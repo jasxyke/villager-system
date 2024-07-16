@@ -1,21 +1,14 @@
-import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View, Image } from "react-native";
-
-export default function App() {
+import { StyleSheet, Text, View } from "react-native";
+import { Slot, Stack } from "expo-router";
+const RootLayout = () => {
   return (
-    <View style={styles.container}>
-      <Text>VILLAGER APP TESTING EYYY</Text>
-      <Image source={require("../assets/cool_villager.jpg")} />
-      <StatusBar style="auto" />
-    </View>
+    <Stack>
+      <Stack.Screen name="index" options={{ headerShown: false }} />
+    </Stack>
   );
-}
+  Roo;
+};
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
+export default RootLayout;
+
+const styles = StyleSheet.create({});

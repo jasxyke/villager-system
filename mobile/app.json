@@ -5,7 +5,7 @@
     "slug": "villager",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/cool_villager.jpg",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",

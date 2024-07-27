@@ -1,36 +1,41 @@
 import { Link } from "expo-router";
-import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { colors } from "../styles/colors";
-import { VILLAGER_ICON } from "../constants/icons";
+import MainBackgroundGradient from "../components/gradients/MainBackgroundGradient";
+import AppLogo from "../components/common/AppLogo";
 
 export default function App() {
   return (
-    <SafeAreaView style={styles.container}>
-      <Image source={VILLAGER_ICON} style={styles.logo} />
-      <Text className="text-4xl font-bold">VILLAGER</Text>
-      <View className="w-full flex items-center gap-y-5">
+    <SafeAreaView className="h-full" style={styles.container}>
+      <MainBackgroundGradient />
+      <AppLogo />
+      {/* <Text className="text-4xl font-bold">VILLAGER</Text> */}
+      <View className="w-full flex items-center gap-y-10">
+        <Link
+          push
+          href="/sign-in"
+          className="p-5 rounded-full text-center bg-primary font-pRegular text-lg"
+          style={styles.navContainer}
+        >
+          <Text style={styles.link}>Login</Text>
+        </Link>
         <Link
           push
           href="/sign-up"
-          className="p-5 border text-center bg-greyGreen"
+          className="p-5 rounded-full text-center bg-greyGreen font-pRegular text-lg"
           style={styles.navContainer}
         >
           <Text style={styles.link}>Sign up</Text>
         </Link>
-
-        <Link
-          push
-          href="/sign-in"
-          className="p-5 border text-center bg-greyGreen"
-          style={styles.navContainer}
-        >
-          <Text style={styles.link}>Sign in</Text>
-        </Link>
       </View>
-
-      <Link push href="/home" style={{ color: "green" }}>
+      {/* <View></View> */}
+      <Link
+        className="font-pRegular"
+        push
+        href="/home"
+        style={{ color: "white" }}
+      >
         Go to Home (Tabs)
       </Link>
     </SafeAreaView>
@@ -40,17 +45,16 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.white,
+    backgroundColor: colors.primary,
     alignItems: "center",
     justifyContent: "space-evenly",
   },
   logo: {
-    width: 125,
-    height: 125,
+    width: 150,
+    height: 150,
   },
   navContainer: {
-    width: "75%",
-    borderRadius: 20,
+    width: "50%",
     color: colors.greyGreen,
   },
 

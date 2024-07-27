@@ -14,7 +14,6 @@ const PasswordInput = ({ password, onChangePass }) => {
       <TextInput
         value={password}
         style={formStyles.textInput}
-        placeholder="password"
         secureTextEntry={!isPasswordVisible}
         onChangeText={(text) => {
           onChangePass(text);
@@ -33,7 +32,7 @@ const PasswordInput = ({ password, onChangePass }) => {
         <Feather
           name={isPasswordVisible ? "eye-off" : "eye"}
           size={24}
-          color="black"
+          color="white"
         />
       </TouchableOpacity>
     </View>

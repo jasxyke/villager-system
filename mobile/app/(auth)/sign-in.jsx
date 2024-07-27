@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import { colors } from "../../styles/colors";
-import { router } from "expo-router";
+import { Link, router } from "expo-router";
 import { Feather } from "@expo/vector-icons";
 import FormScreen from "../../components/forms/FormScreen";
 import PasswordInput from "../../components/forms/PasswordInput";
@@ -30,26 +30,36 @@ const SignIn = () => {
     router.navigate("../home");
   };
   return (
-    <FormScreen headerText={"Welcome back!"}>
+    <FormScreen>
+      <Text className="ml-2 text-white text-base">Email</Text>
       <TextInput
         className="mb-2"
         style={formStyles.textInput}
-        placeholder="email"
         value={email}
         onChangeText={setEmail}
         inputMode="email"
       />
+      <Text className="ml-2 text-white text-base">Password</Text>
       <PasswordInput password={password} onChangePass={setPassword} />
 
       <TouchableHighlight
         onPress={signIn}
-        className="rounded-lg m-auto px-5 py-3 mt-5"
+        className="rounded-full m-auto px-5 py-3 mt-5"
         style={styles.signInButton}
         activeOpacity={0.6}
         underlayColor={colors.greyGreen}
       >
         <Text className="text-white">Sign in</Text>
       </TouchableHighlight>
+      <View
+        className="text-center justify-center 
+      items-center mt-5"
+      >
+        <Text className=" text-white">Don't have an account yet?</Text>
+        <Link href={"sign-up"} className="text-white underline">
+          Register
+        </Link>
+      </View>
     </FormScreen>
   );
 };
@@ -57,7 +67,7 @@ const SignIn = () => {
 const styles = StyleSheet.create({
   signInButton: {
     width: "75%",
-    backgroundColor: colors.paleGreen,
+    backgroundColor: colors.greyGreen,
     display: "flex",
     justifyContent: "center",
     alignItems: "center",

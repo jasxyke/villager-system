@@ -11,6 +11,12 @@ module.exports = {
         white: "#FFFFFF",
         secondary: "#8AB446",
       },
+      fontFamily: {
+        pRegular: ["Itim-Regular", "sans-serif"],
+        pJaldi: ["Jaldi-Regular", "sans-serif"],
+        pJaldiBold: ["Jaldi-Bold", "sans-serif"],
+        pMixed: ["JejuGothic-Regular", "sans-serif"],
+      },
     },
   },
   plugins: [],

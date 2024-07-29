@@ -14,8 +14,9 @@ return new class extends Migration
         Schema::create('announcements', function (Blueprint $table) {
             $table->id();
             $table->foreignId('admin_id')->constrained('admins');
-            $table->string('title');
-            $table->string('content');
+            $table->string('title', 100);
+            $table->string('content', 1000)->nullable();
+            $table->string('picture_path')->nullable();
             $table->timestamps();
         });
     }

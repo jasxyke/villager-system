@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreignId('address_id')->constrained('address');
             $table->enum('civil_status',['single', 'married', 'separated', 'divorced', 'widowed']);
             $table->enum('occupation_status',['self employed', 'employee', 'student', 'unemployed', 'others']);
-            $table->string('facebook_name');
+            $table->string('fb_name')->nullable();
             $table->timestamps();
         });
     }

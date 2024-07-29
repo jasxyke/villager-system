@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('resident_id')->constrained('residents');//nagpost ng product sa store
             $table->foreignId('store_id')->constrained('stores');//kung saang store sya nakalagay
-            $table->string('name');
-            $table->string('description');
+            $table->string('name', 100);
+            $table->text('description');
             $table->decimal('price', 6, 2);
             $table->smallInteger('quantity');
             $table->string('picture_path');

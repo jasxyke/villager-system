@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Comment extends Model
 {
     use HasFactory;
+
+    //TODO: fill-up mo to bukas, papasok pako maaga eh
 }

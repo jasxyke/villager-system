@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('title', 100);
             $table->string('content', 1000)->nullable();
             $table->string('picture_path')->nullable();
+            $table->enum('announcement_type', ['general_info','alert_msg','event']);
             $table->timestamps();
         });
     }

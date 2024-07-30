@@ -20,7 +20,6 @@ return new class extends Migration
             $table->date('issue_date');
             $table->date('expiry_date');
             $table->date('application_date');
-            $table->string('documents');
             $table->text('comments')->nullable();
             $table->timestamps();
         });

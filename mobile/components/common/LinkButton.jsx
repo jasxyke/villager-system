@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet } from "react-native";
 import React from "react";
-import { colors } from "../styles/colors";
+import { colors } from "../../styles/colors";
 import { Link } from "expo-router";
 
 const LinkButton = ({ url, text }) => {

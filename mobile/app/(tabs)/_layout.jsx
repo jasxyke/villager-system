@@ -2,6 +2,7 @@ import { View, Text, Image, StyleSheet } from "react-native";
 import { Tabs, Redirect } from "expo-router";
 import { HOME, BOOKING, PROFILE, BILLS, MARKET } from "../../constants/icons";
 import { colors } from "../../styles/colors";
+import AppLogo from "../../components/common/AppLogo";
 
 const TabIcon = ({ icon, color, name, focused }) => {
   return (
@@ -24,12 +25,15 @@ const TabIcon = ({ icon, color, name, focused }) => {
 const MainLayout = () => {
   return (
     <>
+      <View className="flex bg-transparent p-5 pt-10">
+        <AppLogo width={30} height={30} />
+      </View>
       <Tabs
         screenOptions={{
           tabBarShowLabel: false,
-          tabBarActiveTintColor: colors.white,
-          tabBarInactiveTintColor: colors.greyGreen,
-          tabBarStyle: { backgroundColor: colors.paleGreen },
+          tabBarActiveTintColor: colors.green,
+          tabBarInactiveTintColor: colors.white,
+          tabBarStyle: { backgroundColor: colors.greyGreen },
         }}
       >
         <Tabs.Screen

@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Resident;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +18,10 @@ class BillFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'resident_id'=>Resident::factory(),
+            'amount'=>$this->faker->randomNumber(4),
+            'due_date'=>$this->faker->date(),
+            'issue_date'=>$this->faker->date(),
         ];
     }
 }

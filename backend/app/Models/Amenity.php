@@ -12,7 +12,6 @@ class Amenity extends Model
 
     protected $fillable = [
         'name',
-        'description'
     ];
 
     public function booking(): BelongsTo{

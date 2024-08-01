@@ -14,7 +14,8 @@ class Announcement extends Model
         'admin_id',
         'title',
         'content',
-        'picture_path'
+        'picture_path',
+        'type'
     ];
 
     public function admin(): BelongsTo{

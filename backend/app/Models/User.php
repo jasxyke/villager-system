@@ -36,8 +36,8 @@ class User extends Authenticatable
     protected $fillable = [
         'lastname',
         'firstname',
-        'midname',
-        'role_type',
+        'middlename',
+        'role_type',//'resident','guest','admin','treasurer','home_owner'
         'email',
         'password',
         'remember_token'
@@ -62,12 +62,12 @@ class User extends Authenticatable
     //     'email_verified_at' => 'datetime',
     // ];
 
-    public function resident(): BelongsTo{
-        return $this->belongsTo(Resident::class);
+    public function resident(): HasOne{
+        return $this->hasOne(Resident::class);
     }
 
-    public function admin(): BelongsTo{
-        return $this->belongsTo(Admin::class);
+    public function admin(): HasOne{
+        return $this->hasOne(Admin::class);
     }
 
     public function comments(): HasMany{

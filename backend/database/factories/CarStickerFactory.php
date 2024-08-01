@@ -17,7 +17,12 @@ class CarStickerFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'car_model'=>'Honda',
+            'car_plate_number'=>$this->faker->randomNumber(6),
+            'issue_date'=>$this->faker->date(),
+            'expiry_date'=>$this->faker->date(),
+            'application_date'=>$this->faker->date(),
+            'comments'=>$this->faker->sentence(15)
         ];
     }
 }

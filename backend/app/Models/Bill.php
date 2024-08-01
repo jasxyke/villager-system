@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Bill extends Model
@@ -20,5 +21,9 @@ class Bill extends Model
 
     public function resident(): HasOne{
         return $this->hasOne(Resident::class);
-    } 
+    }
+
+    public function transactions(): HasMany{
+        return $this->hasMany(Transaction::class);
+    }
 }

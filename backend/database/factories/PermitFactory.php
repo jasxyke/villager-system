@@ -17,7 +17,12 @@ class PermitFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'permit_type'=>'repairs',
+            'permit_status'=>'active',
+            'issue_date'=>$this->faker->date(),
+            'expiry_date'=>$this->faker->date(),
+            'application_date'=>$this->faker->date(),
+            'comments'=>$this->faker->text(150)
         ];
     }
 }

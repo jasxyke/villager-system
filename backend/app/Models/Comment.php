@@ -20,7 +20,7 @@ class Comment extends Model
         return $this->belongsTo(Product::class);
     }
 
-    public function user(): BelongsTo{
-        return $this->belongsTo(User::class);
+    public function resident(): BelongsTo{
+        return $this->belongsTo(Resident::class);
     }
 }

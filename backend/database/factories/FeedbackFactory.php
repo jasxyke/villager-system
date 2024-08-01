@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Resident;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +18,8 @@ class FeedbackFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'resident_id'=>Resident::factory(),
+            'message'=>$this->faker->sentence(10)
         ];
     }
 }

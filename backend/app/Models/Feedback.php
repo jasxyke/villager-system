@@ -10,12 +10,14 @@ class Feedback extends Model
 {
     use HasFactory;
 
+    protected $table='feedbacks';
+
     protected $fillable = [
         'resident_id',
         'message'
     ];
 
-    public function messageSender(): BelongsTo{
+    public function resident(): BelongsTo{
         return $this->belongsTo(Resident::class);
     }
 }

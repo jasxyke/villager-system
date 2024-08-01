@@ -19,11 +19,11 @@ class Store extends Model
         'picture_path'
     ];
 
-    public function owner(): BelongsTo{
+    public function resident(): BelongsTo{
         return $this->belongsTo(Resident::class);
     }
 
-    public function storeProducts(): HasMany{
+    public function products(): HasMany{
         return $this->hasMany(Product::class);
     }
 }

@@ -16,16 +16,12 @@ class Admin extends Model
         'user_id'
     ];
 
-    public function user(): HasOne{
-        return $this->hasOne(User::class);
+    public function user(): BelongsTo{
+        return $this->belongsTo(User::class);
     }
 
     public function announcements(): HasMany{
         return $this->hasMany(Announcement::class);
-    }
-
-    public function resident(): BelongsTo{
-        return $this->belongsTo(Resident::class);
     }
 
     // public function events(): HasMany{

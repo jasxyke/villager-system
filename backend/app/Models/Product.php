@@ -21,7 +21,7 @@ class Product extends Model
         'picture_path'
     ];
 
-    public function seller(): BelongsTo{
+    public function resident(): BelongsTo{
         return $this->belongsTo(Resident::class);
     }
 

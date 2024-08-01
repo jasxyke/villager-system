@@ -1,12 +1,13 @@
 import { View, Text, StyleSheet } from "react-native";
 import React from "react";
 import { LinearGradient } from "expo-linear-gradient";
+import { colors } from "../../styles/colors";
 
 const TabsGradient = () => {
   return (
     <LinearGradient
-      colors={["#AEC09A", "#344C11"]}
-      locations={[0.2, 1]}
+      colors={["#AEC09A", colors.green]}
+      locations={[0, 1]}
       style={styles.background}
     />
   );

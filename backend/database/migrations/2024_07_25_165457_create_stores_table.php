@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('stores', function (Blueprint $table) {
             $table->id();
             $table->foreignId('resident_id')->constrained('residents');//owner ng strore
-            $table->string('store_name');
-            $table->string('store_address');
-            $table->string('picture_path');
+            $table->string('store_name', 150);
+            $table->string('store_address', 500);
+            $table->string('picture_path')->nullable();
             $table->timestamps();
         });
     }

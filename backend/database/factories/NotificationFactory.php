@@ -17,7 +17,8 @@ class NotificationFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'caption'=>$this->faker->sentence(5),
+            'content'=>$this->faker->sentence(15),
         ];
     }
 }

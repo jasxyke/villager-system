@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('bills', function (Blueprint $table) {
             $table->id();
             $table->foreignId('resident_id')->constrained('residents');
-            $table->decimal('amount', 6, 2);
+            $table->decimal('amount', 8, 2);
             $table->date('due_date');
             $table->enum('status',['paid','unpaid','overdue']); // Example values: 'paid', 'unpaid', 'overdue'
             $table->date('issue_date');

@@ -17,7 +17,8 @@ class PermitDocumentFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            //CANNOT DO PERMITS AND CAR STICKERS YET,
+            //NEXT TIME NALANG
         ];
     }
 }

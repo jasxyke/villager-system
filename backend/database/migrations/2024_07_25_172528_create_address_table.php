@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('addresses', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('resident_id')->constrained('residents');
             $table->integer('block');
             $table->integer('lot');
             $table->timestamps();

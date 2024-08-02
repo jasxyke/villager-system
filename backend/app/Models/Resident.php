@@ -16,7 +16,6 @@ class Resident extends Model
         'user_id',
         'birthdate',
         'sex',
-        'address_id',
         'civil_status',
         'occupation_status',
         'fb_name'

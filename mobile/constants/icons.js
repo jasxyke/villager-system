@@ -5,3 +5,4 @@ export const MARKET = require("../assets/icons/market.png");
 export const BOOKING = require("../assets/icons/booking.png");
 export const VILLAGER_ICON = require("../assets/images/villager.png");
 export const LOGO = require("../assets/logo.png");
+export const BELL = require("../assets/icons/bell.png");

@@ -21,7 +21,6 @@ class ResidentFactory extends Factory
         return [
             'user_id'=>User::factory()->resident(),
             'birthdate'=>$this->faker->date(),
-            'address_id'=>Address::factory(),
             'fb_name'=>$this->faker->name()
         ];
     }

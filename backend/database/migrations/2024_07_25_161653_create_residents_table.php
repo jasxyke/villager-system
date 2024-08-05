@@ -16,7 +16,6 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users');
             $table->date('birthdate');
             $table->enum('sex',['male','female']);
-            $table->foreignId('address_id')->constrained('addresses');
             $table->enum('civil_status',['single', 'married', 'separated', 'divorced', 'widowed']);
             $table->enum('occupation_status',['self employed', 'employee', 'student', 'unemployed', 'others']);
             $table->string('fb_name')->nullable();

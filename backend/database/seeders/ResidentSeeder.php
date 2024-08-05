@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Address;
 use App\Models\Bill;
 use App\Models\Comment;
 use App\Models\Feedback;
@@ -22,6 +23,7 @@ class ResidentSeeder extends Seeder
         //generate residents with bills and their corresponding
         //transactions
         Resident::factory(5)
+        ->has(Address::factory())
         ->create()
         ->each(function ($resident){
                 Bill::factory(5)
@@ -37,6 +39,7 @@ class ResidentSeeder extends Seeder
         //generate 5 residents with a 1 store each that has
         //5 products for each store
         Resident::factory(5)
+        ->has(Address::factory())
         ->create()
         ->each(function ($resident){
                 Store::factory(1)
@@ -50,6 +53,7 @@ class ResidentSeeder extends Seeder
         //generate 5 residents with 2 feedbacks
         //Feedback::factory(5)->create();
         Resident::factory(5)
+        ->has(Address::factory())
         ->create()
         ->each(function ($resident){
                 Feedback::factory(3)

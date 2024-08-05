@@ -13,7 +13,7 @@ class ResidentController extends Controller
      */
     public function index()
     {
-        //
+        return Resident::with('user')->paginate(20);
     }
 
     /**

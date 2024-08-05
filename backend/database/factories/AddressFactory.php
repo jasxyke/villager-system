@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Resident;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -16,8 +17,12 @@ class AddressFactory extends Factory
      */
     public function definition(): array
     {
+        $block = $this->faker->randomNumber(2);
+        $lot = $this->faker->randomNumber(3);
         return [
-            //
+            'block'=> $block,
+            'lot'=> $lot,
+            'resident_id'=>Resident::factory()
         ];
     }
 }

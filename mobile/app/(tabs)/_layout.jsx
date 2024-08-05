@@ -2,7 +2,8 @@ import { View, Text, Image, StyleSheet } from "react-native";
 import { Tabs, Redirect } from "expo-router";
 import { HOME, BOOKING, PROFILE, BILLS, MARKET } from "../../constants/icons";
 import { colors } from "../../styles/colors";
-import AppLogo from "../../components/common/AppLogo";
+import AppHeader from "../../components/common/AppHeader";
+import TabsGradient from "../../components/gradients/TabsGradient";
 
 const TabIcon = ({ icon, color, name, focused }) => {
   return (
@@ -25,9 +26,6 @@ const TabIcon = ({ icon, color, name, focused }) => {
 const MainLayout = () => {
   return (
     <>
-      <View className="flex bg-transparent p-5 pt-10">
-        <AppLogo width={30} height={30} />
-      </View>
       <Tabs
         screenOptions={{
           tabBarShowLabel: false,

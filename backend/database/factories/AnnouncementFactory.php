@@ -2,7 +2,9 @@
 
 namespace Database\Factories;
 
+use App\Models\Admin;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Announcement>
@@ -17,7 +19,10 @@ class AnnouncementFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'admin_id'=>Admin::factory(),
+            'title'=>$this->faker->sentence(5),
+            'content'=>$this->faker->sentence(20),
+            'picture_path'=>Storage::disk('public')->url('default_img.jpg')
         ];
     }
 }

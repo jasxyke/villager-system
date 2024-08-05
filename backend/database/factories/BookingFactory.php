@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +18,10 @@ class BookingFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'user_id'=>User::factory(),
+            'booking_date'=>$this->faker->date(),
+            'start_time'=>$this->faker->time('13:00:00'),
+            'end_time'=>$this->faker->time('16:00:00')
         ];
     }
 }

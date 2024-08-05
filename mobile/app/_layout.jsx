@@ -3,6 +3,7 @@ import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
+import { AuthProvider } from "../context/AuthContext";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -25,9 +26,11 @@ const RootLayout = () => {
   }
 
   return (
-    <Stack screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="index" options={{ headerShown: false }} />
-    </Stack>
+    <AuthProvider>
+      <Stack screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="index" options={{ headerShown: false }} />
+      </Stack>
+    </AuthProvider>
   );
 };
 

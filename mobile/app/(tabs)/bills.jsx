@@ -1,3 +1,4 @@
+
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import React from "react";
 import TabsGradient from "../../components/gradients/TabsGradient";
@@ -32,6 +33,7 @@ const Bills = () => {
         </View>
       </View>
     </View>
+
   );
 };
 

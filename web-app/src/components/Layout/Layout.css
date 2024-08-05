@@ -1,0 +1,12 @@
+.main-section {
+    margin-left: 340px;
+    margin-right: 50px;
+}
+
+.main-section-bg {
+
+    height: 100%;
+    background: rgb(174, 192, 154);
+    background: linear-gradient(180deg, rgba(174, 192, 154, 1) 40%, rgba(52, 76, 17, 1) 100%);
+
+}

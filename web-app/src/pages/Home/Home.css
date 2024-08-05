@@ -1,0 +1,89 @@
+.logoMiddle img {
+    width: 120px;
+    height: auto;
+    vertical-align: middle;
+}
+
+.logoMiddle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 20px;
+    margin-bottom: 10px;
+}
+
+.reportSection {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    background: #344C11;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.reportTitle {
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 20px;
+}
+
+.reportList {
+    color: rgba(255, 255, 255, 1);
+    padding-left: 10px;
+}
+
+.reportList div {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.reportlistmenu {
+    min-width: 260px;
+}
+
+.box {
+    display: block;
+    position: relative;
+    width: 225px;
+    height: 38px;
+    background-color: #AEC09A;
+    border-radius: 10px;
+}
+
+.barClass {
+    margin-right: 20px;
+}
+
+.barClass img {
+    height: 180px;
+    width: auto;
+    vertical-align: middle;
+}
+
+.pieSection {
+    margin: 20px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.pie-img {
+    margin-top: 20px;
+    overflow: hidden;
+}
+
+.pie-title {
+    font-size: 18px;
+}
+
+.piecolumn {
+    padding: 20px;
+    color: rgba(255, 255, 255, 1);
+    text-align: center;
+    border-radius: 15px;
+    background-color: #475e27;
+    width: calc(100%/3 - 100px);
+    padding-top: 40px;
+    padding-bottom: 40px;
+}

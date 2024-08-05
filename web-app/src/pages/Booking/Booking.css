@@ -1,0 +1,142 @@
+.bookingMiddle img {
+    width: 120px;
+    height: auto;
+    vertical-align: middle;
+}
+
+.bookingMiddle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 20px;
+    margin-bottom: 10px;
+}
+
+.notificationSection {
+    display: flex;
+    flex-direction: column;
+    background: #344C11;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.notificationTitle {
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 20px;
+}
+
+.notificationList {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.notificationCard {
+    padding: 6px 10px;
+    background-color: #AEC09A;
+    border-radius: 10px;
+    color: black;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.notificationIcon {
+    width: 32px;
+    height: auto;
+}
+
+.bookingButtons {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    gap: 5px;
+    margin: 20px 0;
+}
+
+.bookingButtons button.active {
+    background-color: rgba(52, 76, 17, .75);
+}
+
+.bookingButtons button {
+    background-color: #AEC09A;
+    color: #fff;
+    padding: 20px 40px;
+    outline: transparent;
+    border-color: #344C11;
+}
+
+.calendar {
+    width: calc(100% - 150px);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: #AEC09A;
+    border-radius: 10px;
+    border: 1px solid #344C11;
+    padding-bottom: 5px;
+}
+
+.calendar-header {
+    height: 100px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.calendar-body {
+    width: 100%;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.table-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.weekday {
+    width: 175px;
+    text-align: center;
+    color: #344C11;
+    font-weight: bold;
+}
+
+.table-content {
+    width: 100%;
+    flex-grow: 1;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+.calendar-day {
+    width: 120px;
+    height: 90px;
+    position: relative;
+    border: 1px solid #344C11;
+    border-radius: 10px;
+
+}
+
+.calendar-day:hover {
+    background-color: rgba(0, 0, 0, .10);
+}
+
+.calendar-day p {
+    position: absolute;
+    right: 10px;
+    color: #787777;
+}
+
+.current p {
+    color: #000000;
+}
+
+.selected p {
+    color: #cc0000;
+    font-weight: bold;
+}

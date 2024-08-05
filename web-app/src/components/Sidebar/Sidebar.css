@@ -1,0 +1,70 @@
+.sidebar {
+    position: fixed;
+    width: 300px;
+    height: auto;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 99999;
+    background: #344C11;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+
+.menuIconClass {
+    width: 28px;
+    height: 28px;
+    padding: 0 10px;
+    position: relative;
+}
+
+.sidebar .menu {
+    position: static;
+    margin-top: 100px;
+}
+
+.sidebar .menu ul {
+    list-style: none;
+    padding: 10% 0;
+    margin: 0;
+}
+
+.sidebar .menu ul li {
+    padding: 18px 30px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    cursor: pointer;
+    transition: all 300ms ease-in-out;
+}
+
+.sidebar .menu ul li.active {
+    background-color: #fff;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.sidebar .menu ul li.active span {
+    color: #344C11;
+}
+
+.sidebar .menu ul li.active .menuIconClass {
+    color: #fff;
+}
+
+.sidebar .menu ul li span {
+    font-size: 18px;
+    color: rgba(255, 255, 255, 0.7);
+    font-weight: 300;
+    display: block;
+}
+
+.sidebar .menu ul li:hover {
+    background-color: rgba(255, 255, 255, 0.5);
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.sidebar .menu ul li span.logout:hover {
+    color: red;
+}

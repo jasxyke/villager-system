@@ -13,7 +13,7 @@ export default function App() {
       {/* <Text className="text-4xl font-bold">VILLAGER</Text> */}
       <View className="w-full flex items-center gap-y-10">
         <Link
-          push
+          replace
           href="/sign-in"
           className="p-5 rounded-full text-center bg-primary font-pRegular text-lg"
           style={styles.navContainer}
@@ -21,7 +21,7 @@ export default function App() {
           <Text style={styles.link}>Login</Text>
         </Link>
         <Link
-          push
+          replace
           href="/sign-up"
           className="p-5 rounded-full text-center bg-greyGreen font-pRegular text-lg"
           style={styles.navContainer}

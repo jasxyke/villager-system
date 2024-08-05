@@ -3,9 +3,14 @@ import React from "react";
 import AppLogo from "../../components/common/AppLogo";
 import { BELL } from "../../constants/icons";
 
-const AppHeader = () => {
+const AppHeader = ({ addStyles }) => {
   return (
-    <View className="flex-row justify-between items-center bg-transparent p-5 pb-3 pt-10">
+    <View
+      className={
+        "flex-row justify-between items-center bg-transparent p-5 pb-3 pt-10 " +
+        addStyles
+      }
+    >
       <AppLogo width={50} height={50} />
       <Image source={BELL} style={styles.bellStyle} />
     </View>

@@ -2,6 +2,8 @@ import { View, Text, Image, StyleSheet } from "react-native";
 import { Tabs, Redirect } from "expo-router";
 import { HOME, BOOKING, PROFILE, BILLS, MARKET } from "../../constants/icons";
 import { colors } from "../../styles/colors";
+import AppHeader from "../../components/common/AppHeader";
+import TabsGradient from "../../components/gradients/TabsGradient";
 
 const TabIcon = ({ icon, color, name, focused }) => {
   return (

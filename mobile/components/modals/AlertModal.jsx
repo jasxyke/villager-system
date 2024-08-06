@@ -8,10 +8,12 @@ const AlertModal = ({ title, message, visible, onClose }) => {
       animationType="slide"
       visible={visible}
       onRequestClose={() => onClose(false)}
-      className="h-[250px]"
       transparent={true}
     >
-      <View className="flex-1 justify-center items-center ">
+      <View
+        className="flex-1 h-full justify-center items-center"
+        style={{ backgroundColor: "rgba(0,0,0,0.4)" }}
+      >
         <View className="rounded-lg p-5 h-auto w-[70%] bg-green shadow-lg">
           <Text className="font-pJaldiBold text-white mb-3 text-2xl">
             {title}

@@ -25,6 +25,13 @@ const SignUp = () => {
         value={lastName}
         onChangeText={setLastName}
       />
+      <Text className="ml-2 text-white text-base">First name</Text>
+      <TextInput
+        className="mb-2"
+        style={formStyles.textInput}
+        value={lastName}
+        onChangeText={setLastName}
+      />
       <Text className="ml-2 text-white text-base">Email</Text>
       <TextInput
         className="mb-2"

@@ -29,15 +29,15 @@ export default function App() {
           <Text style={styles.link}>Sign up</Text>
         </Link>
       </View>
-      {/* <View></View> */}
-      <Link
+      <View></View>
+      {/* <Link
         className="font-pRegular"
         push
         href="/home"
         style={{ color: "white" }}
       >
         Go to Home (Tabs)
-      </Link>
+      </Link> */}
     </SafeAreaView>
   );
 }

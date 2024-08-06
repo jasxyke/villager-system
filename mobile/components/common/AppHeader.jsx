@@ -1,7 +1,7 @@
 import { View, Text, Image, StyleSheet } from "react-native";
 import React from "react";
 import AppLogo from "../../components/common/AppLogo";
-import { BELL } from "../../constants/icons";
+import { BELL, HAMBURGER } from "../../constants/icons";
 
 const AppHeader = ({ addStyles }) => {
   return (
@@ -12,13 +12,20 @@ const AppHeader = ({ addStyles }) => {
       }
     >
       <AppLogo width={50} height={50} />
-      <Image source={BELL} style={styles.bellStyle} />
+      <View className="flex-row gap-x-3 mr-3">
+        <Image source={BELL} style={styles.bellStyle} />
+        <Image source={HAMBURGER} style={styles.hamburgerMenu} />
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   bellStyle: {
+    width: 30,
+    height: 30,
+  },
+  hamburgerMenu: {
     width: 30,
     height: 30,
   },

@@ -1,13 +1,14 @@
-
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import React from "react";
 import TabsGradient from "../../components/gradients/TabsGradient";
 import { colors } from "../../styles/colors";
+import AppHeader from "../../components/common/AppHeader";
 
 const Bills = () => {
   return (
     <View style={styles.container}>
       <TabsGradient />
+      <AppHeader />
       <Text style={styles.txtBalance}>₱1,000,000</Text>
       <Text style={styles.txtTitleBalance}>Balance</Text>
 
@@ -33,7 +34,6 @@ const Bills = () => {
         </View>
       </View>
     </View>
-
   );
 };
 

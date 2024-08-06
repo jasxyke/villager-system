@@ -32,7 +32,7 @@ export function AuthProvider({ children }) {
       if (router.canGoBack()) {
         router.dismissAll();
       }
-      router.push("../home");
+      router.replace("../home");
       //sets the logged in bool for disable routing options
       setLoggedIn(true);
       //gets user after loggin in
@@ -55,6 +55,15 @@ export function AuthProvider({ children }) {
     }
   };
 
+  const logout = async (onSuccess, onError) => {
+    try {
+      const res = await axiosClient.post("/logout");
+      onSuccess(res.data.message);
+    } catch (error) {
+      onError(error.response.data.message);
+    }
+  };
+
   const value = {
     loading,
     user,
@@ -62,6 +71,7 @@ export function AuthProvider({ children }) {
     getUser,
     loggedIn,
     setUser,
+    logout,
   };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

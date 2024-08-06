@@ -109,6 +109,14 @@ const MainLayout = () => {
             ),
           }}
         />
+        <Tabs.Screen
+          name="car-stickers"
+          options={{ href: null, headerShown: false }}
+        />
+        <Tabs.Screen
+          name="permits"
+          options={{ href: null, headerShown: false }}
+        />
       </Tabs>
     </>
   );

@@ -1,9 +1,17 @@
-import { View, Text, Image, StyleSheet } from "react-native";
-import React from "react";
+import { View, Text, Image, StyleSheet, Pressable } from "react-native";
+import React, { useState } from "react";
 import AppLogo from "../../components/common/AppLogo";
 import { BELL, HAMBURGER } from "../../constants/icons";
+import NavigationModal from "../modals/NavigationModal";
 
 const AppHeader = ({ addStyles }) => {
+  const [visibleMenu, setVisibleMenu] = useState(false);
+  const handleCloseMenu = () => {
+    setVisibleMenu(false);
+  };
+  const openMenu = () => {
+    setVisibleMenu(true);
+  };
   return (
     <View
       className={
@@ -11,10 +19,13 @@ const AppHeader = ({ addStyles }) => {
         addStyles
       }
     >
+      <NavigationModal visible={visibleMenu} onClose={handleCloseMenu} />
       <AppLogo width={50} height={50} />
       <View className="flex-row gap-x-3 mr-3">
         <Image source={BELL} style={styles.bellStyle} />
-        <Image source={HAMBURGER} style={styles.hamburgerMenu} />
+        <Pressable onPress={openMenu}>
+          <Image source={HAMBURGER} style={styles.hamburgerMenu} />
+        </Pressable>
       </View>
     </View>
   );

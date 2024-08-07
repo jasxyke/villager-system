@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import axiosClient, { guestAxios } from "../utils/axios";
 import { router } from "expo-router";
+import { deleteItem, deleteItemAsync, setItemAsync } from "expo-secure-store";
 // import { MMKVLoader, useMMKVStorage } from "react-native-mmkv-storage";
 
 // const storage = new MMKVLoader().initialize();
@@ -25,8 +26,10 @@ export function AuthProvider({ children }) {
       });
 
       //sets the bearer token
-      axiosClient.defaults.headers.Authorization =
-        "Bearer " + res.data.access_token;
+      // axiosClient.defaults.headers.Authorization =
+      //   "Bearer " + res.data.access_token;
+
+      setItemAsync("API_TOKEN", res.data.access_token);
 
       //route to home after succesful login
       if (router.canGoBack()) {
@@ -48,9 +51,10 @@ export function AuthProvider({ children }) {
     try {
       const res = await axiosClient.get("/me");
       const responseUser = res.data;
-
+      if (responseUser !== null) setLoggedIn(true);
       setUser(responseUser);
     } catch (error) {
+      console.log(error.response.data.message);
       onError(error.response.data.message);
     }
   };
@@ -58,6 +62,7 @@ export function AuthProvider({ children }) {
   const logout = async (onSuccess, onError) => {
     try {
       const res = await axiosClient.post("/logout");
+      await deleteItemAsync("API_TOKEN");
       onSuccess(res.data.message);
     } catch (error) {
       onError(error.response.data.message);

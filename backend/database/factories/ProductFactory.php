@@ -26,7 +26,8 @@ class ProductFactory extends Factory
             'description'=>$this->faker->sentence(),
             'price'=>$this->faker->randomNumber(5),
             'quantity'=>$this->faker->numberBetween(0,20),
-            'picture_path'=>Storage::disk('public')->url('default_img.jpg')
+            'picture_path'=>'default_img.jpg',
+            'picture_url' => Storage::disk('public')->url('default_img.jpg'),
         ];
-    }
+    } 
 }

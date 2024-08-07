@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string('firstname', 100);
             $table->string('middlename', 50)->nullable()->default('');
             $table->string('contact_number',20);
+            $table->string('picture_url', 2083);
+            $table->string('picture_path', 2083);
             $table->enum('role_type',['resident','guest','admin','treasurer','home owner']); // Example values: 'resident', 'admin', 'treasurer'
             $table->rememberToken();
             $table->timestamps();

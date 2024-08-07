@@ -19,7 +19,8 @@ return new class extends Migration
             $table->text('description');
             $table->decimal('price', 8, 2);
             $table->smallInteger('quantity');
-            $table->string('picture_path');
+            $table->string('picture_path',1000);
+            $table->string('picture_url', 2083);
             $table->timestamps();
         });
     }

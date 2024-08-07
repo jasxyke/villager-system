@@ -22,7 +22,9 @@ class AnnouncementFactory extends Factory
             'admin_id'=>Admin::factory(),
             'title'=>$this->faker->sentence(5),
             'content'=>$this->faker->sentence(20),
-            'picture_path'=>Storage::disk('public')->url('default_img.jpg')
+            'picture_path'=> 'default_img.jpg',
+            'picture_url' => Storage::disk('public')->url('default_img.jpg'),
+            'event_date_time' => $this->faker->dateTime()
         ];
     }
 }

@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 /**
@@ -31,7 +32,9 @@ class UserFactory extends Factory
             'firstname'=>fake()->firstName(),
             'middlename'=>fake()->lastName(),
             'role_type'=>'resident',
-            'contact_number'=>'09487834862'
+            'contact_number'=>'09487834862',
+            'picture_url' => Storage::disk('public')->url('default_img.jpg'),
+            'picture_path' => 'default_img.jpg',
         ];
     }
     //the role type of the user is a resident

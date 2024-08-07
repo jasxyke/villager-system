@@ -16,7 +16,8 @@ return new class extends Migration
             $table->foreignId('resident_id')->constrained('residents');//owner ng strore
             $table->string('store_name', 150);
             $table->string('store_address', 500);
-            $table->string('picture_path')->nullable();
+            $table->string('picture_path',1000)->nullable();
+            $table->string('picture_url',2083)->nullable();
             $table->timestamps();
         });
     }

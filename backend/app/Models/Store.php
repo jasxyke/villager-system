@@ -16,7 +16,8 @@ class Store extends Model
         'resident_id',
         'store_name',
         'store_address',
-        'picture_path'
+        'picture_path',
+        'picture_url',
     ];
 
     public function resident(): BelongsTo{

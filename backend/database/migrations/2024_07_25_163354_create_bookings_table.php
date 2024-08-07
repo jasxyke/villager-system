@@ -15,7 +15,6 @@ return new class extends Migration
         Schema::create('bookings', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users');
-            //$table->foreignId('amenity_id')->references('id')->on('amenities');
             $table->foreignId('amenity_id')->constrained('amenities');
             $table->dateTime('booking_date');
             $table->time('start_time');

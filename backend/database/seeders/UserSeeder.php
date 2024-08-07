@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 class UserSeeder extends Seeder
 {
@@ -26,7 +27,9 @@ class UserSeeder extends Seeder
             'email'=>'jasxyke23.jxc@gmail.com',
             'password'=>Hash::make('password'),
             'remember_token'=>Str::random(10),
-            'contact_number'=>'09487834865'
+            'contact_number'=>'09487834865',
+            'picture_url' => Storage::disk('public')->url('default_img.jpg'),
+            'picture_path' => 'default_img.jpg'
         ]);
         Resident::factory(['user_id'=>$residentUser->id])
         ->has(Address::factory())
@@ -41,7 +44,9 @@ class UserSeeder extends Seeder
             'email'=>'xykeljas23.jxc@gmail.com',
             'password'=>Hash::make('password'),
             'remember_token'=>Str::random(10),
-            'contact_number'=>'09487834865'
+            'contact_number'=>'09487834865',
+            'picture_url' => Storage::disk('public')->url('default_img.jpg'),
+            'picture_path' => 'default_img.jpg'
         ]);
 
         Resident::factory(['user_id'=>$adminUser->id])
@@ -57,7 +62,9 @@ class UserSeeder extends Seeder
             'email'=>'jasxyke.jxc@gmail.com',
             'password'=>Hash::make('password'),
             'remember_token'=>Str::random(10),
-            'contact_number'=>'09487834865'
+            'contact_number'=>'09487834865',
+            'picture_url' => Storage::disk('public')->url('default_img.jpg'),
+            'picture_path' => 'default_img.jpg'
         ])->create();
     }
 }

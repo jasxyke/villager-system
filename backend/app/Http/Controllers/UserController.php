@@ -7,6 +7,7 @@ use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\Resident;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -75,5 +76,22 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         //
+    }
+
+    public function changePicture(Request $request): string{
+        $request->validate(['profile_pic' => 'required|image|mimes:jpeg,png,jpg']);
+        
+        $path = $request->file('profile_pic')->store('profile_pics','public');
+        $url = Storage::disk('public')->url($path);
+        
+        $user = $request->user();
+        if($user->picture_path !== null || $user->picture_path !== ""){
+            Storage::delete($user->picture_path);
+        }
+        $user->picture_url = $url;
+        $user->picture_path = $path;
+        $user->save();
+        
+        return $url;
     }
 }

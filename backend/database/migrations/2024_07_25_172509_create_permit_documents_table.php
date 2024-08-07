@@ -14,8 +14,9 @@ return new class extends Migration
         Schema::create('permit_documents', function (Blueprint $table) {
             $table->id();
             $table->foreignId('permit_id')->constrained('permits');
-            $table->string('document_type');//TODO: convert mo to to ENUM once makuha mo yung more info about these
-            $table->string('document_path');
+            $table->enum('document_type', ['house','building']);//TODO: convert mo to to ENUM once makuha mo yung more info about these
+            $table->string('document_path',1000);
+            $table->string('document_url',2083);
             $table->date('upload_date');
             $table->timestamps();
         });

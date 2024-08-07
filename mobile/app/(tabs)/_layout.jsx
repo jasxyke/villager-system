@@ -1,4 +1,4 @@
-import { View, Text, Image, StyleSheet } from "react-native";
+import { View, Text, Image, StyleSheet, StatusBar } from "react-native";
 import { Tabs, Redirect } from "expo-router";
 import { HOME, BOOKING, PROFILE, BILLS, MARKET } from "../../constants/icons";
 import { colors } from "../../styles/colors";
@@ -26,6 +26,7 @@ const TabIcon = ({ icon, color, name, focused }) => {
 const MainLayout = () => {
   return (
     <>
+      <StatusBar />
       <Tabs
         screenOptions={{
           tabBarShowLabel: false,

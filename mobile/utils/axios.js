@@ -1,8 +1,9 @@
 import axios from "axios";
-
+import Config from "react-native-config";
+import * as SecureStore from "expo-secure-store";
 axios.defaults.withCredentials = true;
 
-export const DOMAIN = "http://192.168.254.108:8000";
+export const DOMAIN = `http://192.168.254.108:8000`;
 //export const DOMAIN = "http://127.0.0.1:8000";
 
 const axiosClient = axios.create({
@@ -13,18 +14,17 @@ const axiosClient = axios.create({
   },
 });
 
-// axiosClient.interceptors.request.use((config) => {
-//   let token = localStorage.getItem("token");
-//   if (token != null) token = JSON.parse(token);
-//   config.headers.Authorization = "Bearer " + token;
-//   return config;
-// });
+axiosClient.interceptors.request.use(async (config) => {
+  let token = await SecureStore.getItemAsync("API_TOKEN");
+  if (token != null) config.headers.Authorization = "Bearer " + token;
+  return config;
+});
 
 axiosClient.interceptors.response.use(
   (res) => res,
   (err) => {
     if (err.response && err.response.status == 401) {
-      // localStorage.clear();
+      SecureStore.deleteItemAsync("API_TOKEN");
       return err;
     }
     throw err;

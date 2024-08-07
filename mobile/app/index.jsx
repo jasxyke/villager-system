@@ -1,11 +1,32 @@
-import { Link } from "expo-router";
+import { Link, Redirect, router, useRootNavigationState } from "expo-router";
 import { StyleSheet, Text, View, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { colors } from "../styles/colors";
 import MainBackgroundGradient from "../components/gradients/MainBackgroundGradient";
 import AppLogo from "../components/common/AppLogo";
-
+import { useEffect } from "react";
+import { getItemAsync } from "expo-secure-store";
+import { useAuthContext } from "../context/AuthContext";
 export default function App() {
+  const rootNavigationState = useRootNavigationState();
+  const navigatorReady = rootNavigationState?.key != null;
+  const { getUser } = useAuthContext();
+  useEffect(() => {
+    if (!navigatorReady) return;
+
+    const checkIfCanLogin = async () => {
+      const token = await getItemAsync("API_TOKEN");
+      console.log(token);
+      if (token !== null) {
+        getUser();
+        if (router.canGoBack()) {
+          router.dismissAll();
+        }
+        router.replace("/home");
+      }
+    };
+    checkIfCanLogin();
+  }, [navigatorReady]);
   return (
     <SafeAreaView className="h-full" style={styles.container}>
       <MainBackgroundGradient />

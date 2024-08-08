@@ -32,6 +32,20 @@ class UserSeeder extends Seeder
         ->has(Address::factory())
             ->create();
 
+        $residentUser = User::create([
+            'lastname'=>'Fabellon',
+            'firstname'=>'Rydel',
+            'middlename'=>'Fiedacan',
+            'role_type'=>'resident',
+            'email'=>'rydelfabellon@gmail.com',
+            'password'=>Hash::make('password'),
+            'remember_token'=>Str::random(10),
+            'contact_number'=>'09309200555'
+        ]);
+        Resident::factory(['user_id'=>$residentUser->id])
+        ->has(Address::factory())
+            ->create();
+
         //create admin user for testing
         $adminUser = User::create([
             'lastname'=>'Cortez',
@@ -42,6 +56,17 @@ class UserSeeder extends Seeder
             'password'=>Hash::make('password'),
             'remember_token'=>Str::random(10),
             'contact_number'=>'09487834865'
+        ]);
+
+        $adminUser = User::create([
+            'lastname'=>'Fabellon',
+            'firstname'=>'Rydel',
+            'middlename'=>'Fiedacan',
+            'role_type'=>'admin',
+            'email'=>'fabellonrydel@gmail.com',
+            'password'=>Hash::make('password'),
+            'remember_token'=>Str::random(10),
+            'contact_number'=>'09309200555'
         ]);
 
         Resident::factory(['user_id'=>$adminUser->id])
@@ -58,6 +83,17 @@ class UserSeeder extends Seeder
             'password'=>Hash::make('password'),
             'remember_token'=>Str::random(10),
             'contact_number'=>'09487834865'
+        ])->create();
+
+        User::factory([
+            'lastname'=>'Fabellon',
+            'firstname'=>'Rydel',
+            'middlename'=>'Fiedacan',
+            'role_type'=>'guest',
+            'email'=>'rydelfabellon53@gmail.com',
+            'password'=>Hash::make('password'),
+            'remember_token'=>Str::random(10),
+            'contact_number'=>'09309200555'
         ])->create();
     }
 }

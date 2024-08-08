@@ -25,6 +25,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('users')->group(function (){
         Route::post('/change-profile-pic', 
         [UserController::class, 'changePicture']);
+        Route::post('/change-password', [UserController::class, 
+        'changePassword']);
     });
 });
 

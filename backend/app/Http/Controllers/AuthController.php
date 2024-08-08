@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
@@ -17,7 +18,11 @@ class AuthController extends Controller
             'firstname' => 'required|string|max:255',
             'middlename' => 'string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8|confirmed',
+            'password' => Password::min(8)
+                            ->mixedCase()
+                            ->numbers()
+                            ->symbols()
+                            ->uncompromised(),
             'contact_number'=> 'required|string|min:11|unique:users',
         ]);
 
@@ -44,7 +49,7 @@ class AuthController extends Controller
  
         if (! $user || ! Hash::check($request->password, $user->password)) {
             throw ValidationException::withMessages([
-                'email' => ['The provided credentials are incorrect.'],
+                'email' => ['Invalid credentials.'],
             ]);
         }
 
@@ -67,4 +72,5 @@ class AuthController extends Controller
             return $user->load('resident','resident.address');
         }
     }
+
 }

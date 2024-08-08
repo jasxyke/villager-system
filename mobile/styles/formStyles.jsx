@@ -8,4 +8,19 @@ export const formStyles = StyleSheet.create({
     backgroundColor: colors.primary,
     color: colors.white,
   },
+  button: {
+    padding: 15,
+    borderRadius: 20,
+    alignItems: "center",
+    width: "40%",
+    backgroundColor: colors.primary,
+  },
+  buttonText: {
+    color: "white",
+    fontSize: 14,
+  },
+
+  closeButton: {
+    backgroundColor: colors.greyGreen,
+  },
 });

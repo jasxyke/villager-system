@@ -7,7 +7,10 @@ use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\Resident;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rules\Password;
+use Illuminate\Validation\ValidationException;
 
 class UserController extends Controller
 {
@@ -93,5 +96,32 @@ class UserController extends Controller
         $user->save();
         
         return $url;
+    }
+
+    public function changePassword(Request $request){
+        $fields = $request->validate([
+            'old_password' => 'required',
+            'new_password' => ['required',
+                            'string',
+                            'min:8',
+                            Password::min(8)
+                                ->mixedCase()
+                                ->numbers()
+                                ->symbols()
+                                ->uncompromised(),
+                            'confirmed'],
+        ]);
+
+        if(!Hash::check($fields['old_password'], auth()->user()->password)){
+            throw ValidationException::withMessages([
+                'password' => ['Passwords do not match.']
+            ]);
+        }
+
+        User::whereId(auth()->user()->id)->update([
+            'password' => Hash::make($fields['new_password'])
+        ]);
+
+        return response()->json(['message' => 'Password successfuly changed.']);
     }
 }

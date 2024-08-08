@@ -20,6 +20,12 @@ Route::middleware('auth:sanctum')->group(function () {
 
     //resident routes
     Route::apiResource('users', UserController::class);
+
+    //user routes
+    Route::prefix('users')->group(function (){
+        Route::post('/change-profile-pic', 
+        [UserController::class, 'changePicture']);
+    });
 });
 
 

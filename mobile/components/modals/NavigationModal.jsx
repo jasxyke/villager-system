@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Alert,
   TouchableWithoutFeedback,
+  StatusBar,
 } from "react-native";
 import React from "react";
 import AntDesign from "@expo/vector-icons/AntDesign";
@@ -42,6 +43,8 @@ const NavigationModal = ({ visible, onClose }) => {
 
   return (
     <Modal animationType="fade" visible={visible} transparent={true}>
+      <StatusBar backgroundColor={"rgba(0,0,0,0.3)"} translucent={true} />
+
       <TouchableWithoutFeedback onPress={onClose}>
         <View
           className="flex-1 h-full justify-center items-center"

@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('sticker_id')->constrained('car_stickers');
             $table->string('document_type');
-            $table->text('document_path');
+            $table->string('document_path',1000);
+            $table->string('document_url',2083);
             $table->date('upload_date');
             $table->timestamps();
         });

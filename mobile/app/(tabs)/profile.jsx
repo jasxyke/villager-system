@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { formStyles } from "../../styles/profileStyles";
 import TabsGradient from "../../components/gradients/TabsGradient";
-import UserInfo from "../../components/common/user";
+import UserInfo from "../../components/common/UserInfo";
 import EditProfile from "../../components/forms/ChangeInfo";
 import AppHeader from "../../components/common/AppHeader";
 import { useAuthContext } from "../../context/AuthContext";
@@ -88,7 +88,7 @@ const Profile = () => {
         <View className="justify-center items-center">
           <View className="w-[90%]">
             <UserInfo
-              imageUrl={VILLAGER_ICON}
+              imageUrl={user.picture_url}
               userName={userFullname}
               userRole="Owner"
             />

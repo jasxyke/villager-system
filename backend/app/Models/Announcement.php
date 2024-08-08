@@ -15,6 +15,8 @@ class Announcement extends Model
         'title',
         'content',
         'picture_path',
+        'picture_url',
+        'event_date_time',
         'type'
     ];
 

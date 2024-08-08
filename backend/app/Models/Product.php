@@ -18,7 +18,8 @@ class Product extends Model
         'description',
         'price',
         'quantity',
-        'picture_path'
+        'picture_path',
+        'picture_url',
     ];
 
     public function resident(): BelongsTo{

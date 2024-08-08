@@ -22,7 +22,8 @@ class StoreFactory extends Factory
             'resident_id'=>Resident::factory(),
             'store_name'=>$this->faker->word(),
             'store_address'=>$this->faker->text(20),
-            'picture_path'=>Storage::disk('public')->url('default_img')
+            'picture_path'=>'default_img',
+            'picture_url' =>Storage::disk('public')->url('default_img')
         ];
     }
 }

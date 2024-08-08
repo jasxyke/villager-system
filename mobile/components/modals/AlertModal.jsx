@@ -5,6 +5,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   TouchableWithoutFeedback,
+  StatusBar,
 } from "react-native";
 import React from "react";
 import { colors } from "../../styles/colors";
@@ -22,6 +23,7 @@ const AlertModal = ({ title, message, visible, onClose }) => {
           className="flex-1 h-full justify-center items-center"
           style={{ backgroundColor: "rgba(0,0,0,0.3)" }}
         >
+          <StatusBar backgroundColor={"rgba(0,0,0,0.3)"} translucent={true} />
           <View className="rounded-lg p-5 h-auto w-[70%] bg-green shadow-lg">
             <Text className="font-pJaldiBold text-white mb-3 text-2xl">
               {title}

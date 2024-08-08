@@ -7,10 +7,9 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { colors } from "../../styles/colors";
 import { Link, router } from "expo-router";
-import { Feather } from "@expo/vector-icons";
 import FormScreen from "../../components/forms/FormScreen";
 import PasswordInput from "../../components/forms/PasswordInput";
 import { formStyles } from "../../styles/formStyles";
@@ -34,6 +33,7 @@ const SignIn = () => {
   const signIn = () => {
     login(email, password, onError);
   };
+
   return (
     <FormScreen>
       <Text className="ml-2 text-white text-base">Email</Text>

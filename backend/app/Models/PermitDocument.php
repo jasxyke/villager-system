@@ -14,6 +14,7 @@ class PermitDocument extends Model
         'permit_id',
         'document_type',
         'document_path',
+        'document_url',
         'upload_date'
     ];
 

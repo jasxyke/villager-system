@@ -20,9 +20,12 @@ import { colors } from "../../styles/colors";
 import moment from "moment/moment";
 import useUser from "../../hooks/users/useUser";
 import AlertModal from "../../components/modals/AlertModal";
+import ChangePassword from "../../components/forms/ChangePassword";
 
 const Profile = () => {
   const [isEditing, setIsEditing] = useState(false);
+  const [isChangingPass, setIsChangPass] = useState(false);
+
   const { user } = useAuthContext();
   const { updateUser } = useUser();
   const [modalVisible, setModalVisible] = useState(false);
@@ -43,6 +46,10 @@ const Profile = () => {
     setIsEditing(true);
   };
 
+  const handleChangePassword = () => {
+    setIsChangPass(true);
+  };
+
   const handleSavePress = (user) => {
     setIsEditing(false);
     updateUser(
@@ -59,8 +66,6 @@ const Profile = () => {
       }
     );
   };
-
-  const handleChangePassword = () => {};
 
   const handleClosePress = () => {
     setIsEditing(false);
@@ -83,6 +88,12 @@ const Profile = () => {
           user={user}
           onSave={handleSavePress}
           onClose={handleClosePress}
+        />
+      ) : isChangingPass ? (
+        <ChangePassword
+          onClose={() => {
+            setIsChangPass(false);
+          }}
         />
       ) : (
         <View className="justify-center items-center">

@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import axiosClient from "../../utils/axios";
 import { useAuthContext } from "../../context/AuthContext";
 import { Platform } from "react-native";
 
 const useUser = () => {
   const { setUser } = useAuthContext();
+  const [loading, setLoading] = useState(false);
   const updateUser = async (user, onUpdate, onError) => {
+    setLoading(true);
     const userForm = {
       lastname: user.lastname,
       firstname: user.firstname,
@@ -18,12 +20,15 @@ const useUser = () => {
       const res = await axiosClient.put("/users/" + user.id, userForm);
       setUser(res.data.user);
       onUpdate(res.data.message);
+      setLoading(false);
     } catch (error) {
       onError(error.response.data.message);
+      setLoading(false);
     }
   };
 
   const changePicture = async (selectedPicture, onSuccess, onError) => {
+    setLoading(true);
     const uri =
       Platform.OS === "android"
         ? selectedPicture.uri
@@ -48,12 +53,39 @@ const useUser = () => {
       );
       console.log(res.data);
       onSuccess(res.data);
+      setLoading(false);
     } catch (error) {
       console.log(error.response.data.message);
       onError(error.response.data.message);
+      setLoading(false);
     }
   };
-  return { updateUser, changePicture };
+
+  const requestChangePassword = async (
+    oldPassword,
+    newPassword,
+    passWordConfirm,
+    onSuccess,
+    onError
+  ) => {
+    setLoading(true);
+    const formData = {
+      old_password: oldPassword,
+      new_password: newPassword,
+      new_password_confirmation: passWordConfirm,
+    };
+    try {
+      const res = await axiosClient.post("/users/change-password", formData);
+      console.log(res.data.message);
+      onSuccess(res.data?.message);
+      setLoading(false);
+    } catch (error) {
+      console.log(error.response.data);
+      onError(error.response.data.message);
+      setLoading(false);
+    }
+  };
+  return { updateUser, changePicture, requestChangePassword, loading };
 };
 
 export default useUser;

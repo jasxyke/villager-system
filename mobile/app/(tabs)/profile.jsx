@@ -113,95 +113,105 @@ const Profile = () => {
                 editable={false}
               />
             </View>
-            <View className="mb-2">
+            {user.resident === undefined ? null : (
               <View>
-                <Text className="text-white text-base mb-1 font-pRegular">
-                  Address
-                </Text>
-                <TextInput
-                  multiline={true}
-                  style={formStyles.textInput}
-                  editable={false}
-                  value={`BLK ${user.resident.address.block} LOT ${user.resident.address.lot} PAMAHAY VILLAGE SAN JOSE RODRIGUEZ, RIZAL`}
-                />
+                <View className="mb-2">
+                  <View>
+                    <Text className="text-white text-base mb-1 font-pRegular">
+                      Address
+                    </Text>
+                    <TextInput
+                      multiline={true}
+                      style={formStyles.textInput}
+                      editable={false}
+                      value={`BLK ${user.resident.address.block} LOT ${user.resident.address.lot} PAMAHAY VILLAGE SAN JOSE RODRIGUEZ, RIZAL`}
+                    />
+                  </View>
+                </View>
+                <View
+                  className="mb-2"
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <View
+                    style={{
+                      width: "45%",
+                    }}
+                  >
+                    <Text className="text-white text-base mb-1 font-pRegular">
+                      Birthday
+                    </Text>
+                    <TextInput
+                      value={moment(user.resident.birthdate).format("LL")}
+                      style={formStyles.textInput}
+                      editable={false}
+                    />
+                  </View>
+                  <View
+                    style={{
+                      width: "45%",
+                    }}
+                  >
+                    <Text className="text-white text-base mb-1 font-pRegular">
+                      Sex
+                    </Text>
+                    <TextInput
+                      value={formatName(user.resident.sex)}
+                      style={formStyles.textInput}
+                      editable={false}
+                    />
+                  </View>
+                </View>
+                <View className="mb-2">
+                  <Text className="text-white text-base mb-1 font-pRegular">
+                    Facebook Name/Link
+                  </Text>
+                  <TextInput
+                    value={user.resident.fb_name}
+                    style={formStyles.textInput}
+                    editable={false}
+                  />
+                </View>
+                <View
+                  className="mb-2"
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <View
+                    style={{
+                      width: "45%",
+                    }}
+                  >
+                    <Text className="text-white text-base mb-1 font-pRegular">
+                      Civil Status
+                    </Text>
+                    <TextInput
+                      value={formatName(user.resident.civil_status)}
+                      style={formStyles.textInput}
+                      editable={false}
+                    />
+                  </View>
+                  <View
+                    style={{
+                      width: "45%",
+                    }}
+                  >
+                    <Text className="text-white text-base mb-1 font-pRegular">
+                      Occupation status
+                    </Text>
+                    <TextInput
+                      value={formatName(user.resident.occupation_status)}
+                      style={formStyles.textInput}
+                      editable={false}
+                    />
+                  </View>
+                </View>
               </View>
-            </View>
-            <View
-              className="mb-2"
-              style={{ flexDirection: "row", justifyContent: "space-between" }}
-            >
-              <View
-                style={{
-                  width: "45%",
-                }}
-              >
-                <Text className="text-white text-base mb-1 font-pRegular">
-                  Birthday
-                </Text>
-                <TextInput
-                  value={moment(user.resident.birthdate).format("LL")}
-                  style={formStyles.textInput}
-                  editable={false}
-                />
-              </View>
-              <View
-                style={{
-                  width: "45%",
-                }}
-              >
-                <Text className="text-white text-base mb-1 font-pRegular">
-                  Sex
-                </Text>
-                <TextInput
-                  value={formatName(user.resident.sex)}
-                  style={formStyles.textInput}
-                  editable={false}
-                />
-              </View>
-            </View>
-            <View className="mb-2">
-              <Text className="text-white text-base mb-1 font-pRegular">
-                Facebook Name/Link
-              </Text>
-              <TextInput
-                value={user.resident.fb_name}
-                style={formStyles.textInput}
-                editable={false}
-              />
-            </View>
-            <View
-              className="mb-2"
-              style={{ flexDirection: "row", justifyContent: "space-between" }}
-            >
-              <View
-                style={{
-                  width: "45%",
-                }}
-              >
-                <Text className="text-white text-base mb-1 font-pRegular">
-                  Civil Status
-                </Text>
-                <TextInput
-                  value={formatName(user.resident.civil_status)}
-                  style={formStyles.textInput}
-                  editable={false}
-                />
-              </View>
-              <View
-                style={{
-                  width: "45%",
-                }}
-              >
-                <Text className="text-white text-base mb-1 font-pRegular">
-                  Occupation status
-                </Text>
-                <TextInput
-                  value={formatName(user.resident.occupation_status)}
-                  style={formStyles.textInput}
-                  editable={false}
-                />
-              </View>
-            </View>
+            )}
             <View>
               <View style={styles.fixToText}>
                 <TouchableOpacity

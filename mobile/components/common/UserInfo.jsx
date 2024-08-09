@@ -46,7 +46,7 @@ const UserInfo = ({ imageUrl, userName, userRole }) => {
             <Image
               source={{ uri: image === null ? imageUrl : image }}
               style={styles.image}
-              resizeMode="contain"
+              resizeMode="cover"
             />
             <Text className="text-white text-xs underline mt-1">
               Change Picture

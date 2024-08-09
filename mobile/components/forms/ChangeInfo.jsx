@@ -20,10 +20,10 @@ import DropDownPicker from "react-native-dropdown-picker";
 const EditProfile = ({ onSave, user, onClose }) => {
   const [editedUser, setEditUser] = useState(user);
   const [selectedCivlStatus, setSelectedCivilStatus] = useState(
-    editedUser.resident.civil_status
+    editedUser?.resident?.civil_status
   );
   const [selectedOccupation, setSelectedOccupation] = useState(
-    editedUser.resident.occupation_status
+    editedUser?.resident?.occupation_status
   );
   const [openCivil, setOpenCivil] = useState(false);
   const [openOccupation, setOpenOccupation] = useState(false);
@@ -70,126 +70,138 @@ const EditProfile = ({ onSave, user, onClose }) => {
             style={formStyles.textInput}
           />
         </View>
-        <View className="mb-2">
+        {user.resident === undefined ? null : (
           <View>
-            <Text className="text-white text-base mb-1 font-pRegular">
-              Address
-            </Text>
-            <TextInput
-              value={`BLK ${editedUser.resident.address.block} LOT ${editedUser.resident.address.lot} PAMAHAY VILLAGE SAN JOSE RODRIGUEZ, RIZAL`}
-              style={formStyles.textInput}
-              editable={false}
-              multiline={true}
-            />
+            <View className="mb-2">
+              <View>
+                <Text className="text-white text-base mb-1 font-pRegular">
+                  Address
+                </Text>
+                <TextInput
+                  value={`BLK ${editedUser.resident.address.block} LOT ${editedUser.resident.address.lot} PAMAHAY VILLAGE SAN JOSE RODRIGUEZ, RIZAL`}
+                  style={formStyles.textInput}
+                  editable={false}
+                  multiline={true}
+                />
+              </View>
+            </View>
+            <View
+              className="mb-2"
+              style={{ flexDirection: "row", justifyContent: "space-between" }}
+            >
+              <View
+                style={{
+                  width: "45%",
+                }}
+              >
+                <Text className="text-white text-base mb-1 font-pRegular">
+                  Birthday
+                </Text>
+                <TextInput
+                  value={moment(editedUser.resident.birthdate).format("LL")}
+                  style={formStyles.textInput}
+                  editable={false}
+                />
+              </View>
+              <View
+                style={{
+                  width: "45%",
+                }}
+              >
+                <Text className="text-white text-base mb-1 font-pRegular">
+                  Sex
+                </Text>
+                <TextInput
+                  value={formatName(editedUser.resident.sex)}
+                  style={formStyles.textInput}
+                  editable={false}
+                />
+              </View>
+            </View>
+            <View className="mb-2">
+              <Text className="text-white text-base mb-1 font-pRegular">
+                Facebook Name/Link
+              </Text>
+              <TextInput
+                onChangeText={(text) => {
+                  setEditUser({
+                    ...editedUser,
+                    resident: { ...editedUser.resident, fb_name: text },
+                  });
+                }}
+                value={editedUser.resident.fb_name}
+                style={formStyles.textInput}
+                editable={true}
+              />
+            </View>
+            <View
+              className="mb-2"
+              style={{ flexDirection: "row", justifyContent: "space-between" }}
+            >
+              <View
+                style={{
+                  width: "45%",
+                }}
+              >
+                <Text className="text-white text-base mb-1 font-pRegular">
+                  Civil Status
+                </Text>
+                <DropDownPicker
+                  open={openCivil}
+                  value={selectedCivlStatus}
+                  items={civilStatuses}
+                  setOpen={setOpenCivil}
+                  setValue={setSelectedCivilStatus}
+                  setItems={setCivilStatuses}
+                  listMode="SCROLLVIEW"
+                  theme="DARK"
+                  style={{ backgroundColor: colors.primary }}
+                />
+              </View>
+              <View
+                style={{
+                  width: "45%",
+                }}
+              >
+                <Text className="text-white text-base mb-1 font-pRegular">
+                  Occupation
+                </Text>
+                <DropDownPicker
+                  open={openOccupation}
+                  value={selectedOccupation}
+                  items={occupations}
+                  setOpen={setOpenOccupation}
+                  setValue={setSelectedOccupation}
+                  setItems={setOccupations}
+                  listMode="SCROLLVIEW"
+                  theme="DARK"
+                  style={{ backgroundColor: colors.primary }}
+                />
+              </View>
+            </View>
           </View>
-        </View>
-        <View
-          className="mb-2"
-          style={{ flexDirection: "row", justifyContent: "space-between" }}
-        >
-          <View
-            style={{
-              width: "45%",
-            }}
-          >
-            <Text className="text-white text-base mb-1 font-pRegular">
-              Birthday
-            </Text>
-            <TextInput
-              value={moment(editedUser.resident.birthdate).format("LL")}
-              style={formStyles.textInput}
-              editable={false}
-            />
-          </View>
-          <View
-            style={{
-              width: "45%",
-            }}
-          >
-            <Text className="text-white text-base mb-1 font-pRegular">Sex</Text>
-            <TextInput
-              value={formatName(editedUser.resident.sex)}
-              style={formStyles.textInput}
-              editable={false}
-            />
-          </View>
-        </View>
-        <View className="mb-2">
-          <Text className="text-white text-base mb-1 font-pRegular">
-            Facebook Name/Link
-          </Text>
-          <TextInput
-            onChangeText={(text) => {
-              setEditUser({
-                ...editedUser,
-                resident: { ...editedUser.resident, fb_name: text },
-              });
-            }}
-            value={editedUser.resident.fb_name}
-            style={formStyles.textInput}
-            editable={true}
-          />
-        </View>
-        <View
-          className="mb-2"
-          style={{ flexDirection: "row", justifyContent: "space-between" }}
-        >
-          <View
-            style={{
-              width: "45%",
-            }}
-          >
-            <Text className="text-white text-base mb-1 font-pRegular">
-              Civil Status
-            </Text>
-            <DropDownPicker
-              open={openCivil}
-              value={selectedCivlStatus}
-              items={civilStatuses}
-              setOpen={setOpenCivil}
-              setValue={setSelectedCivilStatus}
-              setItems={setCivilStatuses}
-              listMode="SCROLLVIEW"
-              theme="DARK"
-              style={{ backgroundColor: colors.primary }}
-            />
-          </View>
-          <View
-            style={{
-              width: "45%",
-            }}
-          >
-            <Text className="text-white text-base mb-1 font-pRegular">
-              Occupation
-            </Text>
-            <DropDownPicker
-              open={openOccupation}
-              value={selectedOccupation}
-              items={occupations}
-              setOpen={setOpenOccupation}
-              setValue={setSelectedOccupation}
-              setItems={setOccupations}
-              listMode="SCROLLVIEW"
-              theme="DARK"
-              style={{ backgroundColor: colors.primary }}
-            />
-          </View>
-        </View>
+        )}
       </View>
 
       <View style={styles.fixToText}>
         <TouchableOpacity
           style={[styles.button, styles.saveButton]}
           onPress={() => {
-            const user = {
-              ...editedUser,
-              resident: {
-                ...editedUser.resident,
-                civil_status: selectedCivlStatus,
-                occupation_status: selectedOccupation,
-              },
-            };
-            onSave(user);
+            let toSaveUser = null;
+            if (user.role_type === "guest") {
+              toSaveUser = editedUser;
+            } else {
+              toSaveUser = {
+                ...editedUser,
+                resident: {
+                  ...editedUser.resident,
+                  civil_status: selectedCivlStatus,
+                  occupation_status: selectedOccupation,
+                },
+              };
+            }
+
+            onSave(toSaveUser);
           }}
         >
           <Text style={styles.buttonText}>Save</Text>

@@ -14,7 +14,7 @@ export const useAuthContext = () => {
 
 export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(false);
-  const [user, setUser] = useState();
+  const [user, setUser] = useState(null);
   const [loggedIn, setLoggedIn] = useState(false);
 
   const login = async (email, password, onError) => {
@@ -47,12 +47,55 @@ export function AuthProvider({ children }) {
     setLoading(false);
   };
 
+  const register = async (
+    lastName,
+    firstName,
+    middleName,
+    email,
+    password,
+    confirmPassword,
+    contactNumber,
+    onSuccess,
+    onError
+  ) => {
+    setLoading(true);
+    try {
+      const formData = {
+        lastname: lastName,
+        firstname: firstName,
+        middlename: middleName,
+        email: email,
+        password: password,
+        password_confirmation: confirmPassword,
+        contact_number: contactNumber,
+      };
+      const res = await axiosClient.post("/register", formData);
+      console.log(`access token: ${res.data.access_token}`);
+      await setItemAsync("API_TOKEN", res.data.access_token);
+      //route to home after succesful login
+      if (router.canGoBack()) {
+        router.dismissAll();
+      }
+      router.replace("../home");
+      //sets the logged in bool for disable routing options
+      setLoggedIn(true);
+      //gets user after loggin in
+      getUser();
+      setLoading(false);
+    } catch (error) {
+      console.log(error.response.data.message);
+      onError(error?.response.data.message);
+      setLoading(false);
+    }
+  };
+
   const getUser = async () => {
     try {
       const res = await axiosClient.get("/me");
       const responseUser = res.data;
       if (responseUser !== null) setLoggedIn(true);
       setUser(responseUser);
+      console.log(responseUser);
     } catch (error) {
       console.log(error.response.data.message);
       onError(error.response.data.message);
@@ -77,6 +120,7 @@ export function AuthProvider({ children }) {
     loggedIn,
     setUser,
     logout,
+    register,
   };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

@@ -22,7 +22,6 @@ class AuthController extends Controller
             'password' => Password::min(8)
                             ->mixedCase()
                             ->numbers()
-                            ->symbols()
                             ->uncompromised(),
             'contact_number'=> 'required|string|min:11|unique:users',
         ]);

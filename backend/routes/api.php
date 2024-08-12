@@ -19,9 +19,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
 
     //resident routes
-    Route::apiResource('users', UserController::class);
-
+    Route::get('/residents/block/{blockNumber}', 
+    [ResidentController::class, 'getResidentsPerBlock']);
     //user routes
+    Route::apiResource('users', UserController::class);
     Route::prefix('users')->group(function (){
         Route::post('/change-profile-pic', 
         [UserController::class, 'changePicture']);

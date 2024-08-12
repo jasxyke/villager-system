@@ -1,0 +1,7 @@
+this.MsbDataStrings = {};
+this.MsbDataStrings.culture = "en-us";
+this.MsbDataStrings.strings = {
+    "search-components-group.search.group.distributionList": "Distribution list",
+    "search-components-group.search.group.privateGroup": "Private group",
+    "search-components-group.search.group.publicGroup": "Public group"
+};

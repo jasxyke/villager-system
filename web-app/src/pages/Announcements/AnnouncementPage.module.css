@@ -1,0 +1,172 @@
+.mainContainer {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    background: linear-gradient(180deg, rgba(174, 192, 154, 1) 40%, rgba(52, 76, 17, 1) 100%);
+    height: 2000px;
+  }
+  
+  .announcementContainer {
+    width: calc(100% - 300px);
+    max-width: 1200px;
+    border-radius: 8px;
+    padding: 20px;
+    margin-left: 300px;
+    box-sizing: border-box;
+  }
+
+  .logoContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 20px;
+    margin-bottom: 10px;
+  }
+
+  .logoContainer img {
+    width: 120px;
+    height: auto;
+  }
+
+  .mainLogo {
+    max-width: 150px;
+  }
+
+  .announcementButtons {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  
+  .announcementButton {
+    text-decoration: none;
+    padding: 10px 20px;
+    margin: 0 10px;
+    background: #344C11;
+    color: white;
+    border-radius: 4px;
+  }
+  
+  .announcementButton:hover {
+    background: #0f7c09;
+  }
+
+  .remindersContainer {
+    background-color: #4c683d;
+    padding: 20px;
+    border-radius: 10px;
+    color: white;
+    font-family: Arial, sans-serif;
+  }
+  
+  .remindersHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 10px;
+    position: relative;
+  }
+
+  .txtReminder {
+    flex: 1;
+    text-align: center;
+    font-size: 30px;
+    font-weight: bold;
+    margin: 0;
+    padding-left: 70px;
+  }
+  
+  .remindersEditButton {
+    background-color: #344C11;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .reminderSlider {
+    align-items: center;
+    text-align: center;
+    background-color: #4c683d;
+    margin-top: 20px;
+    border-radius: 20px;
+    padding: 20px;
+
+  }
+
+  .sliderContainer {
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 800px;
+    margin: auto;
+  }
+  .sliderContent {
+    white-space: pre-wrap;
+    font-family: 'Courier New', Courier, monospace;
+    color: white;
+  }
+
+  .editableTextArea {
+    width: 100%;
+    height: 300px;
+    resize: none;
+  }
+
+  .overlay {
+    background: rgba(0, 0, 0, 0.75);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal {
+    padding: 20px;
+    max-width: 600px;
+    width: 100%;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.editableTextArea {
+    width: 100%;
+    height: 300px;
+    resize: none;
+    margin-bottom: 10px;
+}
+
+.saveButton, .cancelButton {
+    margin: 10px;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    color: white;
+}
+
+.saveButton {
+    background-color: #007bff;
+}
+
+.saveButton:hover {
+    background-color: #0056b3;
+}
+
+.cancelButton {
+    background-color: #dc3545;
+}
+
+.cancelButton:hover {
+    background-color: #c82333;
+}

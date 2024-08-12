@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\ValidationException;
 
@@ -14,14 +15,13 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $request->validate([
-            'lastname' => 'required|string|max:255',
-            'firstname' => 'required|string|max:255',
-            'middlename' => 'string|max:255',
+            'lastname' => 'required|string|max:100',
+            'firstname' => 'required|string|max:150',
+            'middlename' => 'string|max:100',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => Password::min(8)
                             ->mixedCase()
                             ->numbers()
-                            ->symbols()
                             ->uncompromised(),
             'contact_number'=> 'required|string|min:11|unique:users',
         ]);
@@ -32,10 +32,15 @@ class AuthController extends Controller
             'lastname' => $request->lastname,
             'firstname' => $request->firstname,
             'middlename' => $request->middlename,
-            'contact_number'=> $request->contact_number
+            'contact_number'=> $request->contact_number,
+            'role_type' => 'guest',
+            'picture_url' => Storage::disk('public')->url('default_img.jpg'),
+            'picture_path' => 'default_img.jpg'
         ]);
 
-        return response()->json(['message' => 'User registered successfully!', 'user'=>$user], 201);
+        $token = $user->createToken('auth_token')->plainTextToken;
+
+        return response()->json(['access_token' => $token ], 201);
     }
 
 
@@ -49,7 +54,7 @@ class AuthController extends Controller
  
         if (! $user || ! Hash::check($request->password, $user->password)) {
             throw ValidationException::withMessages([
-                'email' => ['Invalid credentials.'],
+                'email' => ['The provided credentials are incorrect.'],
             ]);
         }
 
@@ -57,6 +62,7 @@ class AuthController extends Controller
 
         return response()->json(['access_token' => $token, 'token_type' => 'Bearer']);
     }
+
 
     // Logout the user (revoke token)
     public function logout(Request $request)
@@ -71,6 +77,8 @@ class AuthController extends Controller
         if($user->role_type == 'resident'){
             return $user->load('resident','resident.address');
         }
+        if($user->role_type == 'guest'){
+            return $user;
+        } 
     }
-
 }

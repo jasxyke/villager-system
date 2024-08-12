@@ -1,0 +1,112 @@
+.mainContainer {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  background: linear-gradient(180deg, rgba(174, 192, 154, 1) 40%, rgba(52, 76, 17, 1) 100%);
+  height: 1000px;
+  width: 100%;
+}
+
+.filesContainer {
+  width: calc(100% - 300px);
+  max-width: 1200px;
+  border-radius: 8px;
+  padding: 20px;
+  margin-left: 300px;
+  box-sizing: border-box;
+}
+
+.logoMiddle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 20px;
+  margin-bottom: 10px;
+}
+
+.logoMiddle img {
+  width: 120px;
+  height: auto;
+}
+
+.logoClass {
+  max-width: 150px;
+}
+
+.fileHeaderButtons {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.fileButton {
+  text-decoration: none;
+  padding: 10px 20px;
+  margin: 0 10px;
+  background: #344C11;
+  color: white;
+  border-radius: 4px;
+  border: none;
+}
+
+.fileButton:hover {
+  background: #0f7c09;
+}
+
+.slideContainer {
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+  background: transparent;
+}
+
+.housePermitContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  border-radius: 15px;
+  overflow: hidden;
+  background: linear-gradient(180deg, rgba(174, 192, 154, 1) 40%, rgba(52, 76, 17, 1) 100%);
+}
+
+.headerContainer, .outputContainer {
+  display: flex;
+  width: 100%;
+}
+
+.housePermitHeader, .outputFile {
+  flex: 1;
+  padding: 10px;
+  text-align: center;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-top: 1px solid #ffffff;
+  background: #344C11;
+  color: white;
+}
+
+.actions {
+  display: flex;
+  gap: 35px;
+  justify-content: center;
+}
+
+.editButton, .deleteButton {
+  border: none;
+  background: none;
+  cursor: pointer;
+  align-items: center;
+  text-align: center;
+  color: white;
+}
+
+.editButton:hover {
+  color: rgb(0, 255, 98);
+}
+
+.deleteButton:hover {
+  color: rgb(0, 255, 98);
+}
+

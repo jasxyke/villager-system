@@ -40,7 +40,9 @@ class User extends Authenticatable
         'email',
         'password',
         'remember_token',
-        'contact_number'
+        'contact_number',
+        'picture_url',
+        'picture_path'
     ];
 
     /**

@@ -3,8 +3,11 @@ import Config from "react-native-config";
 import * as SecureStore from "expo-secure-store";
 axios.defaults.withCredentials = true;
 
-export const DOMAIN = `http://192.168.92.213:8000`;
+// export const DOMAIN = `http://192.168.92.213:8000`;
+export const DOMAIN = `${process.env.EXPO_PUBLIC_API_URL}`;
 //export const DOMAIN = "http://127.0.0.1:8000";
+
+console.log(`DOMAIN: ${DOMAIN}`);
 
 const axiosClient = axios.create({
   baseURL: DOMAIN + "/api",

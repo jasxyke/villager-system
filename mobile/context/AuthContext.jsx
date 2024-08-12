@@ -25,6 +25,8 @@ export function AuthProvider({ children }) {
         password: password,
       });
 
+      console.log("res login: " + res);
+
       //sets the bearer token
       // axiosClient.defaults.headers.Authorization =
       //   "Bearer " + res.data.access_token;
@@ -41,6 +43,7 @@ export function AuthProvider({ children }) {
       //gets user after loggin in
       getUser();
     } catch (error) {
+      console.log(error);
       console.log(error.response.data.message);
       const token = await getItemAsync("API_TOKEN");
       if (token) await deleteItemAsync("API_TOKEN");

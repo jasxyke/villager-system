@@ -1,0 +1,142 @@
+.mainContainer {
+  flex-direction: column;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100%;
+  background: rgb(174, 192, 154);
+  background: linear-gradient(
+    180deg,
+    rgba(174, 192, 154, 1) 40%,
+    rgba(52, 76, 17, 1) 100%
+  );
+}
+
+.titleContainer {
+  display: flex;
+  flex-direction: column;
+  font-size: 64px;
+  font-weight: bolder;
+  align-items: center;
+  justify-content: center;
+}
+
+.resultContainer,
+.historyItem {
+  flex-direction: row;
+  display: flex;
+  width: 400px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.historyContainer {
+  flex-direction: column;
+  display: flex;
+  height: 200px;
+  align-items: center;
+  flex-grow: 5;
+  justify-content: flex-start;
+}
+
+.buttonContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 260px;
+}
+
+.inputParentContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border-radius: 10px;
+  border: 1px solid trasparent;
+  padding-left: 8px;
+  background: #344c11;
+}
+
+.inputContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.email-error > .errorLabel {
+  color: #ff4c4c;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.inputBox {
+  height: 75px;
+  width: 300px;
+  font-size: large;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding-left: 8px;
+  background: transparent;
+  color: #fff;
+  outline: transparent;
+}
+
+.inputBox::placeholder {
+  color: #fefefe;
+  opacity: 1;
+  /* Firefox */
+}
+
+.inputBox::-ms-input-placeholder {
+  /* Edge 12 -18 */
+  color: #fefefe;
+}
+
+.inputIconClass {
+  width: 40px;
+  height: 40px;
+  padding: 0 10px;
+  position: relative;
+}
+
+.inputGap {
+  width: 2px;
+  height: 100%;
+  background-color: #fefefe;
+}
+
+.loginBtn {
+  border: none;
+  background: rgba(52, 76, 17, 75%);
+  color: white;
+  padding: 12px 32px;
+  margin: 8px;
+  font-size: 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 300ms all ease-in-out;
+}
+
+.loginBtn:hover {
+  background: rgba(52, 76, 17, 1);
+}
+
+.forgotPasswordClass {
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  justify-content: end;
+  width: 400px;
+}
+
+.logoClass {
+  width: 600px;
+  height: auto;
+  margin-bottom: 20px;
+  vertical-align: middle;
+}

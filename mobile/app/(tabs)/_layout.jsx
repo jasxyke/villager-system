@@ -4,6 +4,8 @@ import { HOME, BOOKING, PROFILE, BILLS, MARKET } from "../../constants/icons";
 import { colors } from "../../styles/colors";
 import AppHeader from "../../components/common/AppHeader";
 import TabsGradient from "../../components/gradients/TabsGradient";
+import { useAuthContext } from "../../context/AuthContext";
+import LoadingScreen from "../../components/common/LoadingScreen";
 
 const TabIcon = ({ icon, color, name, focused }) => {
   return (

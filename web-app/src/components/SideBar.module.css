@@ -6,7 +6,7 @@
   bottom: 0;
   left: 0;
   z-index: 99999;
-  background: #344c11;
+  background: var(--primary);
   border-top-right-radius: 20px;
   border-bottom-right-radius: 20px;
 }

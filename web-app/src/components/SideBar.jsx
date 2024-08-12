@@ -18,11 +18,11 @@ const SideBar = () => {
   };
 
   const handleError = (msg) => {
-    alert(msg);
+    console.log(msg);
   };
   const logoutUser = () => {
     logout(handleSucces, handleError);
-    navigate("/login");
+    navigate("/");
   };
   return (
     <nav className={styles.sidebar}>
@@ -58,7 +58,7 @@ const SideBar = () => {
           </Link>
         </li>
         <li className="bg-transparent">
-          <p className="bg-transparent" onClick={logoutUser}>
+          <p className="" onClick={logoutUser}>
             <img src={logoutIcon} alt="Logout" /> Logout
           </p>
         </li>

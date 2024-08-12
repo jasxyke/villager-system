@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import axiosClient, { guestAxios } from "../utils/axios";
 import { router } from "expo-router";
-import { deleteItem, deleteItemAsync, setItemAsync } from "expo-secure-store";
+import { deleteItemAsync, getItemAsync, setItemAsync } from "expo-secure-store";
 // import { MMKVLoader, useMMKVStorage } from "react-native-mmkv-storage";
 
 // const storage = new MMKVLoader().initialize();
@@ -41,6 +41,9 @@ export function AuthProvider({ children }) {
       //gets user after loggin in
       getUser();
     } catch (error) {
+      console.log(error.response.data.message);
+      const token = await getItemAsync("API_TOKEN");
+      if (token) await deleteItemAsync("API_TOKEN");
       onError(error.response.data.message);
       setLoading(false);
     }
@@ -97,8 +100,12 @@ export function AuthProvider({ children }) {
       setUser(responseUser);
       console.log(responseUser);
     } catch (error) {
-      console.log(error.response.data.message);
-      onError(error.response.data.message);
+      console.log("user error");
+
+      await deleteItemAsync("API_TOKEN");
+      router.navigate("../sign-in");
+      console.log(error?.response?.data?.message);
+      onError(error?.response?.data?.message);
     }
   };
 

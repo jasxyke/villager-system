@@ -21,6 +21,8 @@ export function AuthProvider({ children }) {
   const login = async (email, password, onError) => {
     setLoading(true);
     try {
+      console.log(email);
+
       const res = await axiosClient.post("/login", {
         email: email,
         password: password,
@@ -63,6 +65,7 @@ export function AuthProvider({ children }) {
       const res = await axiosClient.post("/logout");
       localStorage.removeItem("API_TOKEN");
       localStorage.removeItem("isLoggedIn");
+      setLoggedIn(false);
       onSuccess(res.data.message);
     } catch (error) {
       onError(error.response.data.message);

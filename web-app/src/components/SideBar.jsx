@@ -1,15 +1,29 @@
-import React from 'react';
-import { Link } from 'react-router-dom'; 
-import homeIcon from '../assets/icons/Home_white.png';
-import bookingIcon from '../assets/icons/Calendar.png';
-import billsIcon from '../assets/icons/Book.png';
-import filesIcon from '../assets/icons/File.png';
-import usersIcon from '../assets/icons/Users.png';
-import announcementsIcon from '../assets/icons/chat_bubble.png';
-import logoutIcon from '../assets/icons/Logout.png';
-import styles from './SideBar.module.css';
+import React from "react";
+import { Link, useNavigate } from "react-router-dom";
+import homeIcon from "../assets/icons/Home_white.png";
+import bookingIcon from "../assets/icons/Calendar.png";
+import billsIcon from "../assets/icons/Book.png";
+import filesIcon from "../assets/icons/File.png";
+import usersIcon from "../assets/icons/Users.png";
+import announcementsIcon from "../assets/icons/chat_bubble.png";
+import logoutIcon from "../assets/icons/Logout.png";
+import styles from "./SideBar.module.css";
+import { useAuthContext } from "../contexts/AuthContext";
 
 const SideBar = () => {
+  const { logout } = useAuthContext();
+  const navigate = useNavigate();
+  const handleSucces = () => {
+    //
+  };
+
+  const handleError = (msg) => {
+    console.log(msg);
+  };
+  const logoutUser = () => {
+    logout(handleSucces, handleError);
+    navigate("/");
+  };
   return (
     <nav className={styles.sidebar}>
       <ul>
@@ -43,10 +57,10 @@ const SideBar = () => {
             <img src={announcementsIcon} alt="Announcements" /> Announcements
           </Link>
         </li>
-        <li>
-          <Link to="/logout">
+        <li className="bg-transparent">
+          <p className="" onClick={logoutUser}>
             <img src={logoutIcon} alt="Logout" /> Logout
-          </Link>
+          </p>
         </li>
       </ul>
     </nav>

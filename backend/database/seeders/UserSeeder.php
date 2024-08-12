@@ -43,7 +43,9 @@ class UserSeeder extends Seeder
             'email'=>'rydelfabellon@gmail.com',
             'password'=>Hash::make('password'),
             'remember_token'=>Str::random(10),
-            'contact_number'=>'09309200555'
+            'contact_number'=>'09309200555',
+            'picture_url' => Storage::disk('public')->url('default_img.jpg'),
+            'picture_path' => 'default_img.jpg'
         ]);
         Resident::factory(['user_id'=>$residentUser->id])
         ->has(Address::factory())
@@ -71,7 +73,9 @@ class UserSeeder extends Seeder
             'email'=>'fabellonrydel@gmail.com',
             'password'=>Hash::make('password'),
             'remember_token'=>Str::random(10),
-            'contact_number'=>'09309200555'
+            'contact_number'=>'09309200555',
+            'picture_url' => Storage::disk('public')->url('default_img.jpg'),
+            'picture_path' => 'default_img.jpg'
         ]);
 
         Resident::factory(['user_id'=>$adminUser->id])
@@ -100,7 +104,9 @@ class UserSeeder extends Seeder
             'email'=>'rydelfabellon53@gmail.com',
             'password'=>Hash::make('password'),
             'remember_token'=>Str::random(10),
-            'contact_number'=>'09309200555'
+            'contact_number'=>'09309200555',
+            'picture_url' => Storage::disk('public')->url('default_img.jpg'),
+            'picture_path' => 'default_img.jpg'
         ])->create();
     }
 }

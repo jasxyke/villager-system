@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\House;
 use App\Http\Requests\StoreHouseRequest;
 use App\Http\Requests\UpdateHouseRequest;
+use Illuminate\Http\Client\Request;
 
 class HouseController extends Controller
 {
@@ -38,6 +39,13 @@ class HouseController extends Controller
     public function show(House $house)
     {
         //
+    }
+
+    public function getHousesPerBlock(Request $request, $blockNumber){
+        $houses = House::with('users')
+            ->where('block','=',$blockNumber)
+            ->paginate(20);
+        return $houses;
     }
 
     /**

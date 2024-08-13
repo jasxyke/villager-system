@@ -23,7 +23,6 @@ class HouseFactory extends Factory
         return [
             'block'=> $block,
             'lot'=> $lot,
-            'user_id'=>User::factory(),
             'house_type' => $houseType
         ];
     }

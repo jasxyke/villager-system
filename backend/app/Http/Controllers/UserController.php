@@ -19,7 +19,6 @@ class UserController extends Controller
      */
     public function index()
     {
-        return User::where('role_type','=','guest')->paginate(20);
     }
 
     /**
@@ -71,7 +70,7 @@ class UserController extends Controller
             $resident->occupation_status = $request->input('occupation');
             $resident->save();
             
-            $user = $user->load('resident','resident.address');
+            $user = $user->load('resident','resident.house');
             return response()->json(['message'=>'Profile succesfuly updated!', 'user'=>$user]);
         }elseif($user->role_type == "guest"){
             $fields = $request->validate([

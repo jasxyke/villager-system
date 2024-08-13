@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('houses', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_Id')->constrained('users');
             $table->integer('block');
             $table->integer('lot');
             $table->enum('house_type',['residential','business']);

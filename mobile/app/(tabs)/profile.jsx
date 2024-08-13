@@ -124,7 +124,7 @@ const Profile = () => {
                       multiline={true}
                       style={formStyles.textInput}
                       editable={false}
-                      value={`BLK ${user.resident.address.block} LOT ${user.resident.address.lot} PAMAHAY VILLAGE SAN JOSE RODRIGUEZ, RIZAL`}
+                      value={`BLK ${user.resident.house.block} LOT ${user.resident.house.lot} PAMAHAY VILLAGE SAN JOSE RODRIGUEZ, RIZAL`}
                     />
                   </View>
                 </View>

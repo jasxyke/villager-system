@@ -96,10 +96,10 @@ const Residents = () => {
                 )}
               </div>
               <div className={styles.residentItem}>
-                {resident.resident.address.block}
+                {resident.resident.house.block}
               </div>
               <div className={styles.residentItem}>
-                {resident.resident.address.lot}
+                {resident.resident.house.lot}
               </div>
               <div className={styles.residentItem}>{resident.email}</div>
               <div className={styles.residentActions}>

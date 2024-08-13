@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('residents', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users');
+            $table->foreignId('house_id')->constrained('houses');
             $table->date('birthdate');
             $table->enum('sex',['male','female']);
             $table->enum('civil_status',['single', 'married', 'separated', 'divorced', 'widowed']);

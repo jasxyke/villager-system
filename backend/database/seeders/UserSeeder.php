@@ -2,8 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\Address;
-use App\Models\Admin;
 use App\Models\Resident;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -18,6 +16,7 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
+
         //create resident user for testing
         $residentUser = User::create([
             'lastname'=>'Cortez',
@@ -29,10 +28,10 @@ class UserSeeder extends Seeder
             'remember_token'=>Str::random(10),
             'contact_number'=>'09487834865',
             'picture_url' => Storage::disk('public')->url('default_img.jpg'),
-            'picture_path' => 'default_img.jpg'
+            'picture_path' => 'default_img.jpg',
         ]);
         Resident::factory(['user_id'=>$residentUser->id])
-        ->has(Address::factory())
+       
             ->create();
 
         $residentUser = User::create([
@@ -45,10 +44,9 @@ class UserSeeder extends Seeder
             'remember_token'=>Str::random(10),
             'contact_number'=>'09309200555',
             'picture_url' => Storage::disk('public')->url('default_img.jpg'),
-            'picture_path' => 'default_img.jpg'
+            'picture_path' => 'default_img.jpg',
         ]);
         Resident::factory(['user_id'=>$residentUser->id])
-        ->has(Address::factory())
             ->create();
 
         //create admin user for testing
@@ -62,7 +60,7 @@ class UserSeeder extends Seeder
             'remember_token'=>Str::random(10),
             'contact_number'=>'09487834865',
             'picture_url' => Storage::disk('public')->url('default_img.jpg'),
-            'picture_path' => 'default_img.jpg'
+            'picture_path' => 'default_img.jpg',
         ]);
 
         $adminUser = User::create([
@@ -75,11 +73,10 @@ class UserSeeder extends Seeder
             'remember_token'=>Str::random(10),
             'contact_number'=>'09309200555',
             'picture_url' => Storage::disk('public')->url('default_img.jpg'),
-            'picture_path' => 'default_img.jpg'
+            'picture_path' => 'default_img.jpg',
         ]);
 
         Resident::factory(['user_id'=>$adminUser->id])
-        ->has(Address::factory())
             ->create();
 
         //create guest user for testing
@@ -87,26 +84,26 @@ class UserSeeder extends Seeder
             'lastname'=>'Cortez',
             'firstname'=>'Jaspher Guest',
             'middlename'=>'Mendones',
-            'role_type'=>'guest',
+            'role_type'=>'tenant',
             'email'=>'jasxyke.jxc@gmail.com',
             'password'=>Hash::make('password'),
             'remember_token'=>Str::random(10),
             'contact_number'=>'09487834865',
             'picture_url' => Storage::disk('public')->url('default_img.jpg'),
-            'picture_path' => 'default_img.jpg'
+            'picture_path' => 'default_img.jpg',
         ])->create();
 
         User::factory([
             'lastname'=>'Fabellon',
             'firstname'=>'Rydel',
             'middlename'=>'Fiedacan',
-            'role_type'=>'guest',
+            'role_type'=>'tenant',
             'email'=>'rydelfabellon53@gmail.com',
             'password'=>Hash::make('password'),
             'remember_token'=>Str::random(10),
             'contact_number'=>'09309200555',
             'picture_url' => Storage::disk('public')->url('default_img.jpg'),
-            'picture_path' => 'default_img.jpg'
+            'picture_path' => 'default_img.jpg',
         ])->create();
     }
 }

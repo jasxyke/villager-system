@@ -25,10 +25,6 @@ class Resident extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function address(): HasOne{
-        return $this->hasOne(Address::class);
-    }
-
     public function bills(): HasMany{
         return $this->hasMany(Bill::class);
     }

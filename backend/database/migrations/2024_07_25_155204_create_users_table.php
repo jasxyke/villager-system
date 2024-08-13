@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('house_id')->constrained('houses');
             $table->string('email')->unique();
             $table->char('password', 60);
             $table->string('lastname', 50);
@@ -21,7 +22,7 @@ return new class extends Migration
             $table->string('contact_number',20);
             $table->string('picture_url', 2083);
             $table->string('picture_path', 2083);
-            $table->enum('role_type',['resident','guest','admin','treasurer','home owner']); // Example values: 'resident', 'admin', 'treasurer'
+            $table->enum('role_type',['resident','admin','treasurer','home_owner','seller']); // Example values: 'resident', 'admin', 'treasurer'
             $table->rememberToken();
             $table->timestamps();
         });

@@ -101,7 +101,7 @@ export function AuthProvider({ children }) {
       const responseUser = res.data;
       if (responseUser !== null) setLoggedIn(true);
       setUser(responseUser);
-      console.log(responseUser);
+      console.log("response user: " + responseUser);
     } catch (error) {
       console.log("user error");
 

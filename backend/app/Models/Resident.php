@@ -18,15 +18,16 @@ class Resident extends Model
         'sex',
         'civil_status',
         'occupation_status',
-        'fb_name'
+        'fb_name',
+        'house_id'
     ];
 
     public function user(): BelongsTo{
         return $this->belongsTo(User::class);
     }
 
-    public function address(): HasOne{
-        return $this->hasOne(Address::class);
+    public function house(): BelongsTo{
+        return $this->belongsTo(House::class);
     }
 
     public function bills(): HasMany{

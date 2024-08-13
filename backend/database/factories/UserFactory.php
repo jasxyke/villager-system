@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\House;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -46,10 +47,10 @@ class UserFactory extends Factory
         });
     }
 
-    public function guest(): Factory{
+    public function tenant(): Factory{
         return $this->state(function (array $attributes){
             return [
-                'role_type'=>'guest'
+                'role_type'=>'tenant'
             ];
         });
     }

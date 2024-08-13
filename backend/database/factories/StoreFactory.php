@@ -21,7 +21,7 @@ class StoreFactory extends Factory
         return [
             'resident_id'=>Resident::factory(),
             'store_name'=>$this->faker->word(),
-            'store_address'=>$this->faker->text(20),
+            'store_address'=>$this->faker->address(),
             'picture_path'=>'default_img',
             'picture_url' =>Storage::disk('public')->url('default_img')
         ];

@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Address;
-use App\Http\Requests\StoreAddressRequest;
-use App\Http\Requests\UpdateAddressRequest;
+use App\Models\House;
+use App\Http\Requests\StoreHouseRequest;
+use App\Http\Requests\UpdateHouseRequest;
+use Illuminate\Http\Client\Request;
 
-class AddressController extends Controller
+class HouseController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -27,7 +28,7 @@ class AddressController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreAddressRequest $request)
+    public function store(StoreHouseRequest $request)
     {
         //
     }
@@ -35,15 +36,22 @@ class AddressController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Address $address)
+    public function show(House $house)
     {
         //
+    }
+
+    public function getHousesPerBlock(Request $request, $blockNumber){
+        $houses = House::with('users')
+            ->where('block','=',$blockNumber)
+            ->paginate(20);
+        return $houses;
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Address $address)
+    public function edit(House $house)
     {
         //
     }
@@ -51,7 +59,7 @@ class AddressController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateAddressRequest $request, Address $address)
+    public function update(UpdateHouseRequest $request, House $house)
     {
         //
     }
@@ -59,7 +67,7 @@ class AddressController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Address $address)
+    public function destroy(House $house)
     {
         //
     }

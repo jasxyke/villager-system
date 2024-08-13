@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\HouseController;
 use App\Http\Controllers\ResidentController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -18,6 +19,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/me', [AuthController::class, 'me']);
     Route::post('/logout', [AuthController::class, 'logout']);
 
+    //houses routes
+    Route::prefix('houses')->group(function(){
+        Route::get('/{blockNumber}',[HouseController::class,
+        'getHousesPerBlock']);
+    });
     //resident routes
     Route::get('/residents/block/{blockNumber}', 
     [ResidentController::class, 'getResidentsPerBlock']);

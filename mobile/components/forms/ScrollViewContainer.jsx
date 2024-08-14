@@ -112,6 +112,9 @@ const ScrollViewContainer = ({ data }) => {
         onScrollBeginDrag={handleScrollBeginDrag}
         onScrollEndDrag={handleScrollEndDrag}
         scrollEventThrottle={16}
+        snapToStart={true}
+        snapToInterval={320}
+        decelerationRate={0.9}
       />
       <Indicator />
     </View>

@@ -78,7 +78,7 @@ const EditProfile = ({ onSave, user, onClose }) => {
                   Address
                 </Text>
                 <TextInput
-                  value={`BLK ${editedUser.resident.address.block} LOT ${editedUser.resident.address.lot} PAMAHAY VILLAGE SAN JOSE RODRIGUEZ, RIZAL`}
+                  value={`BLK ${editedUser.resident.house.block} LOT ${editedUser.resident.house.lot} PAMAHAY VILLAGE SAN JOSE RODRIGUEZ, RIZAL`}
                   style={formStyles.textInput}
                   editable={false}
                   multiline={true}

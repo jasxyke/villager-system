@@ -36,13 +36,13 @@ class User extends Authenticatable
         'lastname',
         'firstname',
         'middlename',
-        'role_type',//'resident','guest','admin','treasurer','home_owner'
+        'role_type',//'resident','tenant','admin','treasurer','home_owner'
         'email',
         'password',
         'remember_token',
         'contact_number',
         'picture_url',
-        'picture_path'
+        'picture_path',
     ];
 
     /**

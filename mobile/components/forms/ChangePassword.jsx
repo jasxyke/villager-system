@@ -21,6 +21,9 @@ const ChangePassword = ({ onClose }) => {
   };
 
   const handleSucess = (msg) => {
+    setOldPassword("");
+    setNewPassword("");
+    setPasswordConfirm("");
     setIsError(false);
     setResponseMsg(msg);
   };

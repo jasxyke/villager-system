@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\Address;
+use App\Models\House;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -21,7 +21,8 @@ class ResidentFactory extends Factory
         return [
             'user_id'=>User::factory()->resident(),
             'birthdate'=>$this->faker->date(),
-            'fb_name'=>$this->faker->name()
+            'fb_name'=>$this->faker->name(),
+            'house_id'=>House::factory()
         ];
     }
 }

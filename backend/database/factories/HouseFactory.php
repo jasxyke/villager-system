@@ -2,13 +2,13 @@
 
 namespace Database\Factories;
 
-use App\Models\Resident;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Address>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\House>
  */
-class AddressFactory extends Factory
+class HouseFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -19,10 +19,11 @@ class AddressFactory extends Factory
     {
         $block = $this->faker->numberBetween(1,10);
         $lot = $this->faker->numberBetween(1,100);
+        $houseType = $this->faker->randomElement(['residential','business']);
         return [
             'block'=> $block,
             'lot'=> $lot,
-            'resident_id'=>Resident::factory()
+            'house_type' => $houseType
         ];
     }
 }

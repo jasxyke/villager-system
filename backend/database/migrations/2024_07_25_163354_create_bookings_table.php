@@ -16,7 +16,7 @@ return new class extends Migration
             $table->id();
             // $table->foreignId('user_id')->constrained('users');
             $table->foreignId('amenity_id')->constrained('amenities');
-            $table->dateTime('booking_date');
+            $table->date('booking_date');
             $table->time('start_time');
             $table->time('end_time');
 
@@ -25,7 +25,7 @@ return new class extends Migration
             $table->string('email',400);
             $table->string('contact_number',15);
             $table->enum('booking_status', 
-            ['for_approval','reserved','cancelled']);
+            ['for_approval','reserved','rejected','cancelled']);
             $table->timestamps();
         });
     }

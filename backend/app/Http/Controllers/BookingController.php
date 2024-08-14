@@ -6,6 +6,7 @@ use App\Models\Booking;
 use App\Http\Requests\StoreBookingRequest;
 use App\Http\Requests\UpdateBookingRequest;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class BookingController extends Controller
 {
@@ -17,8 +18,9 @@ class BookingController extends Controller
         //
     }
 
-    public function getBookingsByYearAndMonth(string $year, string $month){
-        $bookings = Booking::with('amenities','booking_payments')
+    public function getBookingsByYearAndMonth(string $year, string $month, string $status){
+        $bookings = Booking::with('amenity','booking_payment')
+                        ->where('booking_status',$status)
                         ->whereYear('booking_date',$year)
                         ->whereMonth('booking_date',$month)
                         ->get();
@@ -34,7 +36,7 @@ class BookingController extends Controller
         // $booking = $request->all();
 
         $booking = Booking::create([
-            'amenity_id'=>$request->only('amenity_id'),
+            'amenity_id'=>$request->input('amenity_id'),
             'booking_date'=>$request->input('booking_date'),
             'start_time'=>$request->safe()->input('start_time'),
             'end_time'=>$request->safe()->input('end_time'),
@@ -44,13 +46,15 @@ class BookingController extends Controller
             'booking_status'=>'for_approval'
         ]);
 
+        $booking->load('amenity');
+
         return response()->json(['booking'=>$booking]);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show($id)
+    public function show(string $id)
     {
         $booking = Booking::findOrFail($id);
 
@@ -62,7 +66,11 @@ class BookingController extends Controller
      */
     public function update(UpdateBookingRequest $request, string $id)
     {
-        $booking = Booking::findOrFail($id);
+        $booking = Booking::findOr($id, function (){
+            throw ValidationException::withMessages([
+                'message'=>'Booking record not fonud.'
+            ]);
+        });
 
         $booking->booking_date = $request->booking_date;
         $booking->start_time = $request->start_time;
@@ -71,6 +79,10 @@ class BookingController extends Controller
         $booking->email = $request->email;
         $booking->contact_number = $request->contact_number;
         $booking->booking_status = $request->booking_status;
+
+        $booking->save();
+
+        return response()->json(['booking'=>$booking]);
     }
 
     /**
@@ -78,8 +90,14 @@ class BookingController extends Controller
      */
     public function destroy(string $id)
     {
-        $booking = Booking::findOrFail($id);
+        $booking = Booking::findOr($id, function (){
+            throw ValidationException::withMessages([
+                'message' => 'Booking record is not found or already deleted'
+            ]);
+        });
 
         $booking->delete();
+
+        return response()->json(['message'=>'Booking sucesfully deleted']);
     }
 }

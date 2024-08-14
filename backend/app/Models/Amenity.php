@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Amenity extends Model
 {
@@ -14,8 +15,8 @@ class Amenity extends Model
         'name',
     ];
 
-    public function booking(): BelongsTo{
-        return $this->belongsTo(Booking::class);
+    public function booking(): HasOne{
+        return $this->hasOne(Booking::class);
     }
 
     

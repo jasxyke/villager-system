@@ -29,11 +29,11 @@ class Booking extends Model
     //     return $this->belongsTo(User::class);
     // }
 
-    public function amenity(): HasOne{
-        return $this->hasOne(Amenity::class);
+    public function amenity(): BelongsTo{
+        return $this->belongsTo(Amenity::class);
     }
 
-    public function payment(): HasOne{
+    public function booking_payment(): HasOne{
         return $this->hasOne(BookingPayment::class);
     }
 }

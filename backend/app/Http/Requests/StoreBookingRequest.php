@@ -26,7 +26,7 @@ class StoreBookingRequest extends FormRequest
             'start_time'=>'required|date_format:H:i',
             'end_time'=>'required|date_format:H:i|after:start_time',
             'full_name'=>'required|string|max:255',
-            'email'=>'required|string|email:rfc,dns|email',
+            'email'=>'required|string|email',//email:rfc,dns  ADD THIS KAPAG SURE NG ONLINE
             'contact_number'=>'required|string|max:15',
         ];
     }

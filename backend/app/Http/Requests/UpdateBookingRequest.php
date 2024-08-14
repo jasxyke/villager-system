@@ -28,6 +28,7 @@ class UpdateBookingRequest extends FormRequest
             'full_name'=>'required|string|max:255',
             'email'=>'required|string|email:rfc,dns|email',
             'contact_number'=>'required|string|max:15',
+            'booking_status'=>'required|string'
         ];
     }
 }

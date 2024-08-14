@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->integer('block');
             $table->integer('lot');
-            $table->enum('house_type',['residential','business']);
+            $table->enum('house_type',['residential','business','mixed']);
             $table->timestamps();
         });
     }

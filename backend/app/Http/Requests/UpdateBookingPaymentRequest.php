@@ -4,14 +4,14 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateBookingRequest extends FormRequest
+class UpdateBookingPaymentRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return true;
+        return false;
     }
 
     /**
@@ -22,12 +22,7 @@ class UpdateBookingRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'booking_date'=>'required|date_format:Y-m-d|after:today',
-            'start_time'=>'required|date_format:H:i',
-            'end_time'=>'required|date_format:H:i|after:start_time',
-            'full_name'=>'required|string|max:255',
-            'email'=>'required|string|email:rfc,dns|email',
-            'contact_number'=>'required|string|max:15',
+            //
         ];
     }
 }

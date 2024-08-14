@@ -18,10 +18,11 @@ class BookingFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id'=>User::factory(),
-            'booking_date'=>$this->faker->date(),
-            'start_time'=>$this->faker->time('13:00:00'),
-            'end_time'=>$this->faker->time('16:00:00')
+            // 'user_id'=>User::factory(),
+            // 'booking_date'=>$this->faker->dateTimeBetween(),
+            // 'start_time'=>$this->faker->time('13:00:00'),
+            // 'start_time'=>$this->faker->time('13:00:00'),
+            // 'end_time'=>$this->faker->time('16:00:00')
         ];
     }
 }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BookingController;
 use App\Http\Controllers\HouseController;
 use App\Http\Controllers\ResidentController;
 use App\Http\Controllers\UserController;
@@ -14,6 +15,12 @@ Route::get('/user', function (Request $request) {
 //authentication routes
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+
+//booking routes (avaialable to the public)
+Route::get('/bookings/{year}/{month}', 
+[BookingController::class, 'getBookingsByYearAndMonth']);
+Route::post('/bookings',[BookingController::class, 'store']);
+Route::get('/bookings/{id}',[BookingController::class, 'show']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/me', [AuthController::class, 'me']);
@@ -34,14 +41,15 @@ Route::middleware('auth:sanctum')->group(function () {
         [UserController::class, 'changePicture']);
         Route::post('/change-password', [UserController::class, 
         'changePassword']);
+
+    //booking routes (avaialable only to the admins)
+    Route::put('/bookings/{id}',[BookingController::class,'update']);
+    Route::delete('/bookings/{id}',[BookingController::class,'destroy']);
+
+    //admin CRUD routes for Users and Residents
+    Route::prefix('admin')->group(function (){
+        Route::apiResource('users', UserController::class);
+        Route::apiResource('residents', ResidentController::class);
+        });
     });
-});
-
-
-//guest routes
-
-//admin routes
-Route::prefix('admin')->group(function (){
-    Route::apiResource('users', UserController::class);
-    Route::apiResource('residents', ResidentController::class);
 });

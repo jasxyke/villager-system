@@ -42,15 +42,18 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('admin')->group(function (){
         Route::apiResource('users', UserController::class);
         Route::apiResource('residents', ResidentController::class);
+        Route::get('/bookings/{year}/{month}',
+        [BookingController::class, 'getBookingsAdmin']);
     });
 
     //booking routes (avaialable only to the admins)
     Route::put('/bookings/{id}',[BookingController::class,'update']);
     Route::delete('/bookings/{id}',[BookingController::class,'destroy']);
+    
 });
 
 //booking routes (avaialable to the public)
-Route::get('/bookings/{year}/{month}/{status}', 
+Route::get('/bookings/{year}/{month}', 
 [BookingController::class, 'getBookingsByYearAndMonth']);
 Route::post('/bookings',[BookingController::class, 'store']);
 Route::get('/bookings/{id}',[BookingController::class, 'show']);

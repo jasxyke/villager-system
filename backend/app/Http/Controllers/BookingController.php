@@ -18,12 +18,20 @@ class BookingController extends Controller
         //
     }
 
-    public function getBookingsByYearAndMonth(string $year, string $month, string $status){
+    public function getBookingsByYearAndMonth(string $year, string $month){
         $bookings = Booking::with('amenity','booking_payment')
-                        ->where('booking_status',$status)
+                        ->where('booking_status','reserved')
                         ->whereYear('booking_date',$year)
                         ->whereMonth('booking_date',$month)
                         ->get();
+        return $bookings;
+    }
+
+    public function getBookingsAdmin(string $year, string $month){
+        $bookings = Booking::with('amenity','booking_payment')
+                    ->whereYear('booking_date',$year)
+                    ->whereMonth('booking_date',$month)
+                    ->get();
         return $bookings;
     }
 

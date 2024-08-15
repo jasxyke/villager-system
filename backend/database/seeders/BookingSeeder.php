@@ -14,15 +14,15 @@ class BookingSeeder extends Seeder
      */
     public function run(): void
     {
-        User::factory(10)
-        ->create()
-        ->each(function ($user){
-            Booking::factory(2)
-            ->state(['user_id'=>$user->id])
-            ->sequence(
-                ['amenity_id'=>1],
-                ['amenity_id'=>2]
-            )->create();
-        }); 
+        // User::factory(10)
+        // ->create()
+        // ->each(function ($user){
+        //     Booking::factory(2)
+        //     ->state(['user_id'=>$user->id])
+        //     ->sequence(
+        //         ['amenity_id'=>1],
+        //         ['amenity_id'=>2]
+        //     )->create();
+        // }); 
     }
 }

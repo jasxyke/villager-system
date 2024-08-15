@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Booking;
 use App\Http\Requests\StoreBookingRequest;
 use App\Http\Requests\UpdateBookingRequest;
+use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class BookingController extends Controller
 {
@@ -16,12 +18,21 @@ class BookingController extends Controller
         //
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+    public function getBookingsByYearAndMonth(string $year, string $month){
+        $bookings = Booking::with('amenity','booking_payment')
+                        ->where('booking_status','reserved')
+                        ->whereYear('booking_date',$year)
+                        ->whereMonth('booking_date',$month)
+                        ->get();
+        return $bookings;
+    }
+
+    public function getBookingsAdmin(string $year, string $month){
+        $bookings = Booking::with('amenity','booking_payment')
+                    ->whereYear('booking_date',$year)
+                    ->whereMonth('booking_date',$month)
+                    ->get();
+        return $bookings;
     }
 
     /**
@@ -29,38 +40,72 @@ class BookingController extends Controller
      */
     public function store(StoreBookingRequest $request)
     {
-        //
+
+        // $booking = $request->all();
+
+        $booking = Booking::create([
+            'amenity_id'=>$request->input('amenity_id'),
+            'booking_date'=>$request->input('booking_date'),
+            'start_time'=>$request->safe()->input('start_time'),
+            'end_time'=>$request->safe()->input('end_time'),
+            'full_name'=>$request->safe()->input('full_name'),
+            'email'=>$request->safe()->input('email'),
+            'contact_number'=>$request->safe()->input('contact_number'),
+            'booking_status'=>'for_approval'
+        ]);
+
+        $booking->load('amenity');
+
+        return response()->json(['booking'=>$booking]);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Booking $booking)
+    public function show(string $id)
     {
-        //
-    }
+        $booking = Booking::findOrFail($id);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Booking $booking)
-    {
-        //
+        return response()->json(['booking'=>$booking]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateBookingRequest $request, Booking $booking)
+    public function update(UpdateBookingRequest $request, string $id)
     {
-        //
+        $booking = Booking::findOr($id, function (){
+            throw ValidationException::withMessages([
+                'message'=>'Booking record not fonud.'
+            ]);
+        });
+
+        $booking->booking_date = $request->booking_date;
+        $booking->start_time = $request->start_time;
+        $booking->end_time = $request->end_time;
+        $booking->full_name = $request->full_name;
+        $booking->email = $request->email;
+        $booking->contact_number = $request->contact_number;
+        $booking->booking_status = $request->booking_status;
+
+        $booking->save();
+
+        return response()->json(['booking'=>$booking]);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Booking $booking)
+    public function destroy(string $id)
     {
-        //
+        $booking = Booking::findOr($id, function (){
+            throw ValidationException::withMessages([
+                'message' => 'Booking record is not found or already deleted'
+            ]);
+        });
+
+        $booking->delete();
+
+        return response()->json(['message'=>'Booking sucesfully deleted']);
     }
 }

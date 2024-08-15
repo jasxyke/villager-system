@@ -11,11 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('houses', function (Blueprint $table) {
+        Schema::create('booking_payments', function (Blueprint $table) {
             $table->id();
-            $table->integer('block');
-            $table->integer('lot');
-            $table->enum('house_type',['residential','business','mixed']);
+            $table->foreignId('booking_id')->constrained('bookings');
+            $table->decimal('amount',6,2);
+            $table->date('payment_date');
+            $table->enum('payment_status',['paid','pending','failed']);
+            // $table->decimal('discount_amount',6,2);
             $table->timestamps();
         });
     }
@@ -25,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('houses');
+        Schema::dropIfExists('booking_payments');
     }
 };

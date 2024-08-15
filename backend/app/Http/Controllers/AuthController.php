@@ -18,7 +18,7 @@ class AuthController extends Controller
             'lastname' => 'required|string|max:100',
             'firstname' => 'required|string|max:150',
             'middlename' => 'string|max:100',
-            'email' => 'required|string|email|max:255|unique:users',
+            'email' => 'required|string|email:rfc,dns|email|max:255|unique:users',
             'password' => Password::min(8)
                             ->mixedCase()
                             ->numbers()

@@ -11,7 +11,7 @@ class UpdateBookingRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,13 @@ class UpdateBookingRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'booking_date'=>'required|date_format:Y-m-d|after:today',
+            'start_time'=>'required|date_format:H:i',
+            'end_time'=>'required|date_format:H:i|after:start_time',
+            'full_name'=>'required|string|max:255',
+            'email'=>'required|string|email:rfc,dns|email',
+            'contact_number'=>'required|string|max:15',
+            'booking_status'=>'required|string'
         ];
     }
 }

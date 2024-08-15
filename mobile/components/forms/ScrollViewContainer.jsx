@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { View, FlatList, Animated, Dimensions, Text, StyleSheet } from 'react-native';
+import { View, FlatList, Animated, Dimensions, Text, Image, StyleSheet } from 'react-native';
 
 const ScrollViewContainer = ({ data }) => {
   const scrollX = useRef(new Animated.Value(0)).current;
@@ -58,6 +58,7 @@ const ScrollViewContainer = ({ data }) => {
 
     return (
       <Animated.View style={[styles.view, { opacity }]}>
+        <Image source={item.image} style={styles.image} />
         <Text style={styles.text}>{item.text}</Text>
       </Animated.View>
     );
@@ -111,7 +112,9 @@ const ScrollViewContainer = ({ data }) => {
         )}
         onScrollBeginDrag={handleScrollBeginDrag}
         onScrollEndDrag={handleScrollEndDrag}
-        scrollEventThrottle={16}
+        snapToStart={true}
+        snapToInterval={320}
+        decelerationRate={0.9}
       />
       <Indicator />
     </View>
@@ -120,11 +123,11 @@ const ScrollViewContainer = ({ data }) => {
 
 const styles = StyleSheet.create({
   scrollContainer: {
-    width: '100%',
-    height: 250,
+    width: '89%',
+    height: 275,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 20,
+    marginTop: 10,
   },
   view: {
     width: Dimensions.get('window').width,
@@ -133,12 +136,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 20,
     backgroundColor: '#1A2902',
+    padding: 20,
+  },
+  image: {
+    width: '80%',
+    height: 150,
+    marginBottom: 10,
+    borderRadius: 10,
+    resizeMode: 'contain',
   },
   text: {
     fontSize: 18,
     color: '#fff',
     textAlign: 'center',
-    padding: 10,
+    paddingHorizontal: 10,
+    paddingBottom: 20,
   },
   indicatorContainer: {
     flexDirection: 'row',

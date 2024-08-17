@@ -1,5 +1,12 @@
-import React from "react";
-import { View, Text, ActivityIndicator, StyleSheet } from "react-native";
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  ActivityIndicator,
+  StyleSheet,
+  ScrollView,
+  RefreshControl,
+} from "react-native";
 import TabsGradient from "../../components/gradients/TabsGradient";
 import AppHeader from "../../components/common/AppHeader";
 import { useAuthContext } from "../../context/AuthContext";
@@ -7,26 +14,40 @@ import ScrollViewContainer from "../../components/forms/ScrollViewContainer";
 
 import image1 from "../../assets/images/maynilad.jpg";
 import image2 from "../../assets/images/hotline.png";
+import useAnnouncement from "../../hooks/announcements/useAnnouncement";
+import LoadingEmptyAnnouncements from "../../components/Screens/Home/LoadingEmptyAnnouncements";
 
-const data = [
-  {
-    id: "1",
-    text: "Water Interruption from 4pm - 10pm at April 27, 2023",
-    image: image1,
-  },
-  {
-    id: "2",
-    text: "Voting of officers will be held at multi-purpose hall on June 20, 2023",
-  },
-  {
-    id: "3",
-    text: "Fur Parents Listen Up! Free vaccination for your pets will be held at a multi-purpose hall on June 30, 2023",
-  },
-  { id: "4", text: "Emergency Hotline", image: image2 },
-];
+// const data = [
+//   {
+//     id: "1",
+//     text: "Water Interruption from 4pm - 10pm at April 27, 2023",
+//     image: image1,
+//   },
+//   {
+//     id: "2",
+//     text: "Voting of officers will be held at multi-purpose hall on June 20, 2023",
+//   },
+//   {
+//     id: "3",
+//     text: "Fur Parents Listen Up! Free vaccination for your pets will be held at a multi-purpose hall on June 30, 2023",
+//   },
+//   { id: "4", text: "Emergency Hotline", image: image2 },
+// ];
+
+const data = null;
 
 const Home = () => {
+  const [refreshing, setRefreshing] = useState(false);
   const { user } = useAuthContext();
+  const { announcements, loading, getAnnouncements } = useAnnouncement();
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    getAnnouncements();
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 1000);
+  }, []);
 
   if (!user) {
     return (
@@ -41,7 +62,12 @@ const Home = () => {
     <View style={styles.container}>
       <TabsGradient />
       <AppHeader />
-      <View style={styles.content}>
+      <ScrollView
+        contentContainerStyle={styles.content}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
         <Text style={styles.greeting}>Hello, {user.firstname}!</Text>
         <View style={styles.row}>
           <View style={styles.card}>
@@ -51,8 +77,20 @@ const Home = () => {
             <Text style={styles.cardContent}>Bookings</Text>
           </View>
         </View>
-        <ScrollViewContainer data={data} />
-      </View>
+        {announcements === null || loading ? (
+          <LoadingEmptyAnnouncements
+            loading={loading}
+            announcements={announcements}
+          />
+        ) : announcements.length === 0 ? (
+          <LoadingEmptyAnnouncements
+            loading={loading}
+            announcements={announcements}
+          />
+        ) : (
+          <ScrollViewContainer data={announcements} />
+        )}
+      </ScrollView>
     </View>
   );
 };
@@ -74,9 +112,8 @@ const styles = StyleSheet.create({
   greeting: {
     color: "white",
     fontSize: 24,
-    width: "100%",
-    marginBottom: 20,
-    marginLeft: 20,
+    width: "90%",
+    marginBottom: 0,
   },
   row: {
     flexDirection: "row",

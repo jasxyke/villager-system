@@ -8,3 +8,21 @@
   --paleGreen: #778d45;
   --secondary: #8ab446;
 }
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.app-container {
+  display: grid;
+  grid-template-columns: 300px auto;
+  height: auto;
+  min-height: 100vh;
+  background: linear-gradient(
+    180deg,
+    rgba(174, 192, 154, 1) 40%,
+    rgba(52, 76, 17, 1) 100%
+  );
+}

@@ -11,7 +11,7 @@ class StoreAnnouncementRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,10 @@ class StoreAnnouncementRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'announcementPic'=>'image|mimes:jpeg,png,jpg',
+            'title'=>'required|string|max:100',
+            'content'=>'required|string|max:2000',
+            'eventDateTime'=>'required|date|date_format:Y-m-d H:i|after:now'
         ];
     }
 }

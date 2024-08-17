@@ -91,9 +91,17 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(User $user)
+    public function destroy(string $id)
     {
-        //
+        $user = User::findOr($id, function (){
+            throw ValidationException::withMessages([
+                'message'=>"User not found, cannot be deleted."
+            ]);
+        });
+
+        $user->delete();
+
+        return response()->json(['message'=>'User successfuly deleted.']);
     }
 
     public function changePicture(Request $request): string{

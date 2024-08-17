@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { colors } from "../../styles/colors";
 
-const ScrollViewContainer = ({ data }) => {
+const ScrollViewContainer = ({ data, loading }) => {
   const scrollX = useRef(new Animated.Value(0)).current;
   const flatListRef = useRef(null);
   const [index, setIndex] = useState(0);
@@ -70,10 +70,19 @@ const ScrollViewContainer = ({ data }) => {
 
     return (
       <Animated.View style={[styles.view, { opacity }]}>
-        {item.image === undefined ? null : (
-          <Image source={item.image} style={styles.image} />
+        <Text numberOfLines={1} style={styles.titleText}>
+          {item.title}
+        </Text>
+        {item.picture_url === null ? null : (
+          <Image
+            resizeMode="contain"
+            source={{ uri: item.picture_url }}
+            style={styles.image}
+          />
         )}
-        <Text style={styles.text}>{item.text}</Text>
+        <Text numberOfLines={3} style={styles.text}>
+          {item.content}
+        </Text>
       </Animated.View>
     );
   };
@@ -138,13 +147,13 @@ const ScrollViewContainer = ({ data }) => {
 const styles = StyleSheet.create({
   scrollContainer: {
     width: "90%",
-    height: 275,
+    height: 300,
     justifyContent: "center",
     alignItems: "center",
     marginTop: 10,
   },
   view: {
-    // width: Dimensions.get("window").width,
+    //width: Dimensions.get("window").width,
     width: 320,
     justifyContent: "center",
     alignItems: "center",
@@ -155,24 +164,24 @@ const styles = StyleSheet.create({
   image: {
     width: "80%",
     height: 150,
-    marginBottom: 10,
+    marginBottom: 5,
     borderRadius: 10,
     resizeMode: "contain",
   },
   text: {
-    fontSize: 18,
+    fontSize: 16,
     color: "#fff",
     textAlign: "center",
     paddingHorizontal: 10,
-    paddingBottom: 20,
+    marginBottom: 10,
   },
   titleText: {
-    fontSize: 22,
+    fontSize: 18,
     fontWeight: "bold",
     color: "#fff",
     textAlign: "center",
     paddingHorizontal: 10,
-    paddingBottom: 20,
+    marginBottom: 10,
   },
   indicatorContainer: {
     flexDirection: "row",

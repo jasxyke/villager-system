@@ -46,7 +46,7 @@ class AuthController extends Controller
 
     public function login(Request $request){
         $request->validate([
-            'email'=>'required|string|email:rfc,dns|email',
+            'email'=>'required|string|email',//|email:rfc,dns
             'password'=>'required|string'
         ]);
         
@@ -77,8 +77,9 @@ class AuthController extends Controller
         if($user->role_type == 'resident'){
             return $user->load('resident','resident.house');
         }
-        if($user->role_type == 'guest'){
-            return $user;
-        } 
+        if($user->role_type == 'admin'){
+            return $user->load('admin');
+        }
+        return $user;
     }
 }

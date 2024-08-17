@@ -17,6 +17,7 @@ import { useAuthContext } from "./contexts/AuthContext";
 import axiosClient, { DOMAIN } from "./utils/axios";
 import AuthenticatedMiddleRoute from "./components/MiddleRoutes/AuthenticatedMiddleRoute";
 import LoginMiddleRoute from "./components/MiddleRoutes/LoginMiddleRoute";
+import Houses from "./pages/Houses/Houses";
 
 function App() {
   const { loggedIn, isLoggedIn } = useAuthContext();
@@ -42,6 +43,7 @@ function App() {
               <Route path="sticker" element={<CarSticker />} />
             </Route>
             <Route path="/announcements" element={<AnnouncementPage />} />
+            <Route path="/houses" element={<Houses />} />
             <Route path="/users">
               <Route path="residents" element={<Residents />} />
               <Route path="guests" element={<GuestPage />} />

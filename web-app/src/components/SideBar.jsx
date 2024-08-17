@@ -9,6 +9,7 @@ import announcementsIcon from "../assets/icons/chat_bubble.png";
 import logoutIcon from "../assets/icons/Logout.png";
 import styles from "./SideBar.module.css";
 import { useAuthContext } from "../contexts/AuthContext";
+import HouseIcon from "../assets/icons/temporaryhouse.png";
 
 const SideBar = () => {
   const { logout } = useAuthContext();
@@ -45,6 +46,11 @@ const SideBar = () => {
         <li>
           <Link to="/files/house-permit">
             <img src={filesIcon} alt="Files" /> Files
+          </Link>
+        </li>
+        <li>
+          <Link to="/houses">
+            <img src={HouseIcon} alt="Houses" /> Houses
           </Link>
         </li>
         <li>

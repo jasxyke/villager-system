@@ -4,9 +4,10 @@ axios.defaults.withCredentials = true;
 axios.defaults.withXSRFToken = true;
 
 //export const DOMAIN = "http://192.168.254.122:8000";
-export const DOMAIN = "http://192.168.92.213:8000";
+//export const DOMAIN = "http://192.168.92.213:8000";
 //export const DOMAIN = "http://127.0.0.1:8000";
 //export const DOMAIN = "https://api.regitech.co";
+export const DOMAIN = "http://192.168.10.109:8000";
 
 const axiosClient = axios.create({
   baseURL: DOMAIN + "/api",

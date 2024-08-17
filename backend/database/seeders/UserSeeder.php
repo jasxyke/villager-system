@@ -75,6 +75,20 @@ class UserSeeder extends Seeder
             'picture_url' => Storage::disk('public')->url('default_img.jpg'),
             'picture_path' => 'default_img.jpg',
         ]);
+        
+        $adminUser = User::create([
+            'lastname'=>'Rebusquillo',
+            'firstname'=>'John Admin',
+            'middlename'=>'Mendones',
+            'role_type'=>'admin',
+            'email'=>'jrey@gmail.com',
+            'password'=>Hash::make('password'),
+            'remember_token'=>Str::random(10),
+            'contact_number'=>'09109912324',
+            'picture_url' => Storage::disk('public')->url('default_img.jpg'),
+            'picture_path' => 'default_img.jpg',
+        ]);
+
 
         Resident::factory(['user_id'=>$adminUser->id])
             ->create();

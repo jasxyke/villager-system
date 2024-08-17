@@ -22,27 +22,19 @@ const Login = () => {
       setEmailError("Please enter your email");
       return;
     }
-
-    if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
-      setEmailError("Please enter a valid email");
-      return;
-    }
-
     if (password === "") {
       setPasswordError("Please enter a password");
       return;
     }
-
     if (password.length < 8) {
       setPasswordError("The password must be 8 characters or longer");
       return;
     }
-
     login(email, password, handleError);
   };
 
   return (
-    <div className={styles.mainContainer}>
+    <form onSubmit={onSubmit} className={styles.mainContainer}>
       <div className={styles.titleContainer}>
         <img src="/Logo.svg" alt="logo" className={styles.logoClass} />
       </div>
@@ -57,7 +49,8 @@ const Login = () => {
         <div className={styles.inputContainer}>
           <input
             value={email}
-            placeholder="Enter your email here"
+            placeholder="Email"
+            type="email"
             onChange={(ev) => setEmail(ev.target.value)}
             className={styles.inputBox}
           />
@@ -74,12 +67,14 @@ const Login = () => {
           <input
             type="password"
             value={password}
-            placeholder="Enter your password here"
+            placeholder="Password"
             onChange={(ev) => setPassword(ev.target.value)}
             className={styles.inputBox}
           />
-          <label className={styles.errorLabel}>{passwordError}</label>
         </div>
+      </div>
+      <div>
+         <label className={styles.errorLabel}>{passwordError}</label>
       </div>
       <br />
       <div className={styles.forgotPasswordClass}>Forgot Password?</div>
@@ -87,13 +82,12 @@ const Login = () => {
       <div className={styles.inputContainer}>
         <input
           className={styles.loginBtn + ` ${loading ? "bg-gray-400" : ""}`}
-          type="button"
-          onClick={onSubmit}
+          type="submit"
           value="Log in"
           disabled={loading}
         />
       </div>
-    </div>
+    </form>
   );
 };
 

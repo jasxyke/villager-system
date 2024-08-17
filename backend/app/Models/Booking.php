@@ -33,7 +33,7 @@ class Booking extends Model
         return $this->belongsTo(Amenity::class);
     }
 
-    public function booking_payment(): HasOne{
+    public function bookingPayment(): HasOne{
         return $this->hasOne(BookingPayment::class);
     }
 }

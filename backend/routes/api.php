@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\HouseController;
@@ -49,7 +50,11 @@ Route::middleware('auth:sanctum')->group(function () {
     //booking routes (avaialable only to the admins)
     Route::put('/bookings/{id}',[BookingController::class,'update']);
     Route::delete('/bookings/{id}',[BookingController::class,'destroy']);
-    
+
+    //anouncement routes
+    Route::apiResource('announcements', AnnouncementController::class);
+    Route::put('/announcements/img/{id}', 
+    [AnnouncementController::class, 'updateAnnouncementImg']);
 });
 
 //booking routes (avaialable to the public)

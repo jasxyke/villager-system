@@ -1,248 +1,343 @@
+/* Existing Styles */
 .mainContainer {
-    display: flex;
-    flex-direction: column;
-    padding: 20px;
-    background: linear-gradient(180deg, rgba(174, 192, 154, 1) 40%, rgba(52, 76, 17, 1) 100%);
-    height: 1000px;
-    width: 100%;
-  }
-  
-  .userContainer {
-    width: calc(100% - 300px);
-    max-width: 1200px;
-    border-radius: 8px;
-    padding: 20px;
-    margin-left: 300px;
-    box-sizing: border-box;
-  }
-  
-  .logoMiddle {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding-top: 20px;
-    margin-bottom: 10px;
-  }
-
-  .logoMiddle img {
-    width: 120px;
-    height: auto;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  background: linear-gradient(
+    180deg,
+    rgba(174, 192, 154, 1) 40%,
+    rgba(52, 76, 17, 1) 100%
+  );
+  width: 100%;
 }
-  
-  .logoClass {
-    max-width: 150px;
-  }
-  
-  .userHeaderButtons {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 20px;
-  }
-  
-  .userButton {
-    text-decoration: none;
-    padding: 10px 20px;
-    margin: 0 10px;
-    background: #344C11;
-    color: white;
-    border-radius: 4px;
-  }
-  
-  .userButton:hover {
-    background: #0f7c09;
-  }
-  
-  .blockButtonContainer {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 10px;
-    justify-content: center;
-    margin-bottom: 20px;
-  }
-  
-  .blockButton {
-    background: #344C11;
-    color: white;
-    border-radius: 4px;
-    padding: 10px;
-    text-align: center;
-    cursor: pointer;
-  }
-  
-  .blockButton:hover {
-    background: #0f7c09;
-  }
-  
-  .residentContainer, .guestContainer, .adminContainer {
-    border-radius: 8px;
-    background-color: #344C11;
-    border: #dee2e6;
-    padding: 20px;
 
-  }
-  
-  .residentHeader, .guestHeader, .adminHeader {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    background: #344C11;
-    color: white;
-    padding: 10px;
-    border-radius: 4px;
-    margin-bottom: 10px;
-  }
-  
-  .residentHeaderItem, .guestHeaderItem, .adminHeaderItem {
-    text-align: center;
-    font-weight: bold;
-  }
-  
-  .residentBody, .guestBody, .adminBody {
-    margin-bottom: 10px;
-    border-top: 1px solid #dee2e6;
-  }
-  
-  .residentRow, .guestRow, .adminRow {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    align-items: center;
-    border-bottom: 1px solid #dee2e6;
-    padding: 10px;
-  }
-  
-  .residentItem, .guestItem, .adminItem {
-    text-align: center;
-    color: white;
-  }
-  
-  .residentActions, .guestActions, .adminActions {
-    display: flex;
-    justify-content: center;
+.userContainer {
+  width: 100%;
+  border-radius: 8px;
+  padding: 20px;
+}
 
-  }
-  
-  .editButton, .deleteButton, .otherButton {
-    border: none;
-    background: none;
-    cursor: pointer;
-  }
-  
-  .editButton {
-    color: #007bff;
-  }
-  
-  .deleteButton {
-    color: #dc3545;
-  }
-  
-  .otherButton {
-    color: #6c757d;
-  }
-  
-  .addDataButton {
-    background: rgba(0,0,0,0.0);
-    color: white;
-    border: none;
-    border-radius: 4px;
-    padding: 10px 20px;
-    font-weight: bold;
-    cursor: pointer;
-  }
-  
-  .addDataButton:hover {
-    background: #42df57;
-  }
-  
-  .modal {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0,0,0,0.5);
-    animation: fadeIn 0.5s;
+.logoMiddle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 20px;
+  margin-bottom: 10px;
+}
+
+.logoMiddle img {
+  width: 120px;
+  height: auto;
+}
+
+.logoClass {
+  max-width: 150px;
+}
+
+.userHeaderButtons {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.userButton {
+  text-decoration: none;
+  padding: 10px 20px;
+  margin: 0 10px;
+  background: #344c11;
+  color: white;
+  border-radius: 4px;
+  transition: background 0.3s, transform 0.2s;
+}
+
+.userButton:hover {
+  background: #0f7c09;
+  transform: scale(1.05);
+}
+
+/* Block Button Styles */
+.blockButtonContainer {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.blockButton {
+  background: #344c11;
+  color: white;
+  border-radius: 4px;
+  padding: 10px;
+  text-align: center;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s;
+}
+
+.blockButton:hover {
+  background: #0f7c09;
+  transform: scale(1.05);
+}
+
+/* Resident, Guest, Admin Container Styles */
+.residentContainer,
+.guestContainer,
+.adminContainer {
+  border-radius: 8px;
+  background-color: #344c11;
+  border: #dee2e6;
+  padding: 20px;
+}
+
+/* Header Styles */
+.residentHeader,
+.guestHeader,
+.adminHeader {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  background: #344c11;
+  color: white;
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+.residentHeaderItem,
+.guestHeaderItem,
+.adminHeaderItem {
+  text-align: center;
+  font-weight: bold;
+}
+
+/* Body Styles */
+.residentBody,
+.guestBody,
+.adminBody {
+  margin-bottom: 10px;
+  border-top: 1px solid #dee2e6;
+}
+
+/* Row Styles */
+.residentRow,
+.guestRow,
+.adminRow {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  align-items: center;
+  border-bottom: 1px solid #dee2e6;
+  padding: 10px;
+  transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+  cursor: pointer;
+}
+
+.residentRow:hover {
+  background-color: #f0f8ff;
+  transform: scale(1.02);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.residentItem,
+.guestItem,
+.adminItem {
+  text-align: center;
+  color: white;
+}
+
+/* Selected Row Highlight */
+.residentRow.selected {
+  background-color: #e0f7fa;
+  border-left: 5px solid #00796b;
+}
+
+/* Actions Styles */
+.residentActions,
+.guestActions,
+.adminActions {
+  display: flex;
+  justify-content: center;
+}
+
+.editButton,
+.deleteButton,
+.otherButton {
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.editButton {
+  color: #007bff;
+}
+
+.deleteButton {
+  color: #dc3545;
+}
+
+.otherButton {
+  color: #6c757d;
+}
+
+.addDataButton {
+  background: rgba(0, 0, 0, 0);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 20px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.addDataButton:hover {
+  background: #42df57;
+}
+
+/* Modal Styles */
+.modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s, visibility 0.3s;
+}
+
+.modal.show {
+  opacity: 1;
+  visibility: visible;
 }
 
 .modalContent {
-    background-color: #fefefe;
-    margin: auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
-    max-width: 500px;
-    position: relative;
-    border-radius: 8px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    animation: slideIn 0.4s;
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  max-width: 500px;
+  position: relative;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  transform: scale(0.9);
+  transition: transform 0.3s;
 }
 
+.modal.show .modalContent {
+  transform: scale(1);
+}
 
 .closeButton {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-    cursor: pointer;
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
 }
 
 .closeButton:hover,
 .closeButton:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
 }
 
 .modalTitle {
-    margin-top: 0;
+  margin-top: 0;
 }
 
-.residentForm, .guestForm, .adminForm {
-    display: flex;
-    flex-direction: column;
+/* Form Styles */
+.residentForm,
+.guestForm,
+.adminForm {
+  display: flex;
+  flex-direction: column;
 }
 
-.residentLabel, .guestLabel, .adminLabel {
-    margin-top: 10px;
-    margin-bottom: 5px;
-    font-weight: bold;
+.residentLabel,
+.guestLabel,
+.adminLabel {
+  margin-top: 10px;
+  margin-bottom: 5px;
+  font-weight: bold;
 }
 
-.residentInput, .guestInput, .adminInput {
-    margin-bottom: 10px;
-    padding: 8px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+.residentInput,
+.guestInput,
+.adminInput {
+  margin-bottom: 10px;
+  padding: 8px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 
+/* Form Buttons Styles */
 .formButtons {
-    display: flex;
-    justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
 }
 
-.submitButton, .cancelButton {
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s ease;
+.submitButton,
+.cancelButton {
+  background-color: #4caf50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
 }
 
 .submitButton:hover {
-    background-color: #45a049;
+  background-color: #45a049;
 }
 
 .cancelButton {
-    background-color: #f44336;
+  background-color: #f44336;
 }
 
 .cancelButton:hover {
-    background-color: #d32f2f;
+  background-color: #d32f2f;
+}
+
+/* Dark and Light Theme Toggle */
+.dark-mode {
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 1) 40%,
+    rgba(34, 34, 34, 1) 100%
+  );
+}
+
+.light-mode {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 1) 40%,
+    rgba(240, 240, 240, 1) 100%
+  );
+}
+
+.themeToggleButton {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 10px 20px;
+  background: #344c11;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.themeToggleButton:hover {
+  background: #0f7c09;
 }

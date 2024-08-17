@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Admin;
 use App\Models\Resident;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -63,6 +64,10 @@ class UserSeeder extends Seeder
             'picture_path' => 'default_img.jpg',
         ]);
 
+        Admin::create([
+            'user_id'=>$adminUser->id
+        ]);
+
         $adminUser = User::create([
             'lastname'=>'Fabellon',
             'firstname'=>'Rydel',
@@ -75,9 +80,24 @@ class UserSeeder extends Seeder
             'picture_url' => Storage::disk('public')->url('default_img.jpg'),
             'picture_path' => 'default_img.jpg',
         ]);
+        
+        $adminUser = User::create([
+            'lastname'=>'Rebusquillo',
+            'firstname'=>'John Admin',
+            'middlename'=>'Mendones',
+            'role_type'=>'admin',
+            'email'=>'jrey@gmail.com',
+            'password'=>Hash::make('password'),
+            'remember_token'=>Str::random(10),
+            'contact_number'=>'09109912324',
+            'picture_url' => Storage::disk('public')->url('default_img.jpg'),
+            'picture_path' => 'default_img.jpg',
+        ]);
 
-        Resident::factory(['user_id'=>$adminUser->id])
-            ->create();
+
+        Admin::create([
+            'user_id'=>$adminUser->id
+        ]);
 
         //create guest user for testing
         User::factory([

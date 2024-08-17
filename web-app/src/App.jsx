@@ -17,6 +17,7 @@ import { useAuthContext } from "./contexts/AuthContext";
 import axiosClient, { DOMAIN } from "./utils/axios";
 import AuthenticatedMiddleRoute from "./components/MiddleRoutes/AuthenticatedMiddleRoute";
 import LoginMiddleRoute from "./components/MiddleRoutes/LoginMiddleRoute";
+import Houses from "./pages/Houses/Houses";
 
 function App() {
   const { loggedIn, isLoggedIn } = useAuthContext();
@@ -27,30 +28,33 @@ function App() {
       .then((res) => {});
   }, []);
   return (
-    <div className="container">
+    <div className={isLoggedIn() ? "app-container" : "w-full h-full"}>
       {isLoggedIn() ? <Sidebar /> : null}
-      <Routes>
-        <Route element={<AuthenticatedMiddleRoute />}>
-          <Route path="/homepage" element={<Homepage />} />
-          <Route path="/booking" element={<BookingPage />} />
-          <Route path="/bills" element={<BillsPage />} />
-          <Route path="/files">
-            <Route path="house-permit" element={<HousePermit />} />
-            <Route path="Building-permit" element={<BuildingPermit />} />
-            <Route path="sticker" element={<CarSticker />} />
+      <div className="w-full">
+        <Routes>
+          <Route element={<AuthenticatedMiddleRoute />}>
+            <Route path="/homepage" element={<Homepage />} />
+            <Route path="/booking" element={<BookingPage />} />
+            <Route path="/bills" element={<BillsPage />} />
+            <Route path="/files">
+              <Route path="house-permit" element={<HousePermit />} />
+              <Route path="Building-permit" element={<BuildingPermit />} />
+              <Route path="sticker" element={<CarSticker />} />
+            </Route>
+            <Route path="/announcements" element={<AnnouncementPage />} />
+            <Route path="/houses" element={<Houses />} />
+            <Route path="/users">
+              <Route path="residents" element={<Residents />} />
+              <Route path="guests" element={<GuestPage />} />
+              <Route path="admins" element={<AdminPage />} />
+            </Route>
           </Route>
-          <Route path="/announcements" element={<AnnouncementPage />} />
-          <Route path="/users">
-            <Route path="residents" element={<Residents />} />
-            <Route path="guests" element={<GuestPage />} />
-            <Route path="admins" element={<AdminPage />} />
+          <Route element={<LoginMiddleRoute />}>
+            <Route path="/" element={<Login />} />
           </Route>
-        </Route>
-        <Route element={<LoginMiddleRoute />}>
-          <Route path="/" element={<Login />} />
-        </Route>
-        <Route path="*" element={<Navigate to={"/"} />} />
-      </Routes>
+          <Route path="*" element={<Navigate to={"/"} />} />
+        </Routes>
+      </div>
     </div>
   );
 }

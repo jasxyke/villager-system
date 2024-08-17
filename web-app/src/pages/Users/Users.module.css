@@ -8,17 +8,13 @@
     rgba(174, 192, 154, 1) 40%,
     rgba(52, 76, 17, 1) 100%
   );
-  height: 1000px;
   width: 100%;
 }
 
 .userContainer {
-  width: calc(100% - 300px);
-  max-width: 1200px;
+  width: 100%;
   border-radius: 8px;
   padding: 20px;
-  margin-left: 300px;
-  box-sizing: border-box;
 }
 
 .logoMiddle {

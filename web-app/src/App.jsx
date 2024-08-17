@@ -30,7 +30,6 @@ function App() {
   return (
     <div className={isLoggedIn() ? "app-container" : "w-full h-full"}>
       {isLoggedIn() ? <Sidebar /> : null}
-      <div></div>
       <div className="w-full">
         <Routes>
           <Route element={<AuthenticatedMiddleRoute />}>

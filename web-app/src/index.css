@@ -23,7 +23,7 @@
 
 .app-container {
   display: grid;
-  grid-template-columns: 300px auto;
+  grid-template-columns: 300px 1fr;
   height: auto;
   min-height: 100vh;
   background: linear-gradient(

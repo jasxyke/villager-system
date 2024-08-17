@@ -186,7 +186,7 @@ const Houses = () => {
 
   return (
     <div className="flex flex-col justify-between p-5 bg-gradient-to-b from-[#AEC09A] to-[#344C11] min-h-screen w-full">
-      <div className="w-[calc(100%-300px)] max-w-[1200px] rounded-lg ml-[300px] box-border">
+      <div className="w-full rounded-lg">
         <div className="flex justify-center items-center pt-5 mb-5">
           <img src={mainLogo} alt="Main Logo" className="w-[120px] h-auto" />
         </div>

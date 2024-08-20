@@ -24,14 +24,21 @@ class AnnouncementFactory extends Factory
             $randomUrl = Storage::disk('public')->url('default_img.jpg');
         }
 
-        $eventDateTime = $this->faker->dateTimeBetween('-1 week','+1 week')->format('Y-m-d H:i');
+        $eventStartDate = $this->faker->dateTimeBetween('-1 week','+1 week')->format('Y-m-d');
+        $eventEndDate = $this->faker->dateTimeBetween($eventStartDate, $eventStartDate . ' +3 days')->format('Y-m-d');
+        $eventStartTime = $this->faker->dateTimeBetween($eventStartDate . ' +7 hour',$eventStartDate . ' +10 hour')->format('H');
+        $eventEndTime = $this->faker->dateTimeBetween($eventStartTime, $eventStartTime . ' +1 hour')->format('H:i');
+
         return [
             'admin_id'=>Admin::factory(),
             'title'=>$this->faker->sentence(5),
             'content'=>$this->faker->sentence(20),
             'picture_path'=> $randomPath,
             'picture_url' => $randomUrl,
-            'event_date_time' => $eventDateTime
+            'event_start_date'=> $eventStartDate,
+            'event_end_date'=>$eventEndDate,
+            'event_start_time'=>$eventStartTime,
+            'event_end_time'=>$eventEndTime
         ];
     }
 }

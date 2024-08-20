@@ -1,38 +1,60 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ReactModal from "react-modal";
 import modalStyles from "./AnnouncementPage.module.css";
 import styles from "./ViewAnnouncements.module.css";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+import noImg from "../../assets/no_image.jpg";
 
-const ViewModal = ({ isViewing, onClose, announcement, editAnnouncement }) => {
-  console.log(announcement.event_date_time);
-
+const ViewModal = ({
+  isViewing,
+  onClose,
+  announcement,
+  editAnnouncement,
+  changePic,
+}) => {
   const [title, setTitle] = useState(announcement.title);
-  const [dateTime, setDateTime] = useState(
-    new Date(announcement.event_date_time)
-  );
+  const [startDate, setStartDate] = useState(announcement.event_start_date);
+  const [endDate, setEndDate] = useState(announcement.event_end_date);
+  const [startTime, setStartTime] = useState(announcement.event_start_time);
+  const [endTime, setEndTime] = useState(announcement.event_end_time);
   const [content, setContent] = useState(announcement.content);
+  const [img, setImg] = useState(announcement.picture_url);
+  useEffect(() => {
+    setTitle(announcement.title);
+    setStartDate(announcement.event_start_date);
+    setEndDate(announcement.event_end_date);
+    setStartTime(announcement.event_start_time);
+    setEndTime(announcement.event_end_time);
+    setContent(announcement.content);
+    setImg(announcement.picture_url);
+  }, [announcement]);
 
+  const openPicker = () => {
+    const imgPicker = document.getElementById("announceImg");
+    imgPicker.click();
+  };
+  const changePicture = (imageFile) => {
+    changePic(
+      announcement.id,
+      imageFile,
+      (imgURL) => setImg(imgURL),
+      (msg) => {
+        alert(msg);
+        const imgPicker = document.getElementById("announceImg");
+        imgPicker.value = null;
+      }
+    );
+  };
   const handleEdit = () => {
-    var dateTimeForm =
-      dateTime.getFullYear() +
-      "-" +
-      ("0" + (dateTime.getMonth() + 1)).slice(-2) +
-      "-" +
-      ("0" + dateTime.getDate()).slice(-2) +
-      " " +
-      ("0" + dateTime.getHours()).slice(-2) +
-      ":" +
-      ("0" + dateTime.getMinutes()).slice(-2);
-
-    console.log(dateTimeForm);
-
     const formData = {
       title: title,
       content: content,
-      eventDateTime: dateTimeForm,
+      eventStartDate: startDate,
+      eventEndDate: endDate,
+      eventStartTime: startTime,
+      eventEndTime: endTime,
     };
+
+    console.log(formData);
 
     editAnnouncement(
       announcement.id,
@@ -54,17 +76,23 @@ const ViewModal = ({ isViewing, onClose, announcement, editAnnouncement }) => {
       id="modalView"
       ariaHideApp={false}
     >
-      <h2 className="text-white text-2xl font-bold mb-10">Announcement</h2>
+      <h2 className="text-white text-2xl font-bold mb-5">Announcement</h2>
       <div className={styles.modalInfo}>
         <div className={styles.modalImgContainer}>
-          <img src={announcement.picture_url} alt="" />
+          <img src={img === null ? noImg : img} alt="" />
 
-          {announcement.picture_url !== null ? (
-            <h2 className="text-white font-bold text-center w-[80%] mt-2 underline cursor-pointer">
+          {img !== null ? (
+            <h2
+              onClick={openPicker}
+              className="text-white font-bold text-center w-[80%] mt-2 underline cursor-pointer"
+            >
               Change Picture
             </h2>
           ) : (
-            <h2 className="text-white font-bold text-center w-[80%] mt-2 underline cursor-pointer">
+            <h2
+              onClick={openPicker}
+              className="text-white font-bold text-center w-[80%] mt-2 underline cursor-pointer"
+            >
               Add Picture
             </h2>
           )}
@@ -81,17 +109,53 @@ const ViewModal = ({ isViewing, onClose, announcement, editAnnouncement }) => {
               onChange={(obj) => setTitle(obj.target.value)}
             />
           </div>
-          <div className="text-white text-lg w-full">
-            <h4>Announcement date:</h4>
-            <DatePicker
-              selected={dateTime}
-              onChange={(date) => setDateTime(date)}
-              showTimeSelect
-              dateFormat="MMMM d, yyyy h:mm aa"
-              timeCaption="time"
-              timeIntervals={15}
-              className="text-black w-full p-2"
-            />
+          <div className="flex gap-y-3 text-white text-lg">
+            <div className="w-[40%]">
+              <h4>Start Date:</h4>
+              <input
+                type="date"
+                name="startDate"
+                id="startDate"
+                className="text-black p-2"
+                value={startDate}
+                onChange={(date) => setStartDate(date.target.value)}
+              />
+            </div>
+            <div className="w-[40%]">
+              <h4>End Date:</h4>
+              <input
+                type="date"
+                name="endDate"
+                id="endDate"
+                value={endDate}
+                onChange={(date) => setEndDate(date.target.value)}
+                className="p-2 text-black"
+              />
+            </div>
+          </div>
+          <div className="flex gap-y-3 text-white text-lg">
+            <div className="w-[40%]">
+              <h4>Start Time:</h4>
+              <input
+                type="time"
+                name="startTime"
+                id="startTime"
+                value={startTime}
+                onChange={(time) => setStartTime(time.target.value)}
+                className="text-black p-2"
+              />
+            </div>
+            <div className="w-[40%]">
+              <h4>End Time:</h4>
+              <input
+                type="time"
+                name="endTime"
+                id="endTime"
+                value={endTime}
+                onChange={(time) => setEndTime(time.target.value)}
+                className="text-black p-2"
+              />
+            </div>
           </div>
           <div className="text-white text-lg">
             <h3>Announcement Content:</h3>
@@ -118,6 +182,17 @@ const ViewModal = ({ isViewing, onClose, announcement, editAnnouncement }) => {
           Close
         </button>
       </div>
+      <input
+        type="file"
+        name="image"
+        id="announceImg"
+        accept="image/png, image/gif, image/jpeg"
+        className="opacity-0"
+        onChange={(file) => {
+          setImg(file.target.files[0]);
+          changePicture(file.target.files[0]);
+        }}
+      />
     </ReactModal>
   );
 };

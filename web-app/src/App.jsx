@@ -20,17 +20,18 @@ import LoginMiddleRoute from "./components/MiddleRoutes/LoginMiddleRoute";
 import Houses from "./pages/Houses/Houses";
 
 function App() {
-  const { loggedIn, isLoggedIn } = useAuthContext();
+  const { isLoggedIn } = useAuthContext();
 
   useEffect(() => {
     axiosClient
       .get("/sanctum/csrf-cookie", { baseURL: DOMAIN })
       .then((res) => {});
+    console.log("hello");
   }, []);
   return (
     <div className={isLoggedIn() ? "app-container" : "w-full h-full"}>
       {isLoggedIn() ? <Sidebar /> : null}
-      <div className="w-full">
+      <div className="main">
         <Routes>
           <Route element={<AuthenticatedMiddleRoute />}>
             <Route path="/homepage" element={<Homepage />} />

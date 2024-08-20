@@ -53,7 +53,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     //anouncement routes
     Route::apiResource('announcements', AnnouncementController::class);
-    Route::put('/announcements/img/{id}', 
+    Route::post('/announcements/img/{id}', 
     [AnnouncementController::class, 'updateAnnouncementImg']);
 });
 

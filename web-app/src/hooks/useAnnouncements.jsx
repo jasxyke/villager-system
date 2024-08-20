@@ -19,10 +19,6 @@ const useAnnouncements = () => {
     }
   };
 
-  useEffect(() => {
-    getAnnouncements();
-  }, []);
-
   const addAnnouncement = async (announcementForm, onSuccess, onError) => {
     try {
       setLoading(true);
@@ -36,6 +32,24 @@ const useAnnouncements = () => {
       setLoading(false);
     } catch (error) {
       console.log(error);
+      onError(error.response.data.message);
+    }
+  };
+
+  const changePicture = async (id, imgFile, onSuccess, onError) => {
+    setLoading(true);
+    console.log(imgFile);
+    try {
+      const res = await axiosClient.post(
+        "/announcements/img/" + id,
+        { image: imgFile },
+        { headers: { "Content-Type": "multipart/form-data" } }
+      );
+      onSuccess(res.data);
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      console.log(error.response.data.message);
       onError(error.response.data.message);
     }
   };
@@ -64,6 +78,7 @@ const useAnnouncements = () => {
     addAnnouncement,
     getAnnouncements,
     editAnnouncement,
+    changePicture,
   };
 };
 

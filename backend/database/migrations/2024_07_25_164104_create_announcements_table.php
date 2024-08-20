@@ -18,8 +18,11 @@ return new class extends Migration
             $table->text('content')->nullable();
             $table->string('picture_path')->nullable();
             $table->string('picture_url', 2083)->nullable();
-            $table->dateTime('event_date_time');
-            $table->enum('type', ['general_info','event']);
+            $table->date('event_start_date');
+            $table->date('event_end_date');
+            $table->time('event_start_time');
+            $table->time('event_end_time');
+            // $table->enum('type', ['general_info','event']);
             $table->timestamps();
         });
     }

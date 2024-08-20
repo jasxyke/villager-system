@@ -25,7 +25,10 @@ class StoreAnnouncementRequest extends FormRequest
             'announcementPic'=>'image|mimes:jpeg,png,jpg',
             'title'=>'required|string|max:100',
             'content'=>'required|string|max:2000',
-            'eventDateTime'=>'required|date|date_format:Y-m-d H:i|after:now'
+            'eventStartDate'=>'required|date|date_format:Y-m-d|after:tomorrow',
+            'eventEndDate'=>'nullable|date|date_format:Y-m-d',
+            'eventStartTime'=>'required|',//date_format:H:i
+            'eventEndTIme'=>'nullable|after:eventEndTime'//date_format:H:i
         ];
     }
 }

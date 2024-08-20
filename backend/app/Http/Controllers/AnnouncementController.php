@@ -26,8 +26,8 @@ class AnnouncementController extends Controller
         $threeWeekSoon = $now->addWeek()->addWeek()->addWeek()->addWeek()->format('Y-m-d H:i');
 
         $announcements = Announcement::whereBetween(
-                        'event_date_time', [$oneWeekAgo, $threeWeekSoon])
-                        ->orderBy('event_date_time', 'DESC')
+                        'event_start_date', [$oneWeekAgo, $threeWeekSoon])
+                        ->orderBy('event_start_date', 'DESC')
                         ->get();
         
         return $announcements;
@@ -49,8 +49,11 @@ class AnnouncementController extends Controller
             'content'=>$request->input('content'),
             'picture_path'=>$picturePath,
             'picture_url'=>$pictureUrl,
-            'event_date_time'=>$request->input('eventDateTime'),
-            'type'=>$request->type
+            'event_start_date'=>$request->input('eventStartDate'),
+            'event_end_date'=>$request->input('eventEndDate'),
+            'event_start_time'=>$request->input('eventStartTime'),
+            'event_end_time'=>$request->input('eventEndTime'),
+            // 'type'=>$request->type
         ]);
         return response()->json(['message'=>'Announced successfuly!',
                             'announcement'=>$announcement]);
@@ -84,7 +87,10 @@ class AnnouncementController extends Controller
 
         $announcement->title = $request->input('title');
         $announcement->content = $request->input('content');
-        $announcement->event_date_time = $request->input('eventDateTime');
+        $announcement->event_start_date = $request->input('eventStartDate');
+        $announcement->event_end_date = $request->input('eventEndDate');
+        $announcement->event_start_time = $request->input('eventStartTime');
+        $announcement->event_end_time = $request->input('eventEndTime');
 
         $announcement->save();
 
@@ -92,9 +98,9 @@ class AnnouncementController extends Controller
     }
 
     public function updateAnnouncementImg(Request $request, string $id){
-        $request->validate(['announcement_img' => 'required|image|mimes:jpeg,png,jpg']);
+        $request->validate(['image' => 'required|image|mimes:jpeg,png,jpg']);
 
-        $path = $request->file('announcement_img')->store($this->imagesFolderName,'public');
+        $path = $request->file('image')->store($this->imagesFolderName,'public');
         $url = Storage::disk('public')->url($path);
 
         $announcement = Announcement::findOr($id, function (){

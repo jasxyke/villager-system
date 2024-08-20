@@ -16,8 +16,11 @@ class Announcement extends Model
         'content',
         'picture_path',
         'picture_url',
-        'event_date_time',
-        'type'
+        'event_start_date',
+        'event_end_date',
+        'event_start_time',
+        'event_end_time'
+        // 'type'
     ];
 
     public function admin(): BelongsTo{

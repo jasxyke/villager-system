@@ -24,7 +24,10 @@ class UpdateAnnouncementRequest extends FormRequest
         return [
             'title'=>'required|string|max:100',
             'content'=>'required|string|max:2000',
-            'eventDateTime'=>'required|date|date_format:Y-m-d H:i'
+            'eventStartDate'=>'required|date|date_format:Y-m-d',
+            'eventEndDate'=>'nullable|date|date_format:Y-m-d',
+            'eventStartTime'=>'required',
+            'eventEndTIme'=>'nullable|after:eventEndTime'
         ];
     }
 }

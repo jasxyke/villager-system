@@ -1,40 +1,18 @@
 import React, { useState } from "react";
 import {
-  View,
-  Text,
   ActivityIndicator,
-  StyleSheet,
-  ScrollView,
   RefreshControl,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
 } from "react-native";
-import TabsGradient from "../../components/gradients/TabsGradient";
 import AppHeader from "../../components/common/AppHeader";
-import { useAuthContext } from "../../context/AuthContext";
 import ScrollViewContainer from "../../components/forms/ScrollViewContainer";
-
-import image1 from "../../assets/images/maynilad.jpg";
-import image2 from "../../assets/images/hotline.png";
-import useAnnouncement from "../../hooks/announcements/useAnnouncement";
+import TabsGradient from "../../components/gradients/TabsGradient";
+import { useAuthContext } from "../../context/AuthContext";
 import LoadingEmptyAnnouncements from "../../components/Screens/Home/LoadingEmptyAnnouncements";
-
-// const data = [
-//   {
-//     id: "1",
-//     text: "Water Interruption from 4pm - 10pm at April 27, 2023",
-//     image: image1,
-//   },
-//   {
-//     id: "2",
-//     text: "Voting of officers will be held at multi-purpose hall on June 20, 2023",
-//   },
-//   {
-//     id: "3",
-//     text: "Fur Parents Listen Up! Free vaccination for your pets will be held at a multi-purpose hall on June 30, 2023",
-//   },
-//   { id: "4", text: "Emergency Hotline", image: image2 },
-// ];
-
-const data = null;
+import useAnnouncement from "../../hooks/announcements/useAnnouncement";
 
 const Home = () => {
   const [refreshing, setRefreshing] = useState(false);

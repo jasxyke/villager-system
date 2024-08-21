@@ -8,6 +8,7 @@ use App\Http\Requests\UpdateResidentRequest;
 use App\Models\House;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class ResidentController extends Controller
 {
@@ -17,7 +18,17 @@ class ResidentController extends Controller
     public function index()
     {
         // return Resident::with('user')->paginate(20);
-        return User::where('role_type','=','resident')->with('resident','resident.house')->paginate(20);
+        return User::where('role_type', '=', 'home_owner')
+                    ->orWhere('role_type', '=', 'home_owner')
+                    ->orWhere('role_type', '=', 'tenant')
+                    ->orWhere('role_type', '=', 'seller')
+                ->with('resident','resident.house')
+                ->orderByRaw("role_type = 'home_owner' ASC")
+                ->orderByRaw("role_type = 'memeber' ASC")
+                ->orderByRaw("role_type = 'tenant' ASC")
+                ->orderByRaw("role_type = 'seller' ASC")
+                ->orderBy('lastname', 'ASC')
+                ->paginate(20);
     }
 
     public function getResidentsPerBlock(Request $request, string $blockNumber){
@@ -37,14 +48,6 @@ class ResidentController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(StoreResidentRequest $request)
@@ -59,21 +62,36 @@ class ResidentController extends Controller
     {
         //
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Resident $resident)
-    {
-        //
-    }
-
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateResidentRequest $request, Resident $resident)
+    public function update(UpdateResidentRequest $request, string $id)
     {
-        //
+        $user = User::findOr($id, function (){
+            throw ValidationException::withMessages([
+                'message'=>'Resident not found.'
+            ]);
+        });
+        $resident = Resident::where('user_id','=',$user->id)->first();
+
+        //update user columns
+        $user->lastname = $request->input('lastname');
+        $user->firstname = $request->input('firstname');
+        $user->middlename = $request->input('middlename');
+        $user->email = $request->input('email');
+        $user->role_type = $request->input('roleType');
+        $user->save();
+
+        $resident->birthdate = $request->input('birthdate');
+        $resident->sex = $request->input('sex');
+        $resident->civil_status = $request->input('civilStatus');
+        $resident->fb_name = $request->input('facebook');
+        $resident->occupation_status = $request->input('occupation');
+        $resident->save();
+
+        $user = $user->load(['resident','resident.house']);
+        return response()->json(['message'=> 'Resident edited!', 'user'=> $user]);
+
     }
 
     /**

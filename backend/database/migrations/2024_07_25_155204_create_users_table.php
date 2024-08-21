@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('contact_number',20);
             $table->string('picture_url', 2083);
             $table->string('picture_path', 2083);
-            $table->enum('role_type',['resident','tenant','admin','treasurer','home_owner','seller']); // Example values: 'resident', 'admin', 'treasurer'
+            $table->enum('role_type',['member','tenant','admin','treasurer','home_owner','seller']); // Example values: 'resident', 'admin', 'treasurer'
             $table->rememberToken();
             $table->timestamps();
         });

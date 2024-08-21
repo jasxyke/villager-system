@@ -23,7 +23,7 @@ class UserSeeder extends Seeder
             'lastname'=>'Cortez',
             'firstname'=>'Jaspher Xyke',
             'middlename'=>'Mendones',
-            'role_type'=>'resident',
+            'role_type'=>'home_owner',
             'email'=>'jasxyke23.jxc@gmail.com',
             'password'=>Hash::make('password'),
             'remember_token'=>Str::random(10),
@@ -39,7 +39,7 @@ class UserSeeder extends Seeder
             'lastname'=>'Fabellon',
             'firstname'=>'Rydel',
             'middlename'=>'Fiedacan',
-            'role_type'=>'resident',
+            'role_type'=>'home_owner',
             'email'=>'rydelfabellon@gmail.com',
             'password'=>Hash::make('password'),
             'remember_token'=>Str::random(10),
@@ -94,36 +94,8 @@ class UserSeeder extends Seeder
             'picture_path' => 'default_img.jpg',
         ]);
 
-
         Admin::create([
             'user_id'=>$adminUser->id
         ]);
-
-        //create guest user for testing
-        User::factory([
-            'lastname'=>'Cortez',
-            'firstname'=>'Jaspher Guest',
-            'middlename'=>'Mendones',
-            'role_type'=>'tenant',
-            'email'=>'jasxyke.jxc@gmail.com',
-            'password'=>Hash::make('password'),
-            'remember_token'=>Str::random(10),
-            'contact_number'=>'09487834865',
-            'picture_url' => Storage::disk('public')->url('default_img.jpg'),
-            'picture_path' => 'default_img.jpg',
-        ])->create();
-
-        User::factory([
-            'lastname'=>'Fabellon',
-            'firstname'=>'Rydel',
-            'middlename'=>'Fiedacan',
-            'role_type'=>'tenant',
-            'email'=>'rydelfabellon53@gmail.com',
-            'password'=>Hash::make('password'),
-            'remember_token'=>Str::random(10),
-            'contact_number'=>'09309200555',
-            'picture_url' => Storage::disk('public')->url('default_img.jpg'),
-            'picture_path' => 'default_img.jpg',
-        ])->create();
     }
 }

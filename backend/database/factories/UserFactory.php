@@ -42,7 +42,7 @@ class UserFactory extends Factory
     public function resident(): Factory{
         return $this->state(function (array $attributes){
             return [
-                'role_type'=>'resident'
+                'role_type'=>'member'
             ];
         });
     }

@@ -1,0 +1,18 @@
+.pagination {
+  display: flex;
+  justify-content: space-between;
+  column-gap: 25px;
+  background-color: var(--primary);
+  margin-top: 20px;
+  padding: 12px 16px;
+}
+
+.pagination li {
+  color: white;
+  padding: 0 0.5rem;
+  box-sizing: border-box;
+}
+
+.pagination li:hover {
+  background-color: var(--paleGreen);
+}

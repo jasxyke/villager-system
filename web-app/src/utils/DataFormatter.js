@@ -1,4 +1,9 @@
-export function formatFullName(firstname, middlename, lastname, lastNameFirst) {
+export function formatFullName(
+  firstname,
+  middlename,
+  lastname,
+  lastNameFirst = true
+) {
   if (middlename === null) {
     middlename = "";
   } else {
@@ -39,4 +44,28 @@ export function converTime(time) {
     time[0] = +time[0] % 12 || 12; // Adjust hours
   }
   return time.join(""); // return adjusted time or original string
+}
+
+export function calculateAge(birthDateString) {
+  // Split the birthDateString to extract year, month, and day
+  const [year, month, day] = birthDateString.split("-").map(Number);
+
+  // Create a new Date object with the extracted year, month, and day
+  const birthDate = new Date(year, month - 1, day); // month is 0-indexed
+
+  // Get today's date
+  const today = new Date();
+
+  // Calculate the age
+  let age = today.getFullYear() - birthDate.getFullYear();
+
+  // Adjust the age if the birth date hasn't occurred yet this year
+  const monthDifference = today.getMonth() - birthDate.getMonth();
+  const dayDifference = today.getDate() - birthDate.getDate();
+
+  if (monthDifference < 0 || (monthDifference === 0 && dayDifference < 0)) {
+    age--;
+  }
+
+  return age;
 }

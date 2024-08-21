@@ -74,7 +74,7 @@ class AuthController extends Controller
 
     public function me(Request $request){
         $user = $request->user();
-        if($user->role_type == 'resident'){
+        if($user->role_type == 'home_owner'){
             return $user->load('resident','resident.house');
         }
         if($user->role_type == 'admin'){

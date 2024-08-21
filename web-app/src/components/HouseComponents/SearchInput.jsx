@@ -2,8 +2,13 @@ import React from "react";
 import searchIcon from "../../assets/icons/search.png";
 
 const SearchInput = ({ query, onSearchChange }) => (
-  <div className="flex items-center px-4 py-2 bg-[var(--darkGreen)] text-white rounded-md h-14 w-96 text-lg">
-    <img src={searchIcon} alt="Search" className="mr-2 w-5 h-5" />
+  <div className="flex items-center w-4/12 h-14 rounded-xl gap-2.5 pl-2.5 border-transparent bg-[var(--darkGreen)]">
+    <img
+      src={searchIcon}
+      alt="Search"
+      className="text-5xl text-white p-2 w-12 h-12"
+    />
+    <span className="w-1 h-full bg-[var(--fourth)]" />
     <input
       type="text"
       placeholder="SEARCH RESIDENT"

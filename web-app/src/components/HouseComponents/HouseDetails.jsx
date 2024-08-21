@@ -9,6 +9,8 @@ import homeIcon from "../../assets/icons/Home.png";
 import mapMarkerIcon from "../../assets/icons/map-marker.png";
 import plusCircleIcon from "../../assets/icons/plus-circle.png";
 
+const ITEMS_PER_PAGE = 5;
+
 const HouseDetails = ({
   lot,
   blockName,
@@ -20,12 +22,25 @@ const HouseDetails = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [memberType, setMemberType] = useState("Family");
 
+  const [currentPage, setCurrentPage] = useState(1);
+
   const handleAddMember = () => {
     if (newMember.trim() !== "") {
       onAddMember({ name: newMember, type: memberType });
       setNewMember("");
       setIsModalOpen(false);
     }
+  };
+
+  const totalPages = Math.ceil(lot.members.length / ITEMS_PER_PAGE);
+
+  const paginatedMembers = lot.members.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  );
+
+  const goToPage = (page) => {
+    setCurrentPage(page);
   };
 
   return (
@@ -38,7 +53,7 @@ const HouseDetails = ({
           className="text-2xl cursor-pointer hover:text-secondary transition-colors w-6 h-6"
         />
         <div className="ml-auto flex space-x-4">
-          <img
+          {/*<img
             src={editIcon}
             alt="Edit"
             className="text-xl cursor-pointer hover:text-secondary transition-colors w-6 h-6"
@@ -47,13 +62,13 @@ const HouseDetails = ({
             src={trashIcon}
             alt="Delete"
             className="text-xl cursor-pointer hover:text-secondary transition-colors w-6 h-6"
-          />
+          />*/}
         </div>
       </div>
 
       <div className="flex flex-col gap-6 mb-0 bg-[var(--mutedGreen)] p-10 rounded-t-lg">
-        <div className="flex flex-wrap gap-6">
-          <div className="flex items-center w-64 h-14 rounded-xl gap-2.5 pl-2.5 border-transparent bg-[var(--darkGreen)]">
+        <div className="flex flex-wrap gap-4">
+          <div className="flex items-center w-8/12 h-14 rounded-xl gap-2.5 pl-2.5 border-transparent bg-[var(--darkGreen)]">
             <img
               src={userIcon}
               alt="User"
@@ -72,13 +87,14 @@ const HouseDetails = ({
             />
             <span className="w-1 h-full bg-[var(--mutedGreen)]" />
             <span className="text-lg font-medium ml-2 text-black">
-              {lot.ownerStatus}
+              OWNER
+              {/*lot.ownerStatus*/}
             </span>
           </div>
         </div>
 
-        <div className="flex flex-auto gap-6">
-          <div className="flex items-center w-64 h-14 rounded-xl gap-2.5 pl-2.5 border-transparent bg-[var(--darkGreen)]">
+        <div className="flex flex-auto gap-4">
+          <div className="flex items-center w-72 h-14 rounded-xl gap-2.5 pl-2.5 border-transparent bg-[var(--darkGreen)]">
             <img
               src={usersIcon}
               alt="Users"
@@ -89,7 +105,7 @@ const HouseDetails = ({
               {lot.members.length} MEMBERS
             </span>
           </div>
-          <div className="flex items-center w-64 h-14 rounded-xl gap-2.5 pl-2.5 border-transparent bg-[var(--darkGreen)]">
+          <div className="flex items-center w-4/12 h-14 rounded-xl gap-2.5 pl-2.5 border-transparent bg-[var(--darkGreen)]">
             <img
               src={homeIcon}
               alt="Home"
@@ -116,7 +132,7 @@ const HouseDetails = ({
 
       <div className="bg-[var(--darkerGreen)] p-10 rounded-b-lg">
         <div className="text-xl font-semibold mb-4">Members:</div>
-        {lot.members.map((member, index) => (
+        {paginatedMembers.map((member, index) => (
           <div
             key={index}
             className="bg-[var(--darkGreen)] text-black flex justify-between items-center px-4 py-3 rounded-lg mb-3 shadow-md hover:bg-[var(--mutedGreen)] transition-colors"
@@ -125,6 +141,37 @@ const HouseDetails = ({
             <span className="text-lg ml-6">{member.type}</span>
           </div>
         ))}
+
+        {totalPages > 1 && (
+          <div className="flex justify-center items-center mt-6 gap-5">
+            <button
+              onClick={() => goToPage(currentPage - 1)}
+              disabled={currentPage === 1}
+              className="bg-[var(--darkGreen)] text-black px-4 py-2 rounded-lg shadow-md hover:bg-[var(--mutedGreen)]"
+            >
+              prev
+            </button>
+            <span className="text-lg text-black">
+              {currentPage} of {totalPages}
+            </span>
+            <button
+              onClick={() => goToPage(currentPage + 1)}
+              disabled={currentPage === totalPages}
+              className="bg-[var(--darkGreen)] text-black px-4 py-2 rounded-lg shadow-md hover:bg-[var(--mutedGreen)]"
+            >
+              next
+            </button>
+          </div>
+        )}
+        {/*lot.members.map((member, index) => (
+          <div
+            key={index}
+            className="bg-[var(--darkGreen)] text-black flex justify-between items-center px-4 py-3 rounded-lg mb-3 shadow-md hover:bg-[var(--mutedGreen)] transition-colors"
+          >
+            <span className="text-lg">{member.name}</span>
+            <span className="text-lg ml-6">{member.type}</span>
+          </div>
+        ))*/}
 
         <div
           className="flex items-center  mt-6 cursor-pointer"
@@ -161,6 +208,7 @@ const HouseDetails = ({
               >
                 <option value="Family">Family</option>
                 <option value="Employee">Employee</option>
+                <option value="Tenant">Tenant</option>
               </select>
             </div>
             <div className="flex justify-end space-x-2">

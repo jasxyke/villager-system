@@ -54,13 +54,13 @@ const Residents = () => {
               <div className={styles.residentHeaderItem}>Type</div>
             </div>
             <div className={styles.residentBody}>
-              {residents !== null ? (
+              {loading ? (
+                <LoadingContainer />
+              ) : residents !== null ? (
                 <ResidentsList
                   residents={residents.data}
                   handleViewDetails={handleViewDetails}
                 />
-              ) : loading ? (
-                <LoadingContainer />
               ) : null}
               {/* <button className={styles.addDataButton} onClick={handleAddClick}>
                 ➕ Add Data

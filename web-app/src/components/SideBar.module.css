@@ -21,7 +21,7 @@
 }
 
 .sidebar a,
-p {
+.sidebar p {
   display: flex;
   align-items: center;
   text-decoration: none;
@@ -40,7 +40,7 @@ p {
 }
 
 .sidebar a:hover,
-p:hover {
+.sidebar p:hover {
   color: #ffffff;
   background-color: #50731b;
 }

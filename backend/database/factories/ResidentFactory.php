@@ -17,7 +17,7 @@ class ResidentFactory extends Factory
      * @return array<string, mixed>
      */
     public function definition(): array
-    {
+    {   
         return [
             'user_id'=>User::factory()->resident(),
             'birthdate'=>$this->faker->date(),

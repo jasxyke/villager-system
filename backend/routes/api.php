@@ -29,6 +29,7 @@ Route::middleware('auth:sanctum')->group(function () {
     //resident routes
     Route::get('/residents/block/{blockNumber}', 
     [ResidentController::class, 'getResidentsPerBlock']);
+    Route::apiResource('residents', ResidentController::class);
 
     //user routes
     Route::apiResource('users', UserController::class);

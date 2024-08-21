@@ -5,86 +5,16 @@ import SearchInput from "../../components/HouseComponents/SearchInput";
 import HouseDetails from "../../components/HouseComponents/HouseDetails";
 import BlockList from "../../components/HouseComponents/BlockList";
 import AddHouse from "../../components/HouseComponents/AddHouse";
+import sampleData from "./SampleData";
+import addIcon from "../../assets/icons/plus-circle.png";
 
-const sampleData = [
-  {
-    name: "Block 1",
-    lots: [
-      {
-        lot: "1",
-        resident: "Maricar Reyes",
-        ownerStatus: "OWNER",
-        members: [
-          { name: "Juanito Reyes", type: "Family" },
-          { name: "Francisco Reyes", type: "Family" },
-          { name: "Richard Tan", type: "Employee" },
-        ],
-      },
-      {
-        lot: "2",
-        resident: "Romeo Hart",
-        ownerStatus: "TENANT",
-        members: [{ name: "Mary Smith", type: "Family" }],
-      },
-      {
-        lot: "3",
-        resident: "Ash Yamzon",
-        ownerStatus: "OWNER",
-        members: [{ name: "Mary Smith", type: "Family" }],
-      },
-    ],
-  },
-  {
-    name: "Block 2",
-    lots: [
-      {
-        lot: "1",
-        resident: "Romeo Hart",
-        ownerStatus: "OWNER",
-        members: [
-          { name: "Robert Johnson", type: "Family" },
-          { name: "Emily Johnson", type: "Family" },
-        ],
-      },
-    ],
-  },
-  {
-    name: "Block 3",
-    lots: [
-      {
-        lot: "1",
-        resident: "Robert Johnson",
-        ownerStatus: "OWNER",
-        members: [
-          { name: "Robert Johnson", type: "Family" },
-          { name: "Emily Johnson", type: "Family" },
-        ],
-      },
-    ],
-  },
-  {
-    name: "Block 4",
-    lots: [
-      {
-        lot: "1",
-        resident: "Ash Yamzon",
-        ownerStatus: "OWNER",
-        members: [
-          { name: "Robert Johnson", type: "Family" },
-          { name: "Emily Johnson", type: "Family" },
-        ],
-      },
-    ],
-  },
-];
-
-const ITEMS_PER_PAGE = 2;
+const ITEMS_PER_PAGE = 5;
 
 const Houses = () => {
   const [filteredBlocks, setFilteredBlocks] = useState(sampleData);
   const [isFilterVisible, setFilterVisible] = useState(false);
   const [selectedBlocks, setSelectedBlocks] = useState(
-    sampleData.reduce((acc, block) => ({ ...acc, [block.name]: true }), {})
+    sampleData.reduce((acc, block) => ({ ...acc, [block.name]: false }), {})
   );
 
   const [openBlock, setOpenBlock] = useState(null);
@@ -160,6 +90,8 @@ const Houses = () => {
             : block
         )
       );
+      setSelectedLot(newHouse.lots[0]);
+      setBlockName(newHouse.name);
     } else {
       // If the block doesn't exist, add the new block
       setFilteredBlocks((prevBlocks) => [...prevBlocks, newHouse]);
@@ -191,7 +123,7 @@ const Houses = () => {
           <img src={mainLogo} alt="Main Logo" className="w-[120px] h-auto" />
         </div>
 
-        <div className="bg-[var(--fourth)] w-full min-h-[700px] max-h-[90vh] overflow-auto p-16 rounded-lg">
+        <div className="bg-[var(--fourth)] w-full min-h-[400px] overflow-auto p-16 rounded-lg">
           <div className="flex justify-start items-center mb-10 space-x-10">
             <FilterButton
               isVisible={isFilterVisible}
@@ -207,9 +139,15 @@ const Houses = () => {
             />
             <button
               onClick={() => setAddHouseVisible(true)}
-              className="flex items-center px-4 py-2 bg-[var(--darkGreen)] text-white rounded-md h-14 w-40 text-lg"
+              className="flex items-center px-4 py-2 bg-[var(--darkGreen)] text-white rounded-xl h-14 w-52 text-lg  hover:bg-[var(--olive)]"
             >
-              Add House
+              <img
+                src={addIcon}
+                alt="User"
+                className="text-5xl text-white p-2 w-12 h-12"
+              />
+              ADD HOUSE
+              {/*Add House*/}
             </button>
           </div>
           {selectedLot ? (
@@ -234,7 +172,7 @@ const Houses = () => {
                   <button
                     onClick={() => goToPage(currentPage - 1)}
                     disabled={currentPage === 1}
-                    className="px-4 py-2 bg-[var(--darkGreen)] text-white rounded"
+                    className="px-4 py-2 bg-[var(--darkGreen)] text-white rounded hover:bg-[var(--mutedGreen)]"
                   >
                     Previous
                   </button>
@@ -247,7 +185,7 @@ const Houses = () => {
                             onClick={() => goToPage(page)}
                             className={`px-4 py-2 rounded ${
                               currentPage === page
-                                ? "bg-[var(--mutedGreen)] text-black"
+                                ? "bg-[var(--mutedGreen)] text-white"
                                 : "bg-[var(--darkGreen)] text-white"
                             }`}
                           >
@@ -260,7 +198,7 @@ const Houses = () => {
                   <button
                     onClick={() => goToPage(currentPage + 1)}
                     disabled={currentPage === totalPages}
-                    className="px-4 py-2 bg-[var(--darkGreen)] text-black rounded hover:bg-[var(--mutedGreen)]"
+                    className="px-4 py-2 bg-[var(--darkGreen)] text-white rounded hover:bg-[var(--mutedGreen)]"
                   >
                     Next
                   </button>

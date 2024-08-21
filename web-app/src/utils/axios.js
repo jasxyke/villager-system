@@ -3,7 +3,7 @@ import axios from "axios";
 axios.defaults.withCredentials = true;
 axios.defaults.withXSRFToken = true;
 
-export const DOMAIN = "http://192.168.254.122:8000";
+export const DOMAIN = "http://192.168.128.45:8000";
 // export const DOMAIN = `${process.env.REACT_APP_API_URL}`;
 console.log(DOMAIN);
 

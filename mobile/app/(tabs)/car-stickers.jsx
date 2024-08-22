@@ -1,12 +1,17 @@
-import { View, Text } from "react-native";
-import React from "react";
+import React from 'react';
+import { SafeAreaView } from 'react-native';
+import PermitForm from '../../components/forms/PermitForm';
+import TabsGradient from "../../components/gradients/TabsGradient";
+import AppHeader from "../../components/common/AppHeader";
 
-const CarStickers = () => {
+const App = () => {
   return (
-    <View>
-      <Text>CarStickers</Text>
-    </View>
+    <SafeAreaView style={{ flex: 1 }}>
+      <TabsGradient />
+      <AppHeader />
+      <PermitForm />
+    </SafeAreaView>
   );
 };
 
-export default CarStickers;
+export default App;

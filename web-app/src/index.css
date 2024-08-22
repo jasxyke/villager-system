@@ -41,3 +41,7 @@
   );
   width: 100%;
 }
+
+li:has(> a.active) {
+  background-color: #50731b;
+}

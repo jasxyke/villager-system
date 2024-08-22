@@ -1,5 +1,4 @@
 import React, { useState, useMemo } from "react";
-import mainLogo from "../../assets/logo.png";
 import FilterButton from "../../components/HouseComponents/FilterButton";
 import SearchInput from "../../components/HouseComponents/SearchInput";
 import HouseDetails from "../../components/HouseComponents/HouseDetails";
@@ -7,6 +6,7 @@ import BlockList from "../../components/HouseComponents/BlockList";
 import AddHouse from "../../components/HouseComponents/AddHouse";
 import sampleData from "./SampleData";
 import addIcon from "../../assets/icons/plus-circle.png";
+import MainLogo from "../../components/MainLogo";
 
 const ITEMS_PER_PAGE = 5;
 
@@ -117,13 +117,11 @@ const Houses = () => {
   const showPageNumbers = totalPages <= 5;
 
   return (
-    <div className="flex flex-col justify-between p-5 bg-gradient-to-b from-[#AEC09A] to-[#344C11] min-h-screen w-full">
+    <div className="flex flex-col justify-between p-10 bg-gradient-to-b from-[#AEC09A] to-[#344C11] min-h-screen w-full">
       <div className="w-full rounded-lg">
-        <div className="flex justify-center items-center pt-5 mb-5">
-          <img src={mainLogo} alt="Main Logo" className="w-[120px] h-auto" />
-        </div>
+        <MainLogo />
 
-        <div className="bg-[var(--fourth)] w-full min-h-[400px] overflow-auto p-16 rounded-lg">
+        <div className="bg-[var(--fourth)] w-full min-h-[400px] overflow-auto px-10 py-8 rounded-lg">
           <div className="flex justify-start items-center mb-10 space-x-10">
             <FilterButton
               isVisible={isFilterVisible}

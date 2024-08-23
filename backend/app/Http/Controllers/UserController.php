@@ -111,7 +111,7 @@ class UserController extends Controller
         $url = Storage::disk('public')->url($path);
         
         $user = $request->user();
-        if($user->picture_path !== null || $user->picture_path !== ""){
+        if($user->picture_path !== null){
             Storage::delete($user->picture_path);
         }
         $user->picture_url = $url;

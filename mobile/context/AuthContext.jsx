@@ -99,7 +99,8 @@ export function AuthProvider({ children }) {
     try {
       const res = await axiosClient.get("/me");
       const responseUser = res.data;
-      if (responseUser !== null) setLoggedIn(true);
+      if (responseUser !== null || responseUser !== undefined)
+        setLoggedIn(true);
       setUser(responseUser);
       console.log("response user: " + responseUser);
     } catch (error) {

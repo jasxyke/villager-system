@@ -1,9 +1,15 @@
 import React from "react";
-
-const LoadingPage = () => {
+import MoonLoader from "react-spinners/MoonLoader";
+const LoadingPage = ({ color, loading, size = 100 }) => {
   return (
-    <div className="container">
-      <p>loading... susunod ko na ibahin antok nako</p>
+    <div className="container flex justify-center items-center h-full">
+      <MoonLoader
+        color={color}
+        loading={loading}
+        size={size}
+        aria-label="Loading Spinner"
+        data-testid="loader"
+      />
     </div>
   );
 };

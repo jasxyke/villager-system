@@ -3,7 +3,7 @@ import BounceLoader from "react-spinners/BounceLoader";
 
 const LoadingContainer = ({ loading, color = "#ffffff", size = 50 }) => {
   return (
-    <div className="flex justify-center items-center w-full h-[500px]">
+    <div className="w-full h-full flex justify-center items-center">
       <BounceLoader
         color={color}
         loading={loading}

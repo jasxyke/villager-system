@@ -15,6 +15,11 @@ export default {
         mintGreen: "#c6e2d4",
         mutedGreen: "#aec09a",
         paleDarkGreen: "#536934",
+        darkOliverGreen: "#556b2f",
+        oliveGreen: "#50731b",
+        olive: "#3c4c24",
+        darkerGreen: "#4b633e",
+
       },
     },
   },

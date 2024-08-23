@@ -1,15 +1,20 @@
-import React from 'react';
-import styles from './BookingPage.module.css';
-import Calendar from './Calendar';
+import React from "react";
+import styles from "./BookingPage.module.css";
+import Calendar from "./Calendar";
+import MainLogo from "../../components/MainLogo";
+import SearchBar from "./SearchBar";
+import BookingTable from "./BookingTable";
 
 const BookingPage = () => {
   return (
     <div className={styles.mainContainer}>
       <div className={styles.bookingContainer}>
-      <div className={styles.logoMiddle}>
-        <img src='/Logo-D.svg' alt='logo' className={styles.logoClass} />
-      </div>
-      <div className={styles.notificationSection}>
+        <div className={styles.logoMiddle}>
+          <MainLogo />
+          {/*<img src="/Logo-D.svg" alt="logo" className={styles.logoClass} />*/}
+        </div>
+        {/** REMOVE THISS SHEEEYY */}
+        {/*<div className={styles.notificationSection}>
         <div>
           <div className={styles.notificationTitle}>PENDING BOOKING APPROVAL</div>
           <div className={styles.notificationList}>
@@ -30,19 +35,22 @@ const BookingPage = () => {
             }
           </div>
         </div>
+      </div>*/}
+        <div className={styles.bookingButtons}>
+          <button className={styles.active}>MULTI-PURPOSE HALL</button>
+          <button className={styles.active}>BASKETBALL COURT</button>
+        </div>
+        <div>
+          <Calendar />
+        </div>
+        <div className={styles.searchBarContainer}>
+          <SearchBar />
+        </div>
+        <div className={styles.searchBarContainer}>
+          <BookingTable />
+        </div>
       </div>
-      <div className={styles.bookingButtons}>
-        <button className={styles.active}>MULTI-PURPOSE HALL</button>
-        <button className={styles.active}>BASKETBALL COURT</button>
-      </div>
-      <center>
-        <Calendar />
-      </center>
-      <br />
-      <br />
     </div>
-    </div>
-    
   );
 };
 

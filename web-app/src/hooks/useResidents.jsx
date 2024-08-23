@@ -37,26 +37,58 @@ const useResidents = () => {
       });
   };
 
+  const addResident = async (residentData, onSuccess, onError) => {
+    try {
+      setLoading(true);
+      const res = await axiosClient.post("/residents", residentData);
+      onSuccess(res.data.message, res.data.resident);
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      console.log(error.response.data);
+      onError(error.response.data.message);
+    }
+  };
+
   const editResident = async (
     residentId,
     editedResident,
     onSucces,
-    onError
+    onError,
+    singleResident = false
   ) => {
-    try {
-      setLoading(true);
-      const res = await axiosClient.put(
-        "/residents/" + residentId,
-        editedResident
-      );
+    if (singleResident) {
+      try {
+        setLoading(true);
+        const res = await axiosClient.put(
+          "/residents/" + residentId,
+          editedResident
+        );
+        console.log("edited resident in house: ");
+        console.log(res.data);
+        onSucces(res.data.message, res.data.user);
+        setLoading(false);
+      } catch (error) {
+        console.log(error.response.data.message);
+        onError(error.response.data.message);
+        setLoading(false);
+      }
+    } else {
+      try {
+        setLoading(true);
+        const res = await axiosClient.put(
+          "/residents/" + residentId,
+          editedResident
+        );
 
-      onSucces("Resident edited!", res.data.user);
-      getAllResidents();
-      setLoading(false);
-    } catch (error) {
-      console.log(error.response.data.message);
-      onError(error.response.data.message);
-      setLoading(false);
+        onSucces("Resident edited!", res.data.user);
+        getAllResidents();
+        setLoading(false);
+      } catch (error) {
+        console.log(error.response.data.message);
+        onError(error.response.data.message);
+        setLoading(false);
+      }
     }
   };
 
@@ -93,6 +125,7 @@ const useResidents = () => {
     editResident,
     loading,
     changePage,
+    addResident,
   };
 };
 

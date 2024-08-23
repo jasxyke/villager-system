@@ -9,6 +9,10 @@
   border-top-right-radius: 20px;
   border-bottom-right-radius: 20px;
 }
+li:has(> a.active) {
+  background-color: white;
+  color: black;
+}
 
 .sidebar ul {
   list-style-type: none;

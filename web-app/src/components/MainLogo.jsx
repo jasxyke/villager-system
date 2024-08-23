@@ -2,7 +2,7 @@ import React from "react";
 import mainLogo from "../assets/logo.png";
 const MainLogo = () => {
   return (
-    <div className="flex-1 w-full">
+    <div className="">
       <img
         src={mainLogo}
         alt="Main Logo"

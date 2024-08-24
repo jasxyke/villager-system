@@ -56,7 +56,7 @@ class ResidentController extends Controller
             'lastname'=>$request->input('lastname'),
             'firstname'=>$request->input('firstname'),
             'middlename'=>$request->input('middlename'),
-            'role_type'=>'home_owner',
+            'role_type'=>$request->roleType,
             'email'=>$request->input('email'),
             'contact_number'=>$request->input('contactNumber'),
         ]);
@@ -66,7 +66,7 @@ class ResidentController extends Controller
             'house_id'=>$request->houseId,
             'birthdate'=>$request->input('birthdate'),
             'sex'=>$request->input('sex'),
-            'civi_status'=>$request->input('civilStatus'),
+            'civil_status'=>$request->input('civilStatus'),
             'occupation_status'=>$request->input('occupation'),
             'fb_name'=>$request->input('facebook'),
         ]);

@@ -16,8 +16,7 @@ import AppHeader from "../../components/common/AppHeader";
 import { colors } from "../../styles/colors";
 import useBookings from "../../hooks/bookings/useBookings";
 import { formatTime } from "../../utils/DataFormatter";
-import DateTimePicker from "@react-native-community/datetimepicker";
-
+import DatePicker from "react-native-date-picker";
 const Booking = () => {
   const [selectedAmenity, setSelectedAmenity] = useState(null);
   const [selectedDate, setSelectedDate] = useState(null);
@@ -91,16 +90,14 @@ const Booking = () => {
     };
   }
 
-  const handleStartTimeChange = (event, selectedDate) => {
-    const currentDate = selectedDate || startTime;
-    setShowStartTimePicker(Platform.OS === "ios");
-    setStartTime(currentDate);
+  const handleStartTimeConfirm = (time) => {
+    setStartTime(time);
+    setShowStartTimePicker(false);
   };
 
-  const handleEndTimeChange = (event, selectedDate) => {
-    const currentDate = selectedDate || endTime;
-    setShowEndTimePicker(Platform.OS === "ios");
-    setEndTime(currentDate);
+  const handleEndTimeConfirm = (time) => {
+    setEndTime(time);
+    setShowEndTimePicker(false);
   };
 
   const checkForConflicts = () => {
@@ -226,15 +223,14 @@ const Booking = () => {
                         onPress={() => setShowStartTimePicker(true)}
                       />
                       <Text>Start Time: {startTime.toLocaleTimeString()}</Text>
-                      {showStartTimePicker && (
-                        <DateTimePicker
-                          value={startTime}
-                          mode="time"
-                          is24Hour={true}
-                          display="default"
-                          onChange={handleStartTimeChange}
-                        />
-                      )}
+                      <DatePicker
+                        modal
+                        open={showStartTimePicker}
+                        date={startTime}
+                        mode="time"
+                        onConfirm={handleStartTimeConfirm}
+                        onCancel={() => setShowStartTimePicker(false)}
+                      />
                     </View>
                     <View className="w-[45%]">
                       <Button
@@ -242,15 +238,14 @@ const Booking = () => {
                         onPress={() => setShowEndTimePicker(true)}
                       />
                       <Text>End Time: {endTime.toLocaleTimeString()}</Text>
-                      {showEndTimePicker && (
-                        <DateTimePicker
-                          value={endTime}
-                          mode="time"
-                          is24Hour={true}
-                          display="default"
-                          onChange={handleEndTimeChange}
-                        />
-                      )}
+                      <DatePicker
+                        modal
+                        open={showEndTimePicker}
+                        date={endTime}
+                        mode="time"
+                        onConfirm={handleEndTimeConfirm}
+                        onCancel={() => setShowEndTimePicker(false)}
+                      />
                     </View>
                   </View>
                   <Button title="Book Now" onPress={handleReservation} />

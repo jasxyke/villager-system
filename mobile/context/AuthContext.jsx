@@ -99,10 +99,15 @@ export function AuthProvider({ children }) {
     try {
       const res = await axiosClient.get("/me");
       const responseUser = res.data;
-      if (responseUser !== null || responseUser !== undefined)
+      if (responseUser !== null || responseUser !== undefined) {
         setLoggedIn(true);
+      } else {
+        router.replace("../sign-in");
+        setLoggedIn(false);
+        return;
+      }
       setUser(responseUser);
-      console.log("response user: " + responseUser);
+      console.log("response user: " + responseUser.firstname);
     } catch (error) {
       console.log("user error");
 

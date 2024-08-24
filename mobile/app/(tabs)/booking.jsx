@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -14,31 +14,41 @@ import { Calendar } from "react-native-calendars";
 import TabsGradient from "../../components/gradients/TabsGradient";
 import AppHeader from "../../components/common/AppHeader";
 import { colors } from "../../styles/colors";
-
-const reservationsData = {
-  "Multi-Purpose Hall": {
-    "2024-08-25": ["10:00 AM - 11:00 AM", "2:00 PM - 3:00 PM"],
-    "2024-08-26": ["9:00 AM - 10:00 AM", "1:00 PM - 2:00 PM"],
-  },
-  "Basketball Court": {
-    "2024-08-25": ["11:00 AM - 12:00 PM", "3:00 PM - 4:00 PM"],
-    "2024-08-26": ["10:00 AM - 11:00 AM", "2:00 PM - 3:00 PM"],
-  },
-};
+import useBookings from "../../hooks/bookings/useBookings";
+import { formatTime } from "../../utils/DataFormatter";
+import DateTimePicker from "@react-native-community/datetimepicker";
 
 const Booking = () => {
   const [selectedAmenity, setSelectedAmenity] = useState(null);
   const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
   const [reservedTimes, setReservedTimes] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   const [timeToReserve, setTimeToReserve] = useState("");
-  const [reservations, setReservations] = useState(reservationsData);
+  const [showStartTimePicker, setShowStartTimePicker] = useState(false);
+  const [showEndTimePicker, setShowEndTimePicker] = useState(false);
+  const [startTime, setStartTime] = useState(new Date());
+  const [endTime, setEndTime] = useState(new Date());
+  //const [markedDates, setMarketDates] = useState(null);
 
-  const amenities = ["Multi-Purpose Hall", "Basketball Court"];
+  const amenities = [
+    { id: 1, name: "Basketball Court" },
+    { id: 2, name: "Multi-Purpose Hall" },
+  ];
+
+  const { fetchBookings, bookings, loading } = useBookings();
+
+  useEffect(() => {
+    if (selectedAmenity) {
+      fetchBookings(selectedYear, selectedMonth, selectedAmenity);
+    }
+  }, [selectedAmenity, selectedMonth]);
 
   const onRefresh = () => {
     setRefreshing(true);
     // Simulate a refresh by waiting for 1 second
+    fetchBookings(selectedYear, selectedMonth, selectedAmenity);
     setTimeout(() => {
       setRefreshing(false);
     }, 1000);
@@ -52,133 +62,212 @@ const Booking = () => {
 
   const handleDateSelection = (day) => {
     setSelectedDate(day.dateString);
-    const times = reservations[selectedAmenity]?.[day.dateString] || [];
+
+    const times = bookings
+      .filter((booking) => booking.booking_date === day.dateString)
+      .map((booking) => {
+        const formattedStartTime = formatTime(booking.start_time);
+        const formattedEndTime = formatTime(booking.end_time);
+        return `${formattedStartTime} - ${formattedEndTime}`;
+      });
+
     setReservedTimes(times);
   };
 
-  const handleReserveTime = () => {
-    if (selectedAmenity && selectedDate && timeToReserve) {
-      setReservations((prev) => ({
-        ...prev,
-        [selectedAmenity]: {
-          ...prev[selectedAmenity],
-          [selectedDate]: [
-            ...(prev[selectedAmenity]?.[selectedDate] || []),
-            timeToReserve,
-          ],
-        },
-      }));
-      setTimeToReserve("");
-      handleDateSelection({ dateString: selectedDate }); // Refresh reserved times
-    }
-  };
-
-  const markedDates = Object.keys(reservations[selectedAmenity] || {}).reduce(
-    (acc, date) => {
+  const markedDates = bookings.reduce((acc, booking) => {
+    const date = booking.booking_date;
+    if (!acc[date]) {
       acc[date] = { marked: true, dotColor: "white" };
-      return acc;
-    },
-    {}
-  );
+    }
+    return acc;
+  }, {});
 
   if (selectedDate) {
     markedDates[selectedDate] = {
       ...markedDates[selectedDate],
       selected: true,
       selectedColor: colors.secondary,
-      dotColor: colors.primary,
+      dotColor: colors.white,
     };
   }
 
-  return (
-    <ScrollView
-      // style={styles.container}
-      refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+  const handleStartTimeChange = (event, selectedDate) => {
+    const currentDate = selectedDate || startTime;
+    setShowStartTimePicker(Platform.OS === "ios");
+    setStartTime(currentDate);
+  };
+
+  const handleEndTimeChange = (event, selectedDate) => {
+    const currentDate = selectedDate || endTime;
+    setShowEndTimePicker(Platform.OS === "ios");
+    setEndTime(currentDate);
+  };
+
+  const checkForConflicts = () => {
+    const start = new Date(startTime);
+    const end = new Date(endTime);
+
+    if (start >= end) {
+      alert("End time must be after start time");
+      return false;
+    }
+
+    for (const booking of bookings) {
+      const bookingStart = new Date(booking.start_time);
+      const bookingEnd = new Date(booking.end_time);
+
+      if (start < bookingEnd && end > bookingStart) {
+        alert("Time conflict with an existing booking");
+        return false;
       }
-      contentContainerStyle={styles.contentContainer}
-    >
+    }
+
+    return true;
+  };
+
+  const handleReservation = () => {
+    if (checkForConflicts()) {
+      // Proceed with reservation
+      console.log("Reservation confirmed");
+    }
+  };
+
+  return (
+    <View className="flex flex-1 w-full h-full">
       <TabsGradient />
       <AppHeader />
-      <View className="flex flex-1 items-center">
+      <ScrollView
+        // style={styles.container}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+        contentContainerStyle={styles.contentContainer}
+      >
         <View className="w-[90%]">
-          <Calendar
-            onDayPress={handleDateSelection}
-            markedDates={markedDates}
-            className="rounded-md"
-            theme={{
-              backgroundColor: colors.green,
-              calendarBackground: colors.green,
-              textSectionTitleColor: colors.white,
-              selectedDayBackgroundColor: colors.white,
-              selectedDayTextColor: colors.white,
-              todayTextColor: colors.secondary,
-              dayTextColor: colors.white,
-              textDisabledColor: "grey",
-              dotColor: "white",
-              selectedDotColor: colors.white,
-              arrowColor: colors.white,
-              disabledArrowColor: "grey",
-              monthTextColor: colors.white,
-              indicatorColor: colors.secondary,
-            }}
-          />
+          <View className="">
+            <Calendar
+              onMonthChange={(date) => {
+                console.log("month: " + date.month);
+                console.log("year:" + date.year);
 
-          <View style={styles.amenitiesContainer}>
-            {amenities.map((amenity) => (
-              <TouchableOpacity
-                key={amenity}
-                style={[
-                  styles.amenityButton,
-                  selectedAmenity === amenity && styles.selectedAmenity,
-                ]}
-                onPress={() => handleAmenitySelection(amenity)}
-              >
-                <Text style={styles.amenityText}>{amenity}</Text>
-              </TouchableOpacity>
-            ))}
-          </View>
+                setSelectedMonth(date);
+                setSelectedYear(date.year);
+              }}
+              onDayPress={handleDateSelection}
+              markedDates={markedDates}
+              className="rounded-md"
+              theme={{
+                backgroundColor: colors.green,
+                calendarBackground: colors.green,
+                textSectionTitleColor: colors.white,
+                selectedDayBackgroundColor: colors.white,
+                selectedDayTextColor: colors.white,
+                todayTextColor: colors.secondary,
+                dayTextColor: colors.white,
+                textDisabledColor: "grey",
+                dotColor: "white",
+                selectedDotColor: colors.white,
+                arrowColor: colors.white,
+                disabledArrowColor: "grey",
+                monthTextColor: colors.white,
+                indicatorColor: colors.secondary,
+              }}
+            />
 
-          {selectedAmenity && selectedDate && (
-            <>
-              <Text style={styles.selectedDateText}>
-                Reserved Times for {selectedDate}:
-              </Text>
-              {reservedTimes.length > 0 ? (
-                <FlatList
-                  data={reservedTimes}
-                  keyExtractor={(item, index) => index.toString()}
-                  renderItem={({ item }) => (
-                    <Text style={styles.timeSlot}>{item}</Text>
-                  )}
-                />
-              ) : (
-                <Text>No reservations for this day.</Text>
-              )}
+            <View style={styles.amenitiesContainer}>
+              {amenities.map((amenity) => (
+                <TouchableOpacity
+                  key={amenity.id}
+                  style={[
+                    styles.amenityButton,
+                    selectedAmenity === amenity.id && styles.selectedAmenity,
+                  ]}
+                  onPress={() => handleAmenitySelection(amenity.id)}
+                >
+                  <Text className="font-pRegular" style={styles.amenityText}>
+                    {amenity.name}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
 
-              <View style={styles.formContainer}>
-                <Text style={styles.formTitle}>Reserve a Time</Text>
-                <TextInput
-                  style={styles.input}
-                  placeholder="Enter time (e.g., 3:00 PM - 4:00 PM)"
-                  value={timeToReserve}
-                  onChangeText={setTimeToReserve}
-                />
-                <Button title="Reserve" onPress={handleReserveTime} />
+            {selectedAmenity && selectedDate && (
+              <View>
+                <View className="p-4 bg-green rounded-md">
+                  <Text
+                    className="text-white font-pRegular"
+                    style={styles.selectedDateText}
+                  >
+                    {new Date(selectedDate).toDateString()}:
+                  </Text>
+                  <View className>
+                    {reservedTimes.length > 0 ? (
+                      reservedTimes.map((item, index) => (
+                        <Text key={index} style={styles.timeSlot}>
+                          {item}
+                        </Text>
+                      ))
+                    ) : (
+                      <Text className="font-pRegular text-md text-white">
+                        No reservations for this day.
+                      </Text>
+                    )}
+                  </View>
+                </View>
+
+                <View style={styles.formContainer}>
+                  <Text style={styles.formTitle}>
+                    Reserve a Time for {new Date(selectedDate).toDateString()}
+                  </Text>
+                  <View className="flex flex-row justify-between">
+                    <View className="w-[45%]">
+                      <Button
+                        title="Select Start Time"
+                        onPress={() => setShowStartTimePicker(true)}
+                      />
+                      <Text>Start Time: {startTime.toLocaleTimeString()}</Text>
+                      {showStartTimePicker && (
+                        <DateTimePicker
+                          value={startTime}
+                          mode="time"
+                          is24Hour={true}
+                          display="default"
+                          onChange={handleStartTimeChange}
+                        />
+                      )}
+                    </View>
+                    <View className="w-[45%]">
+                      <Button
+                        title="Select End Time"
+                        onPress={() => setShowEndTimePicker(true)}
+                      />
+                      <Text>End Time: {endTime.toLocaleTimeString()}</Text>
+                      {showEndTimePicker && (
+                        <DateTimePicker
+                          value={endTime}
+                          mode="time"
+                          is24Hour={true}
+                          display="default"
+                          onChange={handleEndTimeChange}
+                        />
+                      )}
+                    </View>
+                  </View>
+                  <Button title="Book Now" onPress={handleReservation} />
+                </View>
               </View>
-            </>
-          )}
+            )}
+          </View>
         </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   contentContainer: {
-    display: "flex",
     width: "100%",
-    height: "100%",
+    alignItems: "center",
   },
   container: {
     flex: 1,
@@ -198,28 +287,38 @@ const styles = StyleSheet.create({
   amenityButton: {
     padding: 10,
     borderWidth: 1,
-    borderRadius: 5,
+    borderRadius: 10,
+    backgroundColor: colors.green,
   },
   selectedAmenity: {
-    backgroundColor: "lightblue",
+    backgroundColor: colors.greyGreen,
+    color: "white",
   },
   amenityText: {
     fontSize: 18,
+    color: "white",
   },
   selectedDateText: {
-    fontSize: 18,
+    fontSize: 16,
     marginVertical: 10,
+    paddingHorizontal: 10,
   },
   timeSlot: {
     padding: 10,
-    borderBottomWidth: 1,
+    borderTopWidth: 1,
+    borderTopColor: "white",
+    color: "white",
   },
   formContainer: {
     marginTop: 20,
   },
   formTitle: {
-    fontSize: 20,
+    fontSize: 16,
     marginBottom: 10,
+    color: colors.white,
+    borderBottomColor: colors.white,
+    borderBottomWidth: 1,
+    paddingVertical: 4,
   },
   input: {
     borderWidth: 1,

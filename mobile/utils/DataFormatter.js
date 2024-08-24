@@ -25,3 +25,11 @@ export function formatName(name) {
     .join(" ");
   return name;
 }
+
+export const formatTime = (time) => {
+  const [hour, minute] = time.split(":");
+  const hourInt = parseInt(hour, 10);
+  const ampm = hourInt >= 12 ? "PM" : "AM";
+  const formattedHour = hourInt % 12 || 12;
+  return `${formattedHour}:${minute} ${ampm}`;
+};

@@ -5,8 +5,8 @@ export const HouseTypes = [
 ];
 
 export const ROLE_TYPES_RESIDENT = [
-  { text: "Home owner", value: "home_owner" },
-  { text: "Family member", value: "member" },
+  { text: "Home Owner", value: "home_owner" },
+  { text: "Family Member", value: "member" },
   { text: "Tenant", value: "tenant" },
   { text: "Seller", value: "seller" },
 ];
@@ -32,7 +32,9 @@ export const CIVIL_STATUSES = [
 export const OCCUPATION_STATUSES = [
   { text: "Employee", value: "employee" },
   { text: "Self Employed", value: "self employed" },
-  { text: "student", value: "employee" },
-  { text: "unemployed", value: "unemployed" },
-  { text: "others", value: "others" },
+  { text: "Student", value: "student" },
+  { text: "Unemployed", value: "unemployed" },
+  { text: "Others", value: "others" },
 ];
+
+export const BLOCKS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];

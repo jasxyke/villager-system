@@ -11,7 +11,7 @@ class StoreResidentRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,17 @@ class StoreResidentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'lastname'=>'required|string|min:2',
+            'firstname'=>'required|string|min:2',
+            'middlename'=>'nullable|string|min:2',
+            'contactNumber'=>'nullable|string',
+            'birthdate'=>'required|date|date_format:Y-m-d',
+            'sex'=>'required|string',
+            'civilStatus'=>'required|string',
+            'facebook'=>'nullable|string',
+            'occupation'=>'required|string|',
+            'email'=>'nullable|string|email:rfc,dns|email|max:255|unique:users',
+            'roleType'=>'required'
         ];
     }
 }

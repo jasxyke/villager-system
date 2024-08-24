@@ -24,13 +24,14 @@ class UpdateResidentRequest extends FormRequest
         return [
             'lastname'=>'required|string|min:2',
             'firstname'=>'required|string|min:2',
-            'middlename'=>'required|string|min:2',
+            'middlename'=>'nullable|string|min:2',
+            'contactNum'=>'nullable|numeric',
             'birthdate'=>'required|date|date_format:Y-m-d',
             'sex'=>'required|string',
             'civilStatus'=>'required|string',
             'facebook'=>'nullable|string',
             'occupation'=>'required|string|',
-            'email'=>'required|string|email',
+            'email'=>'nullable|string|email',
             'roleType'=>'required|string'
         ];
     }

@@ -29,6 +29,7 @@
   margin-bottom: 10px;
 }
 
+/*
 .logoClass {
   max-width: 150px;
 }
@@ -66,6 +67,7 @@
   width: 32px;
   height: auto;
 }
+*/
 
 .bookingButtons {
   display: flex;
@@ -73,54 +75,90 @@
   justify-content: space-evenly;
   gap: 5px;
   margin: 20px 0;
+  padding-bottom: 60px;
 }
 
 .bookingButtons button.active {
-  background-color: rgba(52, 76, 17, 0.75);
+  border-color: darkgreen;
 }
 
 .bookingButtons button {
-  background-color: #aec09a;
+  background-color: darkolivegreen;
   color: #fff;
   padding: 20px 40px;
   outline: transparent;
-  border-color: #344c11;
+  border-color: palegreen;
 }
 
 .calendar {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  text-align: center;
+  margin-bottom: 5%;
+  width: 100%;
 }
 
 .calendarHeader {
-  margin-bottom: 20px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  text-align: center;
+  font-size: 25px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  padding: 10px 5px;
+  background-color: darkolivegreen;
+}
+
+.navButton {
+  border-radius: 4px;
+  color: #333;
+  font-size: 25px;
+  padding: 5px 10px;
+  cursor: pointer;
+  margin: 0 50px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.navButton:hover {
+  background-color: white;
 }
 
 .calendarBody {
   display: flex;
   flex-direction: column;
+  background: linear-gradient(
+    180deg,
+    rgb(52, 84, 22) 0%,
+    rgb(130, 156, 100) 100%
+  );
+  width: 100%;
 }
 
 .tableHeader {
   display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
 }
 
 .weekday {
   flex: 1;
   text-align: center;
   font-weight: bold;
+  box-sizing: border-box;
   padding: 10px;
-  background-color: #4b6d19;
-  border: 1px solid #344c11;
-  width: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .tableContent {
   display: flex;
   flex-wrap: wrap;
   width: 100%;
+  justify-content: center;
 }
 
 .calendarDay {
@@ -128,22 +166,18 @@
   padding: 10px;
   text-align: center;
   align-items: center;
-  border: 1px solid #344c11;
   cursor: pointer;
   box-sizing: border-box;
-  color: black;
-}
-
-.calendarDay.current {
-  background-color: #a2b38f;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .calendarDay.selected {
-  color: #ffffff;
-  background-color: #50731b94;
+  background-color: var(--oliveGreen);
 }
 
 .calendarDay.nonCurrent {
-  color: #404040;
-  background-color: #c3d3b1;
+  background-color: #50731b;
+  visibility: hidden;
 }

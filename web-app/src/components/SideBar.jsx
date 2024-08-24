@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import homeIcon from "../assets/icons/Home_white.png";
 import bookingIcon from "../assets/icons/Calendar.png";
 import billsIcon from "../assets/icons/Book.png";
@@ -29,39 +29,39 @@ const SideBar = () => {
     <nav className={styles.sidebar}>
       <ul>
         <li>
-          <Link to="/homepage">
+          <NavLink to="/homepage">
             <img src={homeIcon} alt="Home" /> Home
-          </Link>
+          </NavLink>
         </li>
         <li>
-          <Link to="/booking">
+          <NavLink to="/booking">
             <img src={bookingIcon} alt="Booking" /> Booking
-          </Link>
+          </NavLink>
         </li>
         <li>
-          <Link to="/bills">
+          <NavLink to="/bills">
             <img src={billsIcon} alt="Bills" /> Bills
-          </Link>
+          </NavLink>
         </li>
         <li>
-          <Link to="/files/house-permit">
+          <NavLink to="/files/house-permit">
             <img src={filesIcon} alt="Files" /> Files
-          </Link>
+          </NavLink>
         </li>
         <li>
-          <Link to="/houses">
+          <NavLink to="/houses">
             <img src={HouseIcon} alt="Houses" /> Houses
-          </Link>
+          </NavLink>
         </li>
         <li>
-          <Link to="/users/residents">
+          <NavLink to="/users/residents">
             <img src={usersIcon} alt="Users" /> Users
-          </Link>
+          </NavLink>
         </li>
         <li>
-          <Link to="/announcements">
+          <NavLink to="/announcements">
             <img src={announcementsIcon} alt="Announcements" /> Announcements
-          </Link>
+          </NavLink>
         </li>
         <li className="bg-transparent">
           <p className="" onClick={logoutUser}>

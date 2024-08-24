@@ -52,7 +52,29 @@ class ResidentController extends Controller
      */
     public function store(StoreResidentRequest $request)
     {
-        //
+        $user = User::create([
+            'lastname'=>$request->input('lastname'),
+            'firstname'=>$request->input('firstname'),
+            'middlename'=>$request->input('middlename'),
+            'role_type'=>'home_owner',
+            'email'=>$request->input('email'),
+            'contact_number'=>$request->input('contactNumber'),
+        ]);
+
+        $resident =  Resident::create([
+            'user_id'=>$user->id,
+            'house_id'=>$request->houseId,
+            'birthdate'=>$request->input('birthdate'),
+            'sex'=>$request->input('sex'),
+            'civi_status'=>$request->input('civilStatus'),
+            'occupation_status'=>$request->input('occupation'),
+            'fb_name'=>$request->input('facebook'),
+        ]);
+
+        $resident = $resident->load(['user']);
+
+        return response()->json(['message'=> "Member successfuly added.", 
+                        'resident'=>$resident]);
     }
 
     /**
@@ -80,6 +102,7 @@ class ResidentController extends Controller
         $user->middlename = $request->input('middlename');
         $user->email = $request->input('email');
         $user->role_type = $request->input('roleType');
+        $user->contact_number = $request->input('contactNumber');
         $user->save();
 
         $resident->birthdate = $request->input('birthdate');
@@ -89,7 +112,11 @@ class ResidentController extends Controller
         $resident->occupation_status = $request->input('occupation');
         $resident->save();
 
-        $user = $user->load(['resident','resident.house']);
+        if($request->isFromHouse){
+            $user = $resident->load(['user','house']);
+        }else{
+            $user = $user->load(['resident','resident.house']);
+        }
         return response()->json(['message'=> 'Resident edited!', 'user'=> $user]);
 
     }

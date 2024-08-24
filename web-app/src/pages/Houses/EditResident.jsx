@@ -1,44 +1,38 @@
 import React, { useState } from "react";
-import backArrow from "../../../assets/icons/arrow-left.png";
-import editICon from "../../../assets/icons/edit.png";
-import trashIcon from "../../../assets/icons/trash.png";
-import { calculateAge, formatFullName } from "../../../utils/DataFormatter";
-import ResidentDetail from "./ResidentDetail";
-import SelectOptions from "../../../components/forms/SelectOptions";
+import { FaTrashAlt } from "react-icons/fa";
+import { IoMdArrowRoundBack } from "react-icons/io";
+import editICon from "../../assets/icons/edit.png";
+import SelectOptions from "../../components/forms/SelectOptions";
 import {
   CIVIL_STATUSES,
   OCCUPATION_STATUSES,
   ROLE_TYPES_RESIDENT,
   SEX_TYPES,
-} from "../../../data/contants";
-import { IoMdArrowRoundBack } from "react-icons/io";
-import { FaTrashAlt, FaEdit } from "react-icons/fa";
-import useResidents from "../../../hooks/useResidents";
+} from "../../data/contants";
+import { calculateAge } from "../../utils/DataFormatter";
+import ResidentDetail from "../Users/residents/ResidentDetail";
 
-const ResidentDetails = ({
+const EditResident = ({
   resident,
   onBack,
   editResident,
   updateResident,
+  house,
 }) => {
-  const [lastname, setLastname] = useState(resident.lastname);
-  const [firstname, setFirstname] = useState(resident.firstname);
-  const [middlename, setMiddlename] = useState(resident.middlename);
-  const [contactNum, setContactNum] = useState(resident.contact_number);
-  const [age, setAge] = useState(calculateAge(resident.resident.birthdate));
-  const [block, setBlock] = useState(resident.resident.house.block);
-  const [lot, setLot] = useState(resident.resident.house.lot);
-  const [birthdate, setBirthdate] = useState(resident.resident.birthdate);
-  const [sex, setSex] = useState(resident.resident.sex);
-  const [civilStatus, setCivilStatus] = useState(
-    resident.resident.civil_status
-  );
-  const [facebook, setFacebook] = useState(resident.resident.fb_name);
-  const [occupation, setOccupation] = useState(
-    resident.resident.occupation_status
-  );
-  const [email, setEmail] = useState(resident.email);
-  const [roleType, setRoleType] = useState(resident.role_type);
+  const [lastname, setLastname] = useState(resident.user.lastname);
+  const [firstname, setFirstname] = useState(resident.user.firstname);
+  const [middlename, setMiddlename] = useState(resident.user.middlename);
+  const [contactNum, setContactNum] = useState(resident.user.contact_number);
+  const [age, setAge] = useState(calculateAge(resident.birthdate));
+  const [block, setBlock] = useState(house.block);
+  const [lot, setLot] = useState(house.lot);
+  const [birthdate, setBirthdate] = useState(resident.birthdate);
+  const [sex, setSex] = useState(resident.sex);
+  const [civilStatus, setCivilStatus] = useState(resident.civil_status);
+  const [facebook, setFacebook] = useState(resident.fb_name);
+  const [occupation, setOccupation] = useState(resident.occupation_status);
+  const [email, setEmail] = useState(resident.user.email);
+  const [roleType, setRoleType] = useState(resident.user.role_type);
 
   const onSuccess = (msg, editedResident) => {
     alert(msg);
@@ -63,18 +57,19 @@ const ResidentDetails = ({
       email: email,
       roleType: roleType,
       contactNum: contactNum,
+      isFromHouse: true,
     };
 
     console.log(editedResident);
 
-    editResident(resident.id, editedResident, onSuccess, onError);
+    editResident(resident.user.id, editedResident, onSuccess, onError, true);
   };
 
   const deleteResident = () => {
     //
   };
   return (
-    <div className="w-full bg-green text-white rounded-lg p-6 shadow-lg rounded-s-xl">
+    <div className="w-full bg-primary text-white rounded-lg p-6 shadow-lg rounded-s-xl">
       <div className="mb-6 flex items-center space-x-4 justify-between rounded-s-xl">
         <IoMdArrowRoundBack
           className="cursor-pointer"
@@ -209,4 +204,4 @@ const ResidentDetails = ({
   );
 };
 
-export default ResidentDetails;
+export default EditResident;

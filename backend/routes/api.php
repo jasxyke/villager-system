@@ -23,9 +23,13 @@ Route::middleware('auth:sanctum')->group(function () {
 
     //houses routes
     Route::prefix('houses')->group(function(){
-        Route::get('/{blockNumber}',[HouseController::class,
+        Route::post('/blocks',[HouseController::class,
+        'getHousesPerBlocks']);
+        Route::get('/block/{blockNumber}',[HouseController::class,
         'getHousesPerBlock']);
     });
+    Route::apiResource('houses',HouseController::class);
+
     //resident routes
     Route::get('/residents/block/{blockNumber}', 
     [ResidentController::class, 'getResidentsPerBlock']);

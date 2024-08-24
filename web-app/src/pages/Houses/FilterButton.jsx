@@ -1,8 +1,5 @@
-import React, { useState, useEffect } from "react";
-import filterIcon from "../../assets/icons/filter.png";
-import chevronDownIcon from "../../assets/icons/chevron-down.png";
-import chevronRightIcon from "../../assets/icons/chevron-right.png";
-
+import React, { useEffect, useState } from "react";
+import { CiFilter } from "react-icons/ci";
 const FilterButton = ({
   isVisible,
   onToggle,
@@ -61,13 +58,9 @@ const FilterButton = ({
     <div className="relative">
       <button
         onClick={onToggle}
-        className="flex items-center px-4 py-2 bg-[var(--darkGreen)] text-white rounded-xl h-14 w-40 text-lg"
+        className="flex items-center gap-x-3 px-4 py-2 bg-primary text-white rounded-xl h-14 w-40 text-lg"
       >
-        <img
-          src={filterIcon}
-          alt="Filter"
-          className="text-2xl text-white p-2 w-12 h-12"
-        />
+        <CiFilter size={30} />
         FILTER
       </button>
       {isVisible && (

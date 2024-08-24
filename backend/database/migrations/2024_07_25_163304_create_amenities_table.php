@@ -14,6 +14,10 @@ return new class extends Migration
         Schema::create('amenities', function (Blueprint $table) {
             $table->id();
             $table->string('name', 100);
+            $table->decimal("day_price", 6, 2);
+            $table->decimal("night_price", 6,2);
+            $table->decimal("guest_additional_price", 6,2);
+            $table->decimal("extension_price", 6,2);
             $table->timestamps();
         });
     }

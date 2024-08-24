@@ -7,3 +7,4 @@ export const VILLAGER_ICON = require("../assets/images/villager.png");
 export const LOGO = require("../assets/logo.png");
 export const BELL = require("../assets/icons/bell.png");
 export const HAMBURGER = require("../assets/icons/hamburger.png");
+export const TYPE = require("../assets/icons/type.png")

@@ -13,3 +13,8 @@ export const DROPDOWN_OCCUPATION_STATUSES = [
   { label: "Unemployed", value: "unemployed" },
   { label: "Others", value: "others" },
 ];
+
+export const AMENNITIES = [
+  { id: 1, name: "Basketball Court" },
+  { id: 2, name: "Multi-Purpose Hall" },
+];

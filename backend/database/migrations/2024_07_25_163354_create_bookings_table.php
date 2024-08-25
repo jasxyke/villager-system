@@ -26,6 +26,7 @@ return new class extends Migration
             $table->string('contact_number',15);
             $table->enum('booking_status', 
             ['for_approval','reserved','rejected','cancelled']);
+            $table->enum('payment_status',['paid','partial','pending','failed'])->default('pending');
             $table->timestamps();
         });
     }

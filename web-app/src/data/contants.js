@@ -37,4 +37,9 @@ export const OCCUPATION_STATUSES = [
   { text: "Others", value: "others" },
 ];
 
+export const AMENNITIES = [
+  { id: 1, name: "Basketball Court" },
+  { id: 2, name: "Multi-Purpose Hall" },
+];
+
 export const BLOCKS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];

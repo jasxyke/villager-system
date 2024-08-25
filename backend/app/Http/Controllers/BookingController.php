@@ -134,7 +134,7 @@ class BookingController extends Controller
                 BookingPayment::create([
                     'booking_id' => $booking->id,
                     'amount' => $paymentData['amount'],
-                    'payment_date' => $paymentData['payment_date'],
+                    'payment_date' => $paymentData['date'],
                 ]);
             }
         }

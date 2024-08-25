@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import useBookings from "../../hooks/bookings/useBookings";
 import { colors } from "../../styles/colors";
+import { formatTo12Hour } from "../../utils/DataFormatter";
 
 const BookingForm = ({
   selectedAmenity,
@@ -20,8 +21,6 @@ const BookingForm = ({
   const [email, setEmail] = useState("");
   const [contactNumber, setContactNumber] = useState("");
   const [bookingStatus, setBookingStatus] = useState("for_approval");
-  const [localStartTime, setLocalStartTime] = useState(startTime);
-  const [localEndTime, setLocalEndTime] = useState(endTime);
 
   const { submitBooking, loading, error, success } = useBookings();
 
@@ -31,8 +30,8 @@ const BookingForm = ({
       booking_date: selectedDate,
       // start_time: localStartTime.toISOString().split("T")[1].slice(0, 5),
       // end_time: localEndTime.toISOString().split("T")[1].slice(0, 5),
-      start_time: formatTime(startTime),
-      end_time: formatTime(endTime),
+      start_time: formatTimeTwentyFour(startTime),
+      end_time: formatTimeTwentyFour(endTime),
       full_name: fullName,
       email,
       contact_number: contactNumber,
@@ -60,7 +59,7 @@ const BookingForm = ({
   };
 
   // Format time to 24-hour HH:mm format
-  const formatTime = (date) => {
+  const formatTimeTwentyFour = (date) => {
     if (!date) return "N/A";
     const hours = date.getHours().toString().padStart(2, "0");
     const minutes = date.getMinutes().toString().padStart(2, "0");
@@ -83,12 +82,16 @@ const BookingForm = ({
 
       <View style={styles.fieldContainer}>
         <Text style={styles.label}>Start Time</Text>
-        <Text style={styles.value}>{formatTime(startTime)}</Text>
+        <Text style={styles.value}>
+          {formatTo12Hour(formatTimeTwentyFour(startTime))}
+        </Text>
       </View>
 
       <View style={styles.fieldContainer}>
         <Text style={styles.label}>End Time</Text>
-        <Text style={styles.value}>{formatTime(endTime)}</Text>
+        <Text style={styles.value}>
+          {formatTo12Hour(formatTimeTwentyFour(endTime))}
+        </Text>
       </View>
 
       <TextInput

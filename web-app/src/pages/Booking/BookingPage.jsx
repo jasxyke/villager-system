@@ -1,23 +1,25 @@
 import React, { useState } from "react";
 import styles from "./BookingPage.module.css";
-import Calendar from "./Calendar";
 import MainLogo from "../../components/MainLogo";
 import SearchBar from "./SearchBar";
 import BookingTable from "./BookingTable";
+import EditAmenitiesModal from "./EditAmenitiesModal";
 import { AMENNITIES } from "../../data/contants";
 
 const BookingPage = () => {
-  // Initialize with the ID of the default amenity
   const [selectedAmenityId, setSelectedAmenityId] = useState(1);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
-  // Get the name of the selected amenity based on the ID
   const selectedAmenity =
     AMENNITIES.find((amenity) => amenity.id === selectedAmenityId)?.name || "";
 
-  // Function to handle amenity selection
   const handleAmenitySelection = (id) => {
     setSelectedAmenityId(id);
     console.log(id);
+  };
+
+  const toggleModal = () => {
+    setIsModalOpen(!isModalOpen);
   };
 
   return (
@@ -42,11 +44,18 @@ const BookingPage = () => {
             </button>
           ))}
         </div>
-        {/* <div>
-          <Calendar selectedAmenity={selectedAmenity} />
-        </div> */}
-        <div className={styles.searchBarContainer}>
+        <EditAmenitiesModal
+          isOpen={isEditModalOpen}
+          onRequestClose={() => setIsEditModalOpen(false)}
+        />
+        <div className={styles.searchBarContainer + " flex justify-between"}>
           <SearchBar />
+          <button
+            onClick={() => setIsEditModalOpen(true)}
+            className="bg-green rounded-md text-white p-2"
+          >
+            Edit Amenities
+          </button>
         </div>
         <div className={styles.searchBarContainer}>
           <BookingTable selectedAmenity={selectedAmenityId} />

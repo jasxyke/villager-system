@@ -66,9 +66,11 @@ const SignIn = () => {
         className="text-center justify-center 
       items-center mt-5"
       >
-        <Text className=" text-white">Don't have an account yet?</Text>
-        <Link href={"sign-up"} className="text-white underline">
-          Register
+        <Text className=" text-white text-center">
+          Want to reserve an Amenity from the Village?
+        </Text>
+        <Link href={"booking"} className="text-white underline">
+          Reserve Now
         </Link>
       </View>
     </FormScreen>

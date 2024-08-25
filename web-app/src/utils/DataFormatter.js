@@ -69,3 +69,10 @@ export function calculateAge(birthDateString) {
 
   return age;
 }
+
+export function formatTime(timeString) {
+  // Parse the time string into hours and minutes
+  const [hours, minutes] = timeString.split(":");
+  // Format the time as hh:mm
+  return `${hours}:${minutes}`;
+}

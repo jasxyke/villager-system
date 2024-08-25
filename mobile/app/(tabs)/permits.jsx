@@ -1,13 +1,6 @@
-import React, { useState } from 'react';
-import {
-  SafeAreaView,
-  View,
-  Text,
-  Button,
-  StyleSheet,
-  TouchableOpacity,
-  ScrollView,
-} from 'react-native';
+import React from 'react';
+import { SafeAreaView } from 'react-native';
+import PermitForm from '../../components/forms/PermitForm';
 import TabsGradient from "../../components/gradients/TabsGradient";
 import AppHeader from "../../components/common/AppHeader";
 import { colors } from "../../styles/colors";
@@ -55,60 +48,7 @@ const App = () => {
     <SafeAreaView style={styles.safeArea}>
       <TabsGradient />
       <AppHeader />
-      <View style={styles.content}>
-        {!showPermitForm ? (
-          <>
-            <TouchableOpacity
-              style={[styles.button, styles.requestButton]}
-              onPress={() => setShowPermitForm(true)}
-            >
-              <Text style={styles.buttonText}>Request a Permit</Text>
-            </TouchableOpacity>
-            {hasPendingTransactions && (
-              <TouchableOpacity
-                style={[styles.button, styles.pendingButton]}
-                onPress={() => {} /* Add logic to view pending requests */}
-              >
-                <Text style={styles.buttonText}>View Pending Requests</Text>
-              </TouchableOpacity>
-            )}
-            <View style={styles.transactionHeader}>
-              <Text style={styles.historyTitle}>Transaction Details</Text>
-              <TouchableOpacity style={styles.paymentHistoryLink} onPress={() => setShowPaymentHistory(true)}>
-                <Text style={styles.paymentHistoryText}>View Payment History</Text>
-              </TouchableOpacity>
-            </View>
-            <ScrollView style={styles.transactionContainer}>
-              {transactions.length > 0 ? (
-                transactions.map((transaction, index) => (
-                  <View key={index} style={styles.transactionItem}>
-                    <Text>Service: {transaction.service}</Text>
-                    <Text>Issued Last: {dummyTransaction.issuedLast}</Text>
-                    <Text>Start Date: {dummyTransaction.startDate}</Text>
-                    <Text>End Date: {dummyTransaction.endDate}</Text>
-                    <Text>Amount Paid: {dummyTransaction.amountPaid}</Text>
-                    <Text>Paid Last: {dummyTransaction.paidLast}</Text>
-                    <Text>Official Receipt No: {dummyTransaction.officialReceiptNo}</Text>
-                    <Text>Approved By: {dummyTransaction.approvedBy}</Text>
-                  </View>
-                ))
-              ) : (
-                <Text>No transactions to display.</Text>
-              )}
-            </ScrollView>
-          </>
-        ) : (
-          <PermitForm
-            addTransaction={handleAddTransaction}
-            setShowPermitForm={setShowPermitForm}
-          />
-        )}
-      </View>
-      <PaymentHistory
-        visible={showPaymentHistory}
-        onClose={() => setShowPaymentHistory(false)}
-        paymentHistory={dummyPaymentHistory}
-      />
+      {/* <PermitForm /> */}
     </SafeAreaView>
   );
 };

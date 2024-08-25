@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('booking_id')->constrained('bookings');
             $table->decimal('amount',6,2);
             $table->date('payment_date');
-            $table->enum('payment_status',['paid','pending','failed']);
+            // $table->enum('payment_status',['paid','pending','failed']);
             // $table->decimal('discount_amount',6,2);
             $table->timestamps();
         });

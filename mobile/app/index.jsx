@@ -42,12 +42,12 @@ export default function App() {
           <Text style={styles.link}>Login</Text>
         </Link>
         <Link
-          replace
-          href="/sign-up"
+          push
+          href="/booking"
           className="p-5 rounded-full text-center bg-greyGreen font-pRegular text-lg"
           style={styles.navContainer}
         >
-          <Text style={styles.link}>Sign up</Text>
+          <Text style={styles.link}>Booking</Text>
         </Link>
       </View>
       <View></View>

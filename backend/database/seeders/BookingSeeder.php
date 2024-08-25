@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Booking;
+use App\Models\BookingPayment;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -14,15 +15,21 @@ class BookingSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)
-        // ->create()
-        // ->each(function ($user){
-        //     Booking::factory(2)
-        //     ->state(['user_id'=>$user->id])
-        //     ->sequence(
-        //         ['amenity_id'=>1],
-        //         ['amenity_id'=>2]
-        //     )->create();
-        // }); 
+        $booking = Booking::create([
+            'amenity_id'=>'1',
+            'booking_date'=>'2024-08-27',
+            'start_time'=>'13:00',
+            'end_time'=>'16:00',
+            'full_name'=>'Jaspher',
+            'email'=>'jasxyke24.jxc@gmail.com',
+            'contact_number'=>'09487834861',
+            'booking_status'=>'reserved',
+            'payment_status'=>'paid'
+        ]);
+
+        // BookingPayment::create([
+        //     'booking_id'=> $booking->id,
+        //     'amount'=>
+        // ])
     }
 }

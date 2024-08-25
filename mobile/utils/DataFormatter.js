@@ -25,3 +25,27 @@ export function formatName(name) {
     .join(" ");
   return name;
 }
+
+export const formatTime = (time) => {
+  const [hour, minute] = time.split(":");
+  const hourInt = parseInt(hour, 10);
+  const ampm = hourInt >= 12 ? "PM" : "AM";
+  const formattedHour = hourInt % 12 || 12;
+  return `${formattedHour}:${minute} ${ampm}`;
+};
+
+export const formatTo12Hour = (time24) => {
+  // Parse the input time24
+  const [hours, minutes] = time24.split(":").map(Number);
+
+  // Determine AM or PM
+  const period = hours >= 12 ? "PM" : "AM";
+
+  // Convert hours from 24-hour to 12-hour format
+  const hour12 = hours % 12 || 12; // 12 should be displayed as 12, not 0
+
+  // Format minutes with leading zero if needed
+  const minutesFormatted = minutes.toString().padStart(2, "0");
+
+  return `${hour12}:${minutesFormatted} ${period}`;
+};

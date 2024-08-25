@@ -1,5 +1,6 @@
 import React from "react";
 import { Stack } from "expo-router";
+import { colors } from "../../styles/colors";
 
 const AuthLayout = () => {
   return (
@@ -9,8 +10,15 @@ const AuthLayout = () => {
         options={{ headerShown: false, headerTitle: "Sign in" }}
       />
       <Stack.Screen
-        name="sign-up"
-        options={{ headerShown: false, title: "Sign in" }}
+        name="booking"
+        options={{
+          headerShown: true,
+          title: "Booking",
+          headerTintColor: "white",
+          headerStyle: {
+            backgroundColor: colors.green,
+          },
+        }}
       />
     </Stack>
   );

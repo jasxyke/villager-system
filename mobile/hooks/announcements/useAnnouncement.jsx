@@ -11,7 +11,6 @@ const useAnnouncement = () => {
       setLoading(true);
       const res = await axiosClient.get("/announcements");
       setAnnouncements(res.data);
-      console.log(res.data);
       setLoading(false);
     } catch (error) {
       setLoading(false);

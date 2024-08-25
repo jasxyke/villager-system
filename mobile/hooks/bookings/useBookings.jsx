@@ -4,6 +4,8 @@ import axiosClient from "../../utils/axios";
 const useBookings = () => {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
 
   const fetchBookings = async (year, month, amenityId) => {
     setLoading(true);
@@ -14,7 +16,7 @@ const useBookings = () => {
         amenityId: amenityId,
       });
 
-      console.log(response.data);
+      // console.log(response.data);
 
       const data = response.data;
 
@@ -37,29 +39,29 @@ const useBookings = () => {
     }
   };
 
-  const handleReserveTime = async (amenityId, bookingDate, timeToReserve) => {
-    if (amenityId && bookingDate && timeToReserve) {
-      try {
-        const response = await axiosClient.post("/bookings", {
-          amenity_id: amenityId,
-          booking_date: bookingDate,
-          start_time: timeToReserve.split(" - ")[0],
-          end_time: timeToReserve.split(" - ")[1],
-          // Add other required fields like full_name, email, etc.
-        });
+  const submitBooking = async (bookingDetails) => {
+    setLoading(true);
+    setError(null);
+    setSuccess(null);
 
-        if (response.status === 200) {
-          fetchBookings(amenityId); // Refresh bookings after a successful reservation
-        } else {
-          console.error("Failed to reserve time");
-        }
-      } catch (error) {
-        console.error("Error reserving time:", error);
-      }
+    try {
+      const response = await axiosClient.post("/bookings", bookingDetails);
+      console.log(response);
+
+      setSuccess(response.data.message);
+      return response.data.booking;
+    } catch (err) {
+      setError(err.response?.data?.message || "An error occurred");
+    } finally {
+      setLoading(false);
     }
   };
-
-  return { bookings, fetchBookings, handleReserveTime, loading };
+  return {
+    bookings,
+    fetchBookings,
+    loading,
+    submitBooking,
+  };
 };
 
 export default useBookings;

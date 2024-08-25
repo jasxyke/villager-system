@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Booking extends Model
@@ -22,7 +23,8 @@ class Booking extends Model
         'email',
         'contact_number',
         'booking_status',
-        'booking_type'
+        'booking_type',
+        'booking_status'
     ];
 
     // public function user(): BelongsTo{
@@ -33,7 +35,7 @@ class Booking extends Model
         return $this->belongsTo(Amenity::class);
     }
 
-    public function bookingPayment(): HasOne{
-        return $this->hasOne(BookingPayment::class);
+    public function bookingPayments(): HasMany{
+        return $this->hasMany(BookingPayment::class);
     }
 }

@@ -22,12 +22,14 @@ class StoreBookingRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'booking_date'=>'required|date_format:Y-m-d|after:today',
-            'start_time'=>'required|date_format:H:i',
-            'end_time'=>'required|date_format:H:i|after:start_time',
-            'full_name'=>'required|string|max:255',
-            'email'=>'required|string|email',//email:rfc,dns  ADD THIS KAPAG SURE NG ONLINE
-            'contact_number'=>'required|string|max:15',
+            'amenity_id' => 'required|integer|exists:amenities,id',
+            'booking_date' => 'required|date',
+            'start_time' => 'required|date_format:H:i',
+            'end_time' => 'required|date_format:H:i|after:start_time',
+            'full_name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'contact_number' => 'required|string|max:20',
+            'booking_status' => 'required|string|in:for_approval,approved,canceled',
         ];
     }
 }

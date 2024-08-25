@@ -1,19 +1,52 @@
-import React, { useState } from "react";
-import SampleBookings from "./SampleBookings";
+import React, { useEffect, useState } from "react";
+import useBookings from "../../hooks/useBookings";
+import ReactPaginate from "react-paginate";
+import BookingReviewModal from "./BookingReviewModal";
+import Styles from "./BookingPage.module.css";
 
-const BookingTable = () => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 4;
+const BookingTable = ({ selectedAmenity }) => {
+  const {
+    bookings,
+    loading,
+    error,
+    fetchBookings,
+    currentPage,
+    setPage,
+    lastPage,
+    updateBooking,
+    addPayment,
+  } = useBookings(selectedAmenity);
 
-  const totalPages = Math.ceil(SampleBookings.length / itemsPerPage);
+  const [selectedBooking, setSelectedBooking] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = SampleBookings.slice(indexOfFirstItem, indexOfLastItem);
+  useEffect(() => {
+    if (selectedAmenity) {
+      fetchBookings(selectedAmenity, 1); // Fetch bookings when amenity changes
+    }
+  }, [selectedAmenity]);
 
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
+  const handlePageClick = (event) => {
+    const page = event.selected + 1;
+    setPage(page);
+    fetchBookings(selectedAmenity, page); // Fetch bookings for the selected page
   };
+
+  const handleReviewClick = (booking) => {
+    setSelectedBooking(booking);
+    setIsModalOpen(true);
+  };
+
+  const handleSave = () => {
+    fetchBookings(selectedAmenity, 1);
+    setIsModalOpen(false);
+  };
+
+  const bookingData = bookings || [];
+  const totalPages = lastPage || 0;
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error.message}</div>;
 
   return (
     <div className="text-white mt-4">
@@ -24,74 +57,84 @@ const BookingTable = () => {
         <div className="px-4 py-3 text-center">BOOKING DATE</div>
         <div className="px-4 py-3 text-center">BOOKING TIME</div>
         <div className="px-4 py-3 text-center">STATUS</div>
-        <div className="px-4 py-3 text-center">ACTIONS</div>
+        <div className="px-4 py-3 text-center">ACTION</div>
       </div>
-
-      <div className="space-y-2 mt-2">
-        {currentItems.map((booking, index) => (
-          <div
-            key={index}
-            className={`grid grid-cols-7 items-center ${
-              index % 2 === 0 ? "bg-darkOliverGreen" : "bg-green"
-            }`}
-          >
-            <div className="px-4 py-3 text-center truncate">
-              {booking.fullname}
+      <div className="space-y-2 mt-2 bg-green">
+        {bookingData.length > 0 ? (
+          bookingData.map((booking, index) => (
+            <div
+              key={index}
+              className={`grid grid-cols-7 items-center ${
+                index % 2 === 0 ? "bg-darkOliverGreen" : "bg-green"
+              }`}
+            >
+              <div className="px-4 py-3 text-center truncate">
+                {booking.full_name}
+              </div>
+              <div className="px-4 py-3 text-center truncate">
+                {booking.email}
+              </div>
+              <div className="px-4 py-3 text-center truncate">
+                {booking.contact_number}
+              </div>
+              <div className="px-4 py-3 text-center truncate">
+                {booking.booking_date}
+              </div>
+              <div className="px-4 py-3 text-center truncate">
+                {`${booking.start_time} - ${booking.end_time}`}
+              </div>
+              <div className="px-4 py-3 text-center truncate">
+                {booking.booking_status}
+              </div>
+              <div className="px-4 py-3 text-center">
+                <button
+                  className="p-2 bg-secondary rounded-md"
+                  onClick={() => handleReviewClick(booking)}
+                >
+                  REVIEW
+                </button>
+              </div>
             </div>
-            <div className="px-4 py-3 text-center truncate">
-              {booking.email}
-            </div>
-            <div className="px-4 py-3 text-center truncate">
-              {booking.contactNo}
-            </div>
-            <div className="px-4 py-3 text-center truncate">
-              {booking.bookingDate}
-            </div>
-            <div className="px-4 py-3 text-center truncate">
-              {booking.bookingTime}
-            </div>
-            <div className="px-4 py-3 text-center truncate">
-              {booking.status}
-            </div>
-            <div className="px-4 py-3 text-center">
-              <button className="bg-yellow-500 p-2 rounded-full mr-2">
-                📝
-              </button>
-              <button className="bg-red-500 p-2 rounded-full">🗑️</button>
-            </div>
-          </div>
-        ))}
+          ))
+        ) : (
+          <div className="text-center py-4">No bookings available.</div>
+        )}
       </div>
-
-      <div className="flex justify-center mt-4">
-        <button
-          className="px-4 py-2 bg-darkOliverGreen text-white rounded-lg mr-2 disabled:bg-gray-400 hover:bg-paleGreen "
-          onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage === 1}
-        >
-          Previous
-        </button>
-        {Array.from({ length: totalPages }, (_, i) => (
-          <button
-            key={i}
-            className={`px-4 py-2 rounded-lg mx-1 ${
-              currentPage === i + 1
-                ? "bg-darkOliverGreen text-white hover:bg-paleGreen "
-                : "bg-gray-300 text-black hover:bg-paleGreen"
-            }`}
-            onClick={() => handlePageChange(i + 1)}
-          >
-            {i + 1}
-          </button>
-        ))}
-        <button
-          className="px-4 py-2 bg-darkOliverGreen text-white rounded-lg ml-2 disabled:bg-gray-400 hover:bg-paleGreen "
-          onClick={() => handlePageChange(currentPage + 1)}
-          disabled={currentPage === totalPages}
-        >
-          Next
-        </button>
-      </div>
+      {totalPages > 0 && (
+        <div className="flex justify-center mt-4">
+          <ReactPaginate
+            breakLabel="..."
+            nextLabel={"next >"}
+            onPageChange={handlePageClick}
+            pageRangeDisplayed={5}
+            pageCount={totalPages}
+            previousLabel={"< previous"}
+            renderOnZeroPageCount={null}
+            className={Styles.pagination + " rounded-md"}
+            disabledClassName="text-grey opacity-50"
+            pageClassName="page-item"
+            pageLinkClassName="page-link"
+            previousClassName="page-item"
+            previousLinkClassName="page-link"
+            nextClassName="page-item"
+            nextLinkClassName="page-link"
+            breakClassName="page-item"
+            breakLinkClassName="page-link"
+            activeClassName="active bg-paleGreen px-2"
+          />
+        </div>
+      )}
+      {selectedBooking && (
+        <BookingReviewModal
+          isOpen={isModalOpen}
+          onRequestClose={() => setIsModalOpen(false)}
+          booking={selectedBooking}
+          amenity={
+            selectedBooking.amenity /* You might want to pass amenities here */
+          }
+          onUpdate={handleSave}
+        />
+      )}{" "}
     </div>
   );
 };

@@ -1,53 +1,52 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
   TouchableOpacity,
-  FlatList,
-  TextInput,
-  Button,
   ScrollView,
   RefreshControl,
   StyleSheet,
 } from "react-native";
 import { Calendar } from "react-native-calendars";
+import DatePicker from "react-native-date-picker";
 import TabsGradient from "../../components/gradients/TabsGradient";
 import AppHeader from "../../components/common/AppHeader";
 import { colors } from "../../styles/colors";
 import useBookings from "../../hooks/bookings/useBookings";
+import { AMENNITIES } from "../../data/DataStructures";
 import { formatTime } from "../../utils/DataFormatter";
-import DatePicker from "react-native-date-picker";
+import BookingForm from "../../components/forms/BookingForm";
+
 const Booking = () => {
   const [selectedAmenity, setSelectedAmenity] = useState(null);
   const [selectedDate, setSelectedDate] = useState(null);
-  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
-  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
   const [reservedTimes, setReservedTimes] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
-  const [timeToReserve, setTimeToReserve] = useState("");
-  const [showStartTimePicker, setShowStartTimePicker] = useState(false);
-  const [showEndTimePicker, setShowEndTimePicker] = useState(false);
   const [startTime, setStartTime] = useState(new Date());
   const [endTime, setEndTime] = useState(new Date());
-  //const [markedDates, setMarketDates] = useState(null);
+  const [showStartTimePicker, setShowStartTimePicker] = useState(false);
+  const [showEndTimePicker, setShowEndTimePicker] = useState(false);
+  const [showForm, setShowForm] = useState(false);
 
-  const amenities = [
-    { id: 1, name: "Basketball Court" },
-    { id: 2, name: "Multi-Purpose Hall" },
-  ];
-
-  const { fetchBookings, bookings, loading } = useBookings();
+  const { fetchBookings, bookings } = useBookings();
 
   useEffect(() => {
     if (selectedAmenity) {
-      fetchBookings(selectedYear, selectedMonth, selectedAmenity);
+      fetchBookings(
+        new Date().getFullYear(),
+        new Date().getMonth() + 1,
+        selectedAmenity
+      );
     }
-  }, [selectedAmenity, selectedMonth]);
+  }, [selectedAmenity]);
 
   const onRefresh = () => {
     setRefreshing(true);
-    // Simulate a refresh by waiting for 1 second
-    fetchBookings(selectedYear, selectedMonth, selectedAmenity);
+    fetchBookings(
+      new Date().getFullYear(),
+      new Date().getMonth() + 1,
+      selectedAmenity
+    );
     setTimeout(() => {
       setRefreshing(false);
     }, 1000);
@@ -61,7 +60,6 @@ const Booking = () => {
 
   const handleDateSelection = (day) => {
     setSelectedDate(day.dateString);
-
     const times = bookings
       .filter((booking) => booking.booking_date === day.dateString)
       .map((booking) => {
@@ -69,7 +67,6 @@ const Booking = () => {
         const formattedEndTime = formatTime(booking.end_time);
         return `${formattedStartTime} - ${formattedEndTime}`;
       });
-
     setReservedTimes(times);
   };
 
@@ -101,8 +98,16 @@ const Booking = () => {
   };
 
   const checkForConflicts = () => {
-    const start = new Date(startTime);
-    const end = new Date(endTime);
+    const start = new Date(
+      `${selectedDate}T${startTime.toLocaleTimeString("en-GB", {
+        hour12: false,
+      })}`
+    );
+    const end = new Date(
+      `${selectedDate}T${endTime.toLocaleTimeString("en-GB", {
+        hour12: false,
+      })}`
+    );
 
     if (start >= end) {
       alert("End time must be after start time");
@@ -110,8 +115,12 @@ const Booking = () => {
     }
 
     for (const booking of bookings) {
-      const bookingStart = new Date(booking.start_time);
-      const bookingEnd = new Date(booking.end_time);
+      const bookingStart = new Date(
+        `${booking.booking_date}T${booking.start_time}`
+      );
+      const bookingEnd = new Date(
+        `${booking.booking_date}T${booking.end_time}`
+      );
 
       if (start < bookingEnd && end > bookingStart) {
         alert("Time conflict with an existing booking");
@@ -122,11 +131,24 @@ const Booking = () => {
     return true;
   };
 
-  const handleReservation = () => {
+  // Function to reset booking states
+  const resetBooking = () => {
+    setSelectedAmenity(null);
+    setSelectedDate(null);
+    setReservedTimes([]);
+    // setStartTime(new Date());
+    // setEndTime(new Date());
+  };
+
+  const handleProceedToForm = () => {
     if (checkForConflicts()) {
-      // Proceed with reservation
-      console.log("Reservation confirmed");
+      setShowForm(true);
     }
+  };
+
+  const handleBackToBooking = () => {
+    resetBooking();
+    setShowForm(false);
   };
 
   return (
@@ -134,25 +156,16 @@ const Booking = () => {
       <TabsGradient />
       <AppHeader />
       <ScrollView
-        // style={styles.container}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
         contentContainerStyle={styles.contentContainer}
       >
-        <View className="w-[90%]">
-          <View className="">
+        {!showForm ? (
+          <View className="w-[90%]">
             <Calendar
-              onMonthChange={(date) => {
-                console.log("month: " + date.month);
-                console.log("year:" + date.year);
-
-                setSelectedMonth(date);
-                setSelectedYear(date.year);
-              }}
               onDayPress={handleDateSelection}
               markedDates={markedDates}
-              className="rounded-md"
               theme={{
                 backgroundColor: colors.green,
                 calendarBackground: colors.green,
@@ -165,14 +178,13 @@ const Booking = () => {
                 dotColor: "white",
                 selectedDotColor: colors.white,
                 arrowColor: colors.white,
-                disabledArrowColor: "grey",
                 monthTextColor: colors.white,
                 indicatorColor: colors.secondary,
               }}
             />
 
             <View style={styles.amenitiesContainer}>
-              {amenities.map((amenity) => (
+              {AMENNITIES.map((amenity) => (
                 <TouchableOpacity
                   key={amenity.id}
                   style={[
@@ -181,9 +193,7 @@ const Booking = () => {
                   ]}
                   onPress={() => handleAmenitySelection(amenity.id)}
                 >
-                  <Text className="font-pRegular" style={styles.amenityText}>
-                    {amenity.name}
-                  </Text>
+                  <Text style={styles.amenityText}>{amenity.name}</Text>
                 </TouchableOpacity>
               ))}
             </View>
@@ -191,17 +201,14 @@ const Booking = () => {
             {selectedAmenity && selectedDate && (
               <View>
                 <View className="p-4 bg-green rounded-md">
-                  <Text
-                    className="text-white font-pRegular"
-                    style={styles.selectedDateText}
-                  >
+                  <Text style={styles.selectedDateText}>
                     {new Date(selectedDate).toDateString()}:
                   </Text>
-                  <View className>
+                  <View>
                     {reservedTimes.length > 0 ? (
                       reservedTimes.map((item, index) => (
                         <Text key={index} style={styles.timeSlot}>
-                          {item}
+                          {item} - Reserved
                         </Text>
                       ))
                     ) : (
@@ -213,16 +220,24 @@ const Booking = () => {
                 </View>
 
                 <View style={styles.formContainer}>
-                  <Text style={styles.formTitle}>
-                    Reserve a Time for {new Date(selectedDate).toDateString()}
-                  </Text>
-                  <View className="flex flex-row justify-between">
-                    <View className="w-[45%]">
-                      <Button
-                        title="Select Start Time"
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <View style={{ width: "45%" }}>
+                      <Text style={{ color: colors.white }}>
+                        Select Start Time:
+                      </Text>
+                      <TouchableOpacity
+                        style={styles.timeButton}
                         onPress={() => setShowStartTimePicker(true)}
-                      />
-                      <Text>Start Time: {startTime.toLocaleTimeString()}</Text>
+                      >
+                        <Text style={styles.timeText}>
+                          {startTime.toLocaleTimeString()}
+                        </Text>
+                      </TouchableOpacity>
                       <DatePicker
                         modal
                         open={showStartTimePicker}
@@ -230,14 +245,21 @@ const Booking = () => {
                         mode="time"
                         onConfirm={handleStartTimeConfirm}
                         onCancel={() => setShowStartTimePicker(false)}
+                        backgroundColor={colors.white}
                       />
                     </View>
-                    <View className="w-[45%]">
-                      <Button
-                        title="Select End Time"
+                    <View style={{ width: "45%" }}>
+                      <Text style={{ color: colors.white }}>
+                        Select End Time:
+                      </Text>
+                      <TouchableOpacity
+                        style={styles.timeButton}
                         onPress={() => setShowEndTimePicker(true)}
-                      />
-                      <Text>End Time: {endTime.toLocaleTimeString()}</Text>
+                      >
+                        <Text style={styles.timeText}>
+                          {endTime.toLocaleTimeString()}
+                        </Text>
+                      </TouchableOpacity>
                       <DatePicker
                         modal
                         open={showEndTimePicker}
@@ -248,12 +270,27 @@ const Booking = () => {
                       />
                     </View>
                   </View>
-                  <Button title="Book Now" onPress={handleReservation} />
+                  <TouchableOpacity
+                    style={styles.proceedButton}
+                    onPress={handleProceedToForm}
+                  >
+                    <Text style={styles.proceedButtonText}>
+                      Proceed with Reservation
+                    </Text>
+                  </TouchableOpacity>
                 </View>
               </View>
             )}
           </View>
-        </View>
+        ) : (
+          <BookingForm
+            selectedAmenity={selectedAmenity}
+            selectedDate={selectedDate}
+            startTime={startTime}
+            endTime={endTime}
+            onBack={handleBackToBooking}
+          />
+        )}
       </ScrollView>
     </View>
   );
@@ -263,15 +300,6 @@ const styles = StyleSheet.create({
   contentContainer: {
     width: "100%",
     alignItems: "center",
-  },
-  container: {
-    flex: 1,
-    padding: 20,
-  },
-  title: {
-    fontSize: 24,
-    marginBottom: 20,
-    textAlign: "center",
   },
   amenitiesContainer: {
     flexDirection: "row",
@@ -287,7 +315,6 @@ const styles = StyleSheet.create({
   },
   selectedAmenity: {
     backgroundColor: colors.greyGreen,
-    color: "white",
   },
   amenityText: {
     fontSize: 18,
@@ -297,6 +324,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginVertical: 10,
     paddingHorizontal: 10,
+    color: "white",
   },
   timeSlot: {
     padding: 10,
@@ -306,21 +334,28 @@ const styles = StyleSheet.create({
   },
   formContainer: {
     marginTop: 20,
+    marginBottom: 40,
   },
-  formTitle: {
-    fontSize: 16,
-    marginBottom: 10,
-    color: colors.white,
-    borderBottomColor: colors.white,
-    borderBottomWidth: 1,
-    paddingVertical: 4,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: "gray",
+  timeButton: {
     padding: 10,
-    marginBottom: 10,
+    backgroundColor: colors.white,
     borderRadius: 5,
+    alignItems: "center",
+  },
+  timeText: {
+    fontSize: 18,
+    color: colors.primary,
+  },
+  proceedButton: {
+    marginTop: 20,
+    padding: 15,
+    backgroundColor: colors.secondary,
+    borderRadius: 5,
+    alignItems: "center",
+  },
+  proceedButtonText: {
+    color: colors.white,
+    fontSize: 18,
   },
 });
 

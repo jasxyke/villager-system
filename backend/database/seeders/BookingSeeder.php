@@ -23,7 +23,8 @@ class BookingSeeder extends Seeder
             'full_name'=>'Jaspher',
             'email'=>'jasxyke24.jxc@gmail.com',
             'contact_number'=>'09487834861',
-            'booking_status'=>'reserved'
+            'booking_status'=>'reserved',
+            'payment_status'=>'paid'
         ]);
 
         // BookingPayment::create([

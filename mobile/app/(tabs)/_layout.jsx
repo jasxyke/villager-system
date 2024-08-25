@@ -1,6 +1,6 @@
 import { View, Text, Image, StyleSheet, StatusBar } from "react-native";
 import { Tabs, Redirect } from "expo-router";
-import { HOME, BOOKING, PROFILE, BILLS, MARKET } from "../../constants/icons";
+import { HOME, BOOKING, PROFILE, BILLS, PERMITS } from "../../constants/icons";
 import { colors } from "../../styles/colors";
 import AppHeader from "../../components/common/AppHeader";
 import TabsGradient from "../../components/gradients/TabsGradient";
@@ -68,16 +68,16 @@ const MainLayout = () => {
           }}
         />
         <Tabs.Screen
-          name="market"
+          name="permits"
           options={{
-            title: "Market",
+            title: "Permits",
             headerShown: false,
             tabBarIcon: ({ focused, color, size }) => (
               <TabIcon
-                icon={MARKET}
+                icon={PERMITS}
                 color={color}
                 focused={focused}
-                name={"Market"}
+                name={"Permits"}
               />
             ),
           }}
@@ -111,14 +111,6 @@ const MainLayout = () => {
               />
             ),
           }}
-        />
-        <Tabs.Screen
-          name="car-stickers"
-          options={{ href: null, headerShown: false }}
-        />
-        <Tabs.Screen
-          name="permits"
-          options={{ href: null, headerShown: false }}
         />
       </Tabs>
     </>

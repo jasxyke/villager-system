@@ -16,15 +16,6 @@ import { useAuthContext } from "../../context/AuthContext";
 
 const NavigationModal = ({ visible, onClose }) => {
   const { logout } = useAuthContext();
-  const navigateToPermits = () => {
-    router.push("./permits");
-    onClose();
-  };
-
-  const navigateToStickers = () => {
-    router.push("./car-stickers");
-    onClose();
-  };
 
   const handleSuccess = (msg) => {
     //delete login credenials ewan sa local device
@@ -59,29 +50,7 @@ const NavigationModal = ({ visible, onClose }) => {
                 <AntDesign name="close" color="white" size={26} />
               </TouchableOpacity>
             </View>
-
-            <TouchableOpacity
-              onPress={navigateToPermits}
-              className="rounded-xl p-1 h-auto bg-paleGreen mb-2"
-            >
-              <View className="flex-row items-center p-1 gap-x-1">
-                <AntDesign name="arrowright" size={24} color="white" />
-                <Text className="font-pRegular text-white">
-                  Request Permits
-                </Text>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={navigateToStickers}
-              className="rounded-xl p-1 h-auto bg-paleGreen mb-2"
-            >
-              <View className="flex-row items-center p-1 gap-x-1">
-                <AntDesign name="arrowright" size={24} color="white" />
-                <Text className="font-pRegular text-white">
-                  Request Car Stickers
-                </Text>
-              </View>
-            </TouchableOpacity>
+            
             <TouchableOpacity
               onPress={logoutUser}
               className="rounded-xl p-1 h-auto bg-paleGreen mb-2"

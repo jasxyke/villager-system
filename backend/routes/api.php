@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AmenityController;
 use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookingController;
@@ -57,6 +58,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/bookings',[BookingController::class,'update']);
     Route::delete('/bookings/{id}',[BookingController::class,'destroy']);
     Route::get('/bookings', [BookingController::class, 'index']);
+
+    //amenity routes
+    Route::apiResource('/amenities', AmenityController::class);
 
     //anouncement routes
     Route::apiResource('announcements', AnnouncementController::class);

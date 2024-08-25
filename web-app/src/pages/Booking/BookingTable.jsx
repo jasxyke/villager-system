@@ -3,6 +3,7 @@ import useBookings from "../../hooks/useBookings";
 import ReactPaginate from "react-paginate";
 import BookingReviewModal from "./BookingReviewModal";
 import Styles from "./BookingPage.module.css";
+import LoadingContainer from "../../components/LoadingScreen/LoadingContainer";
 
 const BookingTable = ({ selectedAmenity }) => {
   const {
@@ -45,7 +46,7 @@ const BookingTable = ({ selectedAmenity }) => {
   const bookingData = bookings || [];
   const totalPages = lastPage || 0;
 
-  if (loading) return <div>Loading...</div>;
+  // if (loading) return <LoadingContainer />;
   if (error) return <div>Error: {error.message}</div>;
 
   return (
@@ -60,7 +61,9 @@ const BookingTable = ({ selectedAmenity }) => {
         <div className="px-4 py-3 text-center">ACTION</div>
       </div>
       <div className="space-y-2 mt-2 bg-green">
-        {bookingData.length > 0 ? (
+        {loading ? (
+          <LoadingContainer />
+        ) : bookingData.length > 0 ? (
           bookingData.map((booking, index) => (
             <div
               key={index}

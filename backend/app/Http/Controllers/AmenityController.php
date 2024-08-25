@@ -8,59 +8,35 @@ use App\Http\Requests\UpdateAmenityRequest;
 
 class AmenityController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $amenities = Amenity::all();
+        return response()->json($amenities);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(StoreAmenityRequest $request)
     {
-        //
+        $validated = $request->validated();
+        $amenity = Amenity::create($validated);
+        return response()->json($amenity, 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Amenity $amenity)
     {
-        //
+        return response()->json($amenity);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Amenity $amenity)
+    public function update(UpdateAmenityRequest $request, string $id)
     {
-        //
+        $validated = $request->validated();
+        $amenity = Amenity::findOrFail($id);
+        $amenity->update($validated);
+        return response()->json($amenity);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateAmenityRequest $request, Amenity $amenity)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Amenity $amenity)
     {
-        //
+        $amenity->delete();
+        return response()->json(null, 204);
     }
 }

@@ -11,7 +11,7 @@ class StoreAmenityRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,11 @@ class StoreAmenityRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => 'required|string|max:100',
+            'day_price' => 'required|numeric|min:0',
+            'night_price' => 'required|numeric|min:0',
+            'guest_additional_price' => 'required|numeric|min:0',
+            'extension_price' => 'required|numeric|min:0',
         ];
     }
 }

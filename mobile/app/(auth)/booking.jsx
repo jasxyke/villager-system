@@ -28,6 +28,8 @@ const Booking = () => {
   const [showEndTimePicker, setShowEndTimePicker] = useState(false);
   const [showForm, setShowForm] = useState(false);
 
+  const today = new Date().toISOString().split("T")[0];
+
   const { fetchBookings, bookings } = useBookings();
 
   useEffect(() => {
@@ -39,6 +41,12 @@ const Booking = () => {
       );
     }
   }, [selectedAmenity]);
+
+  useEffect(() => {
+    if (selectedAmenity === null) {
+      setSelectedAmenity(1);
+    }
+  }, []);
 
   const onRefresh = () => {
     setRefreshing(true);
@@ -154,7 +162,7 @@ const Booking = () => {
   return (
     <View className="flex flex-1 w-full h-full">
       <TabsGradient />
-      <AppHeader />
+      {/* <AppHeader /> */}
       <ScrollView
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
@@ -181,6 +189,7 @@ const Booking = () => {
                 monthTextColor: colors.white,
                 indicatorColor: colors.secondary,
               }}
+              minDate={today}
             />
 
             <View style={styles.amenitiesContainer}>
@@ -198,7 +207,7 @@ const Booking = () => {
               ))}
             </View>
 
-            {selectedAmenity && selectedDate && (
+            {selectedAmenity && selectedDate ? (
               <View>
                 <View className="p-4 bg-green rounded-md">
                   <Text style={styles.selectedDateText}>
@@ -235,7 +244,7 @@ const Booking = () => {
                         onPress={() => setShowStartTimePicker(true)}
                       >
                         <Text style={styles.timeText}>
-                          {startTime.toLocaleTimeString()}
+                          {formatTime(startTime.toLocaleTimeString())}
                         </Text>
                       </TouchableOpacity>
                       <DatePicker
@@ -246,6 +255,7 @@ const Booking = () => {
                         onConfirm={handleStartTimeConfirm}
                         onCancel={() => setShowStartTimePicker(false)}
                         backgroundColor={colors.white}
+                        minuteInterval={30}
                       />
                     </View>
                     <View style={{ width: "45%" }}>
@@ -257,7 +267,7 @@ const Booking = () => {
                         onPress={() => setShowEndTimePicker(true)}
                       >
                         <Text style={styles.timeText}>
-                          {endTime.toLocaleTimeString()}
+                          {formatTime(endTime.toLocaleTimeString())}
                         </Text>
                       </TouchableOpacity>
                       <DatePicker
@@ -267,6 +277,7 @@ const Booking = () => {
                         mode="time"
                         onConfirm={handleEndTimeConfirm}
                         onCancel={() => setShowEndTimePicker(false)}
+                        minuteInterval={30}
                       />
                     </View>
                   </View>
@@ -280,6 +291,10 @@ const Booking = () => {
                   </TouchableOpacity>
                 </View>
               </View>
+            ) : (
+              <Text className="text-white font-pRegular text-lg text-center">
+                Select a date to check reserved time slots!
+              </Text>
             )}
           </View>
         ) : (
@@ -299,7 +314,9 @@ const Booking = () => {
 const styles = StyleSheet.create({
   contentContainer: {
     width: "100%",
+    height: "100%",
     alignItems: "center",
+    marginTop: 40,
   },
   amenitiesContainer: {
     flexDirection: "row",

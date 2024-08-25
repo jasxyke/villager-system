@@ -13,6 +13,10 @@ class Amenity extends Model
 
     protected $fillable = [
         'name',
+        'day_price',
+        'night_price',
+        'guest_additional_price',
+        'extension_price'
     ];
 
     public function booking(): HasOne{

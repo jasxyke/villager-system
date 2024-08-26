@@ -10,13 +10,18 @@ import {
 } from "react-native";
 import { colors } from "../../styles/colors";
 
-const ScrollViewContainer = ({ data, loading }) => {
+const ScrollViewContainer = ({ data = [], loading = false }) => { // Set default values here
   const scrollX = useRef(new Animated.Value(0)).current;
   const flatListRef = useRef(null);
   const [index, setIndex] = useState(0);
   const [isManualScroll, setIsManualScroll] = useState(false);
 
   useEffect(() => {
+    if (!Array.isArray(data) || data.length === 0) {
+      console.warn("ScrollViewContainer received invalid data:", data);
+      return;
+    }
+
     const interval = setInterval(() => {
       if (!isManualScroll) {
         setIndex((prevIndex) => {
@@ -33,7 +38,7 @@ const ScrollViewContainer = ({ data, loading }) => {
     }, 3000);
 
     return () => clearInterval(interval);
-  }, [isManualScroll]);
+  }, [isManualScroll, data]);
 
   useEffect(() => {
     Animated.timing(scrollX, {
@@ -73,13 +78,13 @@ const ScrollViewContainer = ({ data, loading }) => {
         <Text numberOfLines={1} style={styles.titleText}>
           {item.title}
         </Text>
-        {item.picture_url === null ? null : (
+        {item.picture_url ? (
           <Image
             resizeMode="contain"
             source={{ uri: item.picture_url }}
             style={styles.image}
           />
-        )}
+        ) : null}
         <Text numberOfLines={3} style={styles.text}>
           {item.content}
         </Text>
@@ -87,38 +92,44 @@ const ScrollViewContainer = ({ data, loading }) => {
     );
   };
 
-  const Indicator = () => (
-    <View style={styles.indicatorContainer}>
-      {data.map((_, i) => {
-        const scale = scrollX.interpolate({
-          inputRange: [
-            (i - 1) * Dimensions.get("window").width,
-            i * Dimensions.get("window").width,
-            (i + 1) * Dimensions.get("window").width,
-          ],
-          outputRange: [0.8, 1.2, 0.8],
-          extrapolate: "clamp",
-        });
+  const Indicator = () => {
+    if (!Array.isArray(data) || data.length === 0) {
+      return null; // Early return if data is invalid or empty
+    }
 
-        const opacity = scrollX.interpolate({
-          inputRange: [
-            (i - 1) * Dimensions.get("window").width,
-            i * Dimensions.get("window").width,
-            (i + 1) * Dimensions.get("window").width,
-          ],
-          outputRange: [0.3, 1, 0.3],
-          extrapolate: "clamp",
-        });
+    return (
+      <View style={styles.indicatorContainer}>
+        {data.map((_, i) => {
+          const scale = scrollX.interpolate({
+            inputRange: [
+              (i - 1) * Dimensions.get("window").width,
+              i * Dimensions.get("window").width,
+              (i + 1) * Dimensions.get("window").width,
+            ],
+            outputRange: [0.8, 1.2, 0.8],
+            extrapolate: "clamp",
+          });
 
-        return (
-          <Animated.View
-            key={i}
-            style={[styles.dot, { transform: [{ scale }], opacity }]}
-          />
-        );
-      })}
-    </View>
-  );
+          const opacity = scrollX.interpolate({
+            inputRange: [
+              (i - 1) * Dimensions.get("window").width,
+              i * Dimensions.get("window").width,
+              (i + 1) * Dimensions.get("window").width,
+            ],
+            outputRange: [0.3, 1, 0.3],
+            extrapolate: "clamp",
+          });
+
+          return (
+            <Animated.View
+              key={i}
+              style={[styles.dot, { transform: [{ scale }], opacity }]}
+            />
+          );
+        })}
+      </View>
+    );
+  };
 
   return (
     <View style={styles.scrollContainer}>
@@ -153,7 +164,6 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   view: {
-    //width: Dimensions.get("window").width,
     width: 320,
     justifyContent: "center",
     alignItems: "center",
@@ -199,3 +209,7 @@ const styles = StyleSheet.create({
 });
 
 export default ScrollViewContainer;
+
+
+
+

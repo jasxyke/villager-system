@@ -1,13 +1,14 @@
-// PermitFormLogic.js
 import { useState } from 'react';
+import { Alert } from 'react-native';
 
-export const usePermitFormLogic = () => {
-  const [modalVisible, setModalVisible] = useState(true); // Form is visible by default
+export const usePermitFormLogic = (addTransaction) => {
   const [selectedService, setSelectedService] = useState('');
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [date, setDate] = useState(new Date());
   const [price, setPrice] = useState('');
   const [squareMeters, setSquareMeters] = useState('');
+  const [fileName, setFileName] = useState('');
+  const [showPermitForm, setShowPermitForm] = useState(false);
 
   const services = ['Building Permit', 'Car Sticker', 'Construction Supply Permit'];
 
@@ -29,37 +30,59 @@ export const usePermitFormLogic = () => {
 
   const updatePrice = (service, squareMeters) => {
     let newPrice = '';
-    if (service === 'Building Permit') {
-        const area = parseInt(squareMeters);
-        if (area && area > 100) {
-          newPrice = 'Php 600.00';
-        } else {
-          newPrice = 'Php 500.00';
-        }
-    } else if (service === 'Car Sticker') {
+    const area = parseInt(squareMeters);
+
+    switch (service) {
+      case 'Building Permit':
+        newPrice = area > 100 ? 'Php 600.00' : 'Php 500.00';
+        break;
+      case 'Car Sticker':
         newPrice = 'Php 600.00';
-      }
-     else if (service === 'Construction Supply Permit') {
-      newPrice = 'Php 300.00';
-    };
+        break;
+      case 'Construction Supply Permit':
+        newPrice = 'Php 300.00';
+        break;
+      default:
+        newPrice = '';
+    }
     setPrice(newPrice);
   };
 
-  const handleSubmit = () => {
-    // Handle form submission
-    console.log('Service:', selectedService);
-    console.log('Date:', date);
-    console.log('Price:', price);
-    setModalVisible(false); // Close the modal after submission
+  const handleFileUpload = () => {
+    // Logic for file upload
+    // Set fileName after uploading
+    setFileName('uploaded-file.pdf'); // Example file name
   };
 
-  const handleCancel = () => {
-    setModalVisible(false);
-    setTimeout(() => setModalVisible(true), 100); // Reopen the modal to keep the form active
+  const handleSubmit = () => {
+    if (!selectedService || !price) {
+      Alert.alert('Error', 'Please fill out all required fields.');
+      return;
+    }
+
+    const newTransaction = {
+      id: Date.now().toString(), // Unique ID based on timestamp
+      service: selectedService,
+      date: date.toISOString().split('T')[0], // Format date as YYYY-MM-DD
+      price: price,
+      fileName: fileName || 'No file uploaded', // Include file name if available
+    };
+
+    addTransaction(newTransaction);
+    setShowPermitForm(false);
+  };
+
+  const handleCloseOrCancel = () => {
+    // Clear form fields if needed
+    setSelectedService('');
+    setDate(new Date());
+    setPrice('');
+    setSquareMeters('');
+    setFileName('');
+    setShowPermitForm(false);
   };
 
   return {
-    modalVisible,
     selectedService,
     showDatePicker,
     date,
@@ -70,11 +93,16 @@ export const usePermitFormLogic = () => {
     handleServiceChange,
     handleSquareMetersChange,
     handleSubmit,
-    handleCancel,
+    handleCloseOrCancel,
     setShowDatePicker,
     setDate,
     setSelectedService,
     setPrice,
     setSquareMeters,
+    fileName,
+    setFileName,
+    showPermitForm,
+    setShowPermitForm,
+    handleFileUpload, // Export file upload handler
   };
 };

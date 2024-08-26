@@ -1,21 +1,25 @@
-import { useState } from 'react';
-import { Alert } from 'react-native';
+import { useState } from "react";
+import { Alert } from "react-native";
 
-export const usePermitFormLogic = (addTransaction) => {
-  const [selectedService, setSelectedService] = useState('');
+export const usePermitFormLogic = (addTransaction, setShowPermitForm) => {
+  const [selectedService, setSelectedService] = useState("Building Permit");
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [date, setDate] = useState(new Date());
-  const [price, setPrice] = useState('');
-  const [squareMeters, setSquareMeters] = useState('');
-  const [fileName, setFileName] = useState('');
-  const [showPermitForm, setShowPermitForm] = useState(false);
+  const [price, setPrice] = useState("");
+  const [squareMeters, setSquareMeters] = useState("");
+  const [images, setImages] = useState([]); // Updated to handle image selection
 
-  const services = ['Building Permit', 'Car Sticker', 'Construction Supply Permit'];
+  const services = [
+    "Building Permit",
+    "Car Sticker",
+    "Construction Supply Permit",
+  ];
 
-  const handleDateChange = (event, selectedDate) => {
-    const currentDate = selectedDate || date;
+  const handleDateChange = (selectedDate) => {
     setShowDatePicker(false);
-    setDate(currentDate);
+    if (selectedDate) {
+      setDate(selectedDate);
+    }
   };
 
   const handleServiceChange = (service) => {
@@ -29,56 +33,43 @@ export const usePermitFormLogic = (addTransaction) => {
   };
 
   const updatePrice = (service, squareMeters) => {
-    let newPrice = '';
+    let newPrice = "";
     const area = parseInt(squareMeters);
 
     switch (service) {
-      case 'Building Permit':
-        newPrice = area > 100 ? 'Php 600.00' : 'Php 500.00';
+      case "Building Permit":
+        newPrice = area > 100 ? "Php 600.00" : "Php 500.00";
         break;
-      case 'Car Sticker':
-        newPrice = 'Php 600.00';
+      case "Car Sticker":
+        newPrice = "Php 600.00";
         break;
-      case 'Construction Supply Permit':
-        newPrice = 'Php 300.00';
+      case "Construction Supply Permit":
+        newPrice = "Php 300.00";
         break;
       default:
-        newPrice = '';
+        newPrice = "";
     }
     setPrice(newPrice);
   };
 
-  const handleFileUpload = () => {
-    // Logic for file upload
-    // Set fileName after uploading
-    setFileName('uploaded-file.pdf'); // Example file name
-  };
-
   const handleSubmit = () => {
-    if (!selectedService || !price) {
-      Alert.alert('Error', 'Please fill out all required fields.');
+    if (!selectedService || !price || images.length === 0) {
+      Alert.alert(
+        "Error",
+        "Please fill out all required fields and upload at least one image."
+      );
       return;
     }
 
     const newTransaction = {
       id: Date.now().toString(), // Unique ID based on timestamp
       service: selectedService,
-      date: date.toISOString().split('T')[0], // Format date as YYYY-MM-DD
+      date: date.toISOString().split("T")[0], // Format date as YYYY-MM-DD
       price: price,
-      fileName: fileName || 'No file uploaded', // Include file name if available
+      images: images, // Include the selected images
     };
 
     addTransaction(newTransaction);
-    setShowPermitForm(false);
-  };
-
-  const handleCloseOrCancel = () => {
-    // Clear form fields if needed
-    setSelectedService('');
-    setDate(new Date());
-    setPrice('');
-    setSquareMeters('');
-    setFileName('');
     setShowPermitForm(false);
   };
 
@@ -93,16 +84,12 @@ export const usePermitFormLogic = (addTransaction) => {
     handleServiceChange,
     handleSquareMetersChange,
     handleSubmit,
-    handleCloseOrCancel,
     setShowDatePicker,
     setDate,
     setSelectedService,
     setPrice,
     setSquareMeters,
-    fileName,
-    setFileName,
-    showPermitForm,
-    setShowPermitForm,
-    handleFileUpload, // Export file upload handler
+    images,
+    setImages, // Added for image management
   };
 };

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BillController;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Schedule;
@@ -10,5 +11,5 @@ use Illuminate\Support\Facades\Schedule;
 
 
 Schedule::call(function () {
-    app(\App\Http\Controllers\API\BillController::class)->generateMonthlyBills();
+    app(BillController::class)->generateMonthlyBills();
 })->monthlyOn(1, '00:00');

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -7,22 +7,23 @@ import {
   TouchableOpacity,
   Image,
   Alert,
-} from 'react-native';
-import { BOOKING, PROFILE, BILLS, TYPE, DOWNLOADS } from "../../constants/icons";
-import { Picker } from '@react-native-picker/picker';
-import DateTimePicker from '@react-native-community/datetimepicker';
+  ScrollView,
+} from "react-native";
+import {
+  BOOKING,
+  PROFILE,
+  BILLS,
+  TYPE,
+  DOWNLOADS,
+} from "../../constants/icons";
+import { Picker } from "@react-native-picker/picker";
+import DatePicker from "react-native-date-picker";
+import * as ImagePicker from "expo-image-picker";
 import { colors } from "../../styles/colors";
-import { usePermitFormLogic } from '../../components/common/PermitFormLogic';
-import CustomButton from '../../components/common/CustomButton';
-import FileSelector from 'react-native-file-selector'; // Import the new file selector
+import { usePermitFormLogic } from "../../components/common/PermitFormLogic";
+import CustomButton from "../../components/common/CustomButton";
 
 const PermitForm = ({ addTransaction, setShowPermitForm }) => {
-  // Check if addTransaction is a function
-  if (typeof addTransaction !== 'function') {
-    console.error('addTransaction is not a function:', addTransaction);
-    return null; // Exit if addTransaction is not a function
-  }
-
   const {
     selectedService,
     showDatePicker,
@@ -35,21 +36,34 @@ const PermitForm = ({ addTransaction, setShowPermitForm }) => {
     handleSquareMetersChange,
     setShowDatePicker,
     handleSubmit,
-    fileName,
-    setFileName
+    images,
+    setImages,
   } = usePermitFormLogic(addTransaction, setShowPermitForm);
 
   // State to track submission status
   const [isProcessing, setIsProcessing] = useState(false);
 
-  const handleFileUpload = () => {
-    FileSelector.openFileSelector()
-      .then((file) => {
-        setFileName(file.name); // Update the fileName state in hook
-      })
-      .catch((error) => {
-        Alert.alert('Error', 'An error occurred while selecting the file.');
-      });
+  const handleImageUpload = async () => {
+    const permissionResult =
+      await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+    if (permissionResult.granted === false) {
+      Alert.alert(
+        "Error",
+        "Permission to access the media library is required!"
+      );
+      return;
+    }
+
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsMultipleSelection: true,
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setImages(result.assets.map((image) => image.uri)); // Update the images state in the hook
+    }
   };
 
   const handleSubmitRequest = () => {
@@ -58,7 +72,7 @@ const PermitForm = ({ addTransaction, setShowPermitForm }) => {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>Request Form</Text>
       {/* Other input fields for the form */}
       <View style={styles.row}>
@@ -76,7 +90,7 @@ const PermitForm = ({ addTransaction, setShowPermitForm }) => {
         </Picker>
       </View>
 
-      {selectedService === 'Building Permit' && (
+      {selectedService === "Building Permit" && (
         <View style={styles.row}>
           <View style={styles.logoContainer}>
             <Image source={PROFILE} style={styles.logo} />
@@ -97,7 +111,10 @@ const PermitForm = ({ addTransaction, setShowPermitForm }) => {
             <Image source={BOOKING} style={styles.logo} />
           </View>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => setShowDatePicker(true)} style={styles.datePickerTouchable}>
+        <TouchableOpacity
+          onPress={() => setShowDatePicker(true)}
+          style={styles.datePickerTouchable}
+        >
           <TextInput
             style={styles.input}
             value={date.toDateString()}
@@ -107,11 +124,11 @@ const PermitForm = ({ addTransaction, setShowPermitForm }) => {
       </View>
 
       {showDatePicker && (
-        <DateTimePicker
-          value={date}
+        <DatePicker
+          date={date}
           mode="date"
-          display="default"
-          onChange={handleDateChange}
+          onDateChange={handleDateChange}
+          locale="en"
         />
       )}
 
@@ -134,31 +151,53 @@ const PermitForm = ({ addTransaction, setShowPermitForm }) => {
 
       {/* Conditional rendering for payment instruction message */}
       {isProcessing && (
-        <Text style={styles.smallText}>Please pay the amount above to receive your request</Text>
+        <Text style={styles.smallText}>
+          Please pay the amount above to receive your request
+        </Text>
       )}
 
       <View style={styles.additionalContainer}>
         <Text style={styles.header1}>Supporting Documents</Text>
       </View>
-      
-      {/* File upload input */}
+
+      {/* Image upload input */}
       <View style={styles.fileUploadContainer}>
-      <View style={styles.logoContainer}>
-            <Image source={DOWNLOADS} style={styles.logo} />
-          </View>
-        <TouchableOpacity style={styles.fileUploadButton} onPress={handleFileUpload}>
+        <View style={styles.logoContainer}>
+          <Image source={DOWNLOADS} style={styles.logo} />
+        </View>
+        <TouchableOpacity
+          style={styles.fileUploadButton}
+          onPress={handleImageUpload}
+        >
           <Text style={styles.fileUploadButtonText}>
-            {fileName ? `File: ${fileName}` : 'Upload File'}
+            {images.length > 0
+              ? `Images Selected: ${images.length}`
+              : "Upload Images"}
           </Text>
         </TouchableOpacity>
       </View>
 
+      {/* Display selected images */}
+      {images.length > 0 && (
+        <ScrollView horizontal style={styles.imagePreviewContainer}>
+          {images.map((uri, index) => (
+            <Image key={index} source={{ uri }} style={styles.imagePreview} />
+          ))}
+        </ScrollView>
+      )}
+
       {/* Buttons */}
       <View style={styles.buttonContainer}>
-        <CustomButton title={isProcessing ? "Processing" : "Submit Request"} onPress={handleSubmitRequest} />
-        <CustomButton title={isProcessing ? "Go Back" : "Cancel"} onPress={() => setShowPermitForm(false)} />
+        <CustomButton
+          title={isProcessing ? "Processing" : "Submit Request"}
+          onPress={handleSubmitRequest}
+        />
+        <CustomButton
+          title={isProcessing ? "Go Back" : "Cancel"}
+          onPress={() => setShowPermitForm(false)}
+        />
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -171,14 +210,14 @@ const styles = StyleSheet.create({
   },
   title: {
     marginBottom: 15,
-    textAlign: 'center',
+    textAlign: "center",
     fontSize: 24,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     color: colors.white,
   },
   row: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginBottom: 15,
   },
   logoContainer: {
@@ -186,8 +225,8 @@ const styles = StyleSheet.create({
     height: 53,
     marginRight: 10,
     backgroundColor: colors.white,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     borderTopLeftRadius: 5,
     borderBottomLeftRadius: 5,
   },
@@ -201,21 +240,21 @@ const styles = StyleSheet.create({
   },
   header1: {
     marginBottom: 15,
-    textAlign: 'center',
+    textAlign: "center",
     fontSize: 15,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     color: colors.white,
   },
   smallText: {
     fontSize: 12,
     color: colors.white,
-    textAlign: 'center',
+    textAlign: "center",
     marginVertical: 5,
   },
   input: {
     flex: 1,
     height: 53,
-    borderColor: 'black',
+    borderColor: "black",
     borderWidth: 1,
     borderTopRightRadius: 5,
     borderBottomRightRadius: 5,
@@ -224,7 +263,7 @@ const styles = StyleSheet.create({
   },
   picker: {
     flex: 1,
-    borderColor: 'black',
+    borderColor: "black",
     borderTopRightRadius: 5,
     borderTopLeftRadius: 5,
     backgroundColor: colors.white,
@@ -235,19 +274,19 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 5,
     borderBottomRightRadius: 5,
     backgroundColor: colors.white,
-    justifyContent: 'center',
+    justifyContent: "center",
   },
   fileUploadContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginBottom: 15,
   },
   fileUploadButton: {
     flex: 1,
     height: 53,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderColor: 'black',
+    justifyContent: "center",
+    alignItems: "center",
+    borderColor: "black",
     borderTopRightRadius: 5,
     borderBottomRightRadius: 5,
     backgroundColor: colors.white,
@@ -255,9 +294,19 @@ const styles = StyleSheet.create({
   fileUploadButtonText: {
     color: colors.primary,
   },
+  imagePreviewContainer: {
+    flexDirection: "row",
+    marginBottom: 15,
+  },
+  imagePreview: {
+    width: 80,
+    height: 80,
+    marginRight: 10,
+    borderRadius: 10,
+  },
   buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     marginTop: 20,
   },
 });

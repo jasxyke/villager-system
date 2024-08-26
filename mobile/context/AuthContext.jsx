@@ -107,7 +107,7 @@ export function AuthProvider({ children }) {
         return;
       }
       setUser(responseUser);
-      console.log("response user: " + responseUser.firstname);
+      console.log("response user: " + responseUser.resident.id);
     } catch (error) {
       console.log("user error");
 

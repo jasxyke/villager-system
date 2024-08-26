@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('resident_id')->constrained('residents');
             $table->string('car_model');
             $table->string('car_plate_number');
-            $table->string('sticker_status');
+            $table->enum('sticker_status',['active','expired']);
             $table->date('issue_date');
             $table->date('expiry_date');
             $table->date('application_date');

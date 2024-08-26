@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('permit_documents', function (Blueprint $table) {
+        Schema::create('permit_payments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('permit_id')->constrained('permits');
-            $table->string('description',1000);//TODO: convert mo to to ENUM once makuha mo yung more info about these
-            $table->string('document_path',1000);
-            $table->string('document_url',2083);
-            $table->date('upload_date');
+            $table->decimal('amount', 10, 2);
+            $table->date('payment_date');
+            // $table->string('payment_method'); // e.g., 'credit_card', 'bank_transfer'
+            $table->text('transaction_id')->nullable(); // For tracking payment transaction ID
             $table->timestamps();
         });
     }
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('permit_documents');
+        Schema::dropIfExists('permit_payments');
     }
 };

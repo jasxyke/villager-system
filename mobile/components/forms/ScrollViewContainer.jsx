@@ -10,7 +10,10 @@ import {
 } from "react-native";
 import { colors } from "../../styles/colors";
 
-const ScrollViewContainer = ({ data = [], loading = false }) => { // Set default values here
+// const { width } = Dimensions.get("window");
+const width = 320;
+
+const ScrollViewContainer = ({ data = [], loading = false }) => {
   const scrollX = useRef(new Animated.Value(0)).current;
   const flatListRef = useRef(null);
   const [index, setIndex] = useState(0);
@@ -42,7 +45,7 @@ const ScrollViewContainer = ({ data = [], loading = false }) => { // Set default
 
   useEffect(() => {
     Animated.timing(scrollX, {
-      toValue: index * Dimensions.get("window").width,
+      toValue: index * width,
       duration: 500,
       useNativeDriver: true,
     }).start();
@@ -50,7 +53,7 @@ const ScrollViewContainer = ({ data = [], loading = false }) => { // Set default
 
   const handleScroll = (event) => {
     const offsetX = event.nativeEvent.contentOffset.x;
-    const newIndex = Math.round(offsetX / Dimensions.get("window").width);
+    const newIndex = Math.round(offsetX / width);
     setIndex(newIndex);
   };
 
@@ -65,9 +68,9 @@ const ScrollViewContainer = ({ data = [], loading = false }) => { // Set default
   const renderItem = ({ item, index: itemIndex }) => {
     const opacity = scrollX.interpolate({
       inputRange: [
-        (itemIndex - 1) * Dimensions.get("window").width,
-        itemIndex * Dimensions.get("window").width,
-        (itemIndex + 1) * Dimensions.get("window").width,
+        (itemIndex - 1) * width,
+        itemIndex * width,
+        (itemIndex + 1) * width,
       ],
       outputRange: [0.5, 1, 0.5],
       extrapolate: "clamp",
@@ -101,21 +104,13 @@ const ScrollViewContainer = ({ data = [], loading = false }) => { // Set default
       <View style={styles.indicatorContainer}>
         {data.map((_, i) => {
           const scale = scrollX.interpolate({
-            inputRange: [
-              (i - 1) * Dimensions.get("window").width,
-              i * Dimensions.get("window").width,
-              (i + 1) * Dimensions.get("window").width,
-            ],
+            inputRange: [(i - 1) * width, i * width, (i + 1) * width],
             outputRange: [0.8, 1.2, 0.8],
             extrapolate: "clamp",
           });
 
           const opacity = scrollX.interpolate({
-            inputRange: [
-              (i - 1) * Dimensions.get("window").width,
-              i * Dimensions.get("window").width,
-              (i + 1) * Dimensions.get("window").width,
-            ],
+            inputRange: [(i - 1) * width, i * width, (i + 1) * width],
             outputRange: [0.3, 1, 0.3],
             extrapolate: "clamp",
           });
@@ -146,9 +141,8 @@ const ScrollViewContainer = ({ data = [], loading = false }) => { // Set default
         )}
         onScrollBeginDrag={handleScrollBeginDrag}
         onScrollEndDrag={handleScrollEndDrag}
-        snapToStart={true}
-        snapToInterval={320}
-        decelerationRate={0.9}
+        snapToInterval={width} // Ensure this matches the item width
+        decelerationRate="fast" // Adjust deceleration rate for smoother scroll
       />
       <Indicator />
     </View>
@@ -164,7 +158,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   view: {
-    width: 320,
+    width: width, // Ensure this matches the snapToInterval and item width
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 20,
@@ -209,7 +203,3 @@ const styles = StyleSheet.create({
 });
 
 export default ScrollViewContainer;
-
-
-
-

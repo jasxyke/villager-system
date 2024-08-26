@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import Modal from "react-modal";
-import useBills from "../hooks/useBills";
-import styles from "./EditBillModal.module.css"; // Import CSS Module
+import useBills from "../../hooks/useBills";
+import styles from "./EditBillsModal.module.css"; // Import CSS Module
 
 Modal.setAppElement("#root"); // Ensure that screen readers can work with the modal
 
 const EditBillModal = ({ isOpen, onRequestClose, bill }) => {
-  const { updateBillAndAddPayment } = useBills(); // Import your custom hook
+  const { updateBillAndAddPayment } = useBills();
   const [formData, setFormData] = useState({
     amount: "",
     transaction_date: "",

@@ -9,7 +9,7 @@ const SearchInput = ({ query, onSearchChange }) => (
       placeholder="SEARCH RESIDENT"
       value={query}
       onChange={onSearchChange}
-      className="bg-transparent focus:outline-none w-full"
+      className="bg-transparent focus:outline-none w-full text-white"
     />
   </div>
 );

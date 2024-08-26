@@ -1,11 +1,14 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AmenityController;
 use App\Http\Controllers\AnnouncementController;
+use App\Http\Controllers\BillController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\HouseController;
 use App\Http\Controllers\ResidentController;
+use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -46,13 +49,17 @@ Route::middleware('auth:sanctum')->group(function () {
     });//users prefix
 
     //admin CRUD routes for Users and Residents
-    Route::prefix('admin')->group(function (){
+    Route::prefix('admins')->group(function (){
         // Route::apiResource('users', UserController::class);
         //Route::apiResource('residents', ResidentController::class);
         Route::get('/bookings/{amenityId}',
         [BookingController::class, 'getBookingsAdmin']);
+        Route::get('/', [AdminController::class, 'index']);
+        Route::post('/', [AdminController::class, 'store']);
+        Route::get('/{admin}', [AdminController::class, 'show']);
+        Route::put('/{admin}', [AdminController::class, 'update']);
+        Route::delete('/{admin}', [AdminController::class, 'destroy']);
     });
-
 
     //booking routes (avaialable only to the admins)
     Route::put('/bookings',[BookingController::class,'update']);
@@ -66,6 +73,19 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('announcements', AnnouncementController::class);
     Route::post('/announcements/img/{id}', 
     [AnnouncementController::class, 'updateAnnouncementImg']);
+
+    //bills routes
+    Route::get('/bills', [BillController::class, 'index']);
+    Route::post('/bills', [BillController::class, 'store']);
+    Route::get('/bills/{id}', [BillController::class, 'show']);
+    Route::put('/bills/{id}', [BillController::class, 'update']);
+    Route::delete('/bills/{id}', [BillController::class, 'destroy']);
+    Route::post('/bills/generate-monthly', [BillController::class, 'generateMonthlyBills']);
+    Route::get('/bills/resident/{resident_id}', [BillController::class, 'getUserBills']);
+    Route::get('/bills/admin', [BillController::class, 'getMonthlyBills']);
+
+    //transaction routes (monthly due bills)
+    Route::post('/bills/pay-edit-bill', [TransactionController::class, 'updateBillAndAddPayment']);
 });
 
 //booking routes (avaialable to the public)

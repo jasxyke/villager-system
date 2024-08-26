@@ -67,6 +67,7 @@ export function AuthProvider({ children }) {
       localStorage.removeItem("isLoggedIn");
       setLoggedIn(false);
       onSuccess(res.data.message);
+      navigate("/");
     } catch (error) {
       onError(error.response.data.message);
     }

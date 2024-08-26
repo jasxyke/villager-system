@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AmenityController;
 use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\BillController;
@@ -48,11 +49,16 @@ Route::middleware('auth:sanctum')->group(function () {
     });//users prefix
 
     //admin CRUD routes for Users and Residents
-    Route::prefix('admin')->group(function (){
+    Route::prefix('admins')->group(function (){
         // Route::apiResource('users', UserController::class);
         //Route::apiResource('residents', ResidentController::class);
         Route::get('/bookings/{amenityId}',
         [BookingController::class, 'getBookingsAdmin']);
+        Route::get('/', [AdminController::class, 'index']);
+        Route::post('/', [AdminController::class, 'store']);
+        Route::get('/{admin}', [AdminController::class, 'show']);
+        Route::put('/{admin}', [AdminController::class, 'update']);
+        Route::delete('/{admin}', [AdminController::class, 'destroy']);
     });
 
     //booking routes (avaialable only to the admins)

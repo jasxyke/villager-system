@@ -1,136 +1,115 @@
-import React, { useState } from 'react';
-import styles from './Users.module.css';
-import UsersPage from './UsersPage';
+import React, { useEffect, useState } from "react";
+import UsersPage from "./UsersPage";
+import useAdmins from "../../hooks/useAdmins";
+import LoadingPage from "../../components/LoadingScreen/LoadingPage";
+import { FaEdit, FaRegTrashAlt } from "react-icons/fa";
+import AdminModal from "./admins/AdminModal"; // Import the modal component
+import { formatFullName } from "../../utils/DataFormatter";
 
 function AdminPage() {
-    const [admins, setAdmins] = useState([
-        { name: 'Raymond Junatas', position: 'Manager', email: 'junatas@gmail.com', password: 'password1' },
-        { name: 'John Olive', position: 'Supervisor', email: 'olives@gmail.com', password: 'password2' },
-        { name: 'Jessie Yambroww', position: 'Coordinator', email: 'yambroww@gmail.com', password: 'password3' }
-    ]);
+  const {
+    admins,
+    fetchAdmins,
+    createAdmin,
+    updateAdmin,
+    deleteAdmin,
+    loading,
+    error,
+  } = useAdmins();
 
-    const [form, setForm] = useState({ name: '', position: '', email: '', password: '' });
-    const [editingIndex, setEditingIndex] = useState(null);
-    const [isFormVisible, setIsFormVisible] = useState(false);
+  const [selectedAdmin, setSelectedAdmin] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const handleChange = (e) => {
-        setForm({ ...form, [e.target.name]: e.target.value });
-    };
+  useEffect(() => {
+    fetchAdmins();
+  }, []);
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        if (editingIndex !== null) {
-            const updatedAdmins = admins.map((admin, index) =>
-                index === editingIndex ? form : admin
-            );
-            setAdmins(updatedAdmins);
-            setEditingIndex(null);
-        } else {
-            setAdmins([...admins, form]);
-        }
-        setForm({ name: '', position: '', email: '', password: '' });
-        setIsFormVisible(false);
-    };
+  const handleEdit = (admin) => {
+    setSelectedAdmin(admin);
+    setIsModalOpen(true);
+  };
 
-    const handleEdit = (index) => {
-        setEditingIndex(index);
-        setForm(admins[index]);
-        setIsFormVisible(true);
-    };
+  const handleDelete = async (id) => {
+    try {
+      await deleteAdmin(id);
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
-    const handleDelete = (index) => {
-        setAdmins(admins.filter((_, i) => i !== index));
-    };
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+    setSelectedAdmin(null);
+  };
 
-    const handleAddClick = () => {
-        setForm({ name: '', position: '', email: '', password: '' });
-        setEditingIndex(null);
-        setIsFormVisible(true);
-    };
-
+  if (loading) return <LoadingPage />;
+  if (error)
     return (
-        <UsersPage>
-            <div className={styles.adminContainer}>
-                <div className={styles.adminHeader}>
-                    <div className={styles.adminHeaderItem}>Full Name</div>
-                    <div className={styles.adminHeaderItem}>Position</div>
-                    <div className={styles.adminHeaderItem}>Email</div>
-                    <div className={styles.adminHeaderItem}>Password</div>
-                    <div className={styles.adminHeaderItem}>Actions</div>
-                </div>
-                <div className={styles.adminBody}>
-                    {admins.map((admin, index) => (
-                        <div key={index} className={styles.adminRow}>
-                            <div className={styles.adminItem}>{admin.name}</div>
-                            <div className={styles.adminItem}>{admin.position}</div>
-                            <div className={styles.adminItem}>{admin.email}</div>
-                            <div className={styles.adminItem}>**********</div>
-                            <div className={styles.adminActions}>
-                                <button className={styles.editButton} onClick={() => handleEdit(index)}>✏️</button>
-                                <button className={styles.deleteButton} onClick={() => handleDelete(index)}>🗑️</button>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-                <button className={styles.addDataButton} onClick={handleAddClick}>➕ Add Data</button>
-
-                {isFormVisible && (
-                    <div className={styles.modal}>
-                        <div className={styles.modalContent}>
-                            <span className={styles.closeButton} onClick={() => setIsFormVisible(false)}>&times;</span>
-                            <h2 className={styles.modalTitle}>{editingIndex !== null ? 'Edit Admin' : 'Add Admin'}</h2>
-                            <form className={styles.adminForm} onSubmit={handleSubmit}>
-                                <label className={styles.adminLabel}>Full Name</label>
-                                <input
-                                    type="text"
-                                    name="name"
-                                    value={form.name}
-                                    onChange={handleChange}
-                                    className={styles.adminInput}
-                                    required
-                                />
-                                <label className={styles.adminLabel}>Position</label>
-                                <input
-                                    type="text"
-                                    name="position"
-                                    value={form.position}
-                                    onChange={handleChange}
-                                    className={styles.adminInput}
-                                    required
-                                />
-                                <label className={styles.adminLabel}>Email</label>
-                                <input
-                                    type="email"
-                                    name="email"
-                                    value={form.email}
-                                    onChange={handleChange}
-                                    className={styles.adminInput}
-                                    required
-                                />
-                                <label className={styles.adminLabel}>Password</label>
-                                <input
-                                    type="password"
-                                    name="password"
-                                    value={form.password}
-                                    onChange={handleChange}
-                                    className={styles.adminInput}
-                                    required
-                                />
-                                <div className={styles.formButtons}>
-                                    <button type="submit" className={styles.submitButton}>
-                                        {editingIndex !== null ? 'Update Data' : 'Submit'}
-                                    </button>
-                                    <button type="button" className={styles.cancelButton} onClick={() => setIsFormVisible(false)}>
-                                        Cancel
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                )}
-            </div>
-        </UsersPage>
+      <UsersPage>
+        <div className="text-white bg-red-500 p-4 rounded">
+          Error: {error.message}
+        </div>
+      </UsersPage>
     );
+
+  return (
+    <UsersPage>
+      <div className="p-6 bg-green text-white shadow-md rounded-lg">
+        <div className="grid grid-cols-4 gap-4 mb-4 font-bold text-lg text-center">
+          <div className="p-2 border-b border-white">Full Name</div>
+          <div className="p-2 border-b border-white">Position</div>
+          <div className="p-2 border-b border-white">Email</div>
+          <div className="p-2 border-b border-white">Actions</div>
+        </div>
+        <div>
+          {admins.map((admin) => (
+            <div
+              key={admin.id}
+              className="grid grid-cols-4 gap-4 border-b border-white py-2 items-center text-center"
+            >
+              <div className="p-2">
+                {formatFullName(
+                  admin.user.firstname,
+                  null,
+                  admin.user.lastname,
+                  false
+                )}
+              </div>
+              <div className="p-2">{admin.user.role_type}</div>
+              <div className="p-2">{admin.user.email}</div>
+              <div className="p-2 flex justify-center space-b-2">
+                <button
+                  className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
+                  onClick={() => handleEdit(admin)}
+                >
+                  <FaEdit size={20} />
+                </button>
+                {/* <button
+                  className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+                  onClick={() => handleDelete(admin.id)}
+                >
+                  <FaRegTrashAlt size={20} />
+                </button> */}
+              </div>
+            </div>
+          ))}
+        </div>
+        <button
+          className="mt-4 bg-green-700 text-white px-4 py-2 rounded hover:bg-green-800"
+          onClick={() => handleEdit(null)} // Open modal for adding a new admin
+        >
+          ➕ Add Data
+        </button>
+        <AdminModal
+          isOpen={isModalOpen}
+          onRequestClose={handleModalClose}
+          selectedAdmin={selectedAdmin}
+          createAdmin={createAdmin}
+          updateAdmin={updateAdmin}
+        />
+      </div>
+    </UsersPage>
+  );
 }
 
 export default AdminPage;

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "754235573667",
+    "project_id": "villager-system",
+    "storage_bucket": "villager-system.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:754235573667:android:710f33e7fa38b4665dc616",
+        "android_client_info": {
+          "package_name": "villager.system.com"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA44B9dViNhJxLUYPSagBFbG4VY1SOlcSc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

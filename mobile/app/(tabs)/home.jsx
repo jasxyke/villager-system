@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   RefreshControl,
@@ -13,15 +13,25 @@ import TabsGradient from "../../components/gradients/TabsGradient";
 import { useAuthContext } from "../../context/AuthContext";
 import LoadingEmptyAnnouncements from "../../components/Screens/Home/LoadingEmptyAnnouncements";
 import useAnnouncement from "../../hooks/announcements/useAnnouncement";
-
+import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+import useBills from "../../hooks/useBills";
 const Home = () => {
   const [refreshing, setRefreshing] = useState(false);
   const { user } = useAuthContext();
   const { announcements, loading, getAnnouncements } = useAnnouncement();
 
+  const { error, refetch, totalBalance } = useBills();
+
+  useEffect(() => {
+    if (user) {
+      refetch(user.resident.id);
+    }
+  }, [user]);
+
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
     getAnnouncements();
+    refetch(user.resident.id);
     setTimeout(() => {
       setRefreshing(false);
     }, 1000);
@@ -49,10 +59,13 @@ const Home = () => {
         <Text style={styles.greeting}>Hello, {user.firstname}!</Text>
         <View style={styles.row}>
           <View style={styles.card}>
-            <Text style={styles.cardContent}>Bills</Text>
-          </View>
-          <View style={styles.card}>
-            <Text style={styles.cardContent}>Bookings</Text>
+            <View className="flex flex-row justify-center w-full gap-x-2">
+              <FontAwesome6 name="peso-sign" size={40} color="white" />
+              <Text className="" style={styles.txtBalance}>
+                {totalBalance || "Error generating the total balance"}
+              </Text>
+            </View>
+            <Text className="textw-white text-lg text-white">Balance</Text>
           </View>
         </View>
         {announcements === null || loading ? (
@@ -103,8 +116,8 @@ const styles = StyleSheet.create({
   card: {
     borderRadius: 10,
     backgroundColor: "#1A2902",
-    width: "45%",
-    height: 200,
+    width: "100%",
+    height: 100,
     justifyContent: "center",
     padding: 10,
     alignItems: "center",
@@ -112,6 +125,12 @@ const styles = StyleSheet.create({
   cardContent: {
     color: "white",
     fontSize: 18,
+  },
+  txtBalance: {
+    fontSize: 40,
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
   },
 });
 

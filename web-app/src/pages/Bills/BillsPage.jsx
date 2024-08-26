@@ -1,106 +1,53 @@
-import React from 'react';
-import Container from '../../components/Container/Container';
-import Stack from '@mui/material/Stack';
-import Box from '@mui/material/Box';
-import { PieChart } from '@mui/x-charts/PieChart';
-import styles from './Bills.module.css';
+import React, { useState } from "react";
+import MainLogo from "../../components/MainLogo";
+import BillList from "./BillList";
+import TransactionHistory from "./TransactionHistory";
+import Reminders from "./Reminders";
+import Filters from "./Filters";
 
-const BillsPage = ({ children }) => {
+const BillsPage = () => {
+  const [activeFilter, setActiveFilter] = useState("billList");
+
+  const handleFilterClick = (filter) => {
+    setActiveFilter(filter);
+  };
+
   return (
-    <div className={styles.mainContainer}>
-      <div className={styles.billsContainer}>
-        <div className={styles.logoMiddle}>
-          <img src='/Logo-D.svg' alt='logo' className={styles.logoClass} />
-        </div>
-        <div className={styles.pieSection}>
-        <div className={styles.pieColumn}>
-          <div className={styles.pieTitle}>MONTHLY REPORTS</div>
-          <div className={styles.pieImg}>
-            <Stack
-              direction={{ xs: 'column', md: 'row' }}
-              spacing={{ xs: 0, md: 4 }}
-              sx={{ width: '100%' }}
+    <div className="p-6 min-h-screen">
+      <MainLogo />
+      <div className="bg-green shadow-md rounded-lg overflow-hidden">
+        <div className="flex border-b border-gray-300">
+          {["billList", "transactionHistory", "reminders"].map((filter) => (
+            <button
+              key={filter}
+              onClick={() => handleFilterClick(filter)}
+              className={`flex-1 text-center py-3 border-b-2 ${
+                activeFilter === filter
+                  ? "bg-secondary border-olive text-black"
+                  : "bg-green border-transparent text-white hover:bg-paleDarkGreen"
+              }`}
             >
-              <Box sx={{ flexGrow: 1 }}>
-                <PieChart
-                  series={[
-                    {
-                      data: [
-                        { id: 0, value: 20 },
-                        { id: 1, value: 30 },
-                        { id: 2, value: 40 },
-                        { id: 3, value: 10}
-                      ],
-                    },
-                  ]}
-                  width={360}
-                  height={250}
-                />
-              </Box>
-            </Stack>
-          </div>
+              {filter === "billList" && "Bill List"}
+              {filter === "transactionHistory" && "Transaction History"}
+              {filter === "reminders" && "Reminders"}
+            </button>
+          ))}
         </div>
-        <div className={styles.pieColumn}>
-          <div className={styles.pieTitle}>ANNUAL REPORTS</div>
-          <div className={styles.pieImg}>
-            <Stack
-              direction={{ xs: 'column', md: 'row' }}
-              spacing={{ xs: 0, md: 4 }}
-              sx={{ width: '100%' }}
-            >
-              <Box sx={{ flexGrow: 1 }}>
-                <PieChart
-                  series={[
-                    {
-                      data: [
-                        { id: 0, value: 10 },
-                        { id: 1, value: 15 },
-                        { id: 2, value: 20 },
-                        { id: 3, value: 25 },
-                      ],
-                    },
-                  ]}
-                  width={360}
-                  height={250}
-                />
-              </Box>
-            </Stack>
-          </div>
+
+        <div className="p-4">
+          <Filters />
         </div>
-        <div className={styles.pieColumn}>
-          <div className={styles.pieTitle}>YEARLY REPORTS</div>
-          <div className={styles.pieImg}>
-            <Stack
-              direction={{ xs: 'column', md: 'row' }}
-              spacing={{ xs: 0, md: 4 }}
-              sx={{ width: '100%' }}
-            >
-              <Box sx={{ flexGrow: 1 }}>
-                <PieChart
-                  series={[
-                    {
-                      data: [
-                        { id: 0, value: 10 },
-                        { id: 1, value: 15 },
-                      ],
-                    },
-                  ]}
-                  width={360}
-                  height={255}
-                />
-              </Box>
-            </Stack>
-          </div>
-        </div>
-        </div>
-        <div className={styles.billsButtons}>
-          <button className={styles.billsButton}>MONTHLY DUES</button>
-          <button className={styles.billsButton}>BASKETBALL COURT</button>
-          <button className={styles.billsButton}>MULTI PURPOSE HALL</button>
+
+        <hr className="border-white" />
+
+        <div className="p-5">
+          {activeFilter === "billList" && <BillList />}
+          {activeFilter === "transactionHistory" && <TransactionHistory />}
+          {activeFilter === "reminders" && <Reminders />}
         </div>
       </div>
     </div>
   );
-}
+};
 
 export default BillsPage;

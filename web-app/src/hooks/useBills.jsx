@@ -18,7 +18,7 @@ const useBills = () => {
   ) => {
     setLoading(true);
     try {
-      const response = await axiosClient.get("/admin/bills", {
+      const response = await axiosClient.get("/bills/admin", {
         params: {
           status,
           month,

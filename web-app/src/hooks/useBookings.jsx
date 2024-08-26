@@ -13,7 +13,7 @@ const useBookings = (selectedAmenity) => {
     setLoading(true);
     try {
       const response = await axiosClient.get(
-        `/admin/bookings/${selectedAmenity}`
+        `/admins/bookings/${selectedAmenity}`
       );
       setBookings(response.data.data);
       console.log(response.data);

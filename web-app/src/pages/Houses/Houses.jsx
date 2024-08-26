@@ -14,6 +14,7 @@ const Houses = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [isAddHouseVisible, setAddHouseVisible] = useState(false);
   const { addHouse } = useHouses();
+
   const handleAddMember = (member) => {
     //
   };
@@ -56,10 +57,10 @@ const Houses = () => {
               selectedBlocks={selectedBlocks}
               setFilteredBlocks={setFilteredBlocks}
             /> */}
-            <SearchInput
+            {/* <SearchInput
               query={searchQuery}
               onSearchChange={handleSearchChange}
-            />
+            /> */}
             <button
               onClick={() => setAddHouseVisible(true)}
               className="flex items-center px-4 py-2 bg-primary text-white rounded-xl h-14 w-52 text-lg  hover:bg-[var(--secondary)]"

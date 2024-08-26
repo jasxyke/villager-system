@@ -3,13 +3,17 @@
 namespace Database\Seeders;
 
 use App\Models\Admin;
+use App\Models\Bill;
 use App\Models\Resident;
+use App\Models\Transaction;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Faker\Factory as Faker;
 class UserSeeder extends Seeder
 {
     /**
@@ -17,6 +21,8 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
+
+        $faker = Faker::create();
 
         //create resident user for testing
         $residentUser = User::create([
@@ -32,8 +38,28 @@ class UserSeeder extends Seeder
             'picture_path' => 'default_img.jpg',
         ]);
         Resident::factory(['user_id'=>$residentUser->id])
-       
             ->create();
+            for ($i = 0; $i < 5; $i++) {
+                $bill = Bill::create([
+                    'resident_id' => $residentUser->id,
+                    'amount' => 1000,
+                    'due_date' => Carbon::now()->subMonths($i)->endOfMonth(),
+                    'status' => $faker->randomElement(['paid', 'unpaid', 'overdue']),
+                    'issue_date' => Carbon::now()->subMonths($i)->startOfMonth(),
+                ]);
+
+                // If the bill is marked as paid, create a corresponding transaction
+                if ($bill->status == 'paid') {
+                    Transaction::create([
+                        'resident_id' => $residentUser->id,
+                        'bill_id' => $bill->id,
+                        'amount' => $bill->amount,
+                        // 'payment_method' => $faker->randomElement(['cash', 'gcash']),
+                        'transaction_date' => Carbon::now()->subMonths($i)->endOfMonth(),
+                    ]);
+                }
+            }
+        
 
         $residentUser = User::create([
             'lastname'=>'Fabellon',

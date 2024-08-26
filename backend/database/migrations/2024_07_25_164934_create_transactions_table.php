@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('resident_id')->constrained('residents');
             $table->foreignId("bill_id")->constrained("bills");
             $table->decimal('amount', 8, 2);
-            $table->enum('payment_method',['cash','gcash']);//to be reviewed after kung eto tamang payment method
+            // $table->enum('payment_method',['cash','gcash']);//to be reviewed after kung eto tamang payment method
             $table->date('transaction_date');
             // $table->string('status');
             $table->timestamps();

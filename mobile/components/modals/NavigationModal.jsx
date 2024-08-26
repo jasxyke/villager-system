@@ -53,14 +53,14 @@ const NavigationModal = ({ visible, onClose }) => {
           <View className="rounded-lg p-5 h-auto w-[70%] bg-green shadow-lg">
             <View className="flex-row justify-between">
               <Text className="text-white font-pRegular text-lg">
-                Other options
+                Log out from the app?
               </Text>
               <TouchableOpacity onPress={onClose} className="ml-auto mb-3">
                 <AntDesign name="close" color="white" size={26} />
               </TouchableOpacity>
             </View>
 
-            <TouchableOpacity
+            {/* <TouchableOpacity
               onPress={navigateToPermits}
               className="rounded-xl p-1 h-auto bg-paleGreen mb-2"
             >
@@ -81,10 +81,10 @@ const NavigationModal = ({ visible, onClose }) => {
                   Request Car Stickers
                 </Text>
               </View>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
             <TouchableOpacity
               onPress={logoutUser}
-              className="rounded-xl p-1 h-auto bg-paleGreen mb-2"
+              className="rounded-xl p-1 h-auto bg-paleGreen"
             >
               <View className="flex-row items-center p-1 gap-x-1">
                 <AntDesign name="arrowright" size={24} color="white" />

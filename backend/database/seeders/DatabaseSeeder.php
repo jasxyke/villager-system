@@ -16,8 +16,9 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             AmenitySeeder::class,
             AnnouncementSeeder::class,
-            ResidentSeeder::class,
-            BookingSeeder::class
+            // ResidentSeeder::class,
+            BookingSeeder::class,
+            HouseSeeder::class
        ]);
     }
 }

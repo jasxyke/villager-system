@@ -13,9 +13,6 @@ const UsersPage = ({ children }) => {
           <Link to="/users/residents" className={styles.userButton}>
             Residents
           </Link>
-          <Link to="/users/guests" className={styles.userButton}>
-            Guests
-          </Link>
           <Link to="/users/admins" className={styles.userButton}>
             Administrators
           </Link>

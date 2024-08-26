@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Homepage from "./pages/Home/HomePage";
 import BookingPage from "./pages/Booking/BookingPage";
@@ -6,7 +6,6 @@ import BillsPage from "./pages/Bills/BillsPage";
 import FilePage from "./pages/File/FilePage";
 import AnnouncementPage from "./pages/Announcements/AnnouncementPage";
 import Residents from "./pages/Users/Residents";
-import GuestPage from "./pages/Users/GuestPage";
 import AdminPage from "./pages/Users/AdminPage";
 import Login from "./pages/Login/Login";
 import Sidebar from "./components/SideBar";
@@ -46,7 +45,7 @@ function App() {
             <Route path="/houses" element={<Houses />} />
             <Route path="/users">
               <Route path="residents" element={<Residents />} />
-              <Route path="guests" element={<GuestPage />} />
+
               <Route path="admins" element={<AdminPage />} />
             </Route>
           </Route>

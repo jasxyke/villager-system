@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('resident_id')->constrained('residents');
             $table->decimal('amount', 8, 2);
             $table->date('due_date');
-            $table->enum('status',['paid','unpaid','overdue']); // Example values: 'paid', 'unpaid', 'overdue'
+            $table->enum('status',['paid','pending','overdue']); // Example values: 'paid' , 'overdue'
             $table->date('issue_date');
             $table->timestamps();
         });

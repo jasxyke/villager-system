@@ -60,7 +60,7 @@ class HouseSeeder extends Seeder
                         'resident_id' => $resident->id,
                         'amount' => 1000,
                         'due_date' => Carbon::now()->subMonths($i)->endOfMonth(),
-                        'status' => $faker->randomElement(['paid', 'unpaid', 'overdue']),
+                        'status' => $faker->randomElement(['paid', 'pending', 'overdue']),
                         'issue_date' => Carbon::now()->subMonths($i)->startOfMonth(),
                     ]);
 

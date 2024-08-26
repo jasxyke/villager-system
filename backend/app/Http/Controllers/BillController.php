@@ -98,7 +98,7 @@ class BillController extends Controller
             'resident_id' => 'required|exists:residents,id',
             'amount' => 'required|numeric',
             'due_date' => 'required|date',
-            'status' => 'required|in:paid,unpaid,overdue',
+            'status' => 'required|in:paid,pending,overdue',
             'issue_date' => 'required|date',
         ]);
 
@@ -123,7 +123,7 @@ class BillController extends Controller
             'resident_id' => 'required|exists:residents,id',
             'amount' => 'required|numeric',
             'due_date' => 'required|date',
-            'status' => 'required|in:paid,unpaid,overdue',
+            'status' => 'required|in:paid,pending,overdue',
             'issue_date' => 'required|date',
         ]);
 
@@ -153,7 +153,7 @@ class BillController extends Controller
                     'resident_id' => $resident->id,
                     'amount' => 1000, // Replace with your logic to calculate the amount
                     'due_date' => $now->copy()->endOfMonth(),
-                    'status' => 'unpaid',
+                    'status' => 'pending',
                     'issue_date' => $now->copy()->startOfMonth(),
                 ]);
             }

@@ -19,7 +19,7 @@ class TransactionController extends Controller
         'transaction_date' => 'nullable|date',
         'payment_amount' => 'nullable|numeric|min:0',
         'new_amount' => 'nullable|numeric|min:0',
-        'new_status' => 'nullable|in:paid,unpaid,overdue',
+        'new_status' => 'nullable|in:paid,pending,overdue',
     ]);
 
     $bill = Bill::findOrFail($request->input('bill_id'));

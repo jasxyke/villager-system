@@ -23,7 +23,7 @@ class Transaction extends Model
         return $this->belongsTo(Resident::class);
     }
 
-    public function bill(): HasOne{
-        return $this->hasOne(Bill::class);
+    public function bill(): BelongsTo{
+        return $this->belongsTo(Bill::class);
     }
 }

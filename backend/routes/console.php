@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\BillController;
+use App\Jobs\MonthlyBills;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Schedule;
@@ -10,6 +10,4 @@ use Illuminate\Support\Facades\Schedule;
 // })->purpose('Display an inspiring quote')->hourly();
 
 
-Schedule::call(function () {
-    app(BillController::class)->generateMonthlyBills();
-})->monthlyOn(1, '00:00');
+Schedule::job(new MonthlyBills)->monthlyOn(1, '00:00');

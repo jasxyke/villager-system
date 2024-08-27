@@ -9,41 +9,40 @@ const useBills = () => {
   const [lastPage, setLastPage] = useState(null);
   const [total, setTotal] = useState(0);
 
-  const fetchBills = async (
-    status = "pending",
-    month = null,
-    year = null,
-    search = "",
-    page = 1
-  ) => {
+  const fetchBills = async (status, month, year, search, page) => {
     setLoading(true);
     try {
-      const response = await axiosClient.get("/bills/admin", {
-        params: {
-          status,
-          month,
-          year,
-          search,
-          page,
-        },
+      const response = await axiosClient.post("/bills/admin", {
+        status,
+        month,
+        year,
+        search,
+        page,
       });
+
+      console.log(response.data.bills.data);
+      console.log(response.data);
 
       setBills(response.data.bills.data);
       setCurrentPage(response.data.current_page);
       setLastPage(response.data.last_page);
       setTotal(response.data.total);
     } catch (err) {
+      console.log(err);
+
+      console.log(err.data.response.message);
+
       setError(err);
     } finally {
       setLoading(false);
     }
   };
 
-  const changePage = (page) => {
-    fetchBills(undefined, undefined, undefined, undefined, page);
+  const changePage = (status, month, year, searchQuery, page) => {
+    fetchBills(status, month, year, searchQuery, page);
   };
 
-  const updateBillAndAddPayment = async (data) => {
+  const updateBillAndAddPayment = async (data, onSucess) => {
     setLoading(true);
     try {
       // Make the API call to update the bill and add payment
@@ -51,15 +50,11 @@ const useBills = () => {
 
       // After a successful update, refresh the list of bills
       // You might need to adjust the parameters based on your current filters
-      fetchBills(
-        data.status || "pending",
-        data.month,
-        data.year,
-        data.search,
-        currentPage
-      );
-
-      return response.data.message;
+      if (response.data.success) {
+        console.log(response.data.success);
+        onSucess();
+      }
+      return response.data.success;
     } catch (error) {
       setError(error);
       throw error;

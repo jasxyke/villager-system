@@ -7,9 +7,24 @@ import Filters from "./Filters";
 
 const BillsPage = () => {
   const [activeFilter, setActiveFilter] = useState("billList");
+  const [searchPressed, setSearchPressed] = useState(false);
+  const [filters, setFilters] = useState({
+    status: "pending",
+    month: null,
+    year: null,
+    searchQuery: "",
+  });
 
   const handleFilterClick = (filter) => {
     setActiveFilter(filter);
+  };
+
+  const handleFiltersChange = (newFilters) => {
+    setFilters(newFilters);
+  };
+
+  const handleSearchPress = () => {
+    setSearchPressed(true);
   };
 
   return (
@@ -33,16 +48,38 @@ const BillsPage = () => {
             </button>
           ))}
         </div>
-
-        <div className="p-4">
-          <Filters />
-        </div>
+        {activeFilter !== "reminders" ? (
+          <div className="p-4">
+            <Filters
+              onFiltersChange={handleFiltersChange}
+              handleSearchPress={handleSearchPress}
+              filter={activeFilter}
+            />
+          </div>
+        ) : null}
 
         <hr className="border-white" />
 
         <div className="p-5">
-          {activeFilter === "billList" && <BillList />}
-          {activeFilter === "transactionHistory" && <TransactionHistory />}
+          {activeFilter === "billList" && (
+            <BillList
+              status={filters.status}
+              month={filters.month}
+              year={filters.year}
+              searchQuery={filters.searchQuery}
+              searchPressed={searchPressed}
+              setSearchPressed={setSearchPressed}
+            />
+          )}
+          {activeFilter === "transactionHistory" && (
+            <TransactionHistory
+              month={filters.month}
+              year={filters.year}
+              searchQuery={filters.searchQuery}
+              searchPressed={searchPressed}
+              setSearchPressed={setSearchPressed}
+            />
+          )}
           {activeFilter === "reminders" && <Reminders />}
         </div>
       </div>

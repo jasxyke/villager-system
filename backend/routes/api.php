@@ -82,10 +82,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/bills/{id}', [BillController::class, 'destroy']);
     Route::post('/bills/generate-monthly', [BillController::class, 'generateMonthlyBills']);
     Route::get('/bills/resident/{resident_id}', [BillController::class, 'getUserBills']);
-    Route::get('/bills/admin', [BillController::class, 'getMonthlyBills']);
-
+    Route::post('/bills/admin', [BillController::class, 'getMonthlyBills']);
+    //overdue bills
+    Route::get('/bills/overdue/{page}', [BillController::class, 'getOverdueBills']);
+    Route::post('/bills/notify-overdue', [BillController::class, 'notifyOverdueBills']);
+    
     //transaction routes (monthly due bills)
     Route::post('/bills/pay-edit-bill', [TransactionController::class, 'updateBillAndAddPayment']);
+    Route::get('/transactions/recent-paid', [TransactionController::class, 'getRecentPaidTransactions']);
 });
 
 //booking routes (avaialable to the public)

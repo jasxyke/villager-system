@@ -1,16 +1,45 @@
 import React, { useState, useEffect } from "react";
 import useBills from "../../hooks/useBills";
 import EditBillModal from "./EditBillModal";
+import { formatFullName, formatName } from "../../utils/DataFormatter";
+import ReactPaginate from "react-paginate";
+import LoadingContainer from "../../components/LoadingScreen/LoadingContainer";
 
-const BillList = () => {
-  const { bills, fetchBills, loading, error } = useBills();
+const BillList = ({
+  status,
+  month,
+  year,
+  searchQuery,
+  searchPressed,
+  setSearchPressed,
+}) => {
+  const {
+    bills,
+    fetchBills,
+    loading,
+    error,
+    currentPage,
+    lastPage,
+    total,
+    changePage,
+  } = useBills();
   const [selectedBill, setSelectedBill] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    // Fetch bills when component mounts or updates
-    fetchBills();
-  }, []);
+    // Fetch bills based on filters
+    fetchBills(status, month, year, searchQuery, currentPage);
+  }, [status, month, year]);
+
+  useEffect(() => {
+    if (searchPressed === true) {
+      fetchBills(status, month, year, searchQuery, currentPage);
+      setSearchPressed(false);
+    }
+    if (searchQuery === "") {
+      fetchBills(status, month, year, searchQuery, currentPage);
+    }
+  }, [searchPressed, searchQuery]);
 
   const openModal = (bill) => {
     setSelectedBill(bill);
@@ -22,48 +51,77 @@ const BillList = () => {
     setIsModalOpen(false);
   };
 
-  if (loading) return <div>Loading...</div>;
+  const handleSucess = () => {
+    alert("Bill updated successfully");
+    fetchBills(status, month, year, searchQuery, currentPage);
+  };
+
+  const handlePageClick = (event) => {
+    changePage(status, month, year, searchQuery, event.selected + 1);
+  };
+
+  if (loading) return <LoadingContainer />;
   if (error) return <div>Error: {error.message}</div>;
 
   return (
     <>
-      <div className="text-xl font-bold mb-4 text-white">Date: August 2024</div>
       <div className="overflow-x-auto">
         <div className="min-w-full bg-white border rounded-lg shadow-lg">
-          <div className="grid grid-cols-6 gap-4 p-2 bg-oliveGreen text-white font-semibold">
-            <div>Homeowner</div>
-            <div>Address</div>
-            <div>Date</div>
-            <div>Amount</div>
-            <div>Status</div>
-            <div>Action</div>
+          <div className="grid grid-cols-7 gap-4 p-2 bg-oliveGreen text-white font-semibold">
+            <div className="flex items-center justify-center">Homeowner</div>
+            <div className="flex items-center justify-center">Address</div>
+            <div className="flex items-center justify-center">Issue Date</div>
+            <div className="flex items-center justify-center">Due Date</div>
+            <div className="flex items-center justify-center">Amount</div>
+            <div className="flex items-center justify-center">Status</div>
+            <div className="flex items-center justify-center">Action</div>
           </div>
-          {bills.length > 0 ? (
-            bills.map((bill, index) => (
-              <div
-                key={bill.id} // Use a unique key if available, like bill.id
-                className={`grid grid-cols-6 gap-4 p-2 text-black ${
-                  index > 0 ? "border-t border-greyGreen" : ""
-                }`}
-              >
-                <div>{bill.name}</div>
-                <div>{bill.address}</div>
-                <div>{bill.date}</div>
-                <div>{bill.amount}</div>
-                <div>{bill.status}</div>
-                <div>
-                  <button
-                    onClick={() => openModal(bill)}
-                    className="text-white bg-oliveGreen rounded-xl w-28 p-2 hover:underline"
-                  >
-                    View
-                  </button>
+          <div className="h-[350px] overflow-y-auto">
+            {bills.length > 0 ? (
+              bills.map((bill, index) => (
+                <div
+                  key={bill.id}
+                  className={`grid grid-cols-7 gap-4 p-2 text-black ${
+                    index > 0 ? "border-t border-greyGreen" : ""
+                  }`}
+                >
+                  <div className="flex items-center justify-center">
+                    {formatFullName(
+                      bill.resident.user.firstname,
+                      bill.resident.user.middlename,
+                      bill.resident.user.lastname,
+                      false
+                    )}
+                  </div>
+                  <div className="flex items-center justify-center">
+                    {`BLK ${bill.resident.house.block} LOT ${bill.resident.house.lot}`}
+                  </div>
+                  <div className="flex items-center justify-center">
+                    {bill.issue_date}
+                  </div>
+                  <div className="flex items-center justify-center">
+                    {bill.due_date}
+                  </div>
+                  <div className="flex items-center justify-center">
+                    {bill.amount}
+                  </div>
+                  <div className="flex items-center justify-center">
+                    {formatName(bill.status)}
+                  </div>
+                  <div className="flex items-center justify-center">
+                    <button
+                      onClick={() => openModal(bill)}
+                      className="text-white bg-oliveGreen rounded-xl w-28 p-2 hover:underline"
+                    >
+                      View
+                    </button>
+                  </div>
                 </div>
-              </div>
-            ))
-          ) : (
-            <div className="text-center p-4">No bills available</div>
-          )}
+              ))
+            ) : (
+              <div className="text-center p-4">No bills available</div>
+            )}
+          </div>
         </div>
       </div>
 
@@ -72,8 +130,27 @@ const BillList = () => {
           isOpen={isModalOpen}
           onRequestClose={closeModal}
           bill={selectedBill}
+          onSucess={handleSucess}
         />
       )}
+
+      {/* Pagination Controls using React Paginate */}
+      <div className="flex justify-center mt-4">
+        <ReactPaginate
+          breakLabel="..."
+          nextLabel={"next >"}
+          onPageChange={handlePageClick}
+          pageRangeDisplayed={5}
+          pageCount={lastPage}
+          previousLabel={"< previous"}
+          renderOnZeroPageCount={null}
+          className={"pagination rounded-md"}
+          disabledClassName="text-grey opacity-50"
+          pageClassName="text-white"
+          activeClassName="bg-paleGreen px-2"
+          forcePage={currentPage - 1}
+        />
+      </div>
     </>
   );
 };

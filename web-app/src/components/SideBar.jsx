@@ -28,11 +28,11 @@ const SideBar = () => {
   return (
     <nav className={styles.sidebar}>
       <ul>
-        <li>
+        {/* <li>
           <NavLink to="/homepage">
             <img src={homeIcon} alt="Home" /> Home
           </NavLink>
-        </li>
+        </li> */}
         <li>
           <NavLink to="/booking">
             <img src={bookingIcon} alt="Booking" /> Booking

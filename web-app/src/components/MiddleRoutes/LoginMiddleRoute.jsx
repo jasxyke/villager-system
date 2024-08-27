@@ -12,7 +12,7 @@ const LoginMiddleRoute = () => {
   }
   if (isLoggedIn()) {
     console.log("logged in");
-    return <Navigate to={"/homepage"} />;
+    return <Navigate to={"/booking"} />;
   }
 };
 

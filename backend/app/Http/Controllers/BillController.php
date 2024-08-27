@@ -6,8 +6,10 @@ use App\Models\Bill;
 use App\Models\Resident;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Mail\OverdueBillNotification;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Mail;
 
 class BillController extends Controller
 {
@@ -22,20 +24,25 @@ class BillController extends Controller
     public function getMonthlyBills(Request $request)
     {
         // Get the type of bills requested (paid or pending)
-        $status = $request->query('status', 'pending'); // Default to 'pending' if not provided
+        // $status = $request->query('status', 'pending'); // Default to 'pending' if not provided
+        $status = $request->status; // Default to 'pending' if not provided
     
         // Get the page number from the request or default to 1
-        $page = $request->query('page', 1);
+        // $page = $request->query('page', 1);
+        $page = $request->page;
     
         // Get the month and year from the request
-        $month = $request->query('month');
-        $year = $request->query('year');
+        // $month = $request->query('month');
+        $month = $request->month;
+        // $year = $request->query('year');
+        $year = $request->year;
     
         // Get the search term for homeowner's name, default to an empty string if not provided
-        $search = $request->query('search', '');
+        // $search = $request->query('search', '');
+        $search = $request->search;
     
         // Build the query
-        $query = Bill::with('resident.user', 'transactions')
+        $query = Bill::with('resident.user','resident.house', 'transactions')
             ->where('status', $status)
             ->whereYear('due_date', $year)
             ->whereMonth('due_date', $month)
@@ -59,6 +66,41 @@ class BillController extends Controller
             'last_page' => $bills->lastPage(),
             'total' => $bills->total()
         ]);
+    }
+
+    public function getOverdueBills(string $page)
+    {
+        // Create a query for bills
+        $query = Bill::with(['resident.user']) // Eager load Resident and User relationships
+            ->where('status', 'overdue');  // Filter for overdue bills
+
+        // Order by the oldest due date
+        $bills = $query->orderBy('due_date', 'asc')
+            ->paginate(10, ['*'], 'page', $page); // Adjust the pagination limit as necessary
+
+        return response()->json($bills);
+    }
+
+    public function notifyOverdueBills(Request $request)
+    {
+        // Validate the incoming request
+        $request->validate([
+            'bill_ids' => 'required|array',
+            'bill_ids.*' => 'exists:bills,id', // Ensure each ID exists in the bills table
+        ]);
+
+        // Get the array of bill IDs from the request
+        $billIds = $request->input('bill_ids');
+
+        // Fetch the bills based on the provided IDs
+        $bills = Bill::whereIn('id', $billIds)->get();
+
+        foreach ($bills as $bill) {
+            $residentEmail = $bill->resident->user->email;
+            Mail::to($residentEmail)->send(new OverdueBillNotification($bill));
+        }
+
+        return response()->json(['message' => 'Notifications sent successfully']);
     }
     
     // get user billss
@@ -89,7 +131,6 @@ class BillController extends Controller
             'total_balance' => $totalBalance
         ]);
     }
-
 
     // Store a newly created bill in storage
     public function store(Request $request)
@@ -141,24 +182,4 @@ class BillController extends Controller
         return response()->json(['message' => 'Bill deleted successfully']);
     }
 
-    // Generate bills for all residents every month
-    public function generateMonthlyBills()
-    {
-        $residents = Resident::all();
-        $now = Carbon::now();
-
-        DB::transaction(function () use ($residents, $now) {
-            foreach ($residents as $resident) {
-                Bill::create([
-                    'resident_id' => $resident->id,
-                    'amount' => 1000, // Replace with your logic to calculate the amount
-                    'due_date' => $now->copy()->endOfMonth(),
-                    'status' => 'pending',
-                    'issue_date' => $now->copy()->startOfMonth(),
-                ]);
-            }
-        });
-
-        return response()->json(['message' => 'Monthly bills generated successfully']);
-    }
 }

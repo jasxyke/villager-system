@@ -5,14 +5,14 @@ import styles from "./EditBillsModal.module.css"; // Import CSS Module
 
 Modal.setAppElement("#root"); // Ensure that screen readers can work with the modal
 
-const EditBillModal = ({ isOpen, onRequestClose, bill }) => {
+const EditBillModal = ({ isOpen, onRequestClose, bill, onSucess }) => {
   const { updateBillAndAddPayment } = useBills();
   const [formData, setFormData] = useState({
     amount: "",
     transaction_date: "",
     payment_amount: "",
     new_amount: "",
-    new_status: "",
+    new_status: bill.status,
   });
 
   useEffect(() => {
@@ -22,7 +22,7 @@ const EditBillModal = ({ isOpen, onRequestClose, bill }) => {
         transaction_date: "",
         payment_amount: "",
         new_amount: "",
-        new_status: "",
+        new_status: bill.status,
       });
     }
   }, [bill]);
@@ -43,7 +43,7 @@ const EditBillModal = ({ isOpen, onRequestClose, bill }) => {
         new_amount: formData.new_amount,
         new_status: formData.new_status,
       };
-      await updateBillAndAddPayment(data);
+      await updateBillAndAddPayment(data, onSucess);
       onRequestClose(); // Close the modal after successful update
     } catch (error) {
       console.error("Failed to update bill and add payment:", error);
@@ -58,7 +58,9 @@ const EditBillModal = ({ isOpen, onRequestClose, bill }) => {
       className={styles.modal}
       overlayClassName={styles.overlay}
     >
-      <h2>Edit Bill</h2>
+      <h2 className="text-2xl font-bold border-b-2 border-black mb-4">
+        Edit Bill
+      </h2>
       <form onSubmit={handleSubmit}>
         <div className={styles.formGroup}>
           <label className={styles.label}>Current Amount:</label>

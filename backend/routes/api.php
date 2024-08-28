@@ -31,6 +31,7 @@ Route::middleware('auth:sanctum')->group(function () {
         'getHousesPerBlocks']);
         Route::get('/block/{blockNumber}',[HouseController::class,
         'getHousesPerBlock']);
+        Route::get('/search', [HouseController::class, 'search']);
     });
     Route::apiResource('houses',HouseController::class);
 
@@ -89,7 +90,7 @@ Route::middleware('auth:sanctum')->group(function () {
     
     //transaction routes (monthly due bills)
     Route::post('/bills/pay-edit-bill', [TransactionController::class, 'updateBillAndAddPayment']);
-    Route::get('/transactions/recent-paid', [TransactionController::class, 'getRecentPaidTransactions']);
+    Route::post('/transactions/recent-paid', [TransactionController::class, 'getRecentPaidTransactions']);
 });
 
 //booking routes (avaialable to the public)

@@ -1,4 +1,4 @@
-package com.jasxyke.villager
+package villager.system.com
 
 import android.app.Application
 import android.content.res.Configuration

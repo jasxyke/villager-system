@@ -4,6 +4,7 @@ import ReactPaginate from "react-paginate";
 import BookingReviewModal from "./BookingReviewModal";
 import Styles from "./BookingPage.module.css";
 import LoadingContainer from "../../components/LoadingScreen/LoadingContainer";
+import { formatName } from "../../utils/DataFormatter";
 
 const BookingTable = ({ selectedAmenity }) => {
   const {
@@ -54,9 +55,9 @@ const BookingTable = ({ selectedAmenity }) => {
       <div className="grid grid-cols-7 bg-green font-semibold">
         <div className="px-4 py-3 text-center">FULLNAME</div>
         <div className="px-4 py-3 text-center">EMAIL</div>
-        <div className="px-4 py-3 text-center">CONTACT NO.</div>
         <div className="px-4 py-3 text-center">BOOKING DATE</div>
         <div className="px-4 py-3 text-center">BOOKING TIME</div>
+        <div className="px-4 py-3 text-center">PAYMENT STATUS</div>
         <div className="px-4 py-3 text-center">STATUS</div>
         <div className="px-4 py-3 text-center">ACTION</div>
       </div>
@@ -78,16 +79,16 @@ const BookingTable = ({ selectedAmenity }) => {
                 {booking.email}
               </div>
               <div className="px-4 py-3 text-center truncate">
-                {booking.contact_number}
-              </div>
-              <div className="px-4 py-3 text-center truncate">
                 {booking.booking_date}
               </div>
               <div className="px-4 py-3 text-center truncate">
                 {`${booking.start_time} - ${booking.end_time}`}
               </div>
               <div className="px-4 py-3 text-center truncate">
-                {booking.booking_status}
+                {formatName(booking.payment_status)}
+              </div>
+              <div className="px-4 py-3 text-center truncate">
+                {formatName(booking.booking_status)}
               </div>
               <div className="px-4 py-3 text-center">
                 <button

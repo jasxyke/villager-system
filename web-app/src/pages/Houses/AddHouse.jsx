@@ -23,7 +23,9 @@ const AddHouse = ({ onAdd, onClose }) => {
   const [civilStatus, setCivilStatus] = useState(CIVIL_STATUSES[0].value);
   const [facebook, setFacebook] = useState("");
   const [occupation, setOccupation] = useState(OCCUPATION_STATUSES[0].value);
-  const [lotNumberError, setLotNumberError] = useState("");
+
+  // State for error messages
+  const [errors, setErrors] = useState({});
 
   const handleLotNumberChange = (e) => {
     const value = e.target.value;
@@ -34,7 +36,50 @@ const AddHouse = ({ onAdd, onClose }) => {
     }
   };
 
+  const validateInputs = () => {
+    const newErrors = {};
+
+    if (!lotNumber || isNaN(lotNumber) || lotNumber <= 0 || lotNumber > 99) {
+      newErrors.lotNumber = "Please enter a valid lot number between 1 and 99.";
+    }
+
+    if (!lastname.trim()) {
+      newErrors.lastname = "Last name is required.";
+    }
+
+    if (!firstname.trim()) {
+      newErrors.firstname = "First name is required.";
+    }
+
+    if (!email.trim()) {
+      newErrors.email = "Email is required.";
+    } else if (!/^\S+@\S+\.\S+$/.test(email)) {
+      newErrors.email = "Please enter a valid email address.";
+    }
+
+    if (!contactNum.trim()) {
+      newErrors.contactNum = "Contact number is required.";
+    } else if (!/^\d{10,15}$/.test(contactNum)) {
+      newErrors.contactNum = "Contact number should be 10 to 15 digits long.";
+    }
+
+    if (!birthdate.trim()) {
+      newErrors.birthdate = "Birthdate is required.";
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return false;
+    }
+
+    return true;
+  };
+
   const handleAddHouse = () => {
+    if (!validateInputs()) {
+      return;
+    }
+
     const houseData = {
       block: blockNumber,
       lot: Number(lotNumber),
@@ -86,19 +131,15 @@ const AddHouse = ({ onAdd, onClose }) => {
             <input
               type="number"
               value={lotNumber}
-              //onChange={(e) => setLotNumber(e.target.value)}\
-              //min="1"
-              //max="999"
               onChange={handleLotNumberChange}
-              maxLength="2"
               placeholder="Enter a number between 1 and 99"
               className={`w-full border p-2 rounded ${
-                lotNumberError ? "border-red-500" : "border-gray-300"
+                errors.lotNumber ? "border-red-500" : "border-gray-300"
               }`}
             />
-            {/*lotNumberError && (
-            <p className="text-red-500 text-sm mt-1">{lotNumberError}</p>
-          )*/}
+            {errors.lotNumber && (
+              <p className="text-red-500 text-sm mt-1">{errors.lotNumber}</p>
+            )}
           </div>
           <SelectInput
             label={"House type"}
@@ -117,31 +158,44 @@ const AddHouse = ({ onAdd, onClose }) => {
               label={"Last Name"}
               value={lastname}
               changeText={setLastname}
+              error={errors.lastname}
             />
             <TextInput
               label={"First Name"}
               value={firstname}
               changeText={setFirstname}
+              error={errors.firstname}
             />
             <TextInput
               label={"Middle Name"}
               value={middlename}
               changeText={setMiddlename}
             />
-            <TextInput label={"Email"} value={email} changeText={setEmail} />
+            <TextInput
+              label={"Email"}
+              value={email}
+              changeText={setEmail}
+              error={errors.email}
+            />
             <TextInput
               label={"Contact Number"}
               value={contactNum}
               changeText={setContactNum}
+              error={errors.contactNum}
             />
             <div className="mb-2">
-              <p className="text-black mb-1">Birthdte</p>
+              <p className="text-black mb-1">Birthdate</p>
               <input
                 value={birthdate}
                 onChange={(e) => setBirthdate(e.target.value)}
                 type="date"
-                className="border w-full rounded-md p-2 bg-white text-black"
+                className={`border w-full rounded-md p-2 bg-white text-black ${
+                  errors.birthdate ? "border-red-500" : "border-gray-300"
+                }`}
               />
+              {errors.birthdate && (
+                <p className="text-red-500 text-sm mt-1">{errors.birthdate}</p>
+              )}
             </div>
             <SelectInput
               label={"Sex"}

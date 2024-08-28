@@ -25,8 +25,9 @@ export function formatFullName(
 
 export function formatName(name) {
   name = name
+    .replace(/_/g, " ") // Replace underscores with spaces
     .split(" ")
-    .map((name) => name.charAt(0).toUpperCase() + name.slice(1).toLowerCase())
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
     .join(" ");
   return name;
 }

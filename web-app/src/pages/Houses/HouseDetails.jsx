@@ -45,7 +45,12 @@ const HouseDetails = ({ house, onBack }) => {
       {!isEditing ? (
         <div className="pt-6">
           <div className="mb-2 px-6 flex items-center space-x-4 justify-between rounded-s-xl">
-            <IoMdArrowBack size={30} color="white" onClick={onBack} />
+            <IoMdArrowBack
+              className="cursor-pointer"
+              size={30}
+              color="white"
+              onClick={onBack}
+            />
             <div className="ml-auto flex space-x-4">
               {/*<img
             src={editIcon}

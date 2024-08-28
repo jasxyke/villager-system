@@ -12,7 +12,7 @@ const useTransactions = () => {
   const fetchTransactions = async (month, year, search, page) => {
     setLoading(true);
     try {
-      const response = await axiosClient.get("/transactions/recent-paid", {
+      const response = await axiosClient.post("/transactions/recent-paid", {
         month,
         year,
         search,

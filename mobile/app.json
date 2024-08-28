@@ -20,7 +20,8 @@
         "foregroundImage": "./assets/logo.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.jasxyke.villager"
+      "googleServicesFile": "./android/app/google-services.json",
+      "package": "villager.system.com"
     },
     "web": {
       "favicon": "./assets/favicon.png"

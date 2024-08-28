@@ -40,7 +40,7 @@ const SideBar = () => {
         </li>
         <li>
           <NavLink to="/bills">
-            <img src={billsIcon} alt="Bills" /> Bills
+            <img src={billsIcon} alt="Bills" /> Collections
           </NavLink>
         </li>
         <li>

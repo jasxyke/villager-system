@@ -1,4 +1,4 @@
-package com.jasxyke.villager
+package villager.system.com
 
 import android.os.Build
 import android.os.Bundle

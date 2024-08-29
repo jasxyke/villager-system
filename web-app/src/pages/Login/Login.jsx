@@ -11,8 +11,9 @@ const Login = () => {
   const { login, loading } = useAuthContext();
 
   const handleError = (msg) => {
-    setErrorMsg("");
+    setErrorMsg(msg);
   };
+
   const onSubmit = (event) => {
     event.preventDefault();
     setEmailError("");
@@ -23,13 +24,13 @@ const Login = () => {
       return;
     }
     if (password === "") {
-      setPasswordError("Please enter a password");
+      setErrorMsg("Please enter a password");
       return;
     }
-    if (password.length < 8) {
-      setPasswordError("The password must be 8 characters or longer");
-      return;
-    }
+    // if (password.length < 8) {
+    //   setPasswordError("The password must be 8 characters or longer");
+    //   return;
+    // }
     login(email, password, handleError);
   };
 
@@ -39,6 +40,12 @@ const Login = () => {
         <img src="/Logo.svg" alt="logo" className={styles.logoClass} />
       </div>
       <br />
+      {/* Error message container */}
+      {errorMsg && (
+        <div className={styles.errorContainer}>
+          <p className={styles.errorLabel}>{errorMsg}</p>
+        </div>
+      )}
       <div className={styles.inputParentContainer}>
         <img
           src="/User.svg"
@@ -53,12 +60,20 @@ const Login = () => {
             type="email"
             onChange={(ev) => setEmail(ev.target.value)}
             className={styles.inputBox}
+            onKeyUp={(e) => {
+              if (e.key === "Enter") {
+                document.getElementById("submitBtn").click();
+              }
+            }}
           />
         </div>
       </div>
-      <div className={styles.emailError}>
-        <label className={styles.errorLabel}>{emailError}</label>
-      </div>
+      {/* Email error message */}
+      {emailError && (
+        <div className={styles.emailError}>
+          <label className={styles.errorLabel}>{emailError}</label>
+        </div>
+      )}
       <br />
       <div className={styles.inputParentContainer}>
         <img src="/Key.svg" alt="key icon" className={styles.inputIconClass} />
@@ -70,11 +85,13 @@ const Login = () => {
             placeholder="Password"
             onChange={(ev) => setPassword(ev.target.value)}
             className={styles.inputBox}
+            onKeyUp={(e) => {
+              if (e.key === "Enter") {
+                document.getElementById("submitBtn").click();
+              }
+            }}
           />
         </div>
-      </div>
-      <div>
-         <label className={styles.errorLabel}>{passwordError}</label>
       </div>
       <br />
       <div className={styles.forgotPasswordClass}>Forgot Password?</div>
@@ -85,6 +102,7 @@ const Login = () => {
           type="submit"
           value="Log in"
           disabled={loading}
+          id="submitBtn"
         />
       </div>
     </form>

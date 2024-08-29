@@ -59,8 +59,8 @@ const BookingReviewModal = ({ isOpen, onRequestClose, booking, onUpdate }) => {
 
   const handleSave = async () => {
     try {
-      const sucess = await updateBooking(updatedBooking, payments);
-      alert(sucess);
+      const success = await updateBooking(updatedBooking, payments);
+      alert(success);
       onUpdate();
       onRequestClose();
     } catch (err) {
@@ -109,12 +109,12 @@ const BookingReviewModal = ({ isOpen, onRequestClose, booking, onUpdate }) => {
     <Modal
       isOpen={isOpen}
       onRequestClose={onRequestClose}
-      className="relative w-full max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-lg"
+      className="relative w-full max-w-5xl mx-auto bg-white p-6 rounded-lg shadow-lg overflow-y-auto"
       overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
     >
-      <div className="h-[90vh] overflow-y-auto">
+      <div className="h-[90vh]">
         <h2 className="text-2xl font-semibold mb-4">Review Booking</h2>
-        <div className="flex overflow-auto">
+        <div className="flex">
           {/* Left Column */}
           <div className="w-1/2 pr-4">
             <div className="flex flex-col mb-4">
@@ -154,6 +154,20 @@ const BookingReviewModal = ({ isOpen, onRequestClose, booking, onUpdate }) => {
                   setUpdatedBooking({
                     ...updatedBooking,
                     contact_number: e.target.value,
+                  })
+                }
+                className="p-2 border border-gray-300 rounded"
+              />
+            </div>
+            <div className="flex flex-col mb-4">
+              <label className="text-sm font-medium mb-1">Booking Date</label>
+              <input
+                type="date"
+                value={updatedBooking.booking_date || ""}
+                onChange={(e) =>
+                  setUpdatedBooking({
+                    ...updatedBooking,
+                    booking_date: e.target.value,
                   })
                 }
                 className="p-2 border border-gray-300 rounded"
@@ -262,71 +276,73 @@ const BookingReviewModal = ({ isOpen, onRequestClose, booking, onUpdate }) => {
               </div>
             </div>
             <div className="flex flex-col mb-4">
-              <label className="text-sm font-medium mb-1">Payment Amount</label>
-              <input
-                type="number"
-                value={paymentAmount}
-                onChange={(e) => setPaymentAmount(e.target.value)}
-                className="p-2 border border-gray-300 rounded"
-              />
+              <label className="text-sm font-medium mb-1">Total Paid</label>
+              <div className="p-2 border border-gray-300 rounded bg-gray-100">
+                PHP {totalPaid.toFixed(2)}
+              </div>
             </div>
             <div className="flex flex-col mb-4">
-              <label className="text-sm font-medium mb-1">Payment Date</label>
-              <input
-                type="date"
-                value={paymentDate}
-                onChange={(e) => setPaymentDate(e.target.value)}
-                className="p-2 border border-gray-300 rounded"
-              />
-            </div>
-            {error && <p className="text-red-600 text-sm mt-2 mb-4">{error}</p>}
-            <button
-              onClick={addPayment}
-              className="bg-green text-white px-4 py-2 rounded hover:bg-green-600 mb-4"
-            >
-              Add Payment
-            </button>
-            <div>
-              <h3 className="text-lg font-semibold mb-2">Payments</h3>
-              <div className="space-y-2 max-h-64 overflow-auto">
-                {payments.map((payment, index) => (
-                  <div
-                    key={index}
-                    className="flex justify-between items-center p-2 border border-gray-300 rounded"
-                  >
-                    <div>
-                      <div>Amount: PHP {payment.amount}</div>
-                      <div>Date: {payment.payment_date}</div>
-                    </div>
-                    <button
-                      onClick={() => deletePayment(index)}
-                      className="text-red-600 hover:text-red-800"
-                    >
-                      Delete
-                    </button>
-                  </div>
-                ))}
-              </div>
-
-              <div className="mt-4 p-2 border border-gray-300 rounded bg-gray-100">
-                <h4 className="font-semibold">Total Amount Due</h4>
+              <label className="text-sm font-medium mb-1">Amount Due</label>
+              <div className="p-2 border border-gray-300 rounded bg-gray-100">
                 PHP {totalAmountDue.toFixed(2)}
               </div>
             </div>
+            <div className="flex flex-col mb-4">
+              <label className="text-sm font-medium mb-1">Add Payment</label>
+              <div className="flex space-x-2">
+                <input
+                  type="number"
+                  value={paymentAmount}
+                  onChange={(e) => setPaymentAmount(e.target.value)}
+                  className="p-2 border border-gray-300 rounded"
+                  placeholder="Amount"
+                />
+                <input
+                  type="date"
+                  value={paymentDate}
+                  onChange={(e) => setPaymentDate(e.target.value)}
+                  className="p-2 border border-gray-300 rounded"
+                  placeholder="Date"
+                />
+                <button
+                  onClick={addPayment}
+                  className="p-2 bg-blue-500 text-white rounded"
+                >
+                  Add
+                </button>
+              </div>
+            </div>
+            {error && <div className="text-red-500 mb-4">{error}</div>}
+            {payments.length > 0 && (
+              <p className="text-sm font-medium mb-1">Payments</p>
+            )}
+            {payments.map((payment, index) => (
+              <div key={index} className="flex items-center space-x-2 mb-4">
+                <div className="p-2 border border-gray-300 rounded bg-gray-100 flex-1">
+                  PHP {parseFloat(payment.amount).toFixed(2)} on {payment.date}
+                </div>
+                <button
+                  onClick={() => deletePayment(index)}
+                  className="p-2 bg-red-500 text-white rounded"
+                >
+                  Delete
+                </button>
+              </div>
+            ))}
           </div>
         </div>
-        <div className="flex justify-end gap-4 mt-6">
-          <button
-            onClick={handleSave}
-            className="bg-green text-white px-4 py-2 rounded hover:bg-green-600"
-          >
-            Save
-          </button>
+        <div className="flex justify-end mt-6">
           <button
             onClick={onRequestClose}
-            className="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400"
+            className="p-2 bg-gray-500 text-white rounded mr-2"
           >
-            Close
+            Cancel
+          </button>
+          <button
+            onClick={handleSave}
+            className="p-2 bg-green-500 text-white rounded bg-secondary"
+          >
+            Save
           </button>
         </div>
       </div>

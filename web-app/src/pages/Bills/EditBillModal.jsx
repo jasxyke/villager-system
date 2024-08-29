@@ -14,6 +14,7 @@ const EditBillModal = ({ isOpen, onRequestClose, bill, onSucess }) => {
     new_amount: "",
     new_status: bill.status,
   });
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     if (bill) {
@@ -32,8 +33,39 @@ const EditBillModal = ({ isOpen, onRequestClose, bill, onSucess }) => {
     setFormData({ ...formData, [name]: value });
   };
 
+  const setTodayDate = () => {
+    const today = new Date().toISOString().split("T")[0];
+    setFormData({ ...formData, transaction_date: today });
+  };
+
+  const validateInputs = () => {
+    const newErrors = {};
+    const currentAmount = parseFloat(formData.amount);
+    const paymentAmount = parseFloat(formData.payment_amount);
+    const newAmount = parseFloat(formData.new_amount);
+
+    if (isNaN(paymentAmount) || paymentAmount < 0) {
+      newErrors.payment_amount = "Payment amount cannot be negative or empty.";
+    } else if (paymentAmount > currentAmount) {
+      newErrors.payment_amount =
+        "Payment amount cannot exceed the current amount.";
+    }
+
+    if (newAmount && (isNaN(newAmount) || newAmount < 0)) {
+      newErrors.new_amount = "New amount must be a positive number.";
+    }
+
+    return newErrors;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const validationErrors = validateInputs();
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
+
     try {
       const data = {
         bill_id: bill.id,
@@ -82,6 +114,9 @@ const EditBillModal = ({ isOpen, onRequestClose, bill, onSucess }) => {
             onChange={handleInputChange}
             className={styles.input}
           />
+          {errors.new_amount && (
+            <span className={styles.error}>{errors.new_amount}</span>
+          )}
         </div>
         <div className={styles.formGroup}>
           <label className={styles.label}>New Status:</label>
@@ -106,6 +141,9 @@ const EditBillModal = ({ isOpen, onRequestClose, bill, onSucess }) => {
             onChange={handleInputChange}
             className={styles.input}
           />
+          {errors.payment_amount && (
+            <span className={styles.error}>{errors.payment_amount}</span>
+          )}
         </div>
         <div className={styles.formGroup}>
           <label className={styles.label}>Transaction Date:</label>
@@ -116,6 +154,15 @@ const EditBillModal = ({ isOpen, onRequestClose, bill, onSucess }) => {
             onChange={handleInputChange}
             className={styles.input}
           />
+          <div className="flex justify-end">
+            <button
+              type="button"
+              onClick={setTodayDate}
+              className={`${styles.today}`}
+            >
+              Set to Today
+            </button>
+          </div>
         </div>
         <button type="submit" className={`${styles.button} ${styles.submit}`}>
           Update Bill

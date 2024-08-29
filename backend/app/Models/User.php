@@ -84,5 +84,22 @@ class User extends Authenticatable
         return $this->hasMany(Notification::class);
     }
 
+     // Relationship to Permits
+     public function permits()
+     {
+         return $this->hasMany(Permit::class);
+     }
+ 
+     // Relationship to PermitRequests
+     public function permitRequests()
+     {
+         return $this->hasMany(PermitRequest::class);
+     }
+
+     public function carStickerRequests()
+    {
+        return $this->hasMany(CarStickerRequest::class);
+    }
+
 
 }

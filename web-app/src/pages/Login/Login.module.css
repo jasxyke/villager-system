@@ -48,6 +48,24 @@
   height: 260px;
 }
 
+.errorContainer {
+  background-color: #f8d7da; /* Light red background */
+  color: #93545b; /* Dark red text */
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #f5c6cb; /* Light red border */
+  border-radius: 5px;
+  width: 100%; /* Make it responsive */
+  max-width: 350px; /* Limit max width */
+  text-align: center; /* Center the text */
+}
+
+.errorLabel {
+  margin: 0;
+  font-size: 14px;
+  font-weight: bold;
+}
+
 .inputParentContainer {
   display: flex;
   flex-direction: row;

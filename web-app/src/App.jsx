@@ -13,7 +13,6 @@ import HousePermit from "./pages/File/HousePermit";
 import BuildingPermit from "./pages/File/BuildingPermit";
 import CarSticker from "./pages/File/CarSticker";
 import { useAuthContext } from "./contexts/AuthContext";
-import axiosClient, { DOMAIN } from "./utils/axios";
 import AuthenticatedMiddleRoute from "./components/MiddleRoutes/AuthenticatedMiddleRoute";
 import LoginMiddleRoute from "./components/MiddleRoutes/LoginMiddleRoute";
 import Houses from "./pages/Houses/Houses";
@@ -25,12 +24,6 @@ import Sticker from "./pages/CarSticker/Sticker";
 function App() {
   const { isLoggedIn } = useAuthContext();
 
-  useEffect(() => {
-    axiosClient
-      .get("/sanctum/csrf-cookie", { baseURL: DOMAIN })
-      .then((res) => {});
-    console.log("hello");
-  }, []);
   return (
     <div className={isLoggedIn() ? "app-container" : "w-full h-full"}>
       {isLoggedIn() ? <Sidebar /> : null}

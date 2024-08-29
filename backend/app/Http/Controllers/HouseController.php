@@ -103,10 +103,33 @@ class HouseController extends Controller
                                 'house'=>$house]);
     }
 
+    public function search(Request $request)
+    {
+        $ownerName = $request->query('ownerName');
+
+        if (!$ownerName) {
+            return response()->json(['error' => 'Query parameter is required'], 400);
+        }
+
+        // Perform the search using Eloquent relationships
+        $house = House::whereHas('residents.user', function ($q) use ($ownerName) {
+                $q->where('firstname', 'LIKE', "%{$ownerName}%")
+                ->orWhere('lastname', 'LIKE', "%{$ownerName}%");
+            })
+            ->with(['residents.user','residents'])
+            ->first();  // Use first() to get a single house
+
+        if (!$house) {
+            return response()->json(['message' => 'No house found for the given homeowner name'], 404);
+        }
+
+        return response()->json($house);
+    }
+
     /**
      * Display the specified resource.
      */
-    public function show(House $house)
+    public function show(string $id)
     {
         //
     }

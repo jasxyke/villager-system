@@ -12,20 +12,20 @@ class CarSticker extends Model
     use HasFactory;
 
     protected $fillable = [
-        'car_model',
-        'car_plate_number',
+        'resident_id',
+        'car_sticker_request_id',
         'sticker_status',
         'issue_date',
         'expiry_date',
-        'application_date',
-        'comments'
     ];
 
-    public function applicant(): BelongsTo{
+    public function resident()
+    {
         return $this->belongsTo(Resident::class);
     }
 
-    public function stickerDocuments(): HasMany{
-        return $this->hasMany(StickerDocument::class);
+    public function carStickerRequest()
+    {
+        return $this->belongsTo(CarStickerRequest::class);
     }
 }

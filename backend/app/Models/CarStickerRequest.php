@@ -5,17 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class PermitRequest extends Model
+class CarStickerRequest extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'resident_id',
-        'permit_type',
-        'permit_status',
+        'car_model',
+        'car_plate_number',
+        'request_status',
         'application_date',
         'approval_date',
-        'expiry_date',
         'note',
     ];
 
@@ -24,13 +24,13 @@ class PermitRequest extends Model
         return $this->belongsTo(Resident::class);
     }
 
-    public function permitDocuments()
+    public function carStickers()
     {
-        return $this->hasMany(PermitDocument::class);
+        return $this->hasMany(CarSticker::class);
     }
 
-    public function permitPayments()
+    public function stickerPayments()
     {
-        return $this->hasMany(PermitPayment::class);
+        return $this->hasMany(StickerPayment::class);
     }
 }

@@ -14,13 +14,10 @@ return new class extends Migration
         Schema::create('car_stickers', function (Blueprint $table) {
             $table->id();
             $table->foreignId('resident_id')->constrained('residents');
-            $table->string('car_model');
-            $table->string('car_plate_number');
+            $table->foreignId('car_sticker_request_id')->constrained('car_sticker_requests');
             $table->enum('sticker_status',['active','expired']);
             $table->date('issue_date');
             $table->date('expiry_date');
-            $table->date('application_date');
-            $table->text('comments')->nullable();
             $table->timestamps();
         });
     }

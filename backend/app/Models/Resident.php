@@ -38,7 +38,17 @@ class Resident extends Model
         return $this->hasMany(Permit::class);
     }
 
-    public function carStickers(): HasMany{
+    public function permitRequests(): HasMany{
+        return $this->hasMany(PermitRequest::class);
+    }
+
+    public function carStickerRequests()
+    {
+        return $this->hasMany(CarStickerRequest::class);
+    }
+
+    public function carStickers()
+    {
         return $this->hasMany(CarSticker::class);
     }
 

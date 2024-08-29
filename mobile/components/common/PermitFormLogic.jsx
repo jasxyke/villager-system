@@ -1,21 +1,42 @@
 import { useState } from "react";
 import { Alert } from "react-native";
 
-export const usePermitFormLogic = () => {
+export const usePermitFormLogic = (setIsProcessing) => {
   const [purpose, setPurpose] = useState("");
   const [squareMeters, setSquareMeters] = useState("");
-  const [images, setImages] = useState([]); // Updated to handle image selection
+  const [images, setImages] = useState([]);
 
   const handleSquareMetersChange = (value) => {
     setSquareMeters(value);
   };
 
+  const validateForm = () => {
+    if (!purpose.trim()) {
+      Alert.alert("Validation Error", "Purpose is required.");
+      return false;
+    }
+    if (squareMeters && isNaN(squareMeters)) {
+      Alert.alert("Validation Error", "Floor Size must be a number.");
+      return false;
+    }
+    return true;
+  };
+
   const handleSubmit = () => {
+    if (!validateForm()) {
+      setIsProcessing(false);
+      return;
+    }
+
     const newTransaction = {
       purpose: purpose,
       floorSize: squareMeters,
-      images: images, // Include the selected images
+      images: images,
     };
+
+    // Perform the submit logic, e.g., sending data to the server
+
+    setIsProcessing(false);
   };
 
   return {
@@ -26,6 +47,6 @@ export const usePermitFormLogic = () => {
     handleSubmit,
     setSquareMeters,
     images,
-    setImages, // Added for image management
+    setImages,
   };
 };

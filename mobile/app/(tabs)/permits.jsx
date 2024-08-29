@@ -5,6 +5,7 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
+  ScrollView,
 } from "react-native";
 import TabsGradient from "../../components/gradients/TabsGradient";
 import AppHeader from "../../components/common/AppHeader";
@@ -64,7 +65,9 @@ const Permits = () => {
             </TouchableOpacity>
           </>
         ) : (
-          <PermitForm setShowPermitForm={setShowPermitForm} />
+          <ScrollView>
+            <PermitForm setShowPermitForm={setShowPermitForm} />
+          </ScrollView>
         )}
 
         <PermitRequests

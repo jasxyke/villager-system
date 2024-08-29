@@ -11,14 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('permit_requests', function (Blueprint $table) {
+        Schema::create('car_sticker_requests', function (Blueprint $table) {
             $table->id();
             $table->foreignId('resident_id')->constrained('residents');
-            $table->string('purpose',300);
-            $table->decimal('floor_size',8,2);
-            $table->enum('permit_status', ['pending', 'approved', 'rejected']); // Status of the permit request
-            $table->date('application_date'); // Date the request was made
-            $table->date('approval_date')->nullable(); // Date the request was approved, if applicable
+            $table->string('car_model');
+            $table->string('car_plate_number');
+            $table->enum('request_status',['pending','approved','rejected']);
+            $table->date('application_date');
+            $table->date('approval_date')->nullable();
             $table->text('note')->nullable();
             $table->timestamps();
         });
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('permit_requests');
+        Schema::dropIfExists('car_sticker_requests');
     }
 };

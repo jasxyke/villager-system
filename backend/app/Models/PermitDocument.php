@@ -4,21 +4,21 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class PermitDocument extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'permit_id',
-        'document_type',
+        'permit_request_id',
+        'description',
         'document_path',
         'document_url',
-        'upload_date'
+        'upload_date',
     ];
 
-    public function permit(): BelongsTo{
-        return $this->belongsTo(Permit::class);
+    public function permitRequest()
+    {
+        return $this->belongsTo(PermitRequest::class, 'permit_request_id');
     }
 }

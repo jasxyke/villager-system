@@ -10,15 +10,15 @@ class StickerPayment extends Model
     use HasFactory;
 
     protected $fillable = [
-        'sticker_id',
+        'sticker_request_id',
         'amount',
         'payment_date',
-        'payment_method',
+        'payment_status',
         'transaction_id',
     ];
 
-    public function carSticker()
+    public function carStickerRequest()
     {
-        return $this->belongsTo(CarSticker::class);
+        return $this->belongsTo(CarStickerRequest::class);
     }
 }

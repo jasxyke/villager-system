@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import TransactionDetails from "./TransactionDetails";
+import PermitDetails from "../PermitDetails";
 import SamplePermits from "../SamplePermits";
 
-const TransactionTable = ({
+const CompletedTable = ({
   onRowClick,
   detailsView,
   selectedPermit,
@@ -11,13 +11,13 @@ const TransactionTable = ({
   return (
     <div className="overflow-x-auto">
       {detailsView ? (
-        <TransactionDetails permit={selectedPermit} onBack={handleBack} />
+        <PermitDetails permit={selectedPermit} onBack={handleBack} />
       ) : (
         <>
           <div className="w-full">
             <div className="flex items-center justify-center font-medium bg-mutedGreen mb-2 p-2 text-center">
               <div className="flex-1 p-2 text-center">Name</div>
-              <div className="flex-1 p-2 text-center">Issue Date</div>
+              <div className="flex-1 p-2 text-center">Completed Date</div>
               <div className="flex-1 p-2 text-center">Type</div>
               <div className="flex-1 p-2 text-center">Status</div>
             </div>
@@ -30,7 +30,9 @@ const TransactionTable = ({
                 onClick={() => onRowClick(permit)}
               >
                 <div className="flex-1 p-2 text-center">{permit.name}</div>
-                <div className="flex-1 p-2 text-center">{permit.issueDate}</div>
+                <div className="flex-1 p-2 text-center">
+                  {permit.completionDate}
+                </div>
                 <div className="flex-1 p-2 text-center">
                   {permit.permitType}
                 </div>
@@ -44,4 +46,4 @@ const TransactionTable = ({
   );
 };
 
-export default TransactionTable;
+export default CompletedTable;

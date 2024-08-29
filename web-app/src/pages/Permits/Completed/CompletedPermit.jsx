@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import TransactionFilter from "./TransactionFilter";
+import Filter from "../Filter";
 import SearchBar from "../SearchBar";
-import TransactionTable from "./TransactionTable";
-import TransactionDetails from "./TransactionDetails";
+import CompletedTable from "./CompletedTable";
+import CompletedDetails from "./CompletedDetails";
 
-const PermitTransactionLog = () => {
+const CompletedPermit = () => {
   const [selectedPermit, setSelectedPermit] = useState(null);
   const [detailsView, setDetailsView] = useState(false);
 
@@ -22,14 +22,14 @@ const PermitTransactionLog = () => {
     <div className="w-full max-w-7xl">
       <div className="mt-2">
         {detailsView ? (
-          <TransactionDetails permit={selectedPermit} onBack={handleBack} />
+          <CompletedDetails permit={selectedPermit} onBack={handleBack} />
         ) : (
           <div>
             <div className="flex items-center justify-between border-t py-4">
-              <TransactionFilter />
+              <Filter />
               <SearchBar />
             </div>
-            <TransactionTable onRowClick={handleRowClick} />
+            <CompletedTable onRowClick={handleRowClick} />
           </div>
         )}
       </div>
@@ -37,4 +37,4 @@ const PermitTransactionLog = () => {
   );
 };
 
-export default PermitTransactionLog;
+export default CompletedPermit;

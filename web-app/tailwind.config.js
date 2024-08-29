@@ -25,7 +25,18 @@ export default {
       backgroundImage: {
         greenGradient: "linear-gradient(to bottom, #344C11, #aec09a)",
       },
+      fontFamily: {
+        roboto: ["Roboto", "sans-serif"],
+      },
     },
   },
-  plugins: [],
+  plugins: [
+    function ({ addUtilities }) {
+      addUtilities({
+        ".text-stroke": {
+          "-webkit-text-stroke": "0.5px white",
+        },
+      });
+    },
+  ],
 };

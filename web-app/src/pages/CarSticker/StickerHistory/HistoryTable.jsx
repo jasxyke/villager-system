@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import StickerReview from "./StickerReview";
 import StickerDetails from "../StickerDetails";
 import sampleData from "../SampleData";
 
-const StickerTable = () => {
+const HistoryTable = () => {
   const [selectedSticker, setSelectedSticker] = useState(null);
   const [detailsView, setDetailsView] = useState(false);
 
@@ -27,8 +26,6 @@ const StickerTable = () => {
     <div className="overflow-x-auto">
       {detailsView ? (
         <StickerDetails sticker={selectedSticker} onBack={handleBack} />
-      ) : selectedSticker ? (
-        <StickerReview sticker={selectedSticker} onBack={handleBack} />
       ) : (
         <>
           <div className="w-full">
@@ -37,7 +34,6 @@ const StickerTable = () => {
               <div className="flex-1 p-2 text-center">Block and Lot</div>
               <div className="flex-1 p-2 text-center">Request Date</div>
               <div className="flex-1 p-2 text-center">Status</div>
-              <div className="flex-1 p-2 text-center">Action</div>
             </div>
           </div>
           <div>
@@ -51,14 +47,6 @@ const StickerTable = () => {
                 <div className="flex-1 p-2 text-center">{sticker.house}</div>
                 <div className="flex-1 p-2 text-center">{sticker.date}</div>
                 <div className="flex-1 p-2 text-center">{sticker.status}</div>
-                <div className="flex-1 p-2 text-center">
-                  <button
-                    className="bg-secondary text-white px-4 py-2 rounded hover:bg-greyGreen transition-colors"
-                    onClick={(e) => handleReviewClick(sticker, e)}
-                  >
-                    Review
-                  </button>
-                </div>
               </div>
             ))}
           </div>
@@ -68,4 +56,4 @@ const StickerTable = () => {
   );
 };
 
-export default StickerTable;
+export default HistoryTable;

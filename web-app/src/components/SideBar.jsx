@@ -14,6 +14,7 @@ import { CiMemoPad } from "react-icons/ci";
 import { CiReceipt } from "react-icons/ci";
 import { FiFileText } from "react-icons/fi";
 import { CiStickyNote } from "react-icons/ci";
+import { FaCar } from "react-icons/fa6";
 
 const SideBar = () => {
   const { logout } = useAuthContext();
@@ -59,7 +60,7 @@ const SideBar = () => {
         </li>
         <li>
           <NavLink to="/sticker">
-            <CiStickyNote className="text-3xl mr-2" /> Car Sticker
+            <FaCar className="text-3xl mr-2" /> Car Stickers
           </NavLink>
         </li>
         <li>

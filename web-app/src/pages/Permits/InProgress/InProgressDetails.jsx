@@ -3,7 +3,7 @@ import { FiArrowLeft } from "react-icons/fi";
 import { IoChevronBack, IoChevronForward } from "react-icons/io5";
 import { IoIosClose } from "react-icons/io";
 
-const TransactionDetails = ({ permit, onBack }) => {
+const InProgressDetails = ({ permit, onBack }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
@@ -47,13 +47,14 @@ const TransactionDetails = ({ permit, onBack }) => {
         <div className="flex flex-wrap gap-6">
           {/* Applicant Information */}
           <fieldset className="flex-1 bg-green p-5 rounded-lg shadow-sm border border-gray-300">
-            <legend className="text-xl font-semibold text-white mb-4 px-2">
-              Applicant Information
+            <legend className="text-4xl font-semibold font-roboto text-stroke mb-4 px-4 bg-mutedGreen border">
+              Applicant Details
             </legend>
             <div className="grid grid-cols-1 gap-6">
               {[
                 { label: "Name", value: permit.name },
                 { label: "Contact Number", value: permit.phoneNumber },
+
                 { label: "Email", value: permit.emailAddress },
               ].map(({ label, value }) => (
                 <div
@@ -69,7 +70,7 @@ const TransactionDetails = ({ permit, onBack }) => {
 
           {/* Property Information */}
           <fieldset className="flex-1 bg-green p-5 rounded-lg shadow-sm border border-gray-300">
-            <legend className="text-xl font-semibold text-white mb-4 px-2">
+            <legend className="text-4xl font-semibold font-roboto text-stroke mb-4 px-4 bg-mutedGreen border">
               Property Information
             </legend>
             <div className="flex flex-col gap-4">
@@ -91,8 +92,30 @@ const TransactionDetails = ({ permit, onBack }) => {
 
         {/* Request Details */}
         <fieldset className="bg-green p-5 rounded-lg shadow-sm border border-gray-300">
-          <legend className="text-xl font-semibold text-white mb-4 px-2">
-            Action Details
+          <legend className="text-4xl font-semibold font-roboto text-stroke mb-4 px-4 bg-mutedGreen border">
+            Current Status
+          </legend>
+          <div className="grid grid-cols-1 gap-4">
+            {[
+              { label: "Status", value: permit.reasonForRequest },
+              { label: "Current Phase", value: permit.requestedPermit },
+              { label: "Last Update", value: permit.startDate },
+            ].map(({ label, value }) => (
+              <div
+                key={label}
+                className="grid grid-cols-1 md:grid-cols-2 gap-4"
+              >
+                <span className="font-semibold text-white">{label}:</span>
+                <span className="text-white">{value || "N/A"}</span>
+              </div>
+            ))}
+          </div>
+        </fieldset>
+
+        {/* Request Details */}
+        <fieldset className="bg-green p-5 rounded-lg shadow-sm border border-gray-300">
+          <legend className="text-4xl font-semibold font-roboto text-stroke mb-4 px-4 bg-mutedGreen border">
+            Requested Details
           </legend>
           <div className="grid grid-cols-1 gap-4">
             {[
@@ -102,6 +125,8 @@ const TransactionDetails = ({ permit, onBack }) => {
               },
               { label: "Reason for Request", value: permit.reasonForRequest },
               { label: "Requested Permit", value: permit.requestedPermit },
+              { label: "Permit Purpose", value: permit.phoneNumber },
+              { label: "Requested Date", value: permit.phoneNumber },
               { label: "Expected Starting Date", value: permit.startDate },
               { label: "Expected Completion Date", value: permit.endDate },
             ].map(({ label, value }) => (
@@ -116,14 +141,36 @@ const TransactionDetails = ({ permit, onBack }) => {
           </div>
         </fieldset>
 
+        <fieldset className="bg-green p-5 rounded-lg shadow-sm border border-gray-300">
+          <legend className="text-4xl font-semibold font-roboto text-stroke mb-4 px-4 bg-mutedGreen border">
+            Fees and Payments
+          </legend>
+          <div className="grid grid-cols-1 gap-4">
+            {[
+              { label: "Permit Fees", value: permit.reasonForRequest },
+              { label: "Payment Method", value: permit.requestedPermit },
+            ].map(({ label, value }) => (
+              <div
+                key={label}
+                className="grid grid-cols-1 md:grid-cols-2 gap-4"
+              >
+                <span className="font-semibold text-white">{label}:</span>
+                <span className="text-white">{value || "N/A"}</span>
+              </div>
+            ))}
+          </div>
+        </fieldset>
+
         {/* Supporting Documents */}
         <fieldset className="bg-green p-5 rounded-lg shadow-sm border border-gray-300">
-          <legend className="text-xl font-semibold text-white mb-4 px-2">
-            Supporting Documents
+          <legend className="text-4xl font-semibold font-roboto text-stroke mb-4 px-4 bg-mutedGreen border">
+            Documents
           </legend>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="w-full">
-              <div className="mb-2 text-white font-semibold">Documents</div>
+              <div className="mb-2 text-white font-semibold">
+                Documents Submitted:
+              </div>
               <div className="flex flex-wrap gap-4">
                 {permit.uploadedDocuments &&
                   permit.uploadedDocuments.map((doc, index) => (
@@ -187,4 +234,4 @@ const TransactionDetails = ({ permit, onBack }) => {
   );
 };
 
-export default TransactionDetails;
+export default InProgressDetails;

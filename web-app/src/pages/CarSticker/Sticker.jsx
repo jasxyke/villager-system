@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import MainLogo from "../../components/MainLogo";
 import RequestSticker from "./StickerRequest/RequestSticker";
 import StickerHistory from "./StickerHistory/StickerHistory";
+import InProgress from "./InProgress/InProgress"; // Import the InProgress component
+import CompletedRequest from "./Completed/CompletedRequest"; // Import the CompletedRequest component
 
 const Sticker = () => {
   const [activeTab, setActiveTab] = useState("request");
@@ -26,6 +28,26 @@ const Sticker = () => {
             </button>
             <button
               className={`relative flex-1 py-2 px-4 text-center cursor-pointer transition-colors duration-300 ${
+                activeTab === "inprogress"
+                  ? "bg-mutedGreen text-black"
+                  : "text-white hover:text-mutedGreen"
+              }`}
+              onClick={() => setActiveTab("inprogress")}
+            >
+              In Progress
+            </button>
+            <button
+              className={`relative flex-1 py-2 px-4 text-center cursor-pointer transition-colors duration-300 ${
+                activeTab === "completed"
+                  ? "bg-mutedGreen text-black"
+                  : "text-white hover:text-mutedGreen"
+              }`}
+              onClick={() => setActiveTab("completed")}
+            >
+              Completed
+            </button>
+            <button
+              className={`relative flex-1 py-2 px-4 text-center cursor-pointer transition-colors duration-300 ${
                 activeTab === "history"
                   ? "bg-mutedGreen text-black"
                   : "text-white hover:text-mutedGreen"
@@ -39,6 +61,9 @@ const Sticker = () => {
 
         <div className="pt-6">
           {activeTab === "request" && <RequestSticker />}
+          {activeTab === "inprogress" && <InProgress />}
+          {activeTab === "completed" && <CompletedRequest />}{" "}
+          {/* Render CompletedRequest component */}
           {activeTab === "history" && <StickerHistory />}
         </div>
       </div>

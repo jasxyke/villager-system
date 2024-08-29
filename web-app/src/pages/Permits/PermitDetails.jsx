@@ -3,7 +3,7 @@ import { FiArrowLeft } from "react-icons/fi";
 import { IoChevronBack, IoChevronForward } from "react-icons/io5";
 import { IoIosClose } from "react-icons/io";
 
-const TransactionDetails = ({ permit, onBack }) => {
+const PermitDetails = ({ permit, onBack }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
@@ -34,7 +34,7 @@ const TransactionDetails = ({ permit, onBack }) => {
     <div className="p-6 bg-greenGradient border rounded-lg shadow-lg">
       <div className="flex items-center justify-between mb-6">
         <FiArrowLeft
-          className="text-2xl text-white cursor-pointer hover:text-gray-300 transition"
+          className="text-2xl text-white cursor-pointer hover:text-mutedGreen transition"
           onClick={onBack}
           aria-label="Go back"
         />
@@ -46,9 +46,9 @@ const TransactionDetails = ({ permit, onBack }) => {
       <form className="space-y-6 p-4">
         <div className="flex flex-wrap gap-6">
           {/* Applicant Information */}
-          <fieldset className="flex-1 bg-green p-5 rounded-lg shadow-sm border border-gray-300">
-            <legend className="text-xl font-semibold text-white mb-4 px-2">
-              Applicant Information
+          <fieldset className="flex-1 bg-green p-5 rounded-lg shadow-sm border">
+            <legend className="text-xl font-semibold text-primary font-roboto p-3 border bg-mutedGreen rounded-lg">
+              APPLICANT INFORMATION
             </legend>
             <div className="grid grid-cols-1 gap-6">
               {[
@@ -68,9 +68,9 @@ const TransactionDetails = ({ permit, onBack }) => {
           </fieldset>
 
           {/* Property Information */}
-          <fieldset className="flex-1 bg-green p-5 rounded-lg shadow-sm border border-gray-300">
-            <legend className="text-xl font-semibold text-white mb-4 px-2">
-              Property Information
+          <fieldset className="flex-1 bg-green p-5 rounded-lg shadow-sm border">
+            <legend className="text-xl font-semibold text-primary font-roboto p-3 border bg-mutedGreen rounded-lg">
+              PROPERTY INFORMATION
             </legend>
             <div className="flex flex-col gap-4">
               {[
@@ -91,8 +91,8 @@ const TransactionDetails = ({ permit, onBack }) => {
 
         {/* Request Details */}
         <fieldset className="bg-green p-5 rounded-lg shadow-sm border border-gray-300">
-          <legend className="text-xl font-semibold text-white mb-4 px-2">
-            Action Details
+          <legend className="text-xl font-semibold text-primary font-roboto p-3 border bg-mutedGreen rounded-lg">
+            Request Details
           </legend>
           <div className="grid grid-cols-1 gap-4">
             {[
@@ -118,12 +118,14 @@ const TransactionDetails = ({ permit, onBack }) => {
 
         {/* Supporting Documents */}
         <fieldset className="bg-green p-5 rounded-lg shadow-sm border border-gray-300">
-          <legend className="text-xl font-semibold text-white mb-4 px-2">
+          <legend className="text-xl font-semibold text-primary font-roboto p-3 border bg-mutedGreen rounded-lg">
             Supporting Documents
           </legend>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="w-full">
-              <div className="mb-2 text-white font-semibold">Documents</div>
+              <div className="mb-2 text-white font-semibold">
+                Documents Submitted
+              </div>
               <div className="flex flex-wrap gap-4">
                 {permit.uploadedDocuments &&
                   permit.uploadedDocuments.map((doc, index) => (
@@ -187,4 +189,4 @@ const TransactionDetails = ({ permit, onBack }) => {
   );
 };
 
-export default TransactionDetails;
+export default PermitDetails;

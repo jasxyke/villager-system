@@ -1,20 +1,20 @@
 import React from "react";
+import StickerFilter from "../StickerRequest/StickerFilter";
 import SearchBar from "../SearchBar";
-import StickerTable from "./StickerTable";
-import StickerFilter from "./StickerFilter";
+import CompletedTable from "./CompletedTable";
 
-const RequestSticker = () => {
+const CompletedRequest = () => {
   return (
     <div className="w-full max-w-7xl">
       <div className="flex items-center justify-between border-t py-4">
         <StickerFilter />
         <SearchBar />
       </div>
-      <div className="mt-2">
-        <StickerTable />
+      <div>
+        <CompletedTable />
       </div>
     </div>
   );
 };
 
-export default RequestSticker;
+export default CompletedRequest;

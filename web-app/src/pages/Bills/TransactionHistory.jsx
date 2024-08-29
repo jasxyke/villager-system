@@ -27,6 +27,7 @@ const TransactionHistory = ({
 
   useEffect(() => {
     if (searchPressed === true) {
+      console.log(`search query: ${searchQuery}`);
       fetchTransactions(month, year, searchQuery, currentPage);
       setSearchPressed(false);
     }
@@ -52,7 +53,7 @@ const TransactionHistory = ({
       </div>
       <div className="divide-y divide-gray-300 h-[350px] overflow-x-auto">
         {loading ? (
-          <LoadingContainer />
+          <LoadingContainer color="green" bgColor="white" />
         ) : transactions.length > 0 ? (
           transactions.map((transaction, index) => (
             <div

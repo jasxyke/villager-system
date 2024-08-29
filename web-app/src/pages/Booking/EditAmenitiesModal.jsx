@@ -4,6 +4,7 @@ import axiosClient from "../../utils/axios";
 
 const EditAmenitiesModal = ({ isOpen, onRequestClose }) => {
   const [amenities, setAmenities] = useState([]);
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     // Fetch the list of amenities
@@ -29,7 +30,39 @@ const EditAmenitiesModal = ({ isOpen, onRequestClose }) => {
     );
   };
 
+  const validateAmenities = () => {
+    const newErrors = {};
+    amenities.forEach((amenity, index) => {
+      if (!amenity.name.trim()) {
+        newErrors[`name-${index}`] = "Amenity name is required.";
+      }
+      if (amenity.day_price < 0) {
+        newErrors[`day_price-${index}`] =
+          "Day price must be a positive number.";
+      }
+      if (amenity.night_price < 0) {
+        newErrors[`night_price-${index}`] =
+          "Night price must be a positive number.";
+      }
+      if (amenity.guest_additional_price < 0) {
+        newErrors[`guest_additional_price-${index}`] =
+          "Guest additional price must be a positive number.";
+      }
+      if (amenity.extension_price < 0) {
+        newErrors[`extension_price-${index}`] =
+          "Extension price must be a positive number.";
+      }
+    });
+    return newErrors;
+  };
+
   const handleSave = async () => {
+    const validationErrors = validateAmenities();
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
+
     try {
       const updatedAmenities = await Promise.all(
         amenities.map(async (amenity) => {
@@ -116,87 +149,138 @@ const EditAmenitiesModal = ({ isOpen, onRequestClose }) => {
       </div>
 
       {/* Column Headers */}
-      <div className="grid grid-cols-6 gap-4 mb-2 font-semibold text-sm text-gray-600">
+      <div className="grid grid-cols-4 gap-4 mb-2 font-semibold text-sm text-gray-600">
         <div className="col-span-1">Amenity Name</div>
         <div className="col-span-1 text-center">Day Price</div>
         <div className="col-span-1 text-center">Night Price</div>
         <div className="col-span-1 text-center">Guest Add. Price</div>
-        <div className="col-span-1 text-center">Extension Price</div>
-        <div className="col-span-1 text-center">Actions</div>
+        {/* <div className="col-span-1 text-center">Extension Price</div> */}
+        {/* <div className="col-span-1 text-center">Actions</div> */}
       </div>
 
       <div className="space-y-4">
-        {amenities.map((amenity) => (
+        {amenities.map((amenity, index) => (
           <div
             key={amenity.id || Math.random()}
-            className="grid grid-cols-6 gap-4 items-center"
+            className="grid grid-cols-4 gap-4 items-center"
           >
-            <input
-              type="text"
-              value={amenity.name}
-              onChange={(e) =>
-                handleInputChange(amenity.id, "name", e.target.value)
-              }
-              className="col-span-1 p-2 border rounded-md"
-            />
-            <input
-              type="number"
-              value={amenity.day_price}
-              onChange={(e) =>
-                handleInputChange(amenity.id, "day_price", e.target.value)
-              }
-              className="col-span-1 p-2 border rounded-md text-right"
-            />
-            <input
-              type="number"
-              value={amenity.night_price}
-              onChange={(e) =>
-                handleInputChange(amenity.id, "night_price", e.target.value)
-              }
-              className="col-span-1 p-2 border rounded-md text-right"
-            />
-            <input
-              type="number"
-              value={amenity.guest_additional_price}
-              onChange={(e) =>
-                handleInputChange(
-                  amenity.id,
-                  "guest_additional_price",
-                  e.target.value
-                )
-              }
-              className="col-span-1 p-2 border rounded-md text-right"
-            />
-            <input
-              type="number"
-              value={amenity.extension_price}
-              onChange={(e) =>
-                handleInputChange(amenity.id, "extension_price", e.target.value)
-              }
-              className="col-span-1 p-2 border rounded-md text-right"
-            />
-            <div className="col-span-1 flex justify-center">
+            <div className="col-span-1">
+              <input
+                type="text"
+                value={amenity.name}
+                onChange={(e) =>
+                  handleInputChange(amenity.id, "name", e.target.value)
+                }
+                className={`p-2 border rounded-md w-full ${
+                  errors[`name-${index}`] ? "border-red-500" : ""
+                }`}
+              />
+              {errors[`name-${index}`] && (
+                <p className="text-red-500 text-sm">
+                  {errors[`name-${index}`]}
+                </p>
+              )}
+            </div>
+            <div className="col-span-1 text-right">
+              <input
+                type="number"
+                value={amenity.day_price}
+                onChange={(e) =>
+                  handleInputChange(amenity.id, "day_price", e.target.value)
+                }
+                className={`p-2 border rounded-md w-full ${
+                  errors[`day_price-${index}`] ? "border-red-500" : ""
+                }`}
+              />
+              {errors[`day_price-${index}`] && (
+                <p className="text-red-500 text-sm">
+                  {errors[`day_price-${index}`]}
+                </p>
+              )}
+            </div>
+            <div className="col-span-1 text-right">
+              <input
+                type="number"
+                value={amenity.night_price}
+                onChange={(e) =>
+                  handleInputChange(amenity.id, "night_price", e.target.value)
+                }
+                className={`p-2 border rounded-md w-full ${
+                  errors[`night_price-${index}`] ? "border-red-500" : ""
+                }`}
+              />
+              {errors[`night_price-${index}`] && (
+                <p className="text-red-500 text-sm">
+                  {errors[`night_price-${index}`]}
+                </p>
+              )}
+            </div>
+            <div className="col-span-1 text-right">
+              <input
+                type="number"
+                value={amenity.guest_additional_price}
+                onChange={(e) =>
+                  handleInputChange(
+                    amenity.id,
+                    "guest_additional_price",
+                    e.target.value
+                  )
+                }
+                className={`p-2 border rounded-md w-full ${
+                  errors[`guest_additional_price-${index}`]
+                    ? "border-red-500"
+                    : ""
+                }`}
+              />
+              {errors[`guest_additional_price-${index}`] && (
+                <p className="text-red-500 text-sm">
+                  {errors[`guest_additional_price-${index}`]}
+                </p>
+              )}
+            </div>
+            {/* <div className="col-span-1 text-right">
+              <input
+                type="number"
+                value={amenity.extension_price}
+                onChange={(e) =>
+                  handleInputChange(
+                    amenity.id,
+                    "extension_price",
+                    e.target.value
+                  )
+                }
+                className={`p-2 border rounded-md w-full ${
+                  errors[`extension_price-${index}`] ? "border-red-500" : ""
+                }`}
+              />
+              {errors[`extension_price-${index}`] && (
+                <p className="text-red-500 text-sm">
+                  {errors[`extension_price-${index}`]}
+                </p>
+              )}
+            </div> */}
+            {/* <div className="col-span-1 flex justify-center">
               <button
                 onClick={() => handleDeleteAmenity(amenity.id)}
                 className="text-red-500 hover:text-red-700"
               >
                 Delete
               </button>
-            </div>
+            </div> */}
           </div>
         ))}
       </div>
 
       <div className="flex justify-between mt-6">
-        <button
+        {/* <button
           onClick={handleAddAmenity}
           className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
         >
           Add Amenity
-        </button>
+        </button> */}
         <button
           onClick={handleSave}
-          className="bg-green text-white px-4 py-2 rounded-md hover:bg-secondary"
+          className="bg-green text-white px-4 py-2 rounded-md hover:bg-green-600"
         >
           Save Changes
         </button>

@@ -29,9 +29,7 @@ const useBills = () => {
       setTotal(response.data.total);
     } catch (err) {
       console.log(err);
-
       console.log(err.data.response.message);
-
       setError(err);
     } finally {
       setLoading(false);

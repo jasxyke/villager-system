@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreBookingRequest extends FormRequest
@@ -31,5 +32,34 @@ class StoreBookingRequest extends FormRequest
             'contact_number' => 'required|string|max:20',
             'booking_status' => 'required|string|in:for_approval,approved,canceled',
         ];
+    }
+
+    public function withValidator(Validator $validator): void
+    {
+        $validator->after(function ($validator) {
+            $this->checkForConflicts($validator);
+        });
+    }
+
+    /**
+     * Check for booking conflicts.
+     */
+    protected function checkForConflicts(Validator $validator): void
+    {
+        $conflictExists = Booking::where('amenity_id', $this->amenity_id)
+            ->where('booking_date', $this->booking_date)
+            ->where(function ($query) {
+                $query->whereBetween('start_time', [$this->start_time, $this->end_time])
+                      ->orWhereBetween('end_time', [$this->start_time, $this->end_time])
+                      ->orWhere(function ($query) {
+                          $query->where('start_time', '<=', $this->start_time)
+                                ->where('end_time', '>=', $this->end_time);
+                      });
+            })
+            ->exists();
+
+        if ($conflictExists) {
+            $validator->errors()->add('time_slot', 'The selected time slot is already booked.');
+        }
     }
 }

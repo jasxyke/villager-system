@@ -104,6 +104,11 @@ const Filters = ({ onFiltersChange, handleSearchPress, filter }) => {
             type="text"
             value={searchQuery}
             onChange={handleSearchChange}
+            onKeyUp={(e) => {
+              if (e.key === "Enter") {
+                handleSearchPress();
+              }
+            }}
             placeholder="Search..."
             className="w-full p-2 border rounded pr-10 bg-white text-black"
           />

@@ -18,10 +18,7 @@ class ResidentController extends Controller
     public function index()
     {
         // return Resident::with('user')->paginate(20);
-        return User::where('role_type', '=', 'home_owner')
-                    ->orWhere('role_type', '=', 'home_owner')
-                    ->orWhere('role_type', '=', 'tenant')
-                    ->orWhere('role_type', '=', 'seller')
+        return User::whereIn('role_type',['home_owner','member','tenant','seller'])
                 ->with('resident','resident.house')
                 ->orderByRaw("role_type = 'home_owner' ASC")
                 ->orderByRaw("role_type = 'memeber' ASC")

@@ -44,24 +44,53 @@ class AuthController extends Controller
     }
 
 
-    public function login(Request $request){
-        $request->validate([
-            'email'=>'required|string|email',//|email:rfc,dns
-            'password'=>'required|string'
+    public function login(Request $request)
+{
+    $request->validate([
+        'email' => 'required|string|email', // Validation for email
+        'password' => 'required|string', // Validation for password
+        'isMobile' => 'required|boolean' // Ensure `isMobile` is a boolean
+    ]);
+    
+    $user = User::where('email', $request->email)->first();
+
+    // If user not found
+    if (!$user) {
+        throw ValidationException::withMessages([
+            'message' => 'User not found.'
         ]);
-        
-        $user = User::where('email', $request->email)->first();
- 
-        if (! $user || ! Hash::check($request->password, $user->password)) {
+    }
+
+    // Role-based authentication
+    if (!$request->isMobile) {
+        // Web login check for 'admin' or 'treasurer' roles only
+        if ($user->role_type !== 'admin' && $user->role_type !== 'treasurer') {
             throw ValidationException::withMessages([
-                'email' => ['The provided credentials are incorrect.'],
+                'message' => 'Unauthenticated user!'
             ]);
         }
-
-        $token = $user->createToken('auth_token')->plainTextToken;
-
-        return response()->json(['access_token' => $token, 'token_type' => 'Bearer']);
+    } else {
+        // Mobile login check for 'home_owner' role only
+        if ($user->role_type !== 'home_owner') {
+            throw ValidationException::withMessages([
+                'message' => 'Unauthenticated user!'
+            ]);
+        }
     }
+
+    // Check for password validity
+    if (!Hash::check($request->password, $user->password)) {
+        throw ValidationException::withMessages([
+            'message' => 'The provided credentials are incorrect.'
+        ]);
+    }
+
+    // Create a new token for authenticated user
+    $token = $user->createToken('auth_token')->plainTextToken;
+
+    return response()->json(['access_token' => $token, 'token_type' => 'Bearer']);
+}
+
 
 
     // Logout the user (revoke token)

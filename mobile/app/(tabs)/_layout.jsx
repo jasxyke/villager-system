@@ -1,18 +1,7 @@
-import { View, Text, Image, StyleSheet, StatusBar } from "react-native";
-import { Tabs, Redirect } from "expo-router";
-import {
-  HOME,
-  BOOKING,
-  PROFILE,
-  BILLS,
-  MARKET,
-  PERMITS,
-} from "../../constants/icons";
+import { Tabs } from "expo-router";
+import { Image, StatusBar, StyleSheet, Text, View } from "react-native";
+import { BILLS, CAR, HOME, PERMITS, PROFILE } from "../../constants/icons";
 import { colors } from "../../styles/colors";
-import AppHeader from "../../components/common/AppHeader";
-import TabsGradient from "../../components/gradients/TabsGradient";
-import { useAuthContext } from "../../context/AuthContext";
-import LoadingScreen from "../../components/common/LoadingScreen";
 
 const TabIcon = ({ icon, color, name, focused }) => {
   return (
@@ -89,21 +78,21 @@ const MainLayout = () => {
             ),
           }}
         />
-        {/* <Tabs.Screen
-          name="booking"
+        <Tabs.Screen
+          name="car-stickers"
           options={{
-            title: "Booking",
+            title: "car-stickers",
             headerShown: false,
             tabBarIcon: ({ focused, color, size }) => (
               <TabIcon
-                icon={BOOKING}
+                icon={CAR}
                 color={color}
                 focused={focused}
-                name={"Booking"}
+                name={"Car Stickers"}
               />
             ),
           }}
-        /> */}
+        />
         <Tabs.Screen
           name="profile"
           options={{

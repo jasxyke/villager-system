@@ -12,17 +12,26 @@ class Permit extends Model
     use HasFactory;
 
     protected $fillable = [
-        'resident_id','permit_type',
-        'permit_status','issue_date',
-        'expiry_date','application_date',
-        'comments'
+        'resident_id',
+        'permit_type',
+        'permit_status',
+        'issue_date',
+        'expiry_date',
+        'application_date',
+        // 'comments',
+        'permit_request_id'
     ];
 
-    public function applicant(): BelongsTo{
+    public function resident(): BelongsTo{
         return $this->belongsTo(Resident::class);
     }
 
     public function permitDocuments(): HasMany{
         return $this->hasMany(PermitDocument::class);
+    }
+
+    public function permitRequest()
+    {
+        return $this->belongsTo(PermitRequest::class);
     }
 }

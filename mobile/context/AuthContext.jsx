@@ -23,6 +23,7 @@ export function AuthProvider({ children }) {
       const res = await axiosClient.post("/login", {
         email: email,
         password: password,
+        isMobile: true,
       });
 
       console.log("res login: " + res);

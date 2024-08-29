@@ -1,48 +1,34 @@
+import * as ImagePicker from "expo-image-picker";
 import React, { useState } from "react";
 import {
-  View,
+  Alert,
+  Image,
+  ScrollView,
+  StyleSheet,
   Text,
   TextInput,
-  StyleSheet,
   TouchableOpacity,
-  Image,
-  Alert,
-  ScrollView,
+  View,
 } from "react-native";
-import {
-  BOOKING,
-  PROFILE,
-  BILLS,
-  TYPE,
-  DOWNLOADS,
-} from "../../constants/icons";
-import { Picker } from "@react-native-picker/picker";
-import DatePicker from "react-native-date-picker";
-import * as ImagePicker from "expo-image-picker";
-import { colors } from "../../styles/colors";
-import { usePermitFormLogic } from "../../components/common/PermitFormLogic";
 import CustomButton from "../../components/common/CustomButton";
+import { usePermitFormLogic } from "../../components/common/PermitFormLogic";
+import { DOWNLOADS, PROFILE, TYPE } from "../../constants/icons";
+import { colors } from "../../styles/colors";
 
-const PermitForm = ({ addTransaction, setShowPermitForm }) => {
+const PermitForm = ({ setShowPermitForm }) => {
   const {
-    selectedService,
-    showDatePicker,
-    date,
-    price,
     squareMeters,
-    services,
-    handleDateChange,
-    handleServiceChange,
     handleSquareMetersChange,
-    setShowDatePicker,
     handleSubmit,
     images,
     setImages,
-  } = usePermitFormLogic(addTransaction, setShowPermitForm);
+    purpose,
+    setPurpose,
+  } = usePermitFormLogic(setShowPermitForm);
 
-  // State to track submission status
   const [isProcessing, setIsProcessing] = useState(false);
 
+  // Function to handle image selection and upload
   const handleImageUpload = async () => {
     const permissionResult =
       await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -62,103 +48,62 @@ const PermitForm = ({ addTransaction, setShowPermitForm }) => {
     });
 
     if (!result.canceled) {
-      setImages(result.assets.map((image) => image.uri)); // Update the images state in the hook
+      setImages(result.assets.map((image) => image.uri));
     }
   };
 
+  // Function to clear selected images
+  const handleClearImages = () => {
+    setImages([]); // Clear the images by setting it to an empty array
+  };
+
   const handleSubmitRequest = () => {
-    setIsProcessing(true); // Set to processing state
-    handleSubmit(); // Call the original handleSubmit function
+    setIsProcessing(true);
+    handleSubmit();
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <View style={styles.container}>
       <Text style={styles.title}>Request Form</Text>
       {/* Other input fields for the form */}
       <View style={styles.row}>
         <View style={styles.logoContainer}>
           <Image source={TYPE} style={styles.logo} />
         </View>
-        <Picker
-          selectedValue={selectedService}
-          style={styles.picker}
-          onValueChange={handleServiceChange}
-        >
-          {services.map((service, index) => (
-            <Picker.Item key={index} label={service} value={service} />
-          ))}
-        </Picker>
-      </View>
-
-      {selectedService === "Building Permit" && (
-        <View style={styles.row}>
-          <View style={styles.logoContainer}>
-            <Image source={PROFILE} style={styles.logo} />
-          </View>
-          <TextInput
-            placeholder="Enter Square Meters"
-            style={styles.input}
-            value={squareMeters}
-            onChangeText={handleSquareMetersChange}
-            keyboardType="numeric"
-          />
-        </View>
-      )}
-
-      <View style={styles.row}>
-        <TouchableOpacity onPress={() => setShowDatePicker(true)}>
-          <View style={styles.logoContainer}>
-            <Image source={BOOKING} style={styles.logo} />
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => setShowDatePicker(true)}
-          style={styles.datePickerTouchable}
-        >
-          <TextInput
-            style={styles.input}
-            value={date.toDateString()}
-            editable={false}
-          />
-        </TouchableOpacity>
-      </View>
-
-      {showDatePicker && (
-        <DatePicker
-          date={date}
-          mode="date"
-          onDateChange={handleDateChange}
-          locale="en"
+        <TextInput
+          placeholder="Purpose (ex. House Permit, Construction Supply Permit)"
+          style={styles.input}
+          value={purpose}
+          onChangeText={setPurpose}
         />
-      )}
-
-      {/* Conditional rendering for approval time message */}
-      {isProcessing && (
-        <Text style={styles.smallText}>Approval time is 7 days</Text>
-      )}
+      </View>
 
       <View style={styles.row}>
         <View style={styles.logoContainer}>
-          <Image source={BILLS} style={styles.logo} />
+          <Image source={PROFILE} style={styles.logo} />
         </View>
         <TextInput
-          placeholder="Price"
+          placeholder="Floor Size in Sq. Meters (if applicable)"
           style={styles.input}
-          value={price}
-          editable={false}
+          value={squareMeters}
+          onChangeText={handleSquareMetersChange}
+          keyboardType="numeric"
         />
       </View>
-
-      {/* Conditional rendering for payment instruction message */}
-      {isProcessing && (
-        <Text style={styles.smallText}>
-          Please pay the amount above to receive your request
-        </Text>
-      )}
-
       <View style={styles.additionalContainer}>
         <Text style={styles.header1}>Supporting Documents</Text>
       </View>
+
+      {/* Display selected images */}
+      {images.length > 0 ? (
+        <ScrollView horizontal style={styles.imagePreviewContainer}>
+          {images.map((uri, index) => (
+            <Image key={index} source={{ uri }} style={styles.imagePreview} />
+          ))}
+        </ScrollView>
+      ) : (
+        <View className="h-[100px]"></View>
+      )}
 
       {/* Image upload input */}
       <View style={styles.fileUploadContainer}>
@@ -176,34 +121,30 @@ const PermitForm = ({ addTransaction, setShowPermitForm }) => {
           </Text>
         </TouchableOpacity>
       </View>
-
-      {/* Display selected images */}
+      {/* Clear Images Button */}
       {images.length > 0 && (
-        <ScrollView horizontal style={styles.imagePreviewContainer}>
-          {images.map((uri, index) => (
-            <Image key={index} source={{ uri }} style={styles.imagePreview} />
-          ))}
-        </ScrollView>
+        <TouchableOpacity
+          onPress={handleClearImages}
+          className="rounded-lg p-3 bg-greyGreen"
+        >
+          <Text className="text-center text-white">Clear Images</Text>
+        </TouchableOpacity>
       )}
-
-      {/* Buttons */}
+      {/* Submit and Cancel Buttons */}
       <View style={styles.buttonContainer}>
         <CustomButton
           title={isProcessing ? "Processing" : "Submit Request"}
           onPress={handleSubmitRequest}
         />
-        <CustomButton
-          title={isProcessing ? "Go Back" : "Cancel"}
-          onPress={() => setShowPermitForm(false)}
-        />
+        <CustomButton title="Cancel" onPress={() => setShowPermitForm(false)} />
       </View>
-    </ScrollView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flexGrow: 1,
+    marginTop: 10,
     backgroundColor: colors.primary,
     padding: 20,
     borderRadius: 25,
@@ -235,21 +176,15 @@ const styles = StyleSheet.create({
     height: 20,
   },
   additionalContainer: {
-    flex: 1,
+    marginBottom: 20,
     backgroundColor: colors.primary,
   },
   header1: {
-    marginBottom: 15,
+    marginBottom: 0,
     textAlign: "center",
     fontSize: 15,
     fontWeight: "bold",
     color: colors.white,
-  },
-  smallText: {
-    fontSize: 12,
-    color: colors.white,
-    textAlign: "center",
-    marginVertical: 5,
   },
   input: {
     flex: 1,
@@ -260,21 +195,6 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 5,
     paddingHorizontal: 10,
     backgroundColor: colors.white,
-  },
-  picker: {
-    flex: 1,
-    borderColor: "black",
-    borderTopRightRadius: 5,
-    borderTopLeftRadius: 5,
-    backgroundColor: colors.white,
-  },
-  datePickerTouchable: {
-    flex: 1,
-    height: 53,
-    borderTopRightRadius: 5,
-    borderBottomRightRadius: 5,
-    backgroundColor: colors.white,
-    justifyContent: "center",
   },
   fileUploadContainer: {
     flexDirection: "row",
@@ -296,13 +216,17 @@ const styles = StyleSheet.create({
   },
   imagePreviewContainer: {
     flexDirection: "row",
-    marginBottom: 15,
+    marginBottom: 40,
   },
   imagePreview: {
     width: 80,
     height: 80,
     marginRight: 10,
     borderRadius: 10,
+  },
+  clearButtonContainer: {
+    marginVertical: 10,
+    alignItems: "center",
   },
   buttonContainer: {
     flexDirection: "row",

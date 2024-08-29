@@ -36,6 +36,7 @@ export function AuthProvider({ children }) {
           const res = await axiosClient.post("/login", {
             email: email,
             password: password,
+            isMobile: false,
           });
 
           //sets the bearer token
@@ -49,6 +50,7 @@ export function AuthProvider({ children }) {
           //gets user after loggin in
           getUser();
         } catch (error) {
+          console.log(error);
           onError(error.response.data.message);
         } finally {
           setLoading(false);

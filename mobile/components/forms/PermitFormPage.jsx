@@ -15,8 +15,9 @@ import { usePermitFormLogic } from "../../components/common/PermitFormLogic";
 import { DOWNLOADS, PROFILE, TYPE } from "../../constants/icons";
 import { colors } from "../../styles/colors";
 import Modal from "react-native-modal";
+import { router } from "expo-router";
 
-const PermitForm = ({ setShowPermitForm }) => {
+const PermitForm = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -160,7 +161,7 @@ const PermitForm = ({ setShowPermitForm }) => {
           title={isProcessing ? "Processing" : "Submit Request"}
           onPress={handleSubmitRequest}
         />
-        <CustomButton title="Cancel" onPress={() => setShowPermitForm(false)} />
+        <CustomButton title="Cancel" onPress={router.back()} />
       </View>
 
       <Modal

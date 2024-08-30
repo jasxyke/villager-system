@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('permit_documents', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('permit_id')->constrained('permits');
+            $table->foreignId('permit_request_id')->constrained('permit_requests');
             $table->string('description',1000);//TODO: convert mo to to ENUM once makuha mo yung more info about these
             $table->string('document_path',1000);
             $table->string('document_url',2083);

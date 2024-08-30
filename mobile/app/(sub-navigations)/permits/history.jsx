@@ -1,39 +1,17 @@
-import React from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  FlatList,
-} from "react-native";
+import React, { useEffect } from "react";
+import { View, Text, StyleSheet, FlatList } from "react-native";
 import { colors } from "../../../styles/colors";
 import TabsGradient from "../../../components/gradients/TabsGradient";
+import { useAuthContext } from "../../../context/AuthContext";
+import useFetchPaymentHistory from "../../../hooks/permits/usePaymentHistory";
 
 const PaymentHistory = () => {
-  // Example data for payments
-  const payments = [
-    {
-      payment_date: "2024-08-01",
-      payment_status: "Completed",
-      amount: 150.0,
-    },
-    {
-      payment_date: "2024-08-15",
-      payment_status: "Pending",
-      amount: 75.5,
-    },
-    {
-      payment_date: "2024-08-20",
-      payment_status: "Failed",
-      amount: 120.0,
-    },
-    {
-      payment_date: "2024-08-25",
-      payment_status: "Completed",
-      amount: 200.0,
-    },
-    // Add more sample data as needed
-  ];
+  const { payments, loading, error, refetch, message } =
+    useFetchPaymentHistory();
+  const { user } = useAuthContext();
+  useEffect(() => {
+    if (user) refetch(user.resident.id); // Fetch payment history when component mounts
+  }, []);
 
   // Render item for FlatList
   const renderItem = ({ item }) => {
@@ -56,12 +34,18 @@ const PaymentHistory = () => {
     <View style={{ flex: 1 }}>
       <TabsGradient />
       <View style={styles.container}>
-        <FlatList
-          data={payments}
-          renderItem={renderItem}
-          keyExtractor={(item, index) => `payment-${index}`}
-          contentContainerStyle={styles.paymentHistoryList}
-        />
+        {loading ? (
+          <Text>Loading...</Text>
+        ) : error ? (
+          <Text>{error}</Text>
+        ) : (
+          <FlatList
+            data={payments}
+            renderItem={renderItem}
+            keyExtractor={(item, index) => `payment-${index}`}
+            contentContainerStyle={styles.paymentHistoryList}
+          />
+        )}
       </View>
     </View>
   );
@@ -71,18 +55,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginTop: 20,
-    // borderRadius: 5,
-    // borderWidth: 1,
-    // borderColor: colors.primary,
     padding: 10,
-  },
-  title: {
-    fontSize: 18,
-    fontWeight: "bold",
-    marginBottom: 10,
-    color: colors.white,
-    borderColor: "white",
-    borderBottomWidth: 1,
   },
   card: {
     backgroundColor: colors.green,
@@ -116,17 +89,6 @@ const styles = StyleSheet.create({
   },
   paymentHistoryList: {
     marginBottom: 10,
-  },
-  closeButton: {
-    backgroundColor: colors.primary,
-    padding: 10,
-    borderRadius: 5,
-    alignItems: "center",
-    marginTop: 10,
-  },
-  buttonText: {
-    color: colors.white,
-    fontWeight: "bold",
   },
 });
 

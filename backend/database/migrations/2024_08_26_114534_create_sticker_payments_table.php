@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('sticker_payments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('sticker_request_id')->constrained('car_sticker_requests');
+            $table->foreignId('resident_id')->constrained('residents');
             $table->decimal('amount', 10, 2);
             $table->date('payment_date');
             $table->enum('payment_status',['completed','cancelled']);

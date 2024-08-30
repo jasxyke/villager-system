@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -8,76 +8,30 @@ import {
 } from "react-native";
 import { colors } from "../../../styles/colors";
 import TabsGradient from "../../../components/gradients/TabsGradient";
+import usePendingCarStickerRequests from "../../../hooks/stickers/usePendingCarStickerRequests"; // Adjust the import path
+import { useAuthContext } from "../../../context/AuthContext";
 
 const CarStickerRequests = () => {
-  const [requests, setRequests] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  // Dummy data for car sticker requests
+  const { requests, loading, error, fetchPendingRequests } =
+    usePendingCarStickerRequests();
   useEffect(() => {
-    // Simulating an API call with a timeout
-    setTimeout(() => {
-      setRequests([
-        {
-          id: 1,
-          request_date: "2024-07-01",
-          sticker_request: {
-            car_model: "Toyota Camry",
-            car_plate_number: "XYZ 1234",
-          },
-          status: "Approved",
-        },
-        {
-          id: 2,
-          request_date: "2024-06-15",
-          sticker_request: {
-            car_model: "Honda Accord",
-            car_plate_number: "ABC 5678",
-          },
-          status: "Pending",
-        },
-        {
-          id: 3,
-          request_date: "2024-05-10",
-          sticker_request: {
-            car_model: "Ford Mustang",
-            car_plate_number: "DEF 9012",
-          },
-          status: "Approved",
-        },
-        {
-          id: 4,
-          request_date: "2024-04-05",
-          sticker_request: {
-            car_model: "Chevrolet Camaro",
-            car_plate_number: "GHI 3456",
-          },
-          status: "Rejected",
-        },
-      ]);
-      setLoading(false);
-    }, 2000); // Simulate loading delay
+    fetchPendingRequests();
   }, []);
-
-  // Render a single request item
   const renderRequestItem = ({ item }) => (
     <View style={styles.requestItem}>
       <Text style={styles.boldText}>
         Request Date:{" "}
-        <Text style={styles.requestText}>{item.request_date}</Text>
+        <Text style={styles.requestText}>{item.application_date}</Text>
       </Text>
       <Text style={styles.boldText}>
-        Car Model:{" "}
-        <Text style={styles.requestText}>{item.sticker_request.car_model}</Text>
+        Car Model: <Text style={styles.requestText}>{item.car_model}</Text>
       </Text>
       <Text style={styles.boldText}>
         Car Plate Number:{" "}
-        <Text style={styles.requestText}>
-          {item.sticker_request.car_plate_number}
-        </Text>
+        <Text style={styles.requestText}>{item.car_plate_number}</Text>
       </Text>
       <Text style={styles.boldText}>
-        Status: <Text style={styles.requestText}>{item.status}</Text>
+        Status: <Text style={styles.requestText}>{item.request_status}</Text>
       </Text>
     </View>
   );
@@ -88,6 +42,8 @@ const CarStickerRequests = () => {
       <View style={styles.container}>
         {loading ? (
           <ActivityIndicator size="large" color={colors.white} />
+        ) : error ? (
+          <Text style={styles.noRequestsText}>{error}</Text>
         ) : requests.length > 0 ? (
           <FlatList
             data={requests}
@@ -108,7 +64,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   requestItem: {
-    backgroundColor: colors.green, // Adjust to fit your theme
+    backgroundColor: colors.green,
     padding: 15,
     borderRadius: 10,
     marginBottom: 15,
@@ -116,13 +72,13 @@ const styles = StyleSheet.create({
   boldText: {
     color: colors.white,
     fontSize: 16,
-    fontWeight: "bold", // Make sure only labels are bold
+    fontWeight: "bold",
     marginBottom: 5,
   },
   requestText: {
     color: colors.white,
     fontSize: 16,
-    fontWeight: "normal", // Ensure values are not bold
+    fontWeight: "normal",
   },
   noRequestsText: {
     color: colors.white,

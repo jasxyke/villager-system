@@ -6,10 +6,10 @@ use App\Models\CarStickerRequest;
 use App\Http\Requests\StoreCarStickerRequestRequest;
 use App\Http\Requests\UpdateCarStickerRequestRequest;
 use App\Models\StickerDocument;
-use Illuminate\Http\Client\Request;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
-
+use Illuminate\Support\Str;
 class CarStickerRequestController extends Controller
 {
     /**
@@ -20,48 +20,69 @@ class CarStickerRequestController extends Controller
         //
     }
 
+    public function getPendingRequests(Request $request)
+    {
+        $user = $request->user();
+
+        // Validate resident ID
+        if (!$user->resident->id) {
+            return response()->json(['message' => 'Resident ID is required'], 400);
+        }
+
+        // Fetch pending car sticker requests
+        $requests = CarStickerRequest::where('resident_id', $user->resident->id)
+            ->where('request_status', 'pending')
+            ->get();
+
+        return response()->json($requests);
+    }
+
     /**
-     * Store a newly created car sticker request in storage.
+     * Store a new car sticker request.
      */
     public function store(StoreCarStickerRequestRequest $request)
     {
-        // Validate the incoming request
-        $validated = $request->validated();
-
         $user = $request->user();
-
         // Create the car sticker request
         $carStickerRequest = CarStickerRequest::create([
-            'resident_id' => $user->resident->id, // assuming the user is logged in and has a resident_id
-            'car_model' => $validated['car_model'],
-            'car_plate_number' => $validated['car_plate_number'],
-            'request_status' => 'pending', // or any default status you prefer
-            'application_date' => now()->toDateString(), // setting the application date to now
+            'resident_id' => $user->resident->id,
+            'car_model' => $request->car_model,
+            'car_plate_number' => $request->car_plate_number,
+            'request_status' => 'pending',
+            'application_date' => now()
         ]);
 
-        // Handle image uploads
-        if (isset($validated['images'])) {
-            foreach ($validated['images'] as $image) {
-                // Assuming the image is an array with URI and description
-                $imageUri = $image['uri'];
-                $description = $image['description'];
-
-                // Save image to storage and get its path
-                $path = Storage::disk('public')->put('images', file_get_contents($imageUri));
-
-                // Create sticker document record
+        // Handle image uploads and create sticker documents
+        if($request->has('images')){
+            foreach ($request->file('images') as $index => $image) {
+                $path = $image->store('sticker_documents','public');
+                $documentUrl = Storage::url($path);
+    
                 StickerDocument::create([
                     'car_sticker_request_id' => $carStickerRequest->id,
-                    'description' => $description,
-                    'document_path' => $path, // Store the path to the file
-                    'document_url' => Storage::disk('public')->url($path), // Generate the URL to the file
-                    'upload_date' => now()->toDateString(), // setting the upload date to now
+                    'description' => $request->input('descriptions')[$index] ?? '',
+                    'document_path' => $path,
+                    'document_url' => $documentUrl,
+                    'upload_date' => now()->toDateString(),
                 ]);
             }
         }
+        
 
         return response()->json(['message' => 'Car sticker request submitted successfully!'], 201);
     }
+
+    private function storeImage($imageUri)
+    {
+        $image = file_get_contents($imageUri);
+        $imageName = uniqid() . '.jpg';
+        Storage::put('public/sticker_documents/' . $imageName, $image);
+
+        return 'public/sticker_documents/' . $imageName;
+    }
+
+
+
     /**
      * Display the specified resource.
      */

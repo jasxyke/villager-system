@@ -11,7 +11,6 @@ const useBills = () => {
     setLoading(true);
     try {
       const response = await axiosClient.get(`/bills/resident/${residentId}`);
-      console.log(response.data.bills);
 
       setBills(response.data.bills);
 

@@ -1,29 +1,26 @@
-import React from "react";
-import { FlatList, StyleSheet, Text, View } from "react-native";
+import React, { useEffect } from "react";
+import {
+  FlatList,
+  StyleSheet,
+  Text,
+  View,
+  ActivityIndicator,
+} from "react-native";
 import { colors } from "../../../styles/colors";
 import TabsGradient from "../../../components/gradients/TabsGradient";
+import { useAuthContext } from "../../../context/AuthContext";
+import useFetchPermitRequests from "../../../hooks/permits/useFetchPermitRequests";
 
 const PermitRequests = () => {
-  // Example permit requests data
-  const permitRequests = [
-    {
-      resident_name: "John Doe",
-      purpose: "Building a shed",
-      floor_size: 20,
-      permit_status: "pending",
-      application_date: "2024-08-15",
-      approval_date: null,
-    },
-    {
-      resident_name: "Jane Smith",
-      purpose: "Extending a patio",
-      floor_size: 35,
-      permit_status: "approved",
-      application_date: "2024-08-10",
-      approval_date: "2024-08-20",
-    },
-    // Add more dummy data as needed
-  ];
+  const { permitRequests, loading, error, refetch } = useFetchPermitRequests();
+  const { user } = useAuthContext();
+  // Fetch permit requests when the component mounts
+  useEffect(() => {
+    if (user) {
+      refetch(user.resident.id);
+    }
+    // Replace with the actual resident ID
+  }, [user.resident.id]);
 
   // Render item for FlatList
   const renderItem = ({ item }) => {
@@ -31,10 +28,13 @@ const PermitRequests = () => {
       <View style={styles.card}>
         <Text style={styles.cardTitle}>{item.purpose}</Text>
         <View style={styles.cardContent}>
-          <Text style={styles.cardText}>
-            <Text style={styles.cardLabel}>Floor Size:</Text> {item.floor_size}{" "}
-            m²
-          </Text>
+          {/* Conditionally render Floor Size only if it has a valid value */}
+          {item.floor_size != null && item.floor_size > 0 && (
+            <Text style={styles.cardText}>
+              <Text style={styles.cardLabel}>Floor Size:</Text>{" "}
+              {item.floor_size} m²
+            </Text>
+          )}
           <Text style={styles.cardText}>
             <Text style={styles.cardLabel}>Status:</Text> {item.permit_status}
           </Text>
@@ -50,6 +50,25 @@ const PermitRequests = () => {
       </View>
     );
   };
+
+  // Conditional rendering based on loading, error, and data states
+  if (loading) {
+    return (
+      <ActivityIndicator
+        size="large"
+        color={colors.primary}
+        style={{ marginTop: 20 }}
+      />
+    );
+  }
+
+  if (error) {
+    return (
+      <Text style={{ color: "red", textAlign: "center", marginTop: 20 }}>
+        {error}
+      </Text>
+    );
+  }
 
   return (
     <View style={{ flex: 1 }}>
@@ -70,10 +89,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginTop: 20,
-    // backgroundColor: colors.white,
-    // borderRadius: 5,
-    // borderWidth: 1,
-    // borderColor: colors.primary,
     padding: 10,
   },
   title: {
@@ -87,15 +102,15 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: colors.green,
     borderRadius: 10,
-    shadowColor: colors.black,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 6,
-    elevation: 4,
+    // shadowColor: colors.black,
+    // shadowOffset: { width: 0, height: 4 },
+    // shadowOpacity: 0.2,
+    // shadowRadius: 6,
+    // elevation: 4,
     marginBottom: 15,
     padding: 20,
     borderWidth: 1,
-    borderColor: colors.lightGray,
+    // borderColor: colors.lightGray,
   },
   cardTitle: {
     fontSize: 16,

@@ -11,12 +11,12 @@ class PermitRequest extends Model
 
     protected $fillable = [
         'resident_id',
-        'permit_type',
         'permit_status',
         'application_date',
         'approval_date',
-        'expiry_date',
         'note',
+        'purpose',
+        'floor_size'
     ];
 
     public function resident()

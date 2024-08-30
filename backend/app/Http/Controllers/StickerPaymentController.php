@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\StickerPayment;
 use App\Http\Requests\StoreStickerPaymentRequest;
 use App\Http\Requests\UpdateStickerPaymentRequest;
+use Illuminate\Http\Request;
 
 class StickerPaymentController extends Controller
 {
@@ -16,12 +17,21 @@ class StickerPaymentController extends Controller
         //
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function getPaymentHistory(Request $request)
     {
-        //
+        $residentId = $request->user()->resident->id;
+
+        // Validate the resident_id parameter
+        if (!$residentId) {
+            return response()->json(['message' => 'Resident ID is required'], 400);
+        }
+
+        // Fetch payments for the resident
+        $payments = StickerPayment::where('resident_id', $residentId)
+            ->with('carStickerRequest') // Eager load related car sticker requests
+            ->get();
+
+        return response()->json($payments);
     }
 
     /**

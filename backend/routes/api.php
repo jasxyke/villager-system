@@ -6,11 +6,15 @@ use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\BillController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\CarStickerRequestController;
 use App\Http\Controllers\HouseController;
+use App\Http\Controllers\PermitPaymentController;
 use App\Http\Controllers\PermitRequestController;
 use App\Http\Controllers\ResidentController;
+use App\Http\Controllers\StickerPaymentController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserController;
+use App\Models\CarStickerRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -95,6 +99,14 @@ Route::middleware('auth:sanctum')->group(function () {
 
     //permit routes
     Route::post('/permit-requests', [PermitRequestController::class, 'store']);
+    Route::get('/permits/resident/{residentId}', [PermitRequestController::class, 'getPermitRequestsByResident']);
+    Route::get('/payments/resident/{residentId}', [PermitPaymentController::class, 'getPaymentHistory']);
+
+    //car sticker routes
+    Route::post('/car-sticker-requests', 
+    [CarStickerRequestController::class, 'store']);
+    Route::get('/car-sticker-requests', [CarStickerRequestController::class, 'getPendingRequests']);
+    Route::get('/sticker-payments', [StickerPaymentController::class, 'getPaymentHistory']);
 });
 
 //booking routes (avaialable to the public)

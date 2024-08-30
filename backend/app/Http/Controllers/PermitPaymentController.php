@@ -16,13 +16,35 @@ class PermitPaymentController extends Controller
         //
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+    public function getPaymentHistory($residentId)
+{
+    try {
+        // Fetch payments for the given resident ID
+        $payments = PermitPayment::where('resident_id', $residentId)
+            ->orderBy('payment_date', 'desc') // Order by latest payment first
+            ->get();
+
+        if ($payments->isEmpty()) {
+            // If no payments are found, return a specific message
+            return response()->json([
+                'message' => 'No payment history found for the specified resident.',
+                'payments' => [], // Return an empty array for payments
+            ], 200);
+        }
+
+        // Return a JSON response with the payment history
+        return response()->json([
+            'message' => 'Payment history fetched successfully.',
+            'payments' => $payments,
+        ], 200);
+    } catch (\Exception $e) {
+        // Handle any exceptions that may occur
+        return response()->json([
+            'message' => 'An error occurred while fetching payment history.',
+            'error' => $e->getMessage(),
+        ], 500);
     }
+}
 
     /**
      * Store a newly created resource in storage.

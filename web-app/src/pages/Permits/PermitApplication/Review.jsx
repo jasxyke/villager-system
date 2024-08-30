@@ -39,10 +39,9 @@ const PermitApplicationReview = ({ permit, onBack }) => {
           className="text-2xl cursor-pointer"
           onClick={onBack}
         />
-        <div>PERMIT REQUEST DETAILS</div>
         <div className="flex gap-4">
           <button
-            className="bg-green border text-white px-4 py-2 rounded hover:bg-green-600 transition-colors"
+            className="bg-1ime-700 border text-white px-4 py-2 rounded hover:bg-lime-600 transition-colors"
             onClick={handleApproveClick} // Handle approval
           >
             Approve
@@ -60,7 +59,7 @@ const PermitApplicationReview = ({ permit, onBack }) => {
         <div className="flex flex-wrap gap-6">
           {/* Applicant Information */}
           <fieldset className="flex-1 bg-green p-5 rounded-lg shadow-sm border border-gray-300">
-            <legend className="text-4xl font-semibold font-roboto text-stroke mb-4 px-4 bg-mutedGreen border">
+            <legend className="text-xl font-semibold text-white  mb-4 ">
               Resident Information
             </legend>
             <div className="grid grid-cols-1 gap-6">
@@ -69,53 +68,32 @@ const PermitApplicationReview = ({ permit, onBack }) => {
                 { label: "Contact Number", value: permit.phoneNumber },
 
                 { label: "Email", value: permit.emailAddress },
+                { label: "Lot Number", value: permit.lotNumber },
+                { label: "Block Number", value: permit.blockNumber },
               ].map(({ label, value }) => (
                 <div
                   key={label}
                   className="grid grid-cols-1 md:grid-cols-2 gap-4"
                 >
-                  <span className="font-semibold text-white">{label}:</span>
-                  <span className="text-white">{value || "N/A"}</span>
+                  <span className="text-x1 font-semibold text-white">
+                    {label}:
+                  </span>
+                  <span className="text-x1 text-white">{value || "N/A"}</span>
                 </div>
               ))}
             </div>
           </fieldset>
 
           {/* Property Information */}
-          <fieldset className="flex-1 bg-green p-5 rounded-lg shadow-sm border border-gray-300">
-            <legend className="text-4xl font-semibold font-roboto text-stroke mb-4 px-4 bg-mutedGreen border">
-              Property Information
-            </legend>
-            <div className="flex flex-col gap-4">
-              {[
-                { label: "Property Address", value: permit.propertyAddress },
-                { label: "Lot Number", value: permit.lotNumber },
-                { label: "Block Number", value: permit.blockNumber },
-              ].map(({ label, value }) => (
-                <div key={label} className="flex items-center space-x-4">
-                  <span className="font-semibold text-white w-1/3">
-                    {label}:
-                  </span>
-                  <span className="text-white">{value || "N/A"}</span>
-                </div>
-              ))}
-            </div>
-          </fieldset>
         </div>
 
         {/* Request Details */}
         <fieldset className="bg-green p-5 rounded-lg shadow-sm border border-gray-300">
-          <legend className="text-4xl font-semibold font-roboto text-stroke mb-4 px-4 bg-mutedGreen border">
+          <legend className="text-xl font-semibold text-white  mb-4 ">
             Requested Details
           </legend>
           <div className="grid grid-cols-1 gap-4">
             {[
-              {
-                label: "Description of Request",
-                value: permit.descriptionOfRequest,
-              },
-              { label: "Reason for Request", value: permit.reasonForRequest },
-              { label: "Requested Permit", value: permit.requestedPermit },
               { label: "Permit Purpose", value: permit.phoneNumber },
               { label: "Status", value: permit.phoneNumber },
               { label: "Requested Date", value: permit.phoneNumber },
@@ -126,8 +104,10 @@ const PermitApplicationReview = ({ permit, onBack }) => {
                 key={label}
                 className="grid grid-cols-1 md:grid-cols-2 gap-4"
               >
-                <span className="font-semibold text-white">{label}:</span>
-                <span className="text-white">{value || "N/A"}</span>
+                <span className="text-x1 font-semibold text-white">
+                  {label}:
+                </span>
+                <span className="text-x1 text-white">{value || "N/A"}</span>
               </div>
             ))}
           </div>
@@ -135,8 +115,8 @@ const PermitApplicationReview = ({ permit, onBack }) => {
 
         {/* Supporting Documents */}
         <fieldset className="bg-green p-5 rounded-lg shadow-sm border border-gray-300">
-          <legend className="text-4xl font-semibold font-roboto text-stroke mb-4 px-4 bg-mutedGreen border">
-            Documents
+          <legend className="text-xl font-semibold text-white  mb-4 ">
+            Supporting Documents
           </legend>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="w-full">

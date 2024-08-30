@@ -48,19 +48,19 @@ const StickerReview = ({ sticker, onBack }) => {
   };
 
   return (
-    <div className="p-6 bg-white border border-gray-300 rounded-lg shadow-lg">
+    <div className="p-6 bg-greenGradient border border-gray-300 rounded-lg shadow-lg">
       <div className="flex items-center justify-between mb-6">
         <FiArrowLeft
-          className="text-2xl text-gray-600 cursor-pointer hover:text-gray-800 transition"
+          className="text-2xl text-neutral-50 cursor-pointer hover:text-gray-800 transition"
           onClick={onBack}
           aria-label="Go back"
         />
         <div className="flex gap-4 mt-6">
           <button
-            className="bg-green text-white px-4 py-2 rounded hover:bg-green-600 transition-colors"
+            className="bg-lime-700 text-white px-4 py-2 rounded hover:bg-lime-600 transition-colors"
             onClick={handleApproveClick}
           >
-            Approve
+            Accept
           </button>
           <button
             className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition-colors"
@@ -73,8 +73,8 @@ const StickerReview = ({ sticker, onBack }) => {
 
       <form className="space-y-6">
         {/* Resident Information */}
-        <fieldset className="bg-gray-50 p-5 rounded-lg shadow-sm border border-gray-200">
-          <legend className="text-xl font-semibold text-gray-700 mb-4">
+        <fieldset className="bg-green p-5 rounded-lg shadow-sm border border-gray-200">
+          <legend className="text-xl font-semibold text-white mb-4">
             Resident Information
           </legend>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -86,18 +86,18 @@ const StickerReview = ({ sticker, onBack }) => {
               { label: "Email", value: sticker.residentEmail },
             ].map(({ label, value }) => (
               <div key={label} className="flex items-center">
-                <label className="w-1/3 font-semibold text-gray-600">
+                <label className="w-1/3 font-semibold text-white">
                   {label}:
                 </label>
-                <div className="w-2/3 text-gray-800">{value || "N/A"}</div>
+                <div className="w-2/3 text-white">{value || "N/A"}</div>
               </div>
             ))}
           </div>
         </fieldset>
 
         {/* Vehicle Information */}
-        <fieldset className="bg-gray-50 p-5 rounded-lg shadow-sm border border-gray-200">
-          <legend className="text-xl font-semibold text-gray-700 mb-4">
+        <fieldset className="bg-green p-5 rounded-lg shadow-sm border border-gray-200">
+          <legend className="text-xl font-semibold text-white mb-4">
             Vehicle Information
           </legend>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -106,18 +106,18 @@ const StickerReview = ({ sticker, onBack }) => {
               { label: "License Plate Number", value: sticker.licensePlate },
             ].map(({ label, value }) => (
               <div key={label} className="flex items-center">
-                <label className="w-1/3 font-semibold text-gray-600">
+                <label className="w-1/3 font-semibold text-white">
                   {label}:
                 </label>
-                <div className="w-2/3 text-gray-800">{value || "N/A"}</div>
+                <div className="w-2/3 text-white">{value || "N/A"}</div>
               </div>
             ))}
           </div>
         </fieldset>
 
         {/* Request Information */}
-        <fieldset className="bg-gray-50 p-5 rounded-lg shadow-sm border border-gray-200">
-          <legend className="text-xl font-semibold text-gray-700 mb-4">
+        <fieldset className="bg-green p-5 rounded-lg shadow-sm border border-gray-200">
+          <legend className="text-xl font-semibold text-white mb-4">
             Request Information
           </legend>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -126,23 +126,23 @@ const StickerReview = ({ sticker, onBack }) => {
               { label: "Status", value: sticker.status },
             ].map(({ label, value }) => (
               <div key={label} className="flex items-center">
-                <label className="w-1/3 font-semibold text-gray-600">
+                <label className="w-1/3 font-semibold text-white">
                   {label}:
                 </label>
-                <div className="w-2/3 text-gray-800">{value || "N/A"}</div>
+                <div className="w-2/3 text-white">{value || "N/A"}</div>
               </div>
             ))}
           </div>
         </fieldset>
 
         {/* Additional Documentation */}
-        <fieldset className="bg-gray-50 p-5 rounded-lg shadow-sm border border-gray-200">
-          <legend className="text-xl font-semibold text-gray-700 mb-4">
-            Additional Documentation
+        <fieldset className="bg-green p-5 rounded-lg shadow-sm border border-gray-200">
+          <legend className="text-xl font-semibold text-white mb-4">
+            Supporting Documents
           </legend>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="w-full">
-              <div className="mb-2 text-gray-800 font-semibold">Documents</div>
+              <div className="mb-2 text-white font-semibold">Documents</div>
               <div className="flex flex-wrap gap-4">
                 {sticker.uploadedImages &&
                   sticker.uploadedImages.map((image, index) => (

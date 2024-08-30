@@ -36,7 +36,7 @@ const BookingPage = () => {
                 (selectedAmenityId === amenity.id
                   ? "bg-secondary"
                   : "bg-green") +
-                "  text-white p-4 outline-none border-paleGreen"
+                "  text-white p-4 rounded-lg outline-none border-paleGreen"
               }
               onClick={() => handleAmenitySelection(amenity.id)}
             >

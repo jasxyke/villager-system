@@ -1,5 +1,21 @@
-import { Slot } from "expo-router";
+import { Stack } from "expo-router";
+import { colors } from "../../styles/colors";
 
 export default function FormsLayout() {
-  return <Slot />;
+  return (
+    <Stack
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: colors.primary,
+        },
+        headerTintColor: colors.white,
+        headerTitleStyle: {
+          fontWeight: "bold",
+        },
+      }}
+    >
+      <Stack.Screen name="sticker-form" options={{ title: "Car Stickers" }} />
+      <Stack.Screen name="permit-form" options={{ title: "House Permit" }} />
+    </Stack>
+  );
 }

@@ -17,6 +17,10 @@ class StickerPayment extends Model
         'transaction_id',
     ];
 
+    public function resident(){
+        return $this->belongsTo(Resident::class);
+    }
+
     public function carStickerRequest()
     {
         return $this->belongsTo(CarStickerRequest::class);

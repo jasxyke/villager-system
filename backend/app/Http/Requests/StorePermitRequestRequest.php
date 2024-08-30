@@ -22,10 +22,11 @@ class StorePermitRequestRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'purpose' => 'required|string|max:300',
-            'floorSize' => 'nullable|numeric|between:1,999999.99', 
-            'images.*.uri' => 'required|url',
-            'images.*.description' => 'nullable|string|max:200',
+            'purpose' => 'required|string|max:255',
+            'floorSize' => 'nullable|numeric',
+            'documents' => 'required',
+            'documents.*' => 'required|file|mimes:jpeg,png,pdf|max:2048', // Adjust file type and size as needed
+            'descriptions.*' => 'nullable|string|max:255',
         ];
     }
 }

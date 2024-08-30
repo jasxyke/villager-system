@@ -1,4 +1,3 @@
-import * as ImagePicker from "expo-image-picker";
 import React, { useState } from "react";
 import {
   Alert,
@@ -9,11 +8,15 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  ActivityIndicator,
 } from "react-native";
 import CustomButton from "../../components/common/CustomButton";
 import { colors } from "../../styles/colors";
 import Modal from "react-native-modal";
 import TabsGradient from "../../components/gradients/TabsGradient";
+import useCarStickers from "../../hooks/stickers/useCarStickers"; // Updated import path
+import { router } from "expo-router";
+import * as ImagePicker from "expo-image-picker";
 
 const CarStickerForm = ({ setShowCarStickerForm }) => {
   const [carModel, setCarModel] = useState("");
@@ -22,7 +25,8 @@ const CarStickerForm = ({ setShowCarStickerForm }) => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
 
-  // Function to handle image selection and upload
+  const { createCarStickerRequest, loading, error, success } = useCarStickers();
+
   const handleImageUpload = async () => {
     const permissionResult =
       await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -47,31 +51,27 @@ const CarStickerForm = ({ setShowCarStickerForm }) => {
     }
   };
 
-  // Function to handle image description change
   const handleDescriptionChange = (index, text) => {
     const newImages = [...images];
     newImages[index].description = text;
     setImages(newImages);
   };
 
-  // Function to clear selected images
   const handleClearImages = () => {
     setImages([]);
   };
 
-  // Function to open the modal with the selected image
   const handleImagePress = (uri) => {
     setSelectedImage(uri);
     setIsModalVisible(true);
   };
 
-  // Function to handle image modal close
   const handleModalClose = () => {
     setIsModalVisible(false);
     setSelectedImage(null);
   };
 
-  const handleSubmitRequest = () => {
+  const handleSubmitRequest = async () => {
     if (!carModel || !plateNumber) {
       Alert.alert("Error", "Please fill in all required fields.");
       return;
@@ -82,25 +82,30 @@ const CarStickerForm = ({ setShowCarStickerForm }) => {
       return;
     }
 
-    const requestData = {
-      carModel,
-      plateNumber,
-      images,
-    };
-
-    // Submit logic goes here
-
-    setShowCarStickerForm(false); // Close the form after submission
+    try {
+      const msg = await createCarStickerRequest(carModel, plateNumber, images);
+      if (msg) {
+        Alert.alert("Success", msg);
+        router.back();
+      }
+    } catch (error) {
+      Alert.alert("Error", error.message || "An error occurred.");
+    }
   };
 
   return (
-    <View className="flex-1">
+    <View style={{ flex: 1 }}>
       <TabsGradient />
-      <View style={styles.mainContainer}>
+      <ScrollView style={styles.mainContainer}>
         <View style={styles.container}>
           <Text style={styles.title}>Car Sticker Request Form</Text>
 
-          {/* Car Model Input */}
+          {error && (
+            <Text style={styles.errorMessage}>
+              {error || "An error occurred"}
+            </Text>
+          )}
+
           <View style={styles.row}>
             <TextInput
               placeholder="Car Model (e.g., Toyota Corolla)"
@@ -110,7 +115,6 @@ const CarStickerForm = ({ setShowCarStickerForm }) => {
             />
           </View>
 
-          {/* Plate Number Input */}
           <View style={styles.row}>
             <TextInput
               placeholder="Plate Number (e.g., ABC-1234)"
@@ -120,12 +124,10 @@ const CarStickerForm = ({ setShowCarStickerForm }) => {
             />
           </View>
 
-          {/* Supporting Documents Section */}
           <View style={styles.additionalContainer}>
             <Text style={styles.header1}>Supporting Documents</Text>
           </View>
 
-          {/* Display selected images with descriptions */}
           {images.length > 0 ? (
             <ScrollView horizontal style={styles.imagePreviewContainer}>
               {images.map((item, index) => (
@@ -151,7 +153,6 @@ const CarStickerForm = ({ setShowCarStickerForm }) => {
             <View style={{ height: 100 }}></View>
           )}
 
-          {/* Image upload input */}
           <View style={styles.fileUploadContainer}>
             <TouchableOpacity
               style={styles.fileUploadButton}
@@ -165,7 +166,6 @@ const CarStickerForm = ({ setShowCarStickerForm }) => {
             </TouchableOpacity>
           </View>
 
-          {/* Clear Images Button */}
           {images.length > 0 && (
             <View style={styles.clearButtonContainer}>
               <TouchableOpacity onPress={handleClearImages}>
@@ -174,19 +174,22 @@ const CarStickerForm = ({ setShowCarStickerForm }) => {
             </View>
           )}
 
-          {/* Submit and Cancel Buttons */}
           <View style={styles.buttonContainer}>
             <CustomButton
               title={"Submit Request"}
               onPress={handleSubmitRequest}
             />
-            <CustomButton
-              title="Cancel"
-              onPress={() => setShowCarStickerForm(false)}
-            />
+            <CustomButton title="Cancel" onPress={() => router.back()} />
           </View>
 
-          {/* Image Modal */}
+          {loading && (
+            <ActivityIndicator
+              size="large"
+              color={colors.primary}
+              style={styles.loadingIndicator}
+            />
+          )}
+
           <Modal
             isVisible={isModalVisible}
             onBackdropPress={handleModalClose}
@@ -206,7 +209,7 @@ const CarStickerForm = ({ setShowCarStickerForm }) => {
             </View>
           </Modal>
         </View>
-      </View>
+      </ScrollView>
     </View>
   );
 };
@@ -220,6 +223,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary,
     padding: 20,
     borderRadius: 25,
+    marginBottom: 40,
   },
   title: {
     marginBottom: 15,
@@ -313,24 +317,31 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   modalContent: {
-    backgroundColor: colors.white,
+    backgroundColor: "white",
     padding: 20,
     borderRadius: 10,
     alignItems: "center",
   },
   modalImage: {
     width: 300,
-    height: 600,
-    resizeMode: "contain",
+    height: 300,
+    borderRadius: 10,
   },
   closeButton: {
     marginTop: 10,
-    padding: 10,
-    backgroundColor: colors.primary,
-    borderRadius: 5,
   },
   closeButtonText: {
-    color: colors.white,
+    color: colors.primary,
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  errorMessage: {
+    color: "red",
+    textAlign: "center",
+    marginBottom: 10,
+  },
+  loadingIndicator: {
+    marginTop: 20,
   },
 });
 

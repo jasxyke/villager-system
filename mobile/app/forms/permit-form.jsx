@@ -17,8 +17,9 @@ import { DOWNLOADS, PROFILE, TYPE } from "../../constants/icons";
 import { colors } from "../../styles/colors";
 import Modal from "react-native-modal";
 import TabsGradient from "../../components/gradients/TabsGradient";
+import { router } from "expo-router";
 
-const PermitForm = ({ setShowPermitForm }) => {
+const PermitForm = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const {
@@ -86,127 +87,140 @@ const PermitForm = ({ setShowPermitForm }) => {
       uri: img.uri,
       description: img.description,
     }));
-    await submitPermitRequest({
+    let msg = await submitPermitRequest({
       purpose,
       floorSize: squareMeters,
       documents,
     });
+    if (msg) {
+      setImages([]);
+      setPurpose("");
+      handleSquareMetersChange("");
+    }
   };
 
   return (
-    <View style={styles.mainContainer}>
+    <View className="flex-1">
       <TabsGradient />
-      <ScrollView className="mb-10" contentContainerStyle={styles.container}>
-        <View></View>
-        <Text style={styles.title}>Request Form</Text>
+      <ScrollView style={styles.mainContainer}>
+        <View style={styles.container}>
+          <Text style={styles.title}>Request Form</Text>
 
-        {/* Display success and error messages */}
-        {successMessage && (
-          <Text style={styles.successMessage}>{successMessage}</Text>
-        )}
-        {error && <Text style={styles.errorMessage}>{error}</Text>}
+          {/* Display success and error messages */}
+          {successMessage && (
+            <Text style={styles.successMessage}>{successMessage}</Text>
+          )}
+          {error && <Text style={styles.errorMessage}>{error}</Text>}
 
-        <View style={styles.row}>
-          <View style={styles.logoContainer}>
-            <Image source={TYPE} style={styles.logo} />
+          <View style={styles.row}>
+            <View style={styles.logoContainer}>
+              <Image source={TYPE} style={styles.logo} />
+            </View>
+            <TextInput
+              placeholder="Purpose (ex. House Permit, Construction Supply Permit)"
+              style={styles.input}
+              value={purpose}
+              onChangeText={setPurpose}
+            />
           </View>
-          <TextInput
-            placeholder="Purpose (ex. House Permit, Construction Supply Permit)"
-            style={styles.input}
-            value={purpose}
-            onChangeText={setPurpose}
-          />
-        </View>
 
-        <View style={styles.row}>
-          <View style={styles.logoContainer}>
-            <Image source={PROFILE} style={styles.logo} />
+          <View style={styles.row}>
+            <View style={styles.logoContainer}>
+              <Image source={PROFILE} style={styles.logo} />
+            </View>
+            <TextInput
+              placeholder="Floor Size in Sq. Meters (if applicable)"
+              style={styles.input}
+              value={squareMeters}
+              onChangeText={handleSquareMetersChange}
+              keyboardType="numeric"
+            />
           </View>
-          <TextInput
-            placeholder="Floor Size in Sq. Meters (if applicable)"
-            style={styles.input}
-            value={squareMeters}
-            onChangeText={handleSquareMetersChange}
-            keyboardType="numeric"
-          />
-        </View>
-        <View style={styles.additionalContainer}>
-          <Text style={styles.header1}>Supporting Documents</Text>
-        </View>
+          <View style={styles.additionalContainer}>
+            <Text style={styles.header1}>Supporting Documents</Text>
+          </View>
 
-        {images.length > 0 ? (
-          <ScrollView horizontal style={styles.imagePreviewContainer}>
-            {images.map((item, index) => (
-              <View key={index} style={styles.imageContainer}>
-                <TouchableOpacity onPress={() => handleImagePress(item.uri)}>
-                  <Image
-                    source={{ uri: item.uri }}
-                    style={styles.imagePreview}
+          {images.length > 0 ? (
+            <ScrollView horizontal style={styles.imagePreviewContainer}>
+              {images.map((item, index) => (
+                <View key={index} style={styles.imageContainer}>
+                  <TouchableOpacity onPress={() => handleImagePress(item.uri)}>
+                    <Image
+                      source={{ uri: item.uri }}
+                      style={styles.imagePreview}
+                    />
+                  </TouchableOpacity>
+                  <TextInput
+                    placeholder="Add description"
+                    style={styles.descriptionInput}
+                    value={item.description}
+                    onChangeText={(text) =>
+                      handleDescriptionChange(index, text)
+                    }
                   />
-                </TouchableOpacity>
-                <TextInput
-                  placeholder="Add description"
-                  style={styles.descriptionInput}
-                  value={item.description}
-                  onChangeText={(text) => handleDescriptionChange(index, text)}
-                />
-              </View>
-            ))}
-          </ScrollView>
-        ) : (
-          <View style={{ height: 100 }}></View>
-        )}
+                </View>
+              ))}
+            </ScrollView>
+          ) : (
+            <View style={{ height: 100 }}></View>
+          )}
 
-        <View style={styles.fileUploadContainer}>
-          <View style={styles.logoContainer}>
-            <Image source={DOWNLOADS} style={styles.logo} />
-          </View>
-          <TouchableOpacity
-            style={styles.fileUploadButton}
-            onPress={handleImageUpload}
-          >
-            <Text style={styles.fileUploadButtonText}>
-              {images.length > 0
-                ? `Images Selected: ${images.length}`
-                : "Upload Image"}
-            </Text>
-          </TouchableOpacity>
-        </View>
-
-        {images.length > 0 && (
-          <View style={styles.clearButtonContainer}>
-            <TouchableOpacity onPress={handleClearImages}>
-              <Text style={styles.clearButtonText}>Clear Images</Text>
-            </TouchableOpacity>
-          </View>
-        )}
-
-        <View style={styles.buttonContainer}>
-          <CustomButton
-            title={loading ? "Processing" : "Submit Request"}
-            onPress={handleSubmitRequest}
-          />
-          <CustomButton
-            title="Cancel"
-            onPress={() => setShowPermitForm(false)}
-          />
-        </View>
-
-        <Modal
-          isVisible={isModalVisible}
-          onBackdropPress={handleModalClose}
-          style={styles.modal}
-        >
-          <View style={styles.modalContent}>
-            <Image source={{ uri: selectedImage }} style={styles.modalImage} />
+          <View style={styles.fileUploadContainer}>
+            <View style={styles.logoContainer}>
+              <Image source={DOWNLOADS} style={styles.logo} />
+            </View>
             <TouchableOpacity
-              onPress={handleModalClose}
-              style={styles.closeButton}
+              style={styles.fileUploadButton}
+              onPress={handleImageUpload}
             >
-              <Text style={styles.closeButtonText}>Close</Text>
+              <Text style={styles.fileUploadButtonText}>
+                {images.length > 0
+                  ? `Images Selected: ${images.length}`
+                  : "Upload Image"}
+              </Text>
             </TouchableOpacity>
           </View>
-        </Modal>
+
+          {images.length > 0 && (
+            <View style={styles.clearButtonContainer}>
+              <TouchableOpacity onPress={handleClearImages}>
+                <Text style={styles.clearButtonText}>Clear Images</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+
+          <View style={styles.buttonContainer}>
+            <CustomButton
+              title={loading ? "Processing" : "Submit Request"}
+              onPress={handleSubmitRequest}
+            />
+            <CustomButton
+              title="Cancel"
+              onPress={() => {
+                router.back();
+              }}
+            />
+          </View>
+
+          <Modal
+            isVisible={isModalVisible}
+            onBackdropPress={handleModalClose}
+            style={styles.modal}
+          >
+            <View style={styles.modalContent}>
+              <Image
+                source={{ uri: selectedImage }}
+                style={styles.modalImage}
+              />
+              <TouchableOpacity
+                onPress={handleModalClose}
+                style={styles.closeButton}
+              >
+                <Text style={styles.closeButtonText}>Close</Text>
+              </TouchableOpacity>
+            </View>
+          </Modal>
+        </View>
       </ScrollView>
     </View>
   );
@@ -214,15 +228,14 @@ const PermitForm = ({ setShowPermitForm }) => {
 
 const styles = StyleSheet.create({
   mainContainer: {
-    flex: 1,
-    paddingHorizontal: 20,
+    padding: 20,
   },
   container: {
-    marginTop: 20,
+    marginTop: 10,
     backgroundColor: colors.primary,
     padding: 20,
-    paddingBottom: 60,
     borderRadius: 25,
+    marginBottom: 40,
   },
   title: {
     marginBottom: 15,
@@ -352,7 +365,7 @@ const styles = StyleSheet.create({
     color: colors.white,
   },
   successMessage: {
-    color: colors.green,
+    color: colors.secondary,
     textAlign: "center",
     marginVertical: 10,
   },

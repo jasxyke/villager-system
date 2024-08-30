@@ -11,8 +11,8 @@ class StickerDocument extends Model
     use HasFactory;
 
     protected $fillable = [
-        'sticker_id',
-        'document_type',
+        'car_sticker_request_id',
+        'description',
         'document_path',
         'document_url',
         'upload_date'

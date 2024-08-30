@@ -15,7 +15,7 @@ const usePermitRequest = () => {
       // Create FormData object to handle file uploads
       const formData = new FormData();
       formData.append("purpose", purpose);
-      formData.append("floor_size", floorSize);
+      formData.append("floorSize", floorSize);
 
       if (documents && documents.length > 0) {
         documents.forEach((doc, index) => {
@@ -37,6 +37,7 @@ const usePermitRequest = () => {
       console.log(response.data.message);
 
       setSuccessMessage(response.data.message);
+      return response.data.message;
     } catch (error) {
       console.log(error.response?.data?.message);
       setError(error.response?.data?.message || "An error occurred");

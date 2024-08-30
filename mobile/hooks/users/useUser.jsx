@@ -9,23 +9,14 @@ const useUser = () => {
   const updateUser = async (user, onUpdate, onError) => {
     setLoading(true);
     let userForm = null;
-    if (user.role_type === "resident") {
-      userForm = {
-        lastname: user.lastname,
-        firstname: user.firstname,
-        middlename: user.middlename,
-        fbName: user.resident.fb_name,
-        civilStatus: user.resident.civil_status,
-        occupation: user.resident.occupation_status,
-      };
-    }
-    if (user.role_type === "guest") {
-      userForm = {
-        lastname: user.lastname,
-        firstname: user.firstname,
-        middlename: user.middlename,
-      };
-    }
+    userForm = {
+      lastname: user.lastname,
+      firstname: user.firstname,
+      middlename: user.middlename,
+      fbName: user.resident.fb_name,
+      civilStatus: user.resident.civil_status,
+      occupation: user.resident.occupation_status,
+    };
     try {
       const res = await axiosClient.put("/users/" + user.id, userForm);
       setUser(res.data.user);

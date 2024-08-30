@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('permit_payments', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('resident_id')->constrained('residents');
             $table->foreignId('permit_request_id')->constrained('permit_requests');
             $table->decimal('amount', 10, 2);
             $table->date('payment_date');

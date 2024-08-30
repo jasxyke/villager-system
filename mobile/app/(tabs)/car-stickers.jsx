@@ -12,7 +12,6 @@ const carStickers = () => {
       <AppHeader />
       <View className="p-6">
         <Text style={styles.title}>Car Stickers</Text>
-
         {/* Button to navigate to Car Sticker Form */}
         <TouchableOpacity
           style={styles.button}

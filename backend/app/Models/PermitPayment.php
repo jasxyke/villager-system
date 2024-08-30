@@ -17,6 +17,10 @@ class PermitPayment extends Model
         'transaction_id',
     ];
 
+    public function resident(){
+        return $this->belongsTo(Resident::class);
+    }
+
     public function permitRequest()
     {
         return $this->belongsTo(PermitRequest::class, 'permit_request_id');

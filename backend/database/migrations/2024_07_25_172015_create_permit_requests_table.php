@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('resident_id')->constrained('residents');
             $table->string('purpose',300);
-            $table->decimal('floor_size',8,2);
-            $table->enum('permit_status', ['pending', 'approved', 'rejected']); // Status of the permit request
+            $table->decimal('floor_size',8,2)->nullable()->default(0);
+            $table->enum('permit_status', ['pending', 'approved', 'rejected','in_progress','claimed']); // Status of the permit request
             $table->date('application_date'); // Date the request was made
             $table->date('approval_date')->nullable(); // Date the request was approved, if applicable
             $table->text('note')->nullable();

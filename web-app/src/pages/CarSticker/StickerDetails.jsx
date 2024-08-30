@@ -31,22 +31,22 @@ const StickerDetails = ({ sticker, onBack }) => {
   };
 
   return (
-    <div className="p-6 bg-white border border-gray-300 rounded-lg shadow-lg">
+    <div className="p-6 bg-green border border-gray-300 rounded-lg shadow-lg">
       <div className="flex items-center justify-between mb-6">
         <FiArrowLeft
-          className="text-2xl text-gray-600 cursor-pointer hover:text-gray-800 transition"
+          className="text-2xl text-neutral-50 cursor-pointer hover:text-gray-800 transition"
           onClick={onBack}
           aria-label="Go back"
         />
-        <div className="text-2xl font-bold text-gray-800">
+        <div className="text-2xl font-bold text-white">
           Detailed Information
         </div>
       </div>
 
       <form className="space-y-6">
         {/* Applicant Information */}
-        <fieldset className="bg-gray-50 p-5 rounded-lg shadow-sm border border-gray-200">
-          <legend className="text-xl font-semibold text-gray-700 mb-4">
+        <fieldset className="bg-green p-5 rounded-lg shadow-sm border border-gray-200">
+          <legend className="text-xl font-semibold text-white mb-4">
             Applicant Information
           </legend>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -58,18 +58,18 @@ const StickerDetails = ({ sticker, onBack }) => {
               { label: "Email Address", value: sticker.email },
             ].map(({ label, value }) => (
               <div key={label} className="flex items-center">
-                <label className="w-1/3 font-semibold text-gray-600">
+                <label className="w-1/3 font-semibold text-white">
                   {label}:
                 </label>
-                <div className="w-2/3 text-gray-800">{value || "N/A"}</div>
+                <div className="w-2/3 text-white">{value || "N/A"}</div>
               </div>
             ))}
           </div>
         </fieldset>
 
         {/* Vehicle Information */}
-        <fieldset className="bg-gray-50 p-5 rounded-lg shadow-sm border border-gray-200">
-          <legend className="text-xl font-semibold text-gray-700 mb-4">
+        <fieldset className="bg-green p-5 rounded-lg shadow-sm border border-gray-200">
+          <legend className="text-xl font-semibold text-white mb-4">
             Vehicle Information
           </legend>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -78,18 +78,18 @@ const StickerDetails = ({ sticker, onBack }) => {
               { label: "License Plate Number", value: sticker.licensePlate },
             ].map(({ label, value }) => (
               <div key={label} className="flex items-center">
-                <label className="w-1/3 font-semibold text-gray-600">
+                <label className="w-1/3 font-semibold text-white">
                   {label}:
                 </label>
-                <div className="w-2/3 text-gray-800">{value || "N/A"}</div>
+                <div className="w-2/3 text-white">{value || "N/A"}</div>
               </div>
             ))}
           </div>
         </fieldset>
 
         {/* Request Details */}
-        <fieldset className="bg-gray-50 p-5 rounded-lg shadow-sm border border-gray-200">
-          <legend className="text-xl font-semibold text-gray-700 mb-4">
+        <fieldset className="bg-green p-5 rounded-lg shadow-sm border border-gray-200">
+          <legend className="text-xl font-semibold text-white mb-4">
             Request Details
           </legend>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -98,23 +98,23 @@ const StickerDetails = ({ sticker, onBack }) => {
               { label: "Status", value: sticker.status },
             ].map(({ label, value }) => (
               <div key={label} className="flex items-center">
-                <label className="w-1/3 font-semibold text-gray-600">
+                <label className="w-1/3 font-semibold text-white">
                   {label}:
                 </label>
-                <div className="w-2/3 text-gray-800">{value || "N/A"}</div>
+                <div className="w-2/3 text-white">{value || "N/A"}</div>
               </div>
             ))}
           </div>
         </fieldset>
 
         {/* Additional Information */}
-        <fieldset className="bg-gray-50 p-5 rounded-lg shadow-sm border border-gray-200">
-          <legend className="text-xl font-semibold text-gray-700 mb-4">
+        <fieldset className="bg-green p-5 rounded-lg shadow-sm border border-gray-200">
+          <legend className="text-xl font-semibold text-white mb-4">
             Additional Information
           </legend>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="w-full">
-              <div className="mb-2 text-gray-800 font-semibold">Documents</div>
+              <div className="mb-2 text-white font-semibold">Documents</div>
               <div className="flex flex-wrap gap-4">
                 {sticker.uploadedImages &&
                   sticker.uploadedImages.map((image, index) => (

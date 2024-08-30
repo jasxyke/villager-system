@@ -13,7 +13,8 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.jasxyke.villager"
     },
     "android": {
       "adaptiveIcon": {
@@ -25,21 +26,23 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "expo": {
-      "plugins": [
-        [
-          "expo-image-picker",
-          {
-            "photosPermission": "The app accesses your photos to let you share them with your fellow residents."
-          },
-          "expo-secure-store",
-          {
-            "faceIDPermission": "Allow $(PRODUCT_NAME) to access your Face ID biometric data."
-          }
-        ]
-      ]
-    },
-    "plugins": ["expo-router", "expo-font", "expo-secure-store"],
+    "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "The app accesses your photos to let you share them with your fellow residents."
+        }
+      ],
+      [
+        "expo-secure-store",
+        {
+          "faceIDPermission": "Allow $(PRODUCT_NAME) to access your Face ID biometric data."
+        }
+      ],
+      "expo-router",
+      "expo-font",
+      "expo-secure-store"
+    ],
     "extra": {
       "router": {
         "origin": false

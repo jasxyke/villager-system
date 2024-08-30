@@ -1,23 +1,60 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, useCallback } from "react";
 import {
   View,
   FlatList,
   Animated,
-  Dimensions,
   Text,
   Image,
   StyleSheet,
+  TouchableOpacity,
+  Modal,
 } from "react-native";
 import { colors } from "../../styles/colors";
 
-// const { width } = Dimensions.get("window");
-const width = 320;
+const ITEM_WIDTH = 320;
+const ITEM_HEIGHT = 300;
+
+const ListItem = React.memo(({ item, onPress, opacity }) => {
+  if (!item.picture_url) {
+    console.warn('Invalid picture_url for item:', item);
+  }
+
+  return (
+    <TouchableOpacity onPress={() => onPress(item)}>
+      <Animated.View style={[styles.view, { opacity }]}>
+        <Text numberOfLines={1} style={styles.titleText}>
+          {item.title}
+        </Text>
+        {item.picture_url ? (
+          <Image
+            resizeMode="contain"
+            source={{ uri: item.picture_url }}
+            style={styles.image}
+          />
+        ) : (
+          // Fallback: display a default image or placeholder
+          <Image
+            resizeMode="contain"
+            source={require("C:\Users\RYDEL FABELLON\Programming Project\villager-system\backend\storage\app\public\Announcement Images\default_img.jpg")} // Ensure you have a placeholder image in your assets
+            style={styles.image}
+          />
+        )}
+        <Text numberOfLines={3} style={styles.text}>
+          {item.content}
+        </Text>
+      </Animated.View>
+    </TouchableOpacity>
+  );
+});
+
 
 const ScrollViewContainer = ({ data = [], loading = false }) => {
   const scrollX = useRef(new Animated.Value(0)).current;
   const flatListRef = useRef(null);
   const [index, setIndex] = useState(0);
   const [isManualScroll, setIsManualScroll] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
     if (!Array.isArray(data) || data.length === 0) {
@@ -45,72 +82,64 @@ const ScrollViewContainer = ({ data = [], loading = false }) => {
 
   useEffect(() => {
     Animated.timing(scrollX, {
-      toValue: index * width,
+      toValue: index * ITEM_WIDTH,
       duration: 500,
       useNativeDriver: true,
     }).start();
   }, [index]);
 
-  const handleScroll = (event) => {
+  const handleScroll = useCallback((event) => {
     const offsetX = event.nativeEvent.contentOffset.x;
-    const newIndex = Math.round(offsetX / width);
+    const newIndex = Math.round(offsetX / ITEM_WIDTH);
     setIndex(newIndex);
-  };
+  }, []);
 
-  const handleScrollBeginDrag = () => {
+  const handleScrollBeginDrag = useCallback(() => {
     setIsManualScroll(true);
-  };
+  }, []);
 
-  const handleScrollEndDrag = () => {
+  const handleScrollEndDrag = useCallback(() => {
     setIsManualScroll(false);
+  }, []);
+
+  const handleItemPress = (item) => {
+    setSelectedItem(item);
+    setModalVisible(true);
   };
 
-  const renderItem = ({ item, index: itemIndex }) => {
-    const opacity = scrollX.interpolate({
-      inputRange: [
-        (itemIndex - 1) * width,
-        itemIndex * width,
-        (itemIndex + 1) * width,
-      ],
-      outputRange: [0.5, 1, 0.5],
-      extrapolate: "clamp",
-    });
+  const renderItem = useCallback(
+    ({ item, index: itemIndex }) => {
+      const opacity = scrollX.interpolate({
+        inputRange: [
+          (itemIndex - 1) * ITEM_WIDTH,
+          itemIndex * ITEM_WIDTH,
+          (itemIndex + 1) * ITEM_WIDTH,
+        ],
+        outputRange: [0.5, 1, 0.5],
+        extrapolate: "clamp",
+      });
 
-    return (
-      <Animated.View style={[styles.view, { opacity }]}>
-        <Text numberOfLines={1} style={styles.titleText}>
-          {item.title}
-        </Text>
-        {item.picture_url ? (
-          <Image
-            resizeMode="contain"
-            source={{ uri: item.picture_url }}
-            style={styles.image}
-          />
-        ) : null}
-        <Text numberOfLines={3} style={styles.text}>
-          {item.content}
-        </Text>
-      </Animated.View>
-    );
-  };
+      return <ListItem item={item} onPress={handleItemPress} opacity={opacity} />;
+    },
+    [handleItemPress, scrollX]
+  );
 
   const Indicator = () => {
     if (!Array.isArray(data) || data.length === 0) {
-      return null; // Early return if data is invalid or empty
+      return null;
     }
 
     return (
       <View style={styles.indicatorContainer}>
         {data.map((_, i) => {
           const scale = scrollX.interpolate({
-            inputRange: [(i - 1) * width, i * width, (i + 1) * width],
+            inputRange: [(i - 1) * ITEM_WIDTH, i * ITEM_WIDTH, (i + 1) * ITEM_WIDTH],
             outputRange: [0.8, 1.2, 0.8],
             extrapolate: "clamp",
           });
 
           const opacity = scrollX.interpolate({
-            inputRange: [(i - 1) * width, i * width, (i + 1) * width],
+            inputRange: [(i - 1) * ITEM_WIDTH, i * ITEM_WIDTH, (i + 1) * ITEM_WIDTH],
             outputRange: [0.3, 1, 0.3],
             extrapolate: "clamp",
           });
@@ -141,10 +170,45 @@ const ScrollViewContainer = ({ data = [], loading = false }) => {
         )}
         onScrollBeginDrag={handleScrollBeginDrag}
         onScrollEndDrag={handleScrollEndDrag}
-        snapToInterval={width} // Ensure this matches the item width
-        decelerationRate="fast" // Adjust deceleration rate for smoother scroll
+        snapToInterval={ITEM_WIDTH}
+        decelerationRate="fast"
+        initialNumToRender={10}
+        maxToRenderPerBatch={10}
+        getItemLayout={(data, index) => ({
+          length: ITEM_WIDTH,
+          offset: ITEM_WIDTH * index,
+          index,
+        })}
       />
+
       <Indicator />
+
+      <Modal
+        visible={modalVisible}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.modalContainer}>
+          {selectedItem && (
+            <View style={styles.modalContent}>
+              <Text style={styles.modalTitle}>{selectedItem.title}</Text>
+              <Image
+                resizeMode="contain"
+                source={{ uri: selectedItem.picture_url }}
+                style={styles.modalImage}
+              />
+              <Text style={styles.modalText}>{selectedItem.content}</Text>
+              <TouchableOpacity
+                style={styles.closeButton}
+                onPress={() => setModalVisible(false)}
+              >
+                <Text style={styles.closeButtonText}>Close</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -152,13 +216,14 @@ const ScrollViewContainer = ({ data = [], loading = false }) => {
 const styles = StyleSheet.create({
   scrollContainer: {
     width: "90%",
-    height: 300,
+    height: ITEM_HEIGHT,
     justifyContent: "center",
     alignItems: "center",
     marginTop: 10,
   },
   view: {
-    width: width, // Ensure this matches the snapToInterval and item width
+    width: ITEM_WIDTH,
+    height: 275,
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 20,
@@ -199,6 +264,44 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     backgroundColor: "#1A2902",
     marginHorizontal: 5,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.5)",
+  },
+  modalContent: {
+    width: "90%",
+    padding: 20,
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    alignItems: "center",
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginBottom: 10,
+  },
+  modalImage: {
+    width: "100%",
+    height: 200,
+    marginBottom: 10,
+    borderRadius: 10,
+  },
+  modalText: {
+    fontSize: 16,
+    marginBottom: 20,
+    textAlign: "center",
+  },
+  closeButton: {
+    padding: 10,
+    backgroundColor: colors.primary,
+    borderRadius: 5,
+  },
+  closeButtonText: {
+    color: "#fff",
+    fontWeight: "bold",
   },
 });
 

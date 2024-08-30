@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axiosClient from "../utils/axios";
+import axiosClient from "../../utils/axios";
 
 const usePermitRequest = () => {
   const [loading, setLoading] = useState(false);
@@ -33,6 +33,8 @@ const usePermitRequest = () => {
           "Content-Type": "multipart/form-data",
         },
       });
+
+      console.log(response.data.message);
 
       setSuccessMessage(response.data.message);
     } catch (error) {

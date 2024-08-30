@@ -7,6 +7,7 @@ use App\Http\Controllers\BillController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\HouseController;
+use App\Http\Controllers\PermitRequestController;
 use App\Http\Controllers\ResidentController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserController;
@@ -91,6 +92,9 @@ Route::middleware('auth:sanctum')->group(function () {
     //transaction routes (monthly due bills)
     Route::post('/bills/pay-edit-bill', [TransactionController::class, 'updateBillAndAddPayment']);
     Route::post('/transactions/recent-paid', [TransactionController::class, 'getRecentPaidTransactions']);
+
+    //permit routes
+    Route::post('/permit-requests', [PermitRequestController::class, 'store']);
 });
 
 //booking routes (avaialable to the public)

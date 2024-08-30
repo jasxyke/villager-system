@@ -20,7 +20,7 @@ import TabsGradient from "../../components/gradients/TabsGradient";
 
 const PermitForm = ({ setShowPermitForm }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
-
+  const [selectedImage, setSelectedImage] = useState(null);
   const {
     squareMeters,
     handleSquareMetersChange,
@@ -94,9 +94,10 @@ const PermitForm = ({ setShowPermitForm }) => {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.mainContainer}>
+    <View style={styles.mainContainer}>
       <TabsGradient />
-      <View style={styles.container}>
+      <ScrollView className="mb-10" contentContainerStyle={styles.container}>
+        <View></View>
         <Text style={styles.title}>Request Form</Text>
 
         {/* Display success and error messages */}
@@ -206,8 +207,8 @@ const PermitForm = ({ setShowPermitForm }) => {
             </TouchableOpacity>
           </View>
         </Modal>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 };
 
@@ -220,6 +221,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     backgroundColor: colors.primary,
     padding: 20,
+    paddingBottom: 60,
     borderRadius: 25,
   },
   title: {

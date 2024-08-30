@@ -1,12 +1,7 @@
 import React from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  FlatList,
-} from "react-native";
+import { FlatList, StyleSheet, Text, View } from "react-native";
 import { colors } from "../../../styles/colors";
+import TabsGradient from "../../../components/gradients/TabsGradient";
 
 const PermitRequests = () => {
   // Example permit requests data
@@ -57,14 +52,16 @@ const PermitRequests = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Permit Requests</Text>
-      <FlatList
-        data={permitRequests}
-        renderItem={renderItem}
-        keyExtractor={(item, index) => `permit-${index}`}
-        contentContainerStyle={styles.permitRequestsList}
-      />
+    <View style={{ flex: 1 }}>
+      <TabsGradient />
+      <View style={styles.container}>
+        <FlatList
+          data={permitRequests}
+          renderItem={renderItem}
+          keyExtractor={(item, index) => `permit-${index}`}
+          contentContainerStyle={styles.permitRequestsList}
+        />
+      </View>
     </View>
   );
 };

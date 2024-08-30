@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Alert } from "react-native";
 
-export const usePermitFormLogic = (setIsProcessing) => {
+export const usePermitFormLogic = () => {
   const [purpose, setPurpose] = useState("");
   const [squareMeters, setSquareMeters] = useState("");
   const [images, setImages] = useState([]);

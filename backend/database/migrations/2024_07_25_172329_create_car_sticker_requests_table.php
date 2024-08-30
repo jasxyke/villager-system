@@ -16,7 +16,8 @@ return new class extends Migration
             $table->foreignId('resident_id')->constrained('residents');
             $table->string('car_model');
             $table->string('car_plate_number');
-            $table->enum('request_status',['pending','approved','rejected']);
+            $table->enum('request_status',['pending','approved',
+            'rejected','in_progress','claimed']);
             $table->date('application_date');
             $table->date('approval_date')->nullable();
             $table->text('note')->nullable();

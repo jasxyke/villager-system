@@ -1,87 +1,60 @@
+import { router } from "expo-router";
 import React, { useState } from "react";
 import {
   SafeAreaView,
-  View,
-  Text,
   StyleSheet,
+  Text,
   TouchableOpacity,
-  ScrollView,
+  View,
 } from "react-native";
-import TabsGradient from "../../components/gradients/TabsGradient";
 import AppHeader from "../../components/common/AppHeader";
-import { colors } from "../../styles/colors";
-import PermitForm from "../../components/forms/PermitFormPage";
 import PaymentHistory from "../../components/forms/PaymentHistory"; // Ensure the path is correct
+import TabsGradient from "../../components/gradients/TabsGradient";
 import PermitRequests from "../../components/Screens/Permits/PermitRequests";
+import { colors } from "../../styles/colors";
 
 const Permits = () => {
-  const [showPermitForm, setShowPermitForm] = useState(false);
   const [showPaymentHistory, setShowPaymentHistory] = useState(false);
   const [showRequests, setShowRequests] = useState(true);
 
   const handleShowRequests = () => {
-    setShowPermitForm(false);
-    setShowPaymentHistory(false);
-    setShowRequests(true);
+    router.navigate("../permits/requests");
   };
 
   const handleShowPermitForm = () => {
-    setShowRequests(false);
-    setShowPaymentHistory(false);
-    setShowPermitForm(true);
+    router.navigate("../forms/permit-form");
   };
 
   const handleShowPayment = () => {
-    setShowRequests(false);
-    setShowPermitForm(false);
-    setShowPaymentHistory(true);
+    router.navigate("../permits/history");
   };
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <View style={styles.safeArea}>
       <TabsGradient />
       <AppHeader />
       <View style={styles.content}>
-        {!showPermitForm ? (
-          <>
-            <TouchableOpacity
-              style={[styles.button, styles.requestButton]}
-              onPress={handleShowPermitForm}
-            >
-              <Text style={styles.buttonText}>Request a Permit</Text>
-            </TouchableOpacity>
+        <>
+          <Text style={styles.title}>House Permits</Text>
+          <TouchableOpacity
+            style={[styles.button]}
+            onPress={handleShowPermitForm}
+          >
+            <Text style={styles.buttonText}>Request a Permit</Text>
+          </TouchableOpacity>
 
-            <TouchableOpacity
-              style={[styles.button, styles.pendingButton]}
-              onPress={handleShowRequests}
-            >
-              <Text style={styles.buttonText}>View Pending Requests</Text>
-            </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.button]}
+            onPress={handleShowRequests}
+          >
+            <Text style={styles.buttonText}>Pending Requests</Text>
+          </TouchableOpacity>
 
-            <TouchableOpacity
-              style={[styles.button, styles.paymentHistoryButton]}
-              onPress={handleShowPayment}
-            >
-              <Text style={styles.buttonText}>View Payment History</Text>
-            </TouchableOpacity>
-          </>
-        ) : (
-          <ScrollView>
-            <PermitForm setShowPermitForm={setShowPermitForm} />
-          </ScrollView>
-        )}
-
-        <PermitRequests
-          visible={showRequests}
-          onClose={() => setShowRequests(false)}
-        />
-
-        {/* Payment History Component */}
-        <PaymentHistory
-          visible={showPaymentHistory}
-          onClose={() => setShowPaymentHistory(false)}
-        />
+          <TouchableOpacity style={[styles.button]} onPress={handleShowPayment}>
+            <Text style={styles.buttonText}>Payment History</Text>
+          </TouchableOpacity>
+        </>
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -91,13 +64,27 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    padding: 20,
+    padding: 25,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: colors.white,
+    marginBottom: 30,
   },
   button: {
-    padding: 10,
-    borderRadius: 5,
+    backgroundColor: colors.primary, // Adjust color to match your theme
+    paddingVertical: 15,
+    paddingHorizontal: 30,
+    borderRadius: 10,
+    marginBottom: 20,
+    width: "100%",
     alignItems: "center",
-    marginBottom: 10,
+  },
+  buttonText: {
+    color: colors.white,
+    fontSize: 18,
+    fontWeight: "bold",
   },
   requestButton: {
     backgroundColor: colors.primary,
@@ -107,10 +94,6 @@ const styles = StyleSheet.create({
   },
   paymentHistoryButton: {
     backgroundColor: colors.primary, // Adjust if needed
-  },
-  buttonText: {
-    color: colors.white,
-    fontWeight: "bold",
   },
 });
 

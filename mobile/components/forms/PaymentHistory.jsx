@@ -8,9 +8,7 @@ import {
 } from "react-native";
 import { colors } from "../../styles/colors";
 
-const PaymentHistory = ({ visible, onClose }) => {
-  if (!visible) return null;
-
+const PaymentHistory = () => {
   // Example data for payments
   const payments = [
     {
@@ -55,17 +53,12 @@ const PaymentHistory = ({ visible, onClose }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Payment History</Text>
       <FlatList
         data={payments}
         renderItem={renderItem}
         keyExtractor={(item, index) => `payment-${index}`}
         contentContainerStyle={styles.paymentHistoryList}
       />
-
-      <TouchableOpacity style={styles.closeButton} onPress={onClose}>
-        <Text style={styles.buttonText}>Close</Text>
-      </TouchableOpacity>
     </View>
   );
 };

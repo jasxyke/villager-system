@@ -22,7 +22,10 @@ class StorePermitRequestRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'purpose' => 'required|string|max:300',
+            'floorSize' => 'nullable|numeric|between:1,999999.99', 
+            'images.*.uri' => 'required|url',
+            'images.*.description' => 'nullable|string|max:200',
         ];
     }
 }

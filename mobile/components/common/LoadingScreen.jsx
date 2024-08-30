@@ -4,7 +4,7 @@ import TabsGradient from "../gradients/TabsGradient";
 
 const LoadingScreen = () => {
   return (
-    <View className="flex-1 h-full">
+    <View className="flex-1 h-full justify-center items-center">
       <TabsGradient />
       <ActivityIndicator size={"large"} color={"white"} />
     </View>

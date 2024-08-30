@@ -19,9 +19,24 @@ export default {
         oliveGreen: "#50731b",
         olive: "#3c4c24",
         darkerGreen: "#4b633e",
-
+        lightbeige: "#6b7a54",
+        lighterMute: "#d0d8c4 ",
+      },
+      backgroundImage: {
+        greenGradient: "linear-gradient(to bottom, #344C11, #aec09a)",
+      },
+      fontFamily: {
+        roboto: ["Roboto", "sans-serif"],
       },
     },
   },
-  plugins: [],
+  plugins: [
+    function ({ addUtilities }) {
+      addUtilities({
+        ".text-stroke": {
+          "-webkit-text-stroke": "0.5px white",
+        },
+      });
+    },
+  ],
 };

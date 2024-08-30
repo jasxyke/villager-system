@@ -4,22 +4,21 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class PermitPayment extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'permit_id',
+        'permit_request_id',
         'amount',
         'payment_date',
-        'payment_method',
+        'payment_status',
         'transaction_id',
     ];
 
-    public function permit(): BelongsTo
+    public function permitRequest()
     {
-        return $this->belongsTo(Permit::class);
+        return $this->belongsTo(PermitRequest::class, 'permit_request_id');
     }
 }

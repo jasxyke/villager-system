@@ -5,17 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Permit extends Model
+class PermitRequest extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'resident_id',
-        'permit_request_id',
         'permit_type',
         'permit_status',
-        'issue_date',
+        'application_date',
+        'approval_date',
         'expiry_date',
+        'note',
     ];
 
     public function resident()
@@ -23,8 +24,13 @@ class Permit extends Model
         return $this->belongsTo(Resident::class);
     }
 
-    public function permitRequest()
+    public function permitDocuments()
     {
-        return $this->belongsTo(PermitRequest::class);
+        return $this->hasMany(PermitDocument::class);
+    }
+
+    public function permitPayments()
+    {
+        return $this->hasMany(PermitPayment::class);
     }
 }

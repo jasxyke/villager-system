@@ -11,13 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('car_stickers', function (Blueprint $table) {
+        Schema::create('car_sticker_requests', function (Blueprint $table) {
             $table->id();
             $table->foreignId('resident_id')->constrained('residents');
-            $table->foreignId('car_sticker_request_id')->constrained('car_sticker_requests');
-            $table->enum('sticker_status',['active','expired']);
-            $table->date('issue_date');
-            $table->date('expiry_date');
+            $table->string('car_model');
+            $table->string('car_plate_number');
+            $table->enum('request_status',['pending','approved','rejected']);
+            $table->date('application_date');
+            $table->date('approval_date')->nullable();
+            $table->text('note')->nullable();
             $table->timestamps();
         });
     }
@@ -27,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('car_stickers');
+        Schema::dropIfExists('car_sticker_requests');
     }
 };

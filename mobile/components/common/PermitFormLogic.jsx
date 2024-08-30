@@ -5,7 +5,6 @@ export const usePermitFormLogic = () => {
   const [purpose, setPurpose] = useState("");
   const [squareMeters, setSquareMeters] = useState("");
   const [images, setImages] = useState([]);
-
   const handleSquareMetersChange = (value) => {
     setSquareMeters(value);
   };
@@ -23,10 +22,7 @@ export const usePermitFormLogic = () => {
   };
 
   const handleSubmit = () => {
-    if (!validateForm()) {
-      setIsProcessing(false);
-      return;
-    }
+    return validateForm();
 
     const newTransaction = {
       purpose: purpose,
@@ -34,9 +30,7 @@ export const usePermitFormLogic = () => {
       images: images,
     };
 
-    // Perform the submit logic, e.g., sending data to the server
-
-    setIsProcessing(false);
+    // Perform the submit logic, e.g., sending data to the server\
   };
 
   return {

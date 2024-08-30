@@ -10,16 +10,19 @@ import AddAnnouncement from "./AddAnnouncement";
 import ViewAnnouncements from "./ViewAnnouncements";
 import NotifyResidents from "./NotifyResidents";
 import { colors } from "../../utils/colors";
+import AddNotification from "./AddNotification";
 
 const AnnouncementPage = () => {
   const [isAdding, setIsAdding] = useState(true);
   const [isViewing, setIsViewing] = useState(false);
   const [isNotifying, setIsNotifying] = useState(false);
+  const [isAddingNotification, setIsAddingNotification] = useState(false); // New state for AddNotification
 
   const reset = () => {
     setIsAdding(false);
     setIsViewing(false);
     setIsNotifying(false);
+    setIsAddingNotification(false); // Reset new state
   };
   const adding = () => {
     reset();
@@ -35,6 +38,12 @@ const AnnouncementPage = () => {
     reset();
     setIsNotifying(true);
   };
+
+  const addingNotification = () => {
+    reset();
+    setIsAddingNotification(true); // New function to handle AddNotification
+  };
+
   return (
     <div className={styles.mainContainer + " "}>
       <div className="w-full mt-10 ">
@@ -61,17 +70,33 @@ const AnnouncementPage = () => {
             type="button"
             style={{ backgroundColor: isNotifying && colors.primary }}
           />
+          <input
+            className={styles.announcementButton + " text-center"}
+            value={"ADD NOTIFICATION"} // New button for AddNotification
+            onClick={addingNotification}
+            type="button"
+            style={{ backgroundColor: isAddingNotification && colors.primary }}
+          />
         </div>
       </div>
       <div className="flex-1 items-center justify-center mb-10">
         <div className={styles.optionsContainer}>
-          {isAdding ? (
+          {/*{isAdding ? (
             <AddAnnouncement />
           ) : isViewing ? (
             <ViewAnnouncements />
           ) : (
             isNotifying && <NotifyResidents />
-          )}
+          )}*/}
+          {isAdding ? (
+            <AddAnnouncement />
+          ) : isViewing ? (
+            <ViewAnnouncements />
+          ) : isNotifying ? (
+            <NotifyResidents />
+          ) : isAddingNotification ? (
+            <AddNotification /> // New component displayed here
+          ) : null}
         </div>
       </div>
     </div>

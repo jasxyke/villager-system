@@ -46,7 +46,7 @@ const Sticker = () => {
             >
               Completed
             </button>
-            <button
+            {/*<button
               className={`relative flex-1 py-2 px-4 text-center cursor-pointer transition-colors duration-300 ${
                 activeTab === "history"
                   ? "bg-mutedGreen text-black"
@@ -55,7 +55,7 @@ const Sticker = () => {
               onClick={() => setActiveTab("history")}
             >
               Transaction History
-            </button>
+            </button>*/}
           </div>
         </div>
 
@@ -64,7 +64,7 @@ const Sticker = () => {
           {activeTab === "inprogress" && <InProgress />}
           {activeTab === "completed" && <CompletedRequest />}{" "}
           {/* Render CompletedRequest component */}
-          {activeTab === "history" && <StickerHistory />}
+          {/*{activeTab === "history" && <StickerHistory />}*/}
         </div>
       </div>
     </div>

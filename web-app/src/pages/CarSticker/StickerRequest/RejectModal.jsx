@@ -28,19 +28,16 @@ const RejectModal = ({ isOpen, onClose, onSubmit }) => {
           >
             <option value="">Select a reason</option>
             <option value="Incomplete Application">
-              Incomplete Application
+              Incomplete or Incorrect Documentation
             </option>
             <option value="Non-Compliance with Regulations">
-              Non-Compliance with Regulations
+              Outstanding Dues
             </option>
             <option value="Insufficient Justification">
-              Insufficient Justification
-            </option>
-            <option value="Environmental Concerns">
-              Environmental Concerns
+              Expired or Incorrect Registration
             </option>
             <option value="Financial or Legal Issues">
-              Financial or Legal Issues
+              Non-Compliance with HOA Policies
             </option>
             <option value="Other">Other</option>
           </select>

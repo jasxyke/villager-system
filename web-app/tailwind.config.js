@@ -36,6 +36,9 @@ export default {
         ".text-stroke": {
           "-webkit-text-stroke": "0.5px white",
         },
+        ".text-strokeBlack": {
+          "-webkit-text-stroke": "0.5px black",
+        },
       });
     },
   ],

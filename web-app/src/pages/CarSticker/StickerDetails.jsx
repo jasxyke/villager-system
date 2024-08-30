@@ -31,108 +31,128 @@ const StickerDetails = ({ sticker, onBack }) => {
   };
 
   return (
-    <div className="p-6 bg-white border border-gray-300 rounded-lg shadow-lg">
+    <div className="p-6 bg-greenGradient border border-gray-300 rounded-lg shadow-lg">
       <div className="flex items-center justify-between mb-6">
         <FiArrowLeft
-          className="text-2xl text-gray-600 cursor-pointer hover:text-gray-800 transition"
+          className="text-2xl text-white cursor-pointer hover:text-mutedGreen transition"
           onClick={onBack}
           aria-label="Go back"
         />
-        <div className="text-2xl font-bold text-gray-800">
+        <div className="text-2xl font-bold text-white font-roboto px-8">
           Detailed Information
         </div>
       </div>
 
-      <form className="space-y-6">
-        {/* Applicant Information */}
-        <fieldset className="bg-gray-50 p-5 rounded-lg shadow-sm border border-gray-200">
-          <legend className="text-xl font-semibold text-gray-700 mb-4">
-            Applicant Information
-          </legend>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {[
-              { label: "Name", value: sticker.name },
-              { label: "Block", value: sticker.address },
-              { label: "Lot", value: sticker.address },
-              { label: "Phone Number", value: sticker.phone },
-              { label: "Email Address", value: sticker.email },
-            ].map(({ label, value }) => (
-              <div key={label} className="flex items-center">
-                <label className="w-1/3 font-semibold text-gray-600">
-                  {label}:
-                </label>
-                <div className="w-2/3 text-gray-800">{value || "N/A"}</div>
-              </div>
-            ))}
-          </div>
-        </fieldset>
-
-        {/* Vehicle Information */}
-        <fieldset className="bg-gray-50 p-5 rounded-lg shadow-sm border border-gray-200">
-          <legend className="text-xl font-semibold text-gray-700 mb-4">
-            Vehicle Information
-          </legend>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {[
-              { label: "Model", value: sticker.vehicleModel },
-              { label: "License Plate Number", value: sticker.licensePlate },
-            ].map(({ label, value }) => (
-              <div key={label} className="flex items-center">
-                <label className="w-1/3 font-semibold text-gray-600">
-                  {label}:
-                </label>
-                <div className="w-2/3 text-gray-800">{value || "N/A"}</div>
-              </div>
-            ))}
-          </div>
-        </fieldset>
-
-        {/* Request Details */}
-        <fieldset className="bg-gray-50 p-5 rounded-lg shadow-sm border border-gray-200">
-          <legend className="text-xl font-semibold text-gray-700 mb-4">
-            Request Details
-          </legend>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {[
-              { label: "Request Date", value: sticker.requestDate },
-              { label: "Status", value: sticker.status },
-            ].map(({ label, value }) => (
-              <div key={label} className="flex items-center">
-                <label className="w-1/3 font-semibold text-gray-600">
-                  {label}:
-                </label>
-                <div className="w-2/3 text-gray-800">{value || "N/A"}</div>
-              </div>
-            ))}
-          </div>
-        </fieldset>
-
-        {/* Additional Information */}
-        <fieldset className="bg-gray-50 p-5 rounded-lg shadow-sm border border-gray-200">
-          <legend className="text-xl font-semibold text-gray-700 mb-4">
-            Additional Information
-          </legend>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="w-full">
-              <div className="mb-2 text-gray-800 font-semibold">Documents</div>
-              <div className="flex flex-wrap gap-4">
-                {sticker.uploadedImages &&
-                  sticker.uploadedImages.map((image, index) => (
-                    <div
-                      key={index}
-                      className="relative cursor-pointer w-32 h-32 overflow-hidden border border-gray-300 rounded-md shadow-sm transition-transform transform hover:scale-105"
-                      onClick={() => handleImageClick(index)}
-                      aria-label={`Document ${index + 1}`}
-                    >
-                      <img
-                        src={image}
-                        alt={`Document ${index + 1}`}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                  ))}
-              </div>
+      <form className="space-y-6 p-6 rounded-xl">
+        <div className="flex flex-col md:flex-row gap-6">
+          {/* Request Details */}
+          <fieldset className="flex-1 p-5 rounded-lg shadow-sm border bg-green bg-opacity-80">
+            <legend className="text-xl font-semibold text-white bg-green p-2 font-roboto border">
+              Request Details
+            </legend>
+            <div className="space-y-4">
+              {[
+                { label: "Request Date", value: sticker.requestDate },
+                { label: "Status", value: sticker.status },
+              ].map(({ label, value }) => (
+                <div key={label} className="flex items-center">
+                  <label className="w-1/3 font-semibold text-white">
+                    {label}:
+                  </label>
+                  <div className="w-2/3 text-white">{value || "N/A"}</div>
+                </div>
+              ))}
             </div>
+          </fieldset>
+
+          {/* Vehicle Information */}
+          <fieldset className="flex-1 p-5 rounded-lg shadow-sm border bg-green bg-opacity-80">
+            <legend className="text-xl font-semibold text-white bg-green p-2 font-roboto border">
+              Vehicle Information
+            </legend>
+            <div className="space-y-4">
+              {[
+                { label: "Model", value: sticker.vehicleModel },
+                { label: "License Plate Number", value: sticker.licensePlate },
+              ].map(({ label, value }) => (
+                <div key={label} className="flex items-center">
+                  <label className="w-1/3 font-semibold text-white">
+                    {label}:
+                  </label>
+                  <div className="w-2/3 text-white">{value || "N/A"}</div>
+                </div>
+              ))}
+            </div>
+          </fieldset>
+        </div>
+
+        <div className="flex flex-col md:flex-row gap-6">
+          {/* Resident Information */}
+          <fieldset className="flex-1 bg-green bg-opacity-80 p-5 rounded-lg shadow-sm border">
+            <legend className="text-xl font-semibold text-white bg-green p-2 font-roboto border">
+              Resident Information
+            </legend>
+            <div className="space-y-4">
+              {[
+                { label: "Name", value: sticker.name },
+                { label: "Block", value: sticker.block },
+                { label: "Lot", value: sticker.lot },
+                { label: "Phone Number", value: sticker.phone },
+                { label: "Email Address", value: sticker.email },
+              ].map(({ label, value }) => (
+                <div key={label} className="flex items-center">
+                  <label className="w-1/3 font-semibold text-white">
+                    {label}:
+                  </label>
+                  <div className="w-2/3 text-white">{value || "N/A"}</div>
+                </div>
+              ))}
+            </div>
+          </fieldset>
+
+          {/* Payment Information */}
+          <fieldset className="flex-1 bg-green bg-opacity-80 p-5 rounded-lg shadow-sm border border-gray-200">
+            <legend className="text-xl font-semibold text-white bg-green p-2 font-roboto border">
+              Payment Information
+            </legend>
+            <div className="space-y-4">
+              {[
+                { label: "Sticker Fee", value: sticker.stickerFee },
+                { label: "Payment Status", value: sticker.paymentStatus },
+                { label: "Payment Method", value: sticker.paymentMethod },
+              ].map(({ label, value }) => (
+                <div key={label} className="flex items-center">
+                  <label className="w-1/3 font-semibold text-white">
+                    {label}:
+                  </label>
+                  <div className="w-2/3 text-white">{value || "N/A"}</div>
+                </div>
+              ))}
+            </div>
+          </fieldset>
+        </div>
+
+        {/* Documents */}
+        <fieldset className="p-5 rounded-lg shadow-sm border bg-green bg-opacity-80">
+          <legend className="text-xl font-semibold text-white bg-green p-2 font-roboto border">
+            Documents
+          </legend>
+          <div className="flex flex-wrap gap-4">
+            {sticker.uploadedImages &&
+              sticker.uploadedImages.map((image, index) => (
+                <div
+                  key={index}
+                  className="relative cursor-pointer w-32 h-32 overflow-hidden border border-gray-300 rounded-md shadow-sm transition-transform transform hover:scale-105"
+                  onClick={() => handleImageClick(index)}
+                  aria-label={`Document ${index + 1}`}
+                >
+                  <img
+                    src={image}
+                    alt={`Document ${index + 1}`}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              ))}
           </div>
         </fieldset>
       </form>

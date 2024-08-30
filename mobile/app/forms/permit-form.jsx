@@ -12,14 +12,13 @@ import {
 } from "react-native";
 import CustomButton from "../../components/common/CustomButton";
 import { usePermitFormLogic } from "../../components/common/PermitFormLogic";
+import usePermitRequest from "../../hooks/permits/usePermitRequest"; // Import the custom hook
 import { DOWNLOADS, PROFILE, TYPE } from "../../constants/icons";
 import { colors } from "../../styles/colors";
 import Modal from "react-native-modal";
 import TabsGradient from "../../components/gradients/TabsGradient";
 
 const PermitForm = ({ setShowPermitForm }) => {
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [selectedImage, setSelectedImage] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const {
@@ -30,7 +29,10 @@ const PermitForm = ({ setShowPermitForm }) => {
     setImages,
     purpose,
     setPurpose,
-  } = usePermitFormLogic(setIsProcessing);
+  } = usePermitFormLogic();
+
+  const { loading, error, successMessage, submitPermitRequest } =
+    usePermitRequest(); // Use the custom hook here
 
   const handleImageUpload = async () => {
     const permissionResult =
@@ -76,9 +78,19 @@ const PermitForm = ({ setShowPermitForm }) => {
     setSelectedImage(null);
   };
 
-  const handleSubmitRequest = () => {
-    setIsProcessing(true);
-    handleSubmit();
+  const handleSubmitRequest = async () => {
+    if (!handleSubmit()) {
+      return;
+    }
+    const documents = images.map((img) => ({
+      uri: img.uri,
+      description: img.description,
+    }));
+    await submitPermitRequest({
+      purpose,
+      floorSize: squareMeters,
+      documents,
+    });
   };
 
   return (
@@ -86,6 +98,13 @@ const PermitForm = ({ setShowPermitForm }) => {
       <TabsGradient />
       <View style={styles.container}>
         <Text style={styles.title}>Request Form</Text>
+
+        {/* Display success and error messages */}
+        {successMessage && (
+          <Text style={styles.successMessage}>{successMessage}</Text>
+        )}
+        {error && <Text style={styles.errorMessage}>{error}</Text>}
+
         <View style={styles.row}>
           <View style={styles.logoContainer}>
             <Image source={TYPE} style={styles.logo} />
@@ -163,7 +182,7 @@ const PermitForm = ({ setShowPermitForm }) => {
 
         <View style={styles.buttonContainer}>
           <CustomButton
-            title={isProcessing ? "Processing" : "Submit Request"}
+            title={loading ? "Processing" : "Submit Request"}
             onPress={handleSubmitRequest}
           />
           <CustomButton
@@ -329,6 +348,16 @@ const styles = StyleSheet.create({
   },
   closeButtonText: {
     color: colors.white,
+  },
+  successMessage: {
+    color: colors.green,
+    textAlign: "center",
+    marginVertical: 10,
+  },
+  errorMessage: {
+    color: "red",
+    textAlign: "center",
+    marginVertical: 10,
   },
 });
 

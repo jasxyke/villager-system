@@ -27,7 +27,7 @@ class PermitRequestController extends Controller
         $permitRequest = PermitRequest::create([
             'resident_id' => $user->resident->id, // assuming the user is a resident
             'purpose' => $validated['purpose'],
-            'floor_size' => $validated['floor_size'],
+            'floor_size' => $validated['floorSize'],
             'permit_status' => 'pending',
             'application_date' => now(),
             'note' => $validated['note'],

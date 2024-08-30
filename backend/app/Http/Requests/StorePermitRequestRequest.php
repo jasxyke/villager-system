@@ -23,7 +23,7 @@ class StorePermitRequestRequest extends FormRequest
     {
         return [
             'purpose' => 'required|string|max:300',
-            'squareMeters' => 'nullable|numeric|between:1,999999.99', 
+            'floorSize' => 'nullable|numeric|between:1,999999.99', 
             'images.*.uri' => 'required|url',
             'images.*.description' => 'nullable|string|max:200',
         ];

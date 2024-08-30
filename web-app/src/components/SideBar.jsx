@@ -10,6 +10,11 @@ import logoutIcon from "../assets/icons/Logout.png";
 import styles from "./SideBar.module.css";
 import { useAuthContext } from "../contexts/AuthContext";
 import HouseIcon from "../assets/icons/temporaryhouse.png";
+import { CiMemoPad } from "react-icons/ci";
+import { CiReceipt } from "react-icons/ci";
+import { FiFileText } from "react-icons/fi";
+import { CiStickyNote } from "react-icons/ci";
+import { FaCar } from "react-icons/fa6";
 
 const SideBar = () => {
   const { logout } = useAuthContext();
@@ -43,9 +48,19 @@ const SideBar = () => {
             <img src={billsIcon} alt="Bills" /> Collections
           </NavLink>
         </li>
-        <li>
+        {/*<li>
           <NavLink to="/files/house-permit">
             <img src={filesIcon} alt="Files" /> Files
+          </NavLink>
+        </li>*/}
+        <li>
+          <NavLink to="/permits">
+            <CiMemoPad className="text-4xl mr-2" /> Permits
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to="/sticker">
+            <FaCar className="text-3xl mr-2" /> Car Stickers
           </NavLink>
         </li>
         <li>
@@ -61,6 +76,16 @@ const SideBar = () => {
         <li>
           <NavLink to="/announcements">
             <img src={announcementsIcon} alt="Announcements" /> Announcements
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to="/reports">
+            <FiFileText className="text-3xl mr-2" /> Reports
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to="/guidelines">
+            <CiReceipt className="text-4xl mr-2" /> Rules & Regulations
           </NavLink>
         </li>
         <li className="bg-transparent">

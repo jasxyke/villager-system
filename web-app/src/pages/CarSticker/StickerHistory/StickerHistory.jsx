@@ -7,11 +7,11 @@ import HistoryTable from "./HistoryTable";
 const StickerHistory = () => {
   return (
     <div className="w-full max-w-7xl">
-      <div className="flex items-center justify-between border-t py-4">
+      {/* <div className="flex items-center justify-between border-t py-4">
         <StickerFilter />
         <StatusFilter />
         <SearchBar />
-      </div>
+      </div> */}
       <div className="mt-2">
         <HistoryTable />
       </div>

@@ -34,7 +34,7 @@ const Sticker = () => {
               }`}
               onClick={() => setActiveTab("inprogress")}
             >
-              In Progress
+              To Pay
             </button>
             <button
               className={`relative flex-1 py-2 px-4 text-center cursor-pointer transition-colors duration-300 ${
@@ -44,7 +44,7 @@ const Sticker = () => {
               }`}
               onClick={() => setActiveTab("completed")}
             >
-              Completed
+              To Claim
             </button>
             <button
               className={`relative flex-1 py-2 px-4 text-center cursor-pointer transition-colors duration-300 ${
@@ -54,7 +54,7 @@ const Sticker = () => {
               }`}
               onClick={() => setActiveTab("history")}
             >
-              Transaction History
+              Completed
             </button>
           </div>
         </div>

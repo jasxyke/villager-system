@@ -17,9 +17,33 @@ class BookingSeeder extends Seeder
     {
         $booking = Booking::create([
             'amenity_id'=>'1',
-            'booking_date'=>'2024-08-27',
+            'booking_date'=>'2024-08-31',
             'start_time'=>'13:00',
             'end_time'=>'16:00',
+            'full_name'=>'Jaspher',
+            'email'=>'jasxyke24.jxc@gmail.com',
+            'contact_number'=>'09487834861',
+            'booking_status'=>'reserved',
+            'payment_status'=>'paid'
+        ]);
+
+        Booking::create([
+            'amenity_id'=>'2',
+            'booking_date'=>'2024-08-31',
+            'start_time'=>'15:00',
+            'end_time'=>'18:00',
+            'full_name'=>'Jaspher',
+            'email'=>'jasxyke24.jxc@gmail.com',
+            'contact_number'=>'09487834861',
+            'booking_status'=>'reserved',
+            'payment_status'=>'paid'
+        ]);
+
+        Booking::create([
+            'amenity_id'=>'2',
+            'booking_date'=>'2024-09-02',
+            'start_time'=>'15:00',
+            'end_time'=>'18:00',
             'full_name'=>'Jaspher',
             'email'=>'jasxyke24.jxc@gmail.com',
             'contact_number'=>'09487834861',

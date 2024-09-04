@@ -9,7 +9,7 @@ import {
   SEX_TYPES,
 } from "../../data/contants";
 
-const AddHouse = ({ onAdd, onClose }) => {
+const AddHouse = ({ onAdd, onClose, loading }) => {
   const [blockNumber, setBlockNumber] = useState(BLOCKS[0]);
   const [lotNumber, setLotNumber] = useState("");
   const [houseType, setHouseType] = useState(HouseTypes[0].value);

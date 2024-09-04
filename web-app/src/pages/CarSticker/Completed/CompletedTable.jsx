@@ -28,19 +28,23 @@ const CompletedTable = () => {
               <div className="flex-1 p-2 text-center">Block and Lot</div>
               <div className="flex-1 p-2 text-center">Completion Date</div>
               <div className="flex-1 p-2 text-center">Status</div>
+              <div className="flex-1 p-2 text-center">Action</div>
             </div>
           </div>
           <div>
             {sampleData.map((sticker) => (
               <div
                 key={sticker.id}
-                className="flex border mb-2 hover:bg-darkerGreen cursor-pointer text-white"
+                className="flex border mb-2 p-4 hover:bg-darkerGreen cursor-pointer text-white"
                 onClick={() => handleRowClick(sticker)}
               >
                 <div className="flex-1 p-2 text-center">{sticker.id}</div>
                 <div className="flex-1 p-2 text-center">{sticker.house}</div>
                 <div className="flex-1 p-2 text-center">{sticker.date}</div>
-                <div className="flex-1 p-2 text-center">{sticker.status}</div>
+                <div className="flex-1 p-2 text-center">To Claim</div>
+                <button className="flex-1 p-2 text-center bg-mutedGreen rounded-lg w-12">
+                  REVIEW
+                </button>
               </div>
             ))}
           </div>

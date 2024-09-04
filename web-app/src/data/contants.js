@@ -11,6 +11,12 @@ export const ROLE_TYPES_RESIDENT = [
   { text: "Seller", value: "seller" },
 ];
 
+export const ROLE_TYPES_HOUSE = [
+  { text: "Family Member", value: "member" },
+  { text: "Tenant", value: "tenant" },
+  { text: "Seller", value: "seller" },
+];
+
 export const AnnouncementTypes = [
   { text: "General Info", value: "general_info" },
   { text: "Event", value: "event" },

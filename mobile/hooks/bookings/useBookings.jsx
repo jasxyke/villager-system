@@ -49,9 +49,10 @@ const useBookings = () => {
       console.log(response);
 
       setSuccess(response.data.message);
-      return response.data.booking;
+      return response.data.message;
     } catch (err) {
       setError(err.response?.data?.message || "An error occurred");
+      return err.response.data.message;
     } finally {
       setLoading(false);
     }

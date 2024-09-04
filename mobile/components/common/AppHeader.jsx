@@ -23,10 +23,10 @@ const AppHeader = ({ addStyles }) => {
       <NavigationModal visible={visibleMenu} onClose={handleCloseMenu} />
       <AppLogo width={50} height={50} />
       <View className="flex-row gap-x-3 mr-3">
-        <View className="">
+        {/* <View className="">
           <Image source={BELL} style={styles.bellStyle} />
           <Text style={styles.notificationCount}>1</Text>
-        </View>
+        </View> */}
         <Pressable onPress={openMenu}>
           <Image source={HAMBURGER} style={styles.hamburgerMenu} />
         </Pressable>

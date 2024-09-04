@@ -37,12 +37,15 @@ const useHouses = () => {
 
   const addHouse = async (houseData, onSuccess, onError) => {
     try {
+      setLoading(true);
       const res = await axiosClient.post("/houses", houseData);
       onSuccess(res.data.message, res.data.house);
       console.log(res.data);
     } catch (error) {
       console.log(error);
       onError(error.response.data.message);
+    } finally {
+      setLoading(false);
     }
   };
 

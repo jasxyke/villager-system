@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 const ApprovedModal = ({ isOpen, onClose, onConfirm }) => {
   const [fees, setFees] = useState([
-    { label: "Permit Fee", amount: "" },
+    { label: "Car Sticker Fee", amount: "" },
     { label: "Processing Fee", amount: "" },
   ]);
   const [comment, setComment] = useState("");
@@ -32,7 +32,9 @@ const ApprovedModal = ({ isOpen, onClose, onConfirm }) => {
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
       <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
         <h2 className="text-xl font-semibold mb-4">Approval Confirmation</h2>
-        <p className="mb-4">Please enter the fees for this permit:</p>
+        <p className="mb-4">
+          Please enter the fees for this Car Sticker Request:
+        </p>
         <ul className="mb-4">
           {fees.map((fee, index) => (
             <li key={index} className="flex justify-between items-center mb-2">

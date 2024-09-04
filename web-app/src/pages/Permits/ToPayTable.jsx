@@ -1,8 +1,7 @@
 import React from "react";
-import PermitDetails from "../PermitDetails";
-import SamplePermits from "../SamplePermits";
-
-const InProgressTable = ({
+import PermitDetails from "./PermitDetails";
+import SamplePermits from "./SamplePermits";
+const ToPayTable = ({
   onRowClick,
   detailsView,
   selectedPermit,
@@ -33,7 +32,7 @@ const InProgressTable = ({
                 <div className="flex-1 p-2 text-center">Jaspher Xyke</div>
                 <div className="flex-1 p-2 text-center">2024-08-31</div>
                 <div className="flex-1 p-2 text-center">House Permit</div>
-                <div className="flex-1 p-2 text-center">To Claim</div>
+                <div className="flex-1 p-2 text-center">To Pay</div>
                 <div className="flex-1 p-2 text-center">
                   <button className="bg-secondary text-white px-4 py-2 rounded hover:bg-greyGreen transition-colors">
                     Review
@@ -48,4 +47,4 @@ const InProgressTable = ({
   );
 };
 
-export default InProgressTable;
+export default ToPayTable;

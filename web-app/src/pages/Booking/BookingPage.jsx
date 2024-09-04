@@ -49,7 +49,8 @@ const BookingPage = () => {
           onRequestClose={() => setIsEditModalOpen(false)}
         />
         <div className={styles.searchBarContainer + " flex justify-between"}>
-          <SearchBar />
+          {/* <SearchBar /> */}
+          <div></div>
           <button
             onClick={() => setIsEditModalOpen(true)}
             className="bg-green rounded-md text-white p-2"

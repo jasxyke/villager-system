@@ -78,7 +78,7 @@ const Houses = () => {
               className="flex items-center px-4 py-2 bg-primary text-white rounded-xl h-14 w-52 text-lg  hover:bg-[var(--secondary)]"
             >
               <IoAddCircleOutline size={30} color="white" className="mr-3" />
-              ADD HOUSE
+              {loading ? "Adding house..." : "ADD HOUSE"}
               {/*Add House*/}
             </button>
           </div>
@@ -99,6 +99,7 @@ const Houses = () => {
         <AddHouse
           onAdd={handleAddHouse}
           onClose={() => setAddHouseVisible(false)}
+          loading={loading}
         />
       )}
     </div>

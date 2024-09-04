@@ -27,32 +27,77 @@ const Booking = () => {
   const [showStartTimePicker, setShowStartTimePicker] = useState(false);
   const [showEndTimePicker, setShowEndTimePicker] = useState(false);
   const [showForm, setShowForm] = useState(false);
-
+  const [selectedMonth, setSelectedMonth] = useState(new Date());
+  const [markedDates, setMarkedDates] = useState({});
   const today = new Date().toISOString().split("T")[0];
 
   const { fetchBookings, bookings } = useBookings();
 
+  // Fetch bookings when selected amenity or month changes
   useEffect(() => {
-    if (selectedAmenity) {
+    if (selectedAmenity && selectedMonth) {
       fetchBookings(
-        new Date().getFullYear(),
-        new Date().getMonth() + 1,
+        selectedMonth.getFullYear(),
+        selectedMonth.getMonth() + 1,
         selectedAmenity
       );
     }
-  }, [selectedAmenity]);
+  }, [selectedAmenity, selectedMonth]);
+
+  // Update marked dates whenever bookings or selectedDate changes
+  useEffect(() => {
+    const newMarkedDates = bookings.reduce((acc, booking) => {
+      const date = booking.booking_date;
+      if (!acc[date]) {
+        acc[date] = { marked: true, dotColor: "white" };
+      }
+      return acc;
+    }, {});
+
+    if (selectedDate) {
+      newMarkedDates[selectedDate] = {
+        ...newMarkedDates[selectedDate],
+        selected: true,
+        selectedColor: colors.secondary,
+        dotColor: colors.white,
+      };
+    }
+
+    setMarkedDates(newMarkedDates);
+  }, [bookings, selectedDate]);
+
+  // Update reserved times whenever selected date changes
+  useEffect(() => {
+    if (selectedDate) {
+      const times = bookings
+        .filter((booking) => booking.booking_date === selectedDate)
+        .map((booking) => {
+          const formattedStartTime = formatTime(booking.start_time);
+          const formattedEndTime = formatTime(booking.end_time);
+          return `${formattedStartTime} - ${formattedEndTime}`;
+        });
+      setReservedTimes(times);
+    }
+  }, [bookings, selectedDate]);
+
+  const handleMonthChange = (date) => {
+    setSelectedMonth(new Date(date.dateString));
+  };
 
   useEffect(() => {
     if (selectedAmenity === null) {
       setSelectedAmenity(1);
+    }
+    if (selectedMonth === null) {
+      setSelectedMonth(new Date());
     }
   }, []);
 
   const onRefresh = () => {
     setRefreshing(true);
     fetchBookings(
-      new Date().getFullYear(),
-      new Date().getMonth() + 1,
+      selectedMonth.getFullYear(),
+      selectedMonth.getMonth() + 1,
       selectedAmenity
     );
     setTimeout(() => {
@@ -68,32 +113,7 @@ const Booking = () => {
 
   const handleDateSelection = (day) => {
     setSelectedDate(day.dateString);
-    const times = bookings
-      .filter((booking) => booking.booking_date === day.dateString)
-      .map((booking) => {
-        const formattedStartTime = formatTime(booking.start_time);
-        const formattedEndTime = formatTime(booking.end_time);
-        return `${formattedStartTime} - ${formattedEndTime}`;
-      });
-    setReservedTimes(times);
   };
-
-  const markedDates = bookings.reduce((acc, booking) => {
-    const date = booking.booking_date;
-    if (!acc[date]) {
-      acc[date] = { marked: true, dotColor: "white" };
-    }
-    return acc;
-  }, {});
-
-  if (selectedDate) {
-    markedDates[selectedDate] = {
-      ...markedDates[selectedDate],
-      selected: true,
-      selectedColor: colors.secondary,
-      dotColor: colors.white,
-    };
-  }
 
   const handleStartTimeConfirm = (time) => {
     setStartTime(time);
@@ -139,13 +159,10 @@ const Booking = () => {
     return true;
   };
 
-  // Function to reset booking states
   const resetBooking = () => {
     setSelectedAmenity(null);
     setSelectedDate(null);
     setReservedTimes([]);
-    // setStartTime(new Date());
-    // setEndTime(new Date());
   };
 
   const handleProceedToForm = () => {
@@ -162,7 +179,6 @@ const Booking = () => {
   return (
     <View className="flex flex-1 w-full h-full">
       <TabsGradient />
-      {/* <AppHeader /> */}
       <ScrollView
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
@@ -173,6 +189,7 @@ const Booking = () => {
           <View className="w-[90%]">
             <Calendar
               onDayPress={handleDateSelection}
+              onMonthChange={handleMonthChange}
               markedDates={markedDates}
               theme={{
                 backgroundColor: colors.green,
@@ -277,30 +294,27 @@ const Booking = () => {
                         mode="time"
                         onConfirm={handleEndTimeConfirm}
                         onCancel={() => setShowEndTimePicker(false)}
+                        backgroundColor={colors.white}
                         minuteInterval={30}
                       />
                     </View>
                   </View>
                   <TouchableOpacity
-                    style={styles.proceedButton}
+                    className="bg-secondary items-center justify-center h-10 my-4 rounded-lg"
                     onPress={handleProceedToForm}
                   >
-                    <Text style={styles.proceedButtonText}>
-                      Proceed with Reservation
+                    <Text className="text-white font-pBold text-lg">
+                      Proceed to Form
                     </Text>
                   </TouchableOpacity>
                 </View>
               </View>
-            ) : (
-              <Text className="text-white font-pRegular text-lg text-center">
-                Select a date to check reserved time slots!
-              </Text>
-            )}
+            ) : null}
           </View>
         ) : (
           <BookingForm
-            selectedAmenity={selectedAmenity}
             selectedDate={selectedDate}
+            selectedAmenity={selectedAmenity}
             startTime={startTime}
             endTime={endTime}
             onBack={handleBackToBooking}

@@ -6,12 +6,16 @@ use App\Models\House;
 use App\Http\Requests\StoreHouseRequest;
 use App\Http\Requests\UpdateHouseRequest;
 use App\Mail\SendPasswordMail;
+use App\Models\Bill;
 use App\Models\Resident;
+use App\Models\Transaction;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
@@ -79,9 +83,11 @@ class HouseController extends Controller
             'email'=>$request->input('email'),
             'password'=>$hashedPassword,
             'contact_number'=>$request->input('contactNumber'),
+            'picture_url' => Storage::disk('public')->url('default_img.jpg'),
+            'picture_path' => 'default_img.jpg',
         ]);
 
-        Resident::create([
+        $resident = Resident::create([
             'user_id'=>$user->id,
             'house_id'=>$house->id,
             'birthdate'=>$request->input('birthdate'),
@@ -90,6 +96,27 @@ class HouseController extends Controller
             'occupation_status'=>$request->input('occupation'),
             'fb_name'=>$request->input('facebook'),
         ]);
+
+        for ($i = 0; $i < 5; $i++) {
+            $bill = Bill::create([
+                'resident_id' => $resident->id,
+                'amount' => 1000,
+                'due_date' => Carbon::now()->subMonths($i)->endOfMonth(),
+                'status' => fake()->randomElement(['paid', 'pending', 'overdue']),
+                'issue_date' => Carbon::now()->subMonths($i)->startOfMonth(),
+            ]);
+
+            // If the bill is marked as paid, create a corresponding transaction
+            if ($bill->status == 'paid') {
+                Transaction::create([
+                    'resident_id' => $resident->id,
+                    'bill_id' => $bill->id,
+                    'amount' => $bill->amount,
+                    // 'payment_method' => $faker->randomElement(['cash', 'gcash']),
+                    'transaction_date' => Carbon::now()->subMonths($i)->endOfMonth(),
+                ]);
+            }
+        }
 
         //email the resident about his account details
         Mail::to($user->email)->send(new SendPasswordMail(

@@ -6,10 +6,10 @@ import CompletedTable from "./CompletedTable";
 const CompletedRequest = () => {
   return (
     <div className="w-full max-w-7xl">
-      <div className="flex items-center justify-between border-t py-4">
+      {/* <div className="flex items-center justify-between border-t py-4">
         <StickerFilter />
         <SearchBar />
-      </div>
+      </div> */}
       <div>
         <CompletedTable />
       </div>

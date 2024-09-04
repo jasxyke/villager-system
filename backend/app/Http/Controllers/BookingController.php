@@ -70,7 +70,7 @@ class BookingController extends Controller
         // Process additional logic if needed, such as saving payments
 
         return response()->json([
-            'message' => 'Booking created successfully!',
+            'message' => 'Successfully requested for reservation! You can now proceed to pay for the reservation fee at the admin to officially book your reservation.',
             'booking' => $booking
         ], 201);
 

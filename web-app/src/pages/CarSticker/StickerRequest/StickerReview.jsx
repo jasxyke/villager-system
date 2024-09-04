@@ -3,9 +3,12 @@ import { FiArrowLeft } from "react-icons/fi";
 import { IoChevronBack, IoChevronForward } from "react-icons/io5";
 import { IoIosClose } from "react-icons/io";
 import RejectModal from "./RejectModal"; // Ensure you have this component
+import ApprovedModal from "./ApprovedModal";
+import RejectionModal from "./RejectionModal";
 
 const StickerReview = ({ sticker, onBack }) => {
   const [isRejectModalOpen, setIsRejectModalOpen] = useState(false);
+  const [isApproveModalOpen, setIsApproveModalOpen] = useState(false);
   const [isImageModalOpen, setIsImageModalOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
@@ -16,14 +19,16 @@ const StickerReview = ({ sticker, onBack }) => {
   };
 
   const handleApproveClick = () => {
-    alert("The application has been approved.");
-    onBack(); // Call onBack after approval
+    setIsApproveModalOpen(true);
+    // alert("The application has been approved.");
+    // onBack(); // Call onBack after approval
   };
 
   const handleRejectSubmit = (reason) => {
-    alert(`The application has been rejected. Reason: ${reason}`);
-    setIsRejectModalOpen(false);
-    onBack(); // Call onBack after rejection
+    setIsRejectModalOpen(true);
+    // alert(`The application has been rejected. Reason: ${reason}`);
+    // setIsRejectModalOpen(false);
+    // onBack(); // Call onBack after rejection
   };
 
   const handleImageClick = (index) => {
@@ -166,10 +171,22 @@ const StickerReview = ({ sticker, onBack }) => {
       </form>
 
       {/* Reject Modal */}
-      <RejectModal
+      {/* <RejectModal
         isOpen={isRejectModalOpen}
         onClose={() => setIsRejectModalOpen(false)}
         onSubmit={handleRejectSubmit}
+      /> */}
+
+      <ApprovedModal
+        isOpen={isApproveModalOpen}
+        onClose={() => setIsApproveModalOpen(false)}
+        onConfirm={() => {}}
+      />
+
+      <RejectionModal
+        isOpen={isRejectModalOpen}
+        onClose={() => setIsRejectModalOpen(false)}
+        onSubmit={() => {}}
       />
 
       {/* Image Modal */}

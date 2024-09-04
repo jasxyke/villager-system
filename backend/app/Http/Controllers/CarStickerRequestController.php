@@ -56,7 +56,7 @@ class CarStickerRequestController extends Controller
         if($request->has('images')){
             foreach ($request->file('images') as $index => $image) {
                 $path = $image->store('sticker_documents','public');
-                $documentUrl = Storage::url($path);
+                $documentUrl = Storage::disk('public')->url($path);
     
                 StickerDocument::create([
                     'car_sticker_request_id' => $carStickerRequest->id,

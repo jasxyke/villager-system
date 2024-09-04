@@ -78,16 +78,16 @@ const SideBar = () => {
             <img src={announcementsIcon} alt="Announcements" /> Announcements
           </NavLink>
         </li>
-        <li>
+        {/*<li>
           <NavLink to="/reports">
             <FiFileText className="text-3xl mr-2" /> Reports
           </NavLink>
-        </li>
-        <li>
+        </li>*/}
+        {/* <li>
           <NavLink to="/guidelines">
             <CiReceipt className="text-4xl mr-2" /> Rules & Regulations
           </NavLink>
-        </li>
+        </li> */}
         <li className="bg-transparent">
           <p className="" onClick={logoutUser}>
             <img src={logoutIcon} alt="Logout" /> Logout

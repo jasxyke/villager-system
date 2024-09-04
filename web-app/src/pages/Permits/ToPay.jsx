@@ -1,10 +1,9 @@
 import React, { useState } from "react";
-import Filter from "../Filter";
-import SearchBar from "../SearchBar";
-import CompletedTable from "./CompletedTable";
-import CompletedDetails from "./CompletedDetails";
+import InProgressTable from "./InProgress/InProgressTable";
+import InProgressDetails from "./InProgress/InProgressDetails";
+import ToPayTable from "./ToPayTable";
 
-const CompletedPermit = () => {
+const ToPay = () => {
   const [selectedPermit, setSelectedPermit] = useState(null);
   const [detailsView, setDetailsView] = useState(false);
 
@@ -22,14 +21,14 @@ const CompletedPermit = () => {
     <div className="w-full max-w-7xl">
       <div className="mt-2">
         {detailsView ? (
-          <CompletedDetails permit={selectedPermit} onBack={handleBack} />
+          <InProgressDetails permit={selectedPermit} onBack={handleBack} />
         ) : (
           <div>
             {/* <div className="flex items-center justify-between border-t py-4">
               <Filter />
               <SearchBar />
             </div> */}
-            <CompletedTable onRowClick={handleRowClick} />
+            <ToPayTable onRowClick={handleRowClick} />
           </div>
         )}
       </div>
@@ -37,4 +36,4 @@ const CompletedPermit = () => {
   );
 };
 
-export default CompletedPermit;
+export default ToPay;

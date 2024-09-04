@@ -3,7 +3,12 @@ import { FiArrowLeft } from "react-icons/fi";
 import RejectionModal from "./RejectionModal";
 import ApprovedModal from "./ApprovedModal";
 
-const PermitApplicationReview = ({ permit, onBack }) => {
+const PermitApplicationReview = ({
+  permit,
+  onBack,
+  rejectPermitRequest,
+  approvePermitRequest,
+}) => {
   const [isRejectModalOpen, setIsRejectModalOpen] = useState(false);
   const [isApprovedModalOpen, setIsApprovedModalOpen] = useState(false);
 
@@ -18,17 +23,30 @@ const PermitApplicationReview = ({ permit, onBack }) => {
   };
 
   // Handle submission of the rejection form
-  const handleRejectSubmit = (reason) => {
-    alert(`The application has been rejected. Reason: ${reason}`);
-    setIsRejectModalOpen(false);
-    onBack(); // Call onBack after rejection
+  const handleRejectSubmit = async (reason) => {
+    try {
+      await rejectPermitRequest(permit.id, reason);
+      alert("The application has been rejected.");
+      onBack();
+    } catch (error) {
+      alert("An error occurred while rejecting the application.");
+    } finally {
+      setIsRejectModalOpen(false);
+    }
   };
 
   // Handle the confirmation in the approval modal
-  const handleConfirmApproval = () => {
-    alert("The resident has been notified of the approval.");
-    setIsApprovedModalOpen(false);
-    onBack(); // Call onBack after approval
+  const handleConfirmApproval = async (data) => {
+    try {
+      await approvePermitRequest(permit.id, data);
+      alert("The resident has been notified of the approval.");
+      onBack();
+    } catch (error) {
+      console.log(error);
+      alert("An error occurred while approving the application.");
+    } finally {
+      setIsApprovedModalOpen(false);
+    }
   };
 
   return (
@@ -64,12 +82,15 @@ const PermitApplicationReview = ({ permit, onBack }) => {
             </legend>
             <div className="grid grid-cols-1 gap-6">
               {[
-                { label: "Name", value: permit.name },
-                { label: "Contact Number", value: permit.phoneNumber },
+                { label: "Name", value: permit.resident.user.firstname },
+                {
+                  label: "Contact Number",
+                  value: permit.resident.user.contact_number,
+                },
 
-                { label: "Email", value: permit.emailAddress },
-                { label: "Lot Number", value: permit.lotNumber },
-                { label: "Block Number", value: permit.blockNumber },
+                { label: "Email", value: permit.resident.user.email },
+                { label: "Lot Number", value: permit.resident.house.lot },
+                { label: "Block Number", value: permit.resident.house.block },
               ].map(({ label, value }) => (
                 <div
                   key={label}
@@ -90,15 +111,13 @@ const PermitApplicationReview = ({ permit, onBack }) => {
         {/* Request Details */}
         <fieldset className="bg-green p-5 rounded-lg shadow-sm border border-gray-300">
           <legend className="text-xl font-semibold text-white  mb-4 ">
-            Requested Details
+            Request Details
           </legend>
           <div className="grid grid-cols-1 gap-4">
             {[
-              { label: "Permit Purpose", value: permit.phoneNumber },
-              { label: "Status", value: permit.phoneNumber },
-              { label: "Requested Date", value: permit.phoneNumber },
-              { label: "Expected Starting Date", value: permit.startDate },
-              { label: "Expected Completion Date", value: permit.endDate },
+              { label: "Permit Purpose", value: permit.purpose },
+              { label: "Status", value: permit.permit_status },
+              { label: "Requested Date", value: permit.application_date },
             ].map(({ label, value }) => (
               <div
                 key={label}
@@ -124,8 +143,8 @@ const PermitApplicationReview = ({ permit, onBack }) => {
                 Documents Submitted:
               </div>
               <div className="flex flex-wrap gap-4">
-                {permit.uploadedDocuments &&
-                  permit.uploadedDocuments.map((doc, index) => (
+                {permit.permit_documents &&
+                  permit.permit_documents.map((doc, index) => (
                     <div
                       key={index}
                       className="relative cursor-pointer w-32 h-32 overflow-hidden border border-gray-400 rounded-md shadow-sm transition-transform transform hover:scale-105"
@@ -133,7 +152,7 @@ const PermitApplicationReview = ({ permit, onBack }) => {
                       aria-label={`Document ${index + 1}`}
                     >
                       <img
-                        src={doc}
+                        src={doc.url}
                         alt={`Document ${index + 1}`}
                         className="w-full h-full object-cover"
                       />

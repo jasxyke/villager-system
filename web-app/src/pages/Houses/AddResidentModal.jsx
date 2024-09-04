@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import {
   CIVIL_STATUSES,
   OCCUPATION_STATUSES,
+  ROLE_TYPES_HOUSE,
   ROLE_TYPES_RESIDENT,
   SEX_TYPES,
 } from "../../data/contants";
@@ -99,7 +100,7 @@ const AddResidentModal = ({ isModalOpen, onModalClose, onAddMember }) => {
                 label={"Resident type"}
                 value={roleType}
                 onChangeValue={setRoleType}
-                list={ROLE_TYPES_RESIDENT}
+                list={ROLE_TYPES_HOUSE}
               />
             </div>
             <TextInput

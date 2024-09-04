@@ -5,10 +5,20 @@ import Table from "./Table";
 import PermitDetails from "../PermitDetails";
 import Review from "./Review";
 import SamplePermits from "../SamplePermits";
+import usePermitRequests from "../../../hooks/usePermitRequests";
+import LoadingContainer from "../../../components/LoadingScreen/LoadingContainer";
 
 const PermitApplications = () => {
   const [selectedPermit, setSelectedPermit] = useState(null);
   const [detailsView, setDetailsView] = useState(false);
+
+  const {
+    permitRequests,
+    loading,
+    error,
+    approvePermitRequest,
+    rejectPermitRequest,
+  } = usePermitRequests();
 
   const handleRowClick = (permit) => {
     setSelectedPermit(permit);
@@ -32,17 +42,30 @@ const PermitApplications = () => {
         {detailsView ? (
           <PermitDetails permit={selectedPermit} onBack={handleBack} />
         ) : selectedPermit ? (
-          <Review permit={selectedPermit} onBack={handleBack} />
+          <Review
+            permit={selectedPermit}
+            onBack={handleBack}
+            rejectPermitRequest={rejectPermitRequest}
+            approvePermitRequest={approvePermitRequest}
+          />
         ) : (
           <div>
-            <div className="flex items-center justify-between border-t py-4">
+            {/* <div className="flex items-center justify-between border-t py-4">
               <Filter />
               <SearchBar />
-            </div>
-            <Table
-              onRowClick={handleRowClick}
-              onReviewClick={handleReviewClick}
-            />
+            </div> */}
+            {loading ? (
+              <LoadingContainer />
+            ) : error ? (
+              <p style={{ color: "red" }}>{error}</p>
+            ) : (
+              <Table
+                onRowClick={handleRowClick}
+                onReviewClick={handleReviewClick}
+                permitRequests={permitRequests}
+                loading={loading}
+              />
+            )}
           </div>
         )}
       </div>

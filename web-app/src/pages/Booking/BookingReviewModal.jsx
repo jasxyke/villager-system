@@ -55,7 +55,7 @@ const BookingReviewModal = ({ isOpen, onRequestClose, booking, onUpdate }) => {
     booking.amenity,
   ]);
 
-  const { updateBooking } = useBookings();
+  const { updateBooking, loading } = useBookings();
 
   const handleSave = async () => {
     try {
@@ -342,7 +342,7 @@ const BookingReviewModal = ({ isOpen, onRequestClose, booking, onUpdate }) => {
             onClick={handleSave}
             className="p-2 bg-green-500 text-white rounded bg-secondary"
           >
-            Save
+            {loading ? "Saving..." : "Save"}
           </button>
         </div>
       </div>

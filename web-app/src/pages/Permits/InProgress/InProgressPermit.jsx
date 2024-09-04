@@ -25,10 +25,10 @@ const InProgressPermit = () => {
           <InProgressDetails permit={selectedPermit} onBack={handleBack} />
         ) : (
           <div>
-            <div className="flex items-center justify-between border-t py-4">
+            {/* <div className="flex items-center justify-between border-t py-4">
               <Filter />
               <SearchBar />
-            </div>
+            </div> */}
             <InProgressTable onRowClick={handleRowClick} />
           </div>
         )}

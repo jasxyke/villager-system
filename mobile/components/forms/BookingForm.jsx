@@ -9,6 +9,7 @@ import {
 import useBookings from "../../hooks/bookings/useBookings";
 import { colors } from "../../styles/colors";
 import { formatTo12Hour } from "../../utils/DataFormatter";
+import { AMENNITIES } from "../../data/DataStructures";
 
 const BookingForm = ({
   selectedAmenity,
@@ -49,12 +50,12 @@ const BookingForm = ({
 
     if (booking) {
       console.log(booking);
-
-      alert(
-        "Successfully requested for reservation! You can now proceed to pay for the reservation fee at the admin to officially book your reservation."
-      );
+      alert(booking);
       clearForm();
       onBack();
+    }
+    if (error) {
+      alert(error);
     }
   };
 
@@ -72,7 +73,11 @@ const BookingForm = ({
 
       <View style={styles.fieldContainer}>
         <Text style={styles.label}>Amenity</Text>
-        <Text style={styles.value}>{selectedAmenity}</Text>
+        <Text style={styles.value}>
+          {AMENNITIES.map(
+            (amenity) => amenity.id === selectedAmenity && amenity.name
+          )}
+        </Text>
       </View>
 
       <View style={styles.fieldContainer}>

@@ -11,7 +11,7 @@ import {
   View,
 } from "react-native";
 import CustomButton from "../../components/common/CustomButton";
-import { usePermitFormLogic } from "../../components/common/PermitFormLogic";
+import { usePermitFormLogic } from "../../components/Screens/Permits/PermitFormLogic";
 import usePermitRequest from "../../hooks/permits/usePermitRequest"; // Import the custom hook
 import { DOWNLOADS, PROFILE, TYPE } from "../../constants/icons";
 import { colors } from "../../styles/colors";

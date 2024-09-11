@@ -1,22 +1,11 @@
 import { router } from "expo-router";
-import React, { useState } from "react";
-import {
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import React from "react";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import AppHeader from "../../components/common/AppHeader";
-import PaymentHistory from "../../components/forms/PaymentHistory"; // Ensure the path is correct
 import TabsGradient from "../../components/gradients/TabsGradient";
-import PermitRequests from "../../components/Screens/Permits/PermitRequests";
 import { colors } from "../../styles/colors";
 
 const Permits = () => {
-  const [showPaymentHistory, setShowPaymentHistory] = useState(false);
-  const [showRequests, setShowRequests] = useState(true);
-
   const handleShowRequests = () => {
     router.navigate("../permits/requests");
   };

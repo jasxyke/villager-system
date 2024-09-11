@@ -8,7 +8,7 @@ import {
   View,
 } from "react-native";
 import AppHeader from "../../components/common/AppHeader";
-import ScrollViewContainer from "../../components/forms/ScrollViewContainer";
+import ScrollViewContainer from "../../components/Screens/Home/ScrollViewContainer";
 import TabsGradient from "../../components/gradients/TabsGradient";
 import { useAuthContext } from "../../context/AuthContext";
 import LoadingEmptyAnnouncements from "../../components/Screens/Home/LoadingEmptyAnnouncements";

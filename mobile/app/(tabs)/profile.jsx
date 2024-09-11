@@ -1,26 +1,24 @@
+import moment from "moment/moment";
 import React, { useState } from "react";
 import {
-  View,
+  ScrollView,
+  StyleSheet,
   Text,
   TextInput,
-  ScrollView,
-  Alert,
   TouchableOpacity,
-  StyleSheet,
+  View,
 } from "react-native";
-import { formStyles } from "../../styles/profileStyles";
-import TabsGradient from "../../components/gradients/TabsGradient";
-import UserInfo from "../../components/common/UserInfo";
-import EditProfile from "../../components/forms/ChangeInfo";
 import AppHeader from "../../components/common/AppHeader";
-import { useAuthContext } from "../../context/AuthContext";
-import { VILLAGER_ICON } from "../../constants/icons";
-import { formatFullName, formatName } from "../../utils/DataFormatter";
-import { colors } from "../../styles/colors";
-import moment from "moment/moment";
-import useUser from "../../hooks/users/useUser";
-import AlertModal from "../../components/modals/AlertModal";
+import UserInfo from "../../components/Screens/Profile/UserInfo";
+import EditProfile from "../../components/forms/ChangeInfo";
 import ChangePassword from "../../components/forms/ChangePassword";
+import TabsGradient from "../../components/gradients/TabsGradient";
+import AlertModal from "../../components/modals/AlertModal";
+import { useAuthContext } from "../../context/AuthContext";
+import useUser from "../../hooks/users/useUser";
+import { colors } from "../../styles/colors";
+import { formStyles } from "../../styles/profileStyles";
+import { formatFullName, formatName } from "../../utils/DataFormatter";
 
 const Profile = () => {
   const [isEditing, setIsEditing] = useState(false);

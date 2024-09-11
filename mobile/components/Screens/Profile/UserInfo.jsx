@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { View, Text, Image, StyleSheet, Pressable, Alert } from "react-native";
 import * as ImagePicker from "expo-image-picker";
-import useUser from "../../hooks/users/useUser";
-import { useAuthContext } from "../../context/AuthContext";
+import useUser from "../../../hooks/users/useUser";
+import { useAuthContext } from "../../../context/AuthContext";
 
 const UserInfo = ({ imageUrl, userName, userRole }) => {
   const [image, setImage] = useState(null);

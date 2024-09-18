@@ -7,10 +7,15 @@ import AppLogo from "../components/common/AppLogo";
 import { useEffect } from "react";
 import { getItemAsync } from "expo-secure-store";
 import { useAuthContext } from "../context/AuthContext";
+import requestUserPermission from "../hooks/useNotifications";
 export default function App() {
   const rootNavigationState = useRootNavigationState();
   const navigatorReady = rootNavigationState?.key != null;
   const { getUser } = useAuthContext();
+
+  useEffect(() => {
+    const token = requestUserPermission();
+  }, []);
   useEffect(() => {
     if (!navigatorReady) return;
 

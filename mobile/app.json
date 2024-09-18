@@ -14,14 +14,16 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.jasxyke.villager"
+      "bundleIdentifier": "com.jasxyke.villager",
+      "googleServicesFile": "./google-services.json"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/logo.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.jasxyke.villager"
+      "package": "com.jasxyke.villager",
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -41,7 +43,9 @@
       ],
       "expo-router",
       "expo-font",
-      "expo-secure-store"
+      "expo-secure-store",
+      "@react-native-firebase/app"
+      // "@react-native-firebase/messaging"
     ],
     "extra": {
       "router": {

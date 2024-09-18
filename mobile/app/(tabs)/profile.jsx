@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import AppHeader from "../../components/common/AppHeader";
 import UserInfo from "../../components/Screens/Profile/UserInfo";
-import EditProfile from "../../components/forms/ChangeInfo";
+import EditProfile from "../../components/forms/EditProfile";
 import ChangePassword from "../../components/forms/ChangePassword";
 import TabsGradient from "../../components/gradients/TabsGradient";
 import AlertModal from "../../components/modals/AlertModal";
@@ -19,6 +19,7 @@ import useUser from "../../hooks/users/useUser";
 import { colors } from "../../styles/colors";
 import { formStyles } from "../../styles/profileStyles";
 import { formatFullName, formatName } from "../../utils/DataFormatter";
+import { router } from "expo-router";
 
 const Profile = () => {
   const [isEditing, setIsEditing] = useState(false);
@@ -86,12 +87,6 @@ const Profile = () => {
           user={user}
           onSave={handleSavePress}
           onClose={handleClosePress}
-        />
-      ) : isChangingPass ? (
-        <ChangePassword
-          onClose={() => {
-            setIsChangPass(false);
-          }}
         />
       ) : (
         <View className="justify-center items-center">
@@ -221,7 +216,9 @@ const Profile = () => {
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={[styles.button, styles.editButton]}
-                  onPress={handleChangePassword}
+                  onPress={() => {
+                    router.navigate("../profile/change_password");
+                  }}
                 >
                   <Text className="font-pRegular" style={styles.buttonText}>
                     Change password

@@ -68,12 +68,29 @@ const Bills = () => {
           </TouchableOpacity>
         </View>
       </View> */}
+        <View style={styles.row}>
+          <View style={styles.card}>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%' }}>
+              {/* First Column: Contact Number and Gcash */}
+              <View style={{ flex: 1, marginRight: 10 }}>
+                <Text style={{ color: 'white', fontSize: 18 }}>09309200555</Text>
+                <Text style={{ color: 'white', fontSize: 18 }}>Gcash</Text>
+              </View>
+
+              {/* Second Column: View QR Button */}
+              <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <TouchableOpacity style={styles.qrButton}>
+                  <Text style={{ color: 'white', fontSize: 18 }}>View QR</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </View>
         <View className="flex items-center w-full mt-8 mb-5">
           <Text className="border-b-2 border-primary w-[85%] text-3xl text-white font-pJaldiBold">
             Monthly Bills
           </Text>
         </View>
-        <View></View>
         <FlatList
           style={{ flex: 1, marginBottom: 110 }}
           className="w-[100%]"
@@ -210,7 +227,7 @@ const styles = StyleSheet.create({
   qrButton: {
     width: 150,
     height: 60,
-    backgroundColor: "#AEC09A",
+    backgroundColor: colors.greyGreen,
     borderRadius: 10,
     justifyContent: "center",
     alignItems: "center",
@@ -221,6 +238,22 @@ const styles = StyleSheet.create({
   txtViewQR: {
     color: "black",
     fontWeight: "bold",
+  },
+  row: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
+    marginBottom: 10,
+    padding: 20,
+  },
+  card: {
+    borderRadius: 10,
+    backgroundColor: "#1A2902",
+    width: "100%",
+    height: 100,
+    justifyContent: "center",
+    padding: 10,
+    alignItems: "center",
   },
 });
 

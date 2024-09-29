@@ -1,16 +1,16 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, useCallback } from "react";
 import {
   View,
   FlatList,
   Animated,
-  Dimensions,
   Text,
   Image,
   StyleSheet,
+  TouchableOpacity,
+  Modal,
 } from "react-native";
 import { colors } from "../../../styles/colors";
 
-// const { width } = Dimensions.get("window");
 const width = 320;
 
 const ScrollViewContainer = ({ data = [], loading = false }) => {
@@ -18,6 +18,8 @@ const ScrollViewContainer = ({ data = [], loading = false }) => {
   const flatListRef = useRef(null);
   const [index, setIndex] = useState(0);
   const [isManualScroll, setIsManualScroll] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
     if (!Array.isArray(data) || data.length === 0) {
@@ -65,6 +67,11 @@ const ScrollViewContainer = ({ data = [], loading = false }) => {
     setIsManualScroll(false);
   };
 
+  const handleItemPress = (item) => {
+    setSelectedItem(item);
+    setModalVisible(true);
+  };
+
   const renderItem = ({ item, index: itemIndex }) => {
     const opacity = scrollX.interpolate({
       inputRange: [
@@ -77,27 +84,29 @@ const ScrollViewContainer = ({ data = [], loading = false }) => {
     });
 
     return (
-      <Animated.View style={[styles.view, { opacity }]}>
-        <Text numberOfLines={1} style={styles.titleText}>
-          {item.title}
-        </Text>
-        {item.picture_url ? (
-          <Image
-            resizeMode="contain"
-            source={{ uri: item.picture_url }}
-            style={styles.image}
-          />
-        ) : null}
-        <Text numberOfLines={3} style={styles.text}>
-          {item.content}
-        </Text>
-      </Animated.View>
+      <TouchableOpacity onPress={() => handleItemPress(item)}>
+        <Animated.View style={[styles.view, { opacity }]}>
+          <Text numberOfLines={1} style={styles.titleText}>
+            {item.title}
+          </Text>
+          {item.picture_url ? (
+            <Image
+              resizeMode="contain"
+              source={{ uri: item.picture_url }}
+              style={styles.image}
+            />
+          ) : null}
+          <Text numberOfLines={3} style={styles.text}>
+            {item.content}
+          </Text>
+        </Animated.View>
+      </TouchableOpacity>
     );
   };
 
   const Indicator = () => {
     if (!Array.isArray(data) || data.length === 0) {
-      return null; // Early return if data is invalid or empty
+      return null;
     }
 
     return (
@@ -141,10 +150,40 @@ const ScrollViewContainer = ({ data = [], loading = false }) => {
         )}
         onScrollBeginDrag={handleScrollBeginDrag}
         onScrollEndDrag={handleScrollEndDrag}
-        snapToInterval={width} // Ensure this matches the item width
-        decelerationRate="fast" // Adjust deceleration rate for smoother scroll
+        snapToInterval={width}
+        decelerationRate="fast"
       />
+
       <Indicator />
+
+      <Modal
+        visible={modalVisible}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.modalContainer}>
+          {selectedItem && (
+            <View style={styles.modalContent}>
+              <Text style={styles.modalTitle}>{selectedItem.title}</Text>
+              {selectedItem.picture_url ? (
+                <Image
+                  resizeMode="contain"
+                  source={{ uri: selectedItem.picture_url }}
+                  style={styles.modalImage}
+                />
+              ) : null}
+              <Text style={styles.modalText}>{selectedItem.content}</Text>
+              <TouchableOpacity
+                style={styles.closeButton}
+                onPress={() => setModalVisible(false)}
+              >
+                <Text style={styles.closeButtonText}>Close</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -158,7 +197,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   view: {
-    width: width, // Ensure this matches the snapToInterval and item width
+    width: width,
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 20,
@@ -199,6 +238,44 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     backgroundColor: "#1A2902",
     marginHorizontal: 5,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.5)",
+  },
+  modalContent: {
+    width: "90%",
+    padding: 20,
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    alignItems: "center",
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginBottom: 10,
+  },
+  modalImage: {
+    width: "100%",
+    height: 200,
+    marginBottom: 10,
+    borderRadius: 10,
+  },
+  modalText: {
+    fontSize: 16,
+    marginBottom: 20,
+    textAlign: "center",
+  },
+  closeButton: {
+    padding: 10,
+    backgroundColor: colors.primary,
+    borderRadius: 5,
+  },
+  closeButtonText: {
+    color: "#fff",
+    fontWeight: "bold",
   },
 });
 

@@ -8,6 +8,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\CarStickerRequestController;
 use App\Http\Controllers\HouseController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PermitPaymentController;
 use App\Http\Controllers\PermitRequestController;
 use App\Http\Controllers\ResidentController;
@@ -119,3 +120,6 @@ Route::post('/bookings/public',
 [BookingController::class, 'getBookingsByYearAndMonth']);
 Route::post('/bookings',[BookingController::class, 'store']);
 Route::get('/bookings/{id}',[BookingController::class, 'show']);
+
+//test notification only
+Route::get('/send-test-notification', [NotificationController::class, 'sendTestNotification']);

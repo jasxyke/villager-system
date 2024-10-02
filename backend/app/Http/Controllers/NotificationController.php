@@ -5,21 +5,32 @@ namespace App\Http\Controllers;
 use App\Models\Notification;
 use App\Http\Requests\StoreNotificationRequest;
 use App\Http\Requests\UpdateNotificationRequest;
+use Illuminate\Support\Facades\Http;
 
 class NotificationController extends Controller
 {
+    public function sendTestNotification()
+    {
+        $expoPushToken = 'ExponentPushToken[CEoDCZD_5sTzL0PHE-zjIE]'; // Replace with your Expo push token
+
+        $response = Http::post('https://exp.host/--/api/v2/push/send', [
+            'to' => $expoPushToken,
+            'sound' => 'default',
+            'title' => 'Test Notification',
+            'body' => 'This is a test notification sent from Laravel',
+        ]);
+
+        if ($response->successful()) {
+            return response()->json(['message' => 'Notification sent successfully!']);
+        } else {
+            return response()->json(['error' => 'Failed to send notification'], 500);
+        }
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
     {
         //
     }
@@ -36,14 +47,6 @@ class NotificationController extends Controller
      * Display the specified resource.
      */
     public function show(Notification $notification)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Notification $notification)
     {
         //
     }

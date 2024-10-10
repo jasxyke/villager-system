@@ -112,6 +112,10 @@ Route::middleware('auth:sanctum')->group(function () {
     [CarStickerRequestController::class, 'store']);
     Route::get('/car-sticker-requests', [CarStickerRequestController::class, 'getPendingRequests']);
     Route::get('/sticker-payments', [StickerPaymentController::class, 'getPaymentHistory']);
+
+    //push notifications
+    Route::post('/expo-token', [NotificationController::class, 'storeExpoToken']);
+    
     
 });
 

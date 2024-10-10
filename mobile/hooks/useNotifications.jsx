@@ -1,9 +1,11 @@
-import { useEffect, useState, useRef } from "react";
-import * as Notifications from "expo-notifications";
-import * as Device from "expo-device";
 import Constants from "expo-constants";
+import * as Device from "expo-device";
+import * as Notifications from "expo-notifications";
+import { useEffect, useRef, useState } from "react";
 import { Platform } from "react-native";
+import axiosClient from "../utils/axios";
 
+// Notification handling settings
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,
@@ -12,49 +14,7 @@ Notifications.setNotificationHandler({
   }),
 });
 
-export const usePushNotifications = () => {
-  const [expoPushToken, setExpoPushToken] = useState("");
-  const notificationListener = useRef();
-  const responseListener = useRef();
-
-  useEffect(() => {
-    const setupNotifications = async () => {
-      const token = await registerForPushNotificationsAsync();
-      setExpoPushToken(token ?? "");
-
-      // Listener for notifications received in foreground
-      notificationListener.current =
-        Notifications.addNotificationReceivedListener((notification) => {
-          console.log("Notification received in foreground:", notification);
-        });
-
-      // Listener for when a notification is clicked
-      responseListener.current =
-        Notifications.addNotificationResponseReceivedListener((response) => {
-          console.log("User clicked on notification:", response);
-          // Handle navigation or other actions here
-        });
-
-      return () => {
-        if (notificationListener.current) {
-          Notifications.removeNotificationSubscription(
-            notificationListener.current
-          );
-        }
-        if (responseListener.current) {
-          Notifications.removeNotificationSubscription(
-            responseListener.current
-          );
-        }
-      };
-    };
-
-    setupNotifications();
-  }, []);
-
-  return { expoPushToken };
-};
-
+// Function to register for push notifications
 async function registerForPushNotificationsAsync() {
   let token;
 
@@ -99,27 +59,63 @@ async function registerForPushNotificationsAsync() {
   return token;
 }
 
-export async function sendPushNotification(
-  expoPushToken,
-  title = "Default Title",
-  body = "Default Body",
-  data = {}
-) {
-  const message = {
-    to: expoPushToken,
-    sound: "default",
-    title: title,
-    body: body,
-    data: data,
-  };
+// Custom hook to manage push notifications and token
+export const usePushNotifications = (user_id) => {
+  const [expoPushToken, setExpoPushToken] = useState("");
+  const notificationListener = useRef();
+  const responseListener = useRef();
 
-  await fetch("https://exp.host/--/api/v2/push/send", {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-      "Accept-encoding": "gzip, deflate",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(message),
-  });
+  useEffect(() => {
+    const setupNotifications = async () => {
+      const token = await registerForPushNotificationsAsync();
+      if (token) {
+        setExpoPushToken(token);
+        sendTokenToBackend(token); // Send token to Laravel backend
+      }
+
+      // Listener for notifications received in foreground
+      notificationListener.current =
+        Notifications.addNotificationReceivedListener((notification) => {
+          console.log("Notification received in foreground:", notification);
+        });
+
+      // Listener for when a notification is clicked
+      responseListener.current =
+        Notifications.addNotificationResponseReceivedListener((response) => {
+          console.log("User clicked on notification:", response);
+          // Handle navigation or other actions here
+        });
+
+      return () => {
+        if (notificationListener.current) {
+          Notifications.removeNotificationSubscription(
+            notificationListener.current
+          );
+        }
+        if (responseListener.current) {
+          Notifications.removeNotificationSubscription(
+            responseListener.current
+          );
+        }
+      };
+    };
+
+    setupNotifications();
+  }, []);
+
+  return { expoPushToken };
+};
+
+// Function to send the Expo token to the Laravel backend
+async function sendTokenToBackend(token) {
+  try {
+    const res = axiosClient.post("/expo-token", {
+      token: token,
+      user_id: user_id,
+    });
+
+    console.log("Token sent to backend successfully");
+  } catch (error) {
+    console.error("Error sending token to backend:", error);
+  }
 }

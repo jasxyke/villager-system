@@ -7,7 +7,6 @@ import AppLogo from "../components/common/AppLogo";
 import { useEffect } from "react";
 import { getItemAsync } from "expo-secure-store";
 import { useAuthContext } from "../context/AuthContext";
-import { usePushNotifications } from "../hooks/useNotifications";
 export default function App() {
   const rootNavigationState = useRootNavigationState();
   const navigatorReady = rootNavigationState?.key != null;
@@ -30,7 +29,6 @@ export default function App() {
     checkIfCanLogin();
   }, [navigatorReady]);
 
-  usePushNotifications();
   return (
     <SafeAreaView className="h-full" style={styles.container}>
       <MainBackgroundGradient />

@@ -11,6 +11,7 @@ export default function App() {
   const rootNavigationState = useRootNavigationState();
   const navigatorReady = rootNavigationState?.key != null;
   const { getUser } = useAuthContext();
+
   useEffect(() => {
     if (!navigatorReady) return;
 
@@ -27,6 +28,7 @@ export default function App() {
     };
     checkIfCanLogin();
   }, [navigatorReady]);
+
   return (
     <SafeAreaView className="h-full" style={styles.container}>
       <MainBackgroundGradient />

@@ -18,3 +18,8 @@ export const AMENNITIES = [
   { id: 1, name: "Basketball Court" },
   { id: 2, name: "Multi-Purpose Hall" },
 ];
+
+export const COMPLAINT_TYPES = [
+  { label: "Noise", value: "Noise" },
+  { label: "Dispute", value: "Dispute" },
+];

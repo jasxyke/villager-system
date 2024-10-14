@@ -17,6 +17,7 @@ return new class extends Migration
             $table->enum("status",["Pending","Solved"]);
             $table->enum("type",["Noise", "Dispute"]);
             $table->date("date_sent");
+            $table->string("message");
             $table->timestamps();
         });
     }

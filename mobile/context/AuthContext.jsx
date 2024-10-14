@@ -100,7 +100,10 @@ export function AuthProvider({ children }) {
     try {
       const res = await axiosClient.get("/me");
       const responseUser = res.data;
-      if (responseUser !== null || responseUser !== undefined) {
+      if (
+        responseUser.resident !== null ||
+        responseUser.resident !== undefined
+      ) {
         setLoggedIn(true);
       } else {
         router.replace("../sign-in");
@@ -108,10 +111,11 @@ export function AuthProvider({ children }) {
         return;
       }
       setUser(responseUser);
+      console.log(responseUser);
+
       console.log("response user: " + responseUser.resident.id);
     } catch (error) {
       console.log("user error");
-
       await deleteItemAsync("API_TOKEN");
       router.navigate("../sign-in");
       console.log(error?.response?.data?.message);

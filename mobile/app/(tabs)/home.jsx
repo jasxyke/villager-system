@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
+  Button,
+  Pressable,
   RefreshControl,
   ScrollView,
   StyleSheet,
@@ -16,19 +18,12 @@ import useAnnouncement from "../../hooks/announcements/useAnnouncement";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import useBills from "../../hooks/useBills";
 import { usePushNotifications } from "../../hooks/useNotifications";
+import { router } from "expo-router";
 const Home = () => {
   const [refreshing, setRefreshing] = useState(false);
   const { user } = useAuthContext();
   const { announcements, loading, getAnnouncements } = useAnnouncement();
   const { error, refetch, totalBalance } = useBills();
-
-  usePushNotifications(user.id);
-
-  useEffect(() => {
-    if (user) {
-      refetch(user.resident.id);
-    }
-  }, [user]);
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
@@ -38,6 +33,13 @@ const Home = () => {
       setRefreshing(false);
     }, 1000);
   }, []);
+
+  useEffect(() => {
+    if (user) {
+      refetch(user.resident.id);
+      // usePushNotifications(user.id);
+    }
+  }, [user]);
 
   if (!user) {
     return (
@@ -83,6 +85,12 @@ const Home = () => {
         ) : (
           <ScrollViewContainer data={announcements} />
         )}
+        <Pressable
+          onPress={() => router.push("../home-tab/complaint")}
+          className="p-5 mt-10 bg-secondary rounded-lg"
+        >
+          <Text>Send a Complaint</Text>
+        </Pressable>
       </ScrollView>
     </View>
   );

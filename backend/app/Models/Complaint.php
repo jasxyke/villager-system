@@ -14,6 +14,7 @@ class Complaint extends Model
         'status',
         'type',
         'date_sent',
+        'message'
     ];
 
     public function resident()

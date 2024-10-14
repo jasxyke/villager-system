@@ -13,6 +13,7 @@ const useComplaints = () => {
     setSuccess(null);
 
     try {
+      // Posting complaint details (only resident_id and type are required)
       const response = await axiosClient.post("/complaints", complaintDetails);
       console.log(response);
 

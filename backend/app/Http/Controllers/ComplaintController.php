@@ -13,19 +13,25 @@ class ComplaintController extends Controller
        return Complaint::all();
    }
 
-   // Store a new complaint
-   public function store(Request $request)
-   {
-       $request->validate([
-           'resident_id' => 'required|exists:residents,id',
-           'status' => 'required|in:Pending,Solved',
-           'type' => 'required|in:Noise,Dispute',
-           'date_sent' => 'required|date',
-       ]);
+    // Store a new complaint
+    public function store(Request $request)
+    {
+        $request->validate([
+            'resident_id' => 'required|exists:residents,id',
+            'type' => 'required|in:Noise,Dispute',
+        ]);
 
-       $complaint = Complaint::create($request->all());
-       return response()->json($complaint, 201);
-   }
+        $complaint = Complaint::create([
+            'resident_id' => $request->resident_id,
+            'status' => 'Pending',  // Default status
+            'type' => $request->type,
+            'date_sent' => now(),  // Set the current date
+            'message'=>$request->message
+        ]);
+
+        return response()
+        ->json(["message"=>"Sucessfuly sent a complaint!"], 201);
+    }
 
    // Show a specific complaint
    public function show($id)
@@ -44,6 +50,7 @@ class ComplaintController extends Controller
            'status' => 'required|in:Pending,Solved',
            'type' => 'required|in:Noise,Dispute',
            'date_sent' => 'required|date',
+           'message'=>"required|string",
        ]);
 
        $complaint->update($request->all());

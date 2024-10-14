@@ -68,7 +68,7 @@ class Resident extends Model
         return $this->hasMany(Transaction::class);
     }
 
-    public function store(): HasOne{
-        return $this->hasOne(Store::class);
+    public function complaint(): HasMany{
+        return $this->hasMany(Complaint::class);
     }
 }

@@ -1,11 +1,17 @@
 import React, { useState } from "react";
 import View from "./View";
+import useComplaintsByStatus from "../../hooks/useComplaints";
 
 const Pending = () => {
   const [viewing, setViewing] = useState(false);
+  const [selectedComplaint, setSelectedComplaint] = useState(null);
 
-  const handleReviewClick = (e) => {
-    e.stopPropagation();
+  // Fetch complaints with 'Pending' status
+  const { complaints, loading, error, solveComplaint, fetchComplaints } =
+    useComplaintsByStatus("Pending");
+
+  const handleReviewClick = (complaint) => {
+    setSelectedComplaint(complaint);
     setViewing(true);
   };
 
@@ -13,19 +19,20 @@ const Pending = () => {
     setViewing(false);
   };
 
-  const sample = [
-    {
-      name: "John Rey",
-      address: "Block 1 Lot 2",
-      type: "Noise",
-      date: "July 24, 2024",
-    },
-  ];
+  const handleSolved = async (complaintId) => {
+    await solveComplaint(complaintId); // Mark complaint as solved
+    setViewing(false);
+    fetchComplaints(); // Refresh complaints after solving one
+  };
 
   return (
     <div className="p-10 pt-5">
       {viewing ? (
-        <View onBack={handleBack} />
+        <View
+          complaint={selectedComplaint}
+          onBack={handleBack}
+          onSolved={() => handleSolved(selectedComplaint.id)} // Pass complaint ID
+        />
       ) : (
         <>
           <div className="grid grid-cols-5 bg-green font-semibold rounded-t-md text-white">
@@ -35,22 +42,41 @@ const Pending = () => {
             <div className="px-4 py-3 text-center">DATE</div>
             <div className="px-4 py-3 text-center">ACTIONS</div>
           </div>
-          {sample.map((item, index) => (
-            <div key={index} className="grid grid-cols-5 border-b">
-              <div className="px-4 py-3 text-center">{item.name}</div>
-              <div className="px-4 py-3 text-center">{item.address}</div>
-              <div className="px-4 py-3 text-center">{item.type}</div>
-              <div className="px-4 py-3 text-center">{item.date}</div>
-              <div className="px-4 py-3 text-center">
-                <button
-                  className="text-white px-2 py-1 rounded bg-green hover:bg-secondary"
-                  onClick={handleReviewClick}
-                >
-                  View
-                </button>
+
+          {loading ? (
+            <div className="text-center py-3">Loading complaints...</div>
+          ) : error ? (
+            <div className="text-center py-3 text-red-500">{error}</div>
+          ) : complaints.length > 0 ? (
+            complaints.map((item, index) => (
+              <div key={index} className="grid grid-cols-5 border-b bg-primary">
+                <div className="px-4 py-3 text-center text-white">
+                  {item.resident.user.firstname}
+                </div>
+                <div className="px-4 py-3 text-center text-white">
+                  BLK {item.resident.house.block} LOT {item.resident.house.lot}
+                </div>
+                <div className="px-4 py-3 text-center text-white">
+                  {item.type}
+                </div>
+                <div className="px-4 py-3 text-center text-white">
+                  {new Date(item.date_sent).toLocaleDateString()}
+                </div>
+                <div className="px-4 py-3 text-center">
+                  <button
+                    className="text-white px-2 py-1 rounded bg-green hover:bg-secondary"
+                    onClick={() => handleReviewClick(item)}
+                  >
+                    View
+                  </button>
+                </div>
               </div>
+            ))
+          ) : (
+            <div className="text-center py-3 bg-primary text-white">
+              No pending complaints found.
             </div>
-          ))}
+          )}
         </>
       )}
     </div>

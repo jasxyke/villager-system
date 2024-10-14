@@ -13,6 +13,17 @@ class ComplaintController extends Controller
        return Complaint::all();
    }
 
+   public function getComplaints(string $status)
+   {
+        $complaints = Complaint::with('resident','resident.user', 'resident.house')
+                            ->where('status','=', $status)
+                            ->orderBy('date_sent','desc')
+                            ->take(20)
+                            ->get();
+        return response()
+        ->json($complaints, 201);
+   }
+
     // Store a new complaint
     public function store(Request $request)
     {
@@ -55,6 +66,28 @@ class ComplaintController extends Controller
 
        $complaint->update($request->all());
        return response()->json($complaint);
+   }
+
+   // Method to mark complaint as solved
+   public function solveComplaint($id)
+   {
+       try {
+           // Find the complaint by ID
+           $complaint = Complaint::findOrFail($id);
+
+           // Update the status to 'Solved'
+           $complaint->status = 'Solved';
+           $complaint->save();
+
+           return response()->json([
+               'message' => 'Complaint marked as solved successfully.'
+           ], 200);
+
+       } catch (\Exception $e) {
+           return response()->json([
+               'error' => 'An error occurred while solving the complaint.'
+           ], 500);
+       }
    }
 
    // Delete a complaint

@@ -118,7 +118,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/expo-token', [NotificationController::class, 'storeExpoToken']);
     
     //complaints
-    Route::apiResource('complaints', ComplaintController::class);    
+    Route::apiResource('complaints', ComplaintController::class);
+    Route::get("/get-complaints/{status}", [ComplaintController::class, 'getComplaints']);
+    Route::patch('/complaints/{id}/solve', [ComplaintController::class, 'solveComplaint']);
 });
 
 //booking routes (avaialable to the public)

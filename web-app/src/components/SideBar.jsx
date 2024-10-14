@@ -12,7 +12,7 @@ import { useAuthContext } from "../contexts/AuthContext";
 import HouseIcon from "../assets/icons/temporaryhouse.png";
 import { CiMemoPad } from "react-icons/ci";
 import { CiReceipt } from "react-icons/ci";
-import { FiFileText } from "react-icons/fi";
+import { FiFileText, FiFlag } from "react-icons/fi";
 import { CiStickyNote } from "react-icons/ci";
 import { FaCar } from "react-icons/fa6";
 
@@ -76,6 +76,11 @@ const SideBar = () => {
         <li>
           <NavLink to="/announcements">
             <img src={announcementsIcon} alt="Announcements" /> Announcements
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to="/complaints">
+            <FiFlag className="text-3xl mr-2" /> Complaints
           </NavLink>
         </li>
         {/*<li>

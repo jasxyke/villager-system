@@ -20,6 +20,7 @@ import Permits from "./pages/Permits/Permits";
 import Reports from "./pages/Reports/Reports";
 import CommunityRulesAndRegulation from "./pages/RulesAndRegulation/CommunityRulesAndRegulation";
 import Sticker from "./pages/CarSticker/Sticker";
+import Complaints from "./pages/Complaints/Complaints";
 
 function App() {
   const { isLoggedIn } = useAuthContext();
@@ -52,6 +53,7 @@ function App() {
               element={<CommunityRulesAndRegulation />}
             />
             <Route path="/sticker" element={<Sticker />} />
+            <Route path="/complaints" element={<Complaints />} />
           </Route>
           <Route element={<LoginMiddleRoute />}>
             <Route path="/" element={<Login />} />

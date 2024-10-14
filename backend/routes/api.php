@@ -7,6 +7,7 @@ use App\Http\Controllers\BillController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\CarStickerRequestController;
+use App\Http\Controllers\ComplaintController;
 use App\Http\Controllers\HouseController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PermitPaymentController;
@@ -116,7 +117,8 @@ Route::middleware('auth:sanctum')->group(function () {
     //push notifications
     Route::post('/expo-token', [NotificationController::class, 'storeExpoToken']);
     
-    
+    //complaints
+    Route::apiResource('complaints', ComplaintController::class);    
 });
 
 //booking routes (avaialable to the public)

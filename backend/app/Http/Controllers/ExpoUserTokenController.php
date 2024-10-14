@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ExpoToken;
-use App\Http\Requests\StoreExpoTokenRequest;
-use App\Http\Requests\UpdateExpoTokenRequest;
+use App\Models\ExpoUserToken;
+use App\Http\Requests\StoreExpoUserTokenRequest;
+use App\Http\Requests\UpdateExpoUserTokenRequest;
 
-class ExpoTokenController extends Controller
+class ExpoUserTokenController
 {
     /**
      * Display a listing of the resource.
@@ -27,7 +27,7 @@ class ExpoTokenController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreExpoTokenRequest $request)
+    public function store(StoreExpoUserTokenRequest $request)
     {
         //
     }
@@ -35,7 +35,7 @@ class ExpoTokenController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(ExpoToken $expoToken)
+    public function show(ExpoUserToken $expoUserToken)
     {
         //
     }
@@ -43,7 +43,7 @@ class ExpoTokenController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(ExpoToken $expoToken)
+    public function edit(ExpoUserToken $expoUserToken)
     {
         //
     }
@@ -51,7 +51,7 @@ class ExpoTokenController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateExpoTokenRequest $request, ExpoToken $expoToken)
+    public function update(UpdateExpoUserTokenRequest $request, ExpoUserToken $expoUserToken)
     {
         //
     }
@@ -59,7 +59,7 @@ class ExpoTokenController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(ExpoToken $expoToken)
+    public function destroy(ExpoUserToken $expoUserToken)
     {
         //
     }

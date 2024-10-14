@@ -2,11 +2,11 @@
 
 namespace App\Policies;
 
-use App\Models\ExpoToken;
+use App\Models\Complaint;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 
-class ExpoTokenPolicy
+class ComplaintPolicy
 {
     /**
      * Determine whether the user can view any models.
@@ -19,7 +19,7 @@ class ExpoTokenPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, ExpoToken $expoToken): bool
+    public function view(User $user, Complaint $complaint): bool
     {
         //
     }
@@ -35,7 +35,7 @@ class ExpoTokenPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, ExpoToken $expoToken): bool
+    public function update(User $user, Complaint $complaint): bool
     {
         //
     }
@@ -43,7 +43,7 @@ class ExpoTokenPolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, ExpoToken $expoToken): bool
+    public function delete(User $user, Complaint $complaint): bool
     {
         //
     }
@@ -51,7 +51,7 @@ class ExpoTokenPolicy
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, ExpoToken $expoToken): bool
+    public function restore(User $user, Complaint $complaint): bool
     {
         //
     }
@@ -59,7 +59,7 @@ class ExpoTokenPolicy
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, ExpoToken $expoToken): bool
+    public function forceDelete(User $user, Complaint $complaint): bool
     {
         //
     }

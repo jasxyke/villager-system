@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('expo_tokens', function (Blueprint $table) {
+        Schema::create('expo_user_tokens', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users');
             $table->string('expo_token');
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('expo_tokens');
+        Schema::dropIfExists('expo_user_tokens');
     }
 };

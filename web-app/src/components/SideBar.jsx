@@ -83,11 +83,11 @@ const SideBar = () => {
             <FiFlag className="text-3xl mr-2" /> Complaints
           </NavLink>
         </li>
-        {/*<li>
+        <li>
           <NavLink to="/reports">
             <FiFileText className="text-3xl mr-2" /> Reports
           </NavLink>
-        </li>*/}
+        </li>
         {/* <li>
           <NavLink to="/guidelines">
             <CiReceipt className="text-4xl mr-2" /> Rules & Regulations

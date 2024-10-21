@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import MainLogo from "../../components/MainLogo";
 import Pending from "./Pending";
 import Solved from "./Solved";
-
+import styles from "./complaints.module.css";
 const Complaints = () => {
   const [isPending, setIsPending] = useState(true);
   const [isSolve, setIsSolve] = useState(false);
@@ -18,7 +18,7 @@ const Complaints = () => {
   };
 
   return (
-    <div>
+    <div className={styles.mainContainer}>
       <div>
         <MainLogo />
         <div className="text-right w-[90%] mx-auto space-x-2">

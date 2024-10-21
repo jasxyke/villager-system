@@ -1,10 +1,19 @@
 .mainContainer {
-  background-color: linear-gradient(
+  /* background-color: linear-gradient(
     180deg,
     rgba(174, 192, 154, 1) 40%,
     rgba(52, 76, 17, 1) 100%
   );
-  height: auto;
+  height: auto; */
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  background: linear-gradient(
+    180deg,
+    rgba(174, 192, 154, 1) 40%,
+    rgba(52, 76, 17, 1) 100%
+  );
+  width: 100%;
 }
 
 .logoContainer img {

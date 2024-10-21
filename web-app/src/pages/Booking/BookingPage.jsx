@@ -25,9 +25,7 @@ const BookingPage = () => {
   return (
     <div className={styles.mainContainer + " h-full"}>
       <div className={styles.bookingContainer}>
-        <div className={styles.logoMiddle}>
-          <MainLogo />
-        </div>
+        <MainLogo />
         <div className={styles.bookingButtons}>
           {AMENNITIES.map((amenity) => (
             <button

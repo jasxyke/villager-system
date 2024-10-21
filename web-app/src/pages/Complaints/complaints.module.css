@@ -1,0 +1,11 @@
+.mainContainer {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  /* background: linear-gradient(
+    180deg,
+    rgba(174, 192, 154, 1) 40%,
+    rgba(52, 76, 17, 1) 100%
+  ); */
+  width: 100%;
+}

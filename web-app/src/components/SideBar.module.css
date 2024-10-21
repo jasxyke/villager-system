@@ -1,5 +1,5 @@
 .sidebar {
-  position: relative;
+  position: fixed;
   width: 300px;
   height: auto;
   top: 0;
@@ -8,7 +8,16 @@
   background-color: var(--primary);
   border-top-right-radius: 20px;
   border-bottom-right-radius: 20px;
+  overflow-y: scroll;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.sidebar::-webkit-scrollbar {
+  display: none;
+}
+
 li:has(> a.active) {
   background-color: white;
   color: black;
@@ -22,6 +31,7 @@ li:has(> a.active) {
 
 .sidebar li {
   margin-bottom: 1rem;
+  height: 75px;
 }
 
 .sidebar a,

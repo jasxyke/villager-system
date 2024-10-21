@@ -25,8 +25,8 @@
 }
 
 .app-container {
-  display: grid;
-  grid-template-columns: 300px 1fr;
+  /* display: grid;
+  grid-template-columns: 300px 1fr; */
   height: auto;
   min-height: 100vh;
   background: linear-gradient(
@@ -37,12 +37,13 @@
 }
 
 .main {
-  background: linear-gradient(
+  margin-left: 300px;
+  /* background: linear-gradient(
     180deg,
     rgba(174, 192, 154, 1) 40%,
     rgba(52, 76, 17, 1) 100%
-  );
-  width: 100%;
+  ); */
+  max-width: 100%;
 }
 
 li:has(> a.active) {

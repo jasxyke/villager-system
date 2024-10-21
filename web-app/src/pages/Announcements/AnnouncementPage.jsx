@@ -37,7 +37,7 @@ const AnnouncementPage = () => {
   };
   return (
     <div className={styles.mainContainer + " "}>
-      <div className="w-full mt-10 ">
+      <div className="w-full mt-5 ">
         <MainLogo />
         <div className="text-right w-[90%] mx-auto">
           <input

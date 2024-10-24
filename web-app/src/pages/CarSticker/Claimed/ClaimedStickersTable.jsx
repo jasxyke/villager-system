@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from "react";
-import StickerReview from "./StickerReview";
 import StickerDetails from "../StickerDetails";
 import StickerDefaultTable from "../StickerDefaultTable";
-import useCarStickerRequestsByStatus from "../../../hooks/CarStickers/useCarStickerRequestsByStatus";
-import { formatName, formatUserName } from "../../../utils/DataFormatter";
 import ReactPaginate from "react-paginate";
+import useCarStickerRequestsByStatus from "../../../hooks/CarStickers/useCarStickerRequestsByStatus";
+import { formatUserName } from "../../../utils/DataFormatter";
 
-const StickerTable = () => {
+const ClaimedStickersTable = () => {
   const [selectedSticker, setSelectedSticker] = useState(null);
   const [detailsView, setDetailsView] = useState(false);
 
-  // Use the custom hook to fetch car sticker requests
+  // Use the custom hook to fetch claimed car sticker requests
   const {
     fetchRequestsByStatus,
     requests,
@@ -22,19 +21,13 @@ const StickerTable = () => {
   } = useCarStickerRequestsByStatus();
 
   useEffect(() => {
-    // Fetch pending requests when the component mounts
-    fetchRequestsByStatus("pending", currentPage); // Default to page 1 on mount
-  }, [currentPage]);
+    // Fetch "claimed" requests when the component mounts
+    fetchRequestsByStatus("claimed", 1); // Default to page 1 on mount
+  }, []);
 
   const handleRowClick = (sticker) => {
     setSelectedSticker(sticker);
     setDetailsView(true);
-  };
-
-  const handleReviewClick = (sticker, e) => {
-    e.stopPropagation();
-    setSelectedSticker(sticker);
-    setDetailsView(false);
   };
 
   const handleBack = () => {
@@ -44,7 +37,7 @@ const StickerTable = () => {
 
   const handlePageClick = (event) => {
     // Paginate to the selected page
-    changePage(status, event.selected + 1);
+    changePage("claimed", event.selected + 1);
   };
 
   if (loading) {
@@ -59,28 +52,21 @@ const StickerTable = () => {
     <div className="overflow-x-auto">
       {detailsView ? (
         <StickerDetails sticker={selectedSticker} onBack={handleBack} />
-      ) : selectedSticker ? (
-        <StickerReview
-          sticker={selectedSticker}
-          onBack={handleBack}
-          onResponse={() => fetchRequestsByStatus("pending", currentPage)}
-        />
       ) : (
         <>
           <div className="w-full">
             <div className="flex items-center justify-center font-medium bg-mutedGreen mb-2 p-2 text-center">
               <div className="flex-1 p-2 text-center">Name</div>
               <div className="flex-1 p-2 text-center">Plate Number</div>
-              <div className="flex-1 p-2 text-center">Request Date</div>
+              <div className="flex-1 p-2 text-center">Claimed Date</div>
               <div className="flex-1 p-2 text-center">Status</div>
-              <div className="flex-1 p-2 text-center">Action</div>
             </div>
           </div>
           <div>
             {requests.length === 0 ? (
               <StickerDefaultTable>
                 <div className="text-center p-4 w-full">
-                  No pending sticker requests found.
+                  No claimed sticker requests found.
                 </div>
               </StickerDefaultTable>
             ) : (
@@ -96,19 +82,9 @@ const StickerTable = () => {
                     {sticker.car_plate_number}
                   </div>
                   <div className="flex-1 p-2 text-center">
-                    {sticker.application_date}
+                    {sticker.claimed_date}
                   </div>
-                  <div className="flex-1 p-2 text-center">
-                    {formatName(sticker.request_status)}
-                  </div>
-                  <div className="flex-1 p-2 text-center">
-                    <button
-                      className="bg-secondary text-white px-4 py-2 rounded hover:bg-greyGreen transition-colors"
-                      onClick={(e) => handleReviewClick(sticker, e)}
-                    >
-                      Review
-                    </button>
-                  </div>
+                  <div className="flex-1 p-2 text-center">Claimed</div>
                 </StickerDefaultTable>
               ))
             )}
@@ -137,4 +113,4 @@ const StickerTable = () => {
   );
 };
 
-export default StickerTable;
+export default ClaimedStickersTable;

@@ -25,10 +25,11 @@ import Complaints from "./pages/Complaints/Complaints";
 function App() {
   const { isLoggedIn } = useAuthContext();
 
+  const marginLeft = isLoggedIn() ? "300px" : "0px";
   return (
     <div className={isLoggedIn() ? "app-container" : "w-full h-full"}>
       {isLoggedIn() ? <Sidebar /> : null}
-      <div className="main">
+      <div className="main" style={{ marginLeft: marginLeft }}>
         <Routes>
           <Route element={<AuthenticatedMiddleRoute />}>
             <Route path="/homepage" element={<Homepage />} />

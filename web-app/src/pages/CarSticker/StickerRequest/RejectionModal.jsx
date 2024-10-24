@@ -1,16 +1,32 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
+import useCarStickerRequests from "../../../hooks/CarStickers/useCarStickerRequests";
 
-const RejectionModal = ({ isOpen, onClose, onSubmit }) => {
+const RejectionModal = ({ isOpen, onClose, requestId, onSubmit }) => {
   const [selectedReason, setSelectedReason] = useState("");
   const [otherReason, setOtherReason] = useState("");
+  const { rejectCarStickerRequest, loading, error, success } =
+    useCarStickerRequests(); // Destructure the hook
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const reason = selectedReason === "Other" ? otherReason : selectedReason;
-    onSubmit(reason);
-    setSelectedReason("");
-    setOtherReason("");
+
+    try {
+      // Call the rejectCarStickerRequest function with the requestId and reason
+      let res = await rejectCarStickerRequest(requestId, reason);
+
+      if (res) {
+        // Handle successful rejection (e.g., show notification, close modal, etc.)
+        onSubmit(reason);
+        setSelectedReason("");
+        setOtherReason("");
+        onSubmit();
+        onClose(); // Close the modal after successful rejection
+      }
+    } catch (err) {
+      console.error("Failed to reject the request:", error);
+    }
   };
 
   if (!isOpen) return null;
@@ -56,12 +72,16 @@ const RejectionModal = ({ isOpen, onClose, onSubmit }) => {
             />
           )}
 
+          {loading && <p>Submitting rejection...</p>}
+          {error && <p className="text-red-500">{error}</p>}
+
           <div className="mt-4 flex gap-4">
             <button
               type="submit"
               className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition-colors"
+              disabled={loading}
             >
-              Submit
+              {loading ? "Submitting..." : "Submit"}
             </button>
             <button
               type="button"

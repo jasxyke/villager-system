@@ -10,7 +10,7 @@ class StickerPayment extends Model
     use HasFactory;
 
     protected $fillable = [
-        'sticker_request_id',
+        'car_sticker_request_id',
         'amount',
         'payment_date',
         'payment_status',

@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import StickerReview from "./StickerReview";
 import StickerDetails from "../StickerDetails";
 import StickerDefaultTable from "../StickerDefaultTable";
 import useCarStickerRequestsByStatus from "../../../hooks/CarStickers/useCarStickerRequestsByStatus";
-import { formatName, formatUserName } from "../../../utils/DataFormatter";
+import useCarStickerRequests from "../../../hooks/CarStickers/useCarStickerRequests"; // Import the custom hook
+import { formatUserName } from "../../../utils/DataFormatter";
 import ReactPaginate from "react-paginate";
 
-const StickerTable = () => {
+const ToClaimRequestTable = () => {
   const [selectedSticker, setSelectedSticker] = useState(null);
   const [detailsView, setDetailsView] = useState(false);
 
@@ -21,9 +21,16 @@ const StickerTable = () => {
     changePage,
   } = useCarStickerRequestsByStatus();
 
+  const {
+    claimCarStickerRequest, // Use the claim function from the hook
+    loading: claimLoading,
+    error: claimError,
+    success: claimSuccess,
+  } = useCarStickerRequests();
+
   useEffect(() => {
-    // Fetch pending requests when the component mounts
-    fetchRequestsByStatus("pending", currentPage); // Default to page 1 on mount
+    // Fetch "to_claim" requests when the component mounts
+    fetchRequestsByStatus("completed", currentPage); // Default to page 1 on mount
   }, [currentPage]);
 
   const handleRowClick = (sticker) => {
@@ -31,47 +38,60 @@ const StickerTable = () => {
     setDetailsView(true);
   };
 
-  const handleReviewClick = (sticker, e) => {
-    e.stopPropagation();
-    setSelectedSticker(sticker);
-    setDetailsView(false);
-  };
-
   const handleBack = () => {
     setSelectedSticker(null);
     setDetailsView(false);
   };
 
-  const handlePageClick = (event) => {
-    // Paginate to the selected page
-    changePage(status, event.selected + 1);
+  const handleSetAsClaimed = async (sticker, e) => {
+    e.stopPropagation();
+    const isConfirmed = window.confirm(
+      "Are you sure you want to mark this sticker request as claimed?"
+    );
+
+    if (isConfirmed) {
+      try {
+        // Use the custom hook function to mark the request as claimed
+        const responseSuccess = await claimCarStickerRequest(sticker.id);
+
+        if (responseSuccess) {
+          alert("Sticker request has been marked as claimed.");
+          // Optionally refresh the data after marking as claimed
+          fetchRequestsByStatus("completed", currentPage);
+        }
+      } catch (error) {
+        console.error("Failed to mark the sticker as claimed", claimError);
+        alert(
+          "There was an error marking the sticker as claimed. Please try again."
+        );
+      }
+    }
   };
 
-  if (loading) {
+  const handlePageClick = (event) => {
+    // Paginate to the selected page
+    changePage(event.selected + 1);
+  };
+
+  if (loading || claimLoading) {
     return <div>Loading...</div>; // Handle loading state
   }
 
-  if (error) {
-    return <div>{error}</div>; // Handle error state
+  if (error || claimError) {
+    return <div>{error || claimError}</div>; // Handle error state
   }
 
   return (
     <div className="overflow-x-auto">
       {detailsView ? (
         <StickerDetails sticker={selectedSticker} onBack={handleBack} />
-      ) : selectedSticker ? (
-        <StickerReview
-          sticker={selectedSticker}
-          onBack={handleBack}
-          onResponse={() => fetchRequestsByStatus("pending", currentPage)}
-        />
       ) : (
         <>
           <div className="w-full">
             <div className="flex items-center justify-center font-medium bg-mutedGreen mb-2 p-2 text-center">
               <div className="flex-1 p-2 text-center">Name</div>
               <div className="flex-1 p-2 text-center">Plate Number</div>
-              <div className="flex-1 p-2 text-center">Request Date</div>
+              <div className="flex-1 p-2 text-center">Completion Date</div>
               <div className="flex-1 p-2 text-center">Status</div>
               <div className="flex-1 p-2 text-center">Action</div>
             </div>
@@ -80,7 +100,7 @@ const StickerTable = () => {
             {requests.length === 0 ? (
               <StickerDefaultTable>
                 <div className="text-center p-4 w-full">
-                  No pending sticker requests found.
+                  No requests found to claim.
                 </div>
               </StickerDefaultTable>
             ) : (
@@ -96,17 +116,15 @@ const StickerTable = () => {
                     {sticker.car_plate_number}
                   </div>
                   <div className="flex-1 p-2 text-center">
-                    {sticker.application_date}
+                    {sticker.completed_date}
                   </div>
-                  <div className="flex-1 p-2 text-center">
-                    {formatName(sticker.request_status)}
-                  </div>
+                  <div className="flex-1 p-2 text-center">To Claim</div>
                   <div className="flex-1 p-2 text-center">
                     <button
                       className="bg-secondary text-white px-4 py-2 rounded hover:bg-greyGreen transition-colors"
-                      onClick={(e) => handleReviewClick(sticker, e)}
+                      onClick={(e) => handleSetAsClaimed(sticker, e)} // Use the claim handler
                     >
-                      Review
+                      Set as Claimed
                     </button>
                   </div>
                 </StickerDefaultTable>
@@ -137,4 +155,4 @@ const StickerTable = () => {
   );
 };
 
-export default StickerTable;
+export default ToClaimRequestTable;

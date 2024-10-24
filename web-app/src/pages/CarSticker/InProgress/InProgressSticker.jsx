@@ -1,9 +1,7 @@
 import React from "react";
-import StickerFilter from "../StickerRequest/StickerFilter";
-import SearchBar from "../SearchBar";
-import InProgressTable from "./InProgressTable";
+import InProgressStickerTable from "./InProgressStickerTable";
 
-const InProgress = () => {
+const InProgressSticker = () => {
   return (
     <div className="w-full max-w-7xl">
       {/* <div className="flex items-center justify-between border-t py-4">
@@ -11,10 +9,10 @@ const InProgress = () => {
         <SearchBar />
       </div> */}
       <div>
-        <InProgressTable />
+        <InProgressStickerTable />
       </div>
     </div>
   );
 };
 
-export default InProgress;
+export default InProgressSticker;

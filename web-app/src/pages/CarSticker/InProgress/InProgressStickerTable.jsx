@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import StickerReview from "./StickerReview";
 import StickerDetails from "../StickerDetails";
 import StickerDefaultTable from "../StickerDefaultTable";
-import useCarStickerRequestsByStatus from "../../../hooks/CarStickers/useCarStickerRequestsByStatus";
-import { formatName, formatUserName } from "../../../utils/DataFormatter";
 import ReactPaginate from "react-paginate";
+import useCarStickerRequestsByStatus from "../../../hooks/CarStickers/useCarStickerRequestsByStatus";
+import useCarStickerRequests from "../../../hooks/CarStickers/useCarStickerRequests"; // Import the custom hook
+import { formatUserName } from "../../../utils/DataFormatter";
 
-const StickerTable = () => {
+const InProgressStickerTable = () => {
   const [selectedSticker, setSelectedSticker] = useState(null);
   const [detailsView, setDetailsView] = useState(false);
 
@@ -21,20 +21,21 @@ const StickerTable = () => {
     changePage,
   } = useCarStickerRequestsByStatus();
 
+  // Use the custom hook to complete car sticker requests
+  const {
+    completeCarStickerRequest,
+    loading: completeLoading,
+    error: completeError,
+  } = useCarStickerRequests();
+
   useEffect(() => {
-    // Fetch pending requests when the component mounts
-    fetchRequestsByStatus("pending", currentPage); // Default to page 1 on mount
-  }, [currentPage]);
+    // Fetch "in_progress" requests when the component mounts
+    fetchRequestsByStatus("in_progress", 1); // Default to page 1 on mount
+  }, []);
 
   const handleRowClick = (sticker) => {
     setSelectedSticker(sticker);
     setDetailsView(true);
-  };
-
-  const handleReviewClick = (sticker, e) => {
-    e.stopPropagation();
-    setSelectedSticker(sticker);
-    setDetailsView(false);
   };
 
   const handleBack = () => {
@@ -42,45 +43,62 @@ const StickerTable = () => {
     setDetailsView(false);
   };
 
-  const handlePageClick = (event) => {
-    // Paginate to the selected page
-    changePage(status, event.selected + 1);
+  const handleMarkAsDone = async (sticker, e) => {
+    e.stopPropagation(); // Prevent row click from being triggered
+
+    const isConfirmed = window.confirm(
+      "Are you sure you want to mark this sticker request as done?"
+    );
+
+    if (isConfirmed) {
+      try {
+        // Call the completeCarStickerRequest function
+        const response = await completeCarStickerRequest(sticker.id);
+
+        if (response) {
+          // Refresh or update the state to reflect the completed status
+          console.log(`Sticker ${sticker.id} marked as done.`);
+          fetchRequestsByStatus("in_progress", currentPage); // Optionally refetch the current page of data
+        }
+      } catch (error) {
+        console.error("Failed to mark the sticker request as done:", error);
+      }
+    }
   };
 
-  if (loading) {
+  const handlePageClick = (event) => {
+    // Paginate to the selected page
+    changePage("in_progress", event.selected + 1);
+  };
+
+  if (loading || completeLoading) {
     return <div>Loading...</div>; // Handle loading state
   }
 
-  if (error) {
-    return <div>{error}</div>; // Handle error state
+  if (error || completeError) {
+    return <div>{error || completeError}</div>; // Handle error state
   }
 
   return (
     <div className="overflow-x-auto">
       {detailsView ? (
         <StickerDetails sticker={selectedSticker} onBack={handleBack} />
-      ) : selectedSticker ? (
-        <StickerReview
-          sticker={selectedSticker}
-          onBack={handleBack}
-          onResponse={() => fetchRequestsByStatus("pending", currentPage)}
-        />
       ) : (
         <>
           <div className="w-full">
             <div className="flex items-center justify-center font-medium bg-mutedGreen mb-2 p-2 text-center">
               <div className="flex-1 p-2 text-center">Name</div>
               <div className="flex-1 p-2 text-center">Plate Number</div>
-              <div className="flex-1 p-2 text-center">Request Date</div>
+              <div className="flex-1 p-2 text-center">Approved Date</div>
               <div className="flex-1 p-2 text-center">Status</div>
-              <div className="flex-1 p-2 text-center">Action</div>
+              <div className="flex-1 p-2 text-center">Actions</div>
             </div>
           </div>
           <div>
             {requests.length === 0 ? (
               <StickerDefaultTable>
                 <div className="text-center p-4 w-full">
-                  No pending sticker requests found.
+                  No in-progress sticker requests found.
                 </div>
               </StickerDefaultTable>
             ) : (
@@ -96,17 +114,15 @@ const StickerTable = () => {
                     {sticker.car_plate_number}
                   </div>
                   <div className="flex-1 p-2 text-center">
-                    {sticker.application_date}
+                    {sticker.approval_date}
                   </div>
-                  <div className="flex-1 p-2 text-center">
-                    {formatName(sticker.request_status)}
-                  </div>
+                  <div className="flex-1 p-2 text-center">In Progress</div>
                   <div className="flex-1 p-2 text-center">
                     <button
                       className="bg-secondary text-white px-4 py-2 rounded hover:bg-greyGreen transition-colors"
-                      onClick={(e) => handleReviewClick(sticker, e)}
+                      onClick={(e) => handleMarkAsDone(sticker, e)} // Pass event to handler
                     >
-                      Review
+                      Mark as Done
                     </button>
                   </div>
                 </StickerDefaultTable>
@@ -137,4 +153,4 @@ const StickerTable = () => {
   );
 };
 
-export default StickerTable;
+export default InProgressStickerTable;

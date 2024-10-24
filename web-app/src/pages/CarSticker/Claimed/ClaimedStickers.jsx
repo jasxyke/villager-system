@@ -1,10 +1,7 @@
 import React from "react";
-import StickerFilter from "../StickerRequest/StickerFilter";
-import SearchBar from "../SearchBar";
-import StatusFilter from "../StatusFilter";
-import HistoryTable from "./HistoryTable";
+import ClaimedStickersTable from "./ClaimedStickersTable";
 
-const StickerHistory = () => {
+const ClaimedStickers = () => {
   return (
     <div className="w-full max-w-7xl">
       {/* <div className="flex items-center justify-between border-t py-4">
@@ -13,10 +10,10 @@ const StickerHistory = () => {
         <SearchBar />
       </div> */}
       <div className="mt-2">
-        <HistoryTable />
+        <ClaimedStickersTable />
       </div>
     </div>
   );
 };
 
-export default StickerHistory;
+export default ClaimedStickers;

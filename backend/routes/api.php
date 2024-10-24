@@ -109,10 +109,19 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/permit-requests/{id}/reject',[PermitRequestController::class, 'reject']);
 
     //car sticker routes
-    Route::post('/car-sticker-requests', 
-    [CarStickerRequestController::class, 'store']);
-    Route::get('/car-sticker-requests', [CarStickerRequestController::class, 'getPendingRequests']);
     Route::get('/sticker-payments', [StickerPaymentController::class, 'getPaymentHistory']);
+    Route::post('/sticker-payments/add-payment', [StickerPaymentController::class, 'addPayment']);
+    //requests
+    Route::post('/car-sticker-requests', [CarStickerRequestController::class, 'store']);
+    //FOR ADMIN
+    Route::get('/car-sticker-requests/status/{status}', [CarStickerRequestController::class, 'getRequestsByStatus']);
+    Route::put('/car-sticker-requests/{id}/complete', [CarStickerRequestController::class, 'completeStickerRequest']);
+    Route::put('/car-sticker-requests/{id}/claim', [CarStickerRequestController::class, 'claimStickerRequest']);
+    //FOR RESIDENT
+    Route::get('/car-sticker-requests', [CarStickerRequestController::class, 'getPendingRequests']);
+    //==============
+    Route::put('/car-sticker-requests/approve/{id}', [CarStickerRequestController::class, 'approveRequest']);
+    Route::put('/car-sticker-requests/{id}/reject', [CarStickerRequestController::class, 'rejectRequest']);
 
     //push notifications
     Route::post('/expo-token', [NotificationController::class, 'storeExpoToken']);

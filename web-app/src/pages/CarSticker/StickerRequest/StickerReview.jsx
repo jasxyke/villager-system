@@ -2,11 +2,12 @@ import React, { useState } from "react";
 import { FiArrowLeft } from "react-icons/fi";
 import { IoChevronBack, IoChevronForward } from "react-icons/io5";
 import { IoIosClose } from "react-icons/io";
-import RejectModal from "./RejectModal"; // Ensure you have this component
+//import RejectModal from "./RejectModal"; // Ensure you have this component
 import ApprovedModal from "./ApprovedModal";
 import RejectionModal from "./RejectionModal";
+import { formatUserName } from "../../../utils/DataFormatter";
 
-const StickerReview = ({ sticker, onBack }) => {
+const StickerReview = ({ sticker, onBack, onResponse }) => {
   const [isRejectModalOpen, setIsRejectModalOpen] = useState(false);
   const [isApproveModalOpen, setIsApproveModalOpen] = useState(false);
   const [isImageModalOpen, setIsImageModalOpen] = useState(false);
@@ -84,11 +85,17 @@ const StickerReview = ({ sticker, onBack }) => {
           </legend>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {[
-              { label: "Name", value: sticker.residentName },
-              { label: "Block", value: sticker.residentBlock },
-              { label: "Lot", value: sticker.residentLot },
-              { label: "Contact Number", value: sticker.residentPhone },
-              { label: "Email", value: sticker.residentEmail },
+              {
+                label: "Name",
+                value: formatUserName(sticker.resident.user, false),
+              },
+              { label: "Block", value: sticker.resident.house.block },
+              { label: "Lot", value: sticker.resident.house.lot },
+              {
+                label: "Contact Number",
+                value: sticker.resident.user.contact_number,
+              },
+              { label: "Email", value: sticker.resident.user.email },
             ].map(({ label, value }) => (
               <div key={label} className="flex items-center">
                 <label className="w-1/3 font-semibold text-white">
@@ -107,8 +114,11 @@ const StickerReview = ({ sticker, onBack }) => {
           </legend>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {[
-              { label: "Model", value: sticker.vehicleModel },
-              { label: "License Plate Number", value: sticker.licensePlate },
+              { label: "Model", value: sticker.car_model },
+              {
+                label: "License Plate Number",
+                value: sticker.car_plate_number,
+              },
             ].map(({ label, value }) => (
               <div key={label} className="flex items-center">
                 <label className="w-1/3 font-semibold text-white">
@@ -127,8 +137,8 @@ const StickerReview = ({ sticker, onBack }) => {
           </legend>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {[
-              { label: "Request Date", value: sticker.requestDate },
-              { label: "Status", value: sticker.status },
+              { label: "Request Date", value: sticker.application_date },
+              { label: "Status", value: sticker.request_status },
             ].map(({ label, value }) => (
               <div key={label} className="flex items-center">
                 <label className="w-1/3 font-semibold text-white">
@@ -149,8 +159,8 @@ const StickerReview = ({ sticker, onBack }) => {
             <div className="w-full">
               <div className="mb-2 text-white font-semibold">Documents</div>
               <div className="flex flex-wrap gap-4">
-                {sticker.uploadedImages &&
-                  sticker.uploadedImages.map((image, index) => (
+                {sticker.sticker_documents &&
+                  sticker.sticker_documents.map((image, index) => (
                     <div
                       key={index}
                       className="relative cursor-pointer w-32 h-32 overflow-hidden border border-gray-300 rounded-md shadow-sm transition-transform transform hover:scale-105"
@@ -158,7 +168,7 @@ const StickerReview = ({ sticker, onBack }) => {
                       aria-label={`Document ${index + 1}`}
                     >
                       <img
-                        src={image}
+                        src={image.document_url}
                         alt={`Document ${index + 1}`}
                         className="w-full h-full object-cover"
                       />
@@ -180,17 +190,25 @@ const StickerReview = ({ sticker, onBack }) => {
       <ApprovedModal
         isOpen={isApproveModalOpen}
         onClose={() => setIsApproveModalOpen(false)}
-        onConfirm={() => {}}
+        onConfirm={() => {
+          onResponse();
+          onBack();
+        }}
+        carStickerRequestId={sticker.id}
       />
 
       <RejectionModal
         isOpen={isRejectModalOpen}
         onClose={() => setIsRejectModalOpen(false)}
-        onSubmit={() => {}}
+        onSubmit={() => {
+          onResponse();
+          onBack();
+        }}
+        requestId={sticker.id}
       />
 
       {/* Image Modal */}
-      {isImageModalOpen && sticker.uploadedImages && (
+      {isImageModalOpen && sticker.sticker_documents && (
         <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 p-4">
           <button
             className="w-12 h-12 bg-black text-white rounded-full flex items-center justify-center text-3xl absolute top-4 right-4 z-20 hover:bg-white hover:text-black"
@@ -211,11 +229,11 @@ const StickerReview = ({ sticker, onBack }) => {
               </button>
             )}
             <img
-              src={sticker.uploadedImages[currentImageIndex]}
+              src={sticker.sticker_documents[currentImageIndex].document_url}
               alt={`Document ${currentImageIndex + 1}`}
               className="max-w-full max-h-screen object-contain transition-transform duration-300 p-5 mx-auto"
             />
-            {currentImageIndex < sticker.uploadedImages.length - 1 && (
+            {currentImageIndex < sticker.sticker_documents.length - 1 && (
               <button
                 className="absolute right-10 top-1/2 transform -translate-y-1/2 text-white text-4xl z-10 p-2 rounded-full hover:bg-white hover:text-black"
                 onClick={handleNextImage}

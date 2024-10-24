@@ -1,11 +1,15 @@
 import React, { useState } from "react";
+import useCarStickerRequests from "../../../hooks/CarStickers/useCarStickerRequests";
 
-const ApprovedModal = ({ isOpen, onClose, onConfirm }) => {
+const ApprovedModal = ({ isOpen, onClose, onConfirm, carStickerRequestId }) => {
   const [fees, setFees] = useState([
     { label: "Car Sticker Fee", amount: "" },
     { label: "Processing Fee", amount: "" },
   ]);
   const [comment, setComment] = useState("");
+
+  const { updateCarStickerRequest, loading, error, success } =
+    useCarStickerRequests(); // Use the custom hook
 
   const handleInputChange = (index, value) => {
     const updatedFees = [...fees];
@@ -13,17 +17,35 @@ const ApprovedModal = ({ isOpen, onClose, onConfirm }) => {
     setFees(updatedFees);
   };
 
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     const allFeesFilled = fees.every((fee) => fee.amount);
     if (!allFeesFilled) {
       alert("Please enter all fees before confirming.");
       return;
     }
-    onConfirm({
-      processing_fee: fees[0].amount,
-      permit_fee: fees[0].amount,
-      note: comment,
-    }); // Pass the fees and comment to the onConfirm function
+
+    const stickerFee = fees[0].amount; // Car Sticker Fee
+    const processingFee = fees[1].amount; // Processing Fee
+
+    try {
+      // Call the update function from the hook to submit the form data
+      const res = await updateCarStickerRequest(
+        carStickerRequestId,
+        stickerFee,
+        processingFee,
+        comment
+      );
+
+      if (res) {
+        alert(
+          "Car sticker request updated and resident notified successfully."
+        );
+        onConfirm();
+        onClose(); // Close the modal after successful update
+      }
+    } catch (err) {
+      alert("An error occurred while updating the request. Please try again.");
+    }
   };
 
   if (!isOpen) return null;
@@ -41,6 +63,8 @@ const ApprovedModal = ({ isOpen, onClose, onConfirm }) => {
               <span>{fee.label}:</span>
               <input
                 type="number"
+                min={"1"}
+                step={"any"}
                 className="border border-gray-300 rounded px-2 py-1 w-64"
                 value={fee.amount}
                 onChange={(e) => handleInputChange(index, e.target.value)}
@@ -63,12 +87,17 @@ const ApprovedModal = ({ isOpen, onClose, onConfirm }) => {
           />
         </div>
 
+        {error && <p className="text-red-500 mb-4">{error}</p>}
+
         <div className="space-x-4">
           <button
-            className="bg-green text-white px-4 py-2 rounded hover:bg-mutedGreen"
+            className={`bg-green text-white px-4 py-2 rounded ${
+              loading ? "opacity-50" : "hover:bg-mutedGreen"
+            }`}
             onClick={handleConfirm}
+            disabled={loading}
           >
-            Confirm and Notify Resident
+            {loading ? "Processing..." : "Confirm and Notify Resident"}
           </button>
           <button
             className="bg-red-500 text-white px-4 py-2 rounded hover:bg-gray-400"

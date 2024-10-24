@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
             AmenitySeeder::class,
             AnnouncementSeeder::class,
             // ResidentSeeder::class,
+            CarStickerRequestSeeder::class,
             BookingSeeder::class,
             HouseSeeder::class
        ]);

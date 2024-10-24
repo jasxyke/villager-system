@@ -17,9 +17,13 @@ return new class extends Migration
             $table->string('car_model');
             $table->string('car_plate_number');
             $table->enum('request_status',['pending','approved',
-            'rejected','in_progress','claimed']);
+            'rejected','in_progress','completed', 'claimed']);
             $table->date('application_date');
             $table->date('approval_date')->nullable();
+            $table->date('completed_date')->nullable();
+            $table->date('claimed_date')->nullable();
+            $table->decimal('sticker_fee');
+            $table->decimal('processing_fee');
             $table->text('note')->nullable();
             $table->timestamps();
         });

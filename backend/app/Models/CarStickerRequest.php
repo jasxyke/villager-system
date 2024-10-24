@@ -24,13 +24,18 @@ class CarStickerRequest extends Model
         return $this->belongsTo(Resident::class);
     }
 
-    public function carStickers()
+    public function carSticker()
     {
-        return $this->hasMany(CarSticker::class);
+        return $this->hasOne(CarSticker::class);
     }
 
     public function stickerPayments()
     {
         return $this->hasMany(StickerPayment::class);
+    }
+
+    public function stickerDocuments()
+    {
+        return $this->hasMany(StickerDocument::class);
     }
 }

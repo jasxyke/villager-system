@@ -18,7 +18,8 @@ class StickerDocument extends Model
         'upload_date'
     ];
 
-    public function carSticker(): BelongsTo{
-        return $this->belongsTo(CarSticker::class);
+    public function carStickerRequest()
+    {
+        return $this->belongsTo(CarStickerRequest::class);
     }
 }

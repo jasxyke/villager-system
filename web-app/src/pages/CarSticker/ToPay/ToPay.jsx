@@ -1,9 +1,9 @@
 import React from "react";
 import StickerFilter from "../StickerRequest/StickerFilter";
 import SearchBar from "../SearchBar";
-import CompletedTable from "./CompletedTable";
+import ToPayStickerTable from "./ToPayStickerTable";
 
-const CompletedRequest = () => {
+const ToPaySticker = () => {
   return (
     <div className="w-full max-w-7xl">
       {/* <div className="flex items-center justify-between border-t py-4">
@@ -11,10 +11,10 @@ const CompletedRequest = () => {
         <SearchBar />
       </div> */}
       <div>
-        <CompletedTable />
+        <ToPayStickerTable />
       </div>
     </div>
   );
 };
 
-export default CompletedRequest;
+export default ToPaySticker;

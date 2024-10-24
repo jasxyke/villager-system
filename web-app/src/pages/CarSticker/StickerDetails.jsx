@@ -150,18 +150,6 @@ const StickerDetails = ({ sticker, onBack }) => {
                 ))}
               </div>
             ))}
-            {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {[
-                // { label: "Processing Fee", value: sticker.sticker_payment },
-              ].map(({ label, value }) => (
-                <div key={label} className="flex items-center">
-                  <label className="w-1/3 font-semibold text-white">
-                    {label}:
-                  </label>
-                  <div className="w-2/3 text-white">{value || "N/A"}</div>
-                </div>
-              ))}
-            </div> */}
           </fieldset>
         ) : null}
 

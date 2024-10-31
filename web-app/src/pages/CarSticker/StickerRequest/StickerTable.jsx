@@ -6,7 +6,7 @@ import useCarStickerRequestsByStatus from "../../../hooks/CarStickers/useCarStic
 import { formatName, formatUserName } from "../../../utils/DataFormatter";
 import ReactPaginate from "react-paginate";
 
-const StickerTable = () => {
+const StickerTable = ({ status }) => {
   const [selectedSticker, setSelectedSticker] = useState(null);
   const [detailsView, setDetailsView] = useState(false);
 
@@ -23,8 +23,8 @@ const StickerTable = () => {
 
   useEffect(() => {
     // Fetch pending requests when the component mounts
-    fetchRequestsByStatus("pending", currentPage); // Default to page 1 on mount
-  }, [currentPage]);
+    fetchRequestsByStatus(status, currentPage); // Default to page 1 on mount
+  }, [currentPage, status]);
 
   const handleRowClick = (sticker) => {
     setSelectedSticker(sticker);
@@ -63,7 +63,7 @@ const StickerTable = () => {
         <StickerReview
           sticker={selectedSticker}
           onBack={handleBack}
-          onResponse={() => fetchRequestsByStatus("pending", currentPage)}
+          onResponse={() => fetchRequestsByStatus(status, currentPage)}
         />
       ) : (
         <>

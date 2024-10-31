@@ -6,13 +6,21 @@ const SelectOptions = ({ list, onChangeValue, value, label, width = 0 }) => {
       {item.text}
     </option>
   ));
+
+  const selectWidth =
+    width === 0
+      ? `100px`
+      : width === "auto"
+      ? "auto"
+      : width === "full"
+      ? "100%"
+      : `${width}`;
   return (
     <div>
       <p className="text-white mb-1">{label}</p>
       <select
-        className={`bg-greyGreen rounded-md p-2 ${
-          width === 0 ? `w-[${width}]` : "w-[100px]"
-        } text-black`}
+        className={`bg-greyGreen rounded-md p-2 text-black`}
+        style={{ width: selectWidth }}
         name={label}
         id={label}
         onChange={(e) => onChangeValue(e.target.value)}

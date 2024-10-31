@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { FiPrinter } from "react-icons/fi";
-import useReports from "../../hooks/useReports";
+import useMonthsBehindReports from "../../hooks/Reports/useMonthsBehindReports";
 
 const MonthlyDuesReport = () => {
   const {
@@ -9,7 +9,7 @@ const MonthlyDuesReport = () => {
     monthsBehindData,
     fetchMonthsBehindReport,
     fetchMonthsBehindData,
-  } = useReports();
+  } = useMonthsBehindReports();
 
   // Fetch data when the component mounts
   useEffect(() => {

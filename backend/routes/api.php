@@ -12,6 +12,7 @@ use App\Http\Controllers\HouseController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PermitPaymentController;
 use App\Http\Controllers\PermitRequestController;
+use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\ResidentController;
 use App\Http\Controllers\StickerPaymentController;
 use App\Http\Controllers\TransactionController;
@@ -130,6 +131,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('complaints', ComplaintController::class);
     Route::get("/get-complaints/{status}", [ComplaintController::class, 'getComplaints']);
     Route::patch('/complaints/{id}/solve', [ComplaintController::class, 'solveComplaint']);
+
+    //REPORTS
+    Route::get('/reports/resident-bills', [ReportsController::class, 'generatePdfReport']);
+    Route::get('/reports/resident-bill-data', [ReportsController::class, 'fetchResidentBillData']);
 });
 
 //booking routes (avaialable to the public)

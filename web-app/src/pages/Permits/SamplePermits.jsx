@@ -40,6 +40,7 @@ const SamplePermits = [
     completionDate: "2024-09-02",
     details: "Permit already received",
     issueDate: "2024-09-02",
+    purpose: "House Permit",
   },
 ];
 

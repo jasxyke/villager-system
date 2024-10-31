@@ -5,6 +5,8 @@ import PermitTransactionLog from "./TransactionLog/PermitTransactionLog";
 import InProgressPermit from "./InProgress/InProgressPermit";
 import CompletedPermit from "./Completed/CompletedPermit";
 import ToPay from "./ToPay";
+import ToClaim from "./ToClaim/ToClaim";
+import ToPayPermit from "./ToPay/ToPayPermit";
 
 const Permits = () => {
   const [activeTab, setActiveTab] = useState("applications");
@@ -45,6 +47,16 @@ const Permits = () => {
               }`}
               onClick={() => setActiveTab("inProgress")}
             >
+              In Progress
+            </button>
+            <button
+              className={`relative flex-1 py-2 px-4 text-center cursor-pointer transition-colors duration-300 ${
+                activeTab === "toClaim"
+                  ? "bg-mutedGreen text-black"
+                  : "text-white hover:text-mutedGreen"
+              }`}
+              onClick={() => setActiveTab("toClaim")}
+            >
               To Claim
             </button>
             <button
@@ -62,8 +74,9 @@ const Permits = () => {
 
         <div className="pt-6">
           {activeTab === "applications" && <PermitApplications />}
-          {activeTab === "toPay" && <ToPay />}
+          {activeTab === "toPay" && <ToPayPermit />}
           {activeTab === "inProgress" && <InProgressPermit />}
+          {activeTab === "toClaim" && <ToClaim />}
           {activeTab === "completed" && <CompletedPermit />}
         </div>
       </div>

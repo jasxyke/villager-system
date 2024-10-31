@@ -12,7 +12,19 @@ import { useAuthContext } from "../contexts/AuthContext";
 import HouseIcon from "../assets/icons/temporaryhouse.png";
 import { CiMemoPad } from "react-icons/ci";
 import { FaCar } from "react-icons/fa6";
-import { FiFileText, FiFlag } from "react-icons/fi";
+import { BiCar, BiDetail } from "react-icons/bi";
+import { BsGraphUpArrow } from "react-icons/bs";
+import {
+  FiBook,
+  FiCalendar,
+  FiClipboard,
+  FiFileText,
+  FiFlag,
+  FiHome,
+  FiLogOut,
+  FiMessageSquare,
+  FiUsers,
+} from "react-icons/fi";
 
 const SideBar = () => {
   const { logout } = useAuthContext();
@@ -52,7 +64,7 @@ const SideBar = () => {
             to="/booking"
             ref={location.pathname === "/booking" ? activeLinkRef : null}
           >
-            <img src={bookingIcon} alt="Booking" /> Booking
+            <FiCalendar className="text-3xl mr-2" /> Booking
           </NavLink>
         </li>
         <li>
@@ -60,7 +72,7 @@ const SideBar = () => {
             to="/bills"
             ref={location.pathname === "/bills" ? activeLinkRef : null}
           >
-            <img src={billsIcon} alt="Bills" /> Bills
+            <FiBook className="text-3xl mr-2" /> Collections
           </NavLink>
         </li>
         <li>
@@ -68,7 +80,8 @@ const SideBar = () => {
             to="/permits"
             ref={location.pathname === "/permits" ? activeLinkRef : null}
           >
-            <CiMemoPad className="text-4xl mr-2" /> Permits
+            <FiClipboard className="text-3xl mr-2" />
+            Permits
           </NavLink>
         </li>
         <li>
@@ -76,7 +89,8 @@ const SideBar = () => {
             to="/sticker"
             ref={location.pathname === "/sticker" ? activeLinkRef : null}
           >
-            <FaCar className="text-3xl mr-2" /> Car Stickers
+            <BiCar className="text-3xl mr-2" />
+            Car Stickers
           </NavLink>
         </li>
         <li>
@@ -84,7 +98,8 @@ const SideBar = () => {
             to="/houses"
             ref={location.pathname === "/houses" ? activeLinkRef : null}
           >
-            <img src={HouseIcon} alt="Houses" /> Houses
+            <FiHome className="text-3xl mr-2" />
+            Houses
           </NavLink>
         </li>
         <li>
@@ -94,7 +109,8 @@ const SideBar = () => {
               location.pathname === "/users/residents" ? activeLinkRef : null
             }
           >
-            <img src={usersIcon} alt="Users" /> Users
+            <FiUsers className="text-3xl mr-2" />
+            Users
           </NavLink>
         </li>
         <li>
@@ -102,7 +118,8 @@ const SideBar = () => {
             to="/announcements"
             ref={location.pathname === "/announcements" ? activeLinkRef : null}
           >
-            <img src={announcementsIcon} alt="Announcements" /> Announcements
+            <FiMessageSquare className="text-3xl mr-2" />
+            Announcements
           </NavLink>
         </li>
         <li>
@@ -118,12 +135,13 @@ const SideBar = () => {
             to="/reports"
             ref={location.pathname === "/reports" ? activeLinkRef : null}
           >
-            <FiFileText className="text-3xl mr-2" /> Reports
+            <BsGraphUpArrow className="text-3xl mr-2" />
+            Reports
           </NavLink>
         </li>
         <li className="bg-transparent">
           <p className="" onClick={logoutUser}>
-            <img src={logoutIcon} alt="Logout" /> Logout
+            <FiLogOut className="text-3xl mr-2" /> Logout
           </p>
         </li>
       </ul>

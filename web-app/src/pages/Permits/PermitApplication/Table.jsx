@@ -1,5 +1,6 @@
 import React from "react";
 import LoadingContainer from "../../../components/LoadingScreen/LoadingContainer";
+import { formatName, formatUserName } from "../../../utils/DataFormatter";
 
 const Table = ({ onRowClick, onReviewClick, permitRequests, loading }) => {
   return (
@@ -24,14 +25,14 @@ const Table = ({ onRowClick, onReviewClick, permitRequests, loading }) => {
               onClick={() => onRowClick(permit)}
             >
               <div className="flex-1 p-2 text-center">
-                {permit.resident.user.firstname}
+                {formatUserName(permit.resident.user, false)}
               </div>
               <div className="flex-1 p-2 text-center">
                 {permit.application_date}
               </div>
               <div className="flex-1 p-2 text-center">{permit.purpose}</div>
               <div className="flex-1 p-2 text-center">
-                {permit.permit_status}
+                {formatName(permit.permit_status)}
               </div>
               <div className="flex-1 p-2 text-center">
                 <button

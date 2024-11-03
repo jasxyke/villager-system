@@ -211,7 +211,7 @@ class CarStickerRequestController extends Controller
             TODO: UNCOMMENT YUNG PAG SEND NG EMAIL KAPAG PROPER TESTING NA
             ===============================================================
             */
-            // // Get the resident associated with the car sticker request
+            // Get the resident associated with the car sticker request
             // $resident = Resident::findOrFail($carStickerRequest->resident_id);
 
             // // Send an email to the resident with the rejection reason

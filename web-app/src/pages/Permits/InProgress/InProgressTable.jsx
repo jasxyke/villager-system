@@ -1,13 +1,26 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PermitDetails from "../PermitDetails";
-import usePermitRequests from "../../../hooks/usePermitRequests";
+import usePermitRequests from "../../../hooks/Permits/usePermitRequests";
+import useUpdatePermitRequests from "../../../hooks/Permits/useUpdatePermitRequests"; // Import the new hook
 import LoadingContainer from "../../../components/LoadingScreen/LoadingContainer";
+import ReactPaginate from "react-paginate";
+import { formatUserName } from "../../../utils/DataFormatter";
 
 const InProgressTable = () => {
   const [detailsView, setDetailsView] = useState(false);
   const [selectedPermit, setSelectedPermit] = useState(null);
+  const { permitRequests, loading, error, currentPage, lastPage, changePage } =
+    usePermitRequests();
+  const {
+    completePermitRequest,
+    loading: completing,
+    error: completeError,
+    success,
+  } = useUpdatePermitRequests(); // Destructure the new hook
 
-  const { permitRequests, loading, error } = usePermitRequests();
+  useEffect(() => {
+    changePage("in_progress", currentPage);
+  }, [currentPage]);
 
   const handleRowClick = (permit) => {
     setSelectedPermit(permit);
@@ -19,10 +32,25 @@ const InProgressTable = () => {
     setDetailsView(false);
   };
 
-  const handleMarkAsDone = (permit) => {
+  const handleMarkAsDone = async (permit, e) => {
+    e.stopPropagation();
     const confirm = window.confirm(
       "Are you sure you want to mark this permit as done?"
     );
+    if (confirm) {
+      const response = await completePermitRequest(permit.id); // Call the new hook function
+      if (response) {
+        // Optionally handle the success response, e.g., show a notification
+        alert("Permit marked as done successfully!");
+        changePage("in_progress", currentPage); // Refresh the data if needed
+      } else {
+        alert(completeError || "Failed to mark permit as done."); // Show error if any
+      }
+    }
+  };
+
+  const handlePageClick = (event) => {
+    changePage("in_progress", event.selected + 1);
   };
 
   return (
@@ -58,23 +86,42 @@ const InProgressTable = () => {
                   onClick={() => handleRowClick(permit)}
                 >
                   <div className="flex-1 p-2 text-center">
-                    {permit.resident.user.firstname}
+                    {formatUserName(permit.resident.user, false)}
                   </div>
                   <div className="flex-1 p-2 text-center">
                     {permit.approval_date}
                   </div>
                   <div className="flex-1 p-2 text-center">{permit.purpose}</div>
-                  <div className="flex-1 p-2 text-center">To Claim</div>
+                  <div className="flex-1 p-2 text-center">In Progress</div>
                   <div className="flex-1 p-2 text-center">
                     <button
                       className="bg-secondary text-white px-4 py-2 rounded hover:bg-greyGreen transition-colors"
-                      onClick={() => handleMarkAsDone(permit)}
+                      onClick={(e) => handleMarkAsDone(permit, e)} // Pass event to handleMarkAsDone
+                      disabled={completing} // Disable button while completing
                     >
-                      Mark as Done
+                      {completing ? "Marking..." : "Mark as Done"}
                     </button>
                   </div>
                 </div>
               ))
+            )}
+          </div>
+
+          <div className="flex justify-center mt-4">
+            {lastPage > 1 && (
+              <ReactPaginate
+                breakLabel="..."
+                nextLabel={"next >"}
+                onPageChange={handlePageClick}
+                pageRangeDisplayed={5}
+                pageCount={lastPage}
+                previousLabel={"< previous"}
+                renderOnZeroPageCount={null}
+                className={"pagination rounded-md"}
+                disabledClassName="text-grey opacity-50"
+                pageClassName="text-white"
+                activeClassName="bg-paleGreen px-2"
+              />
             )}
           </div>
         </>

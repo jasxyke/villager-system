@@ -1,13 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PermitDetails from "../PermitDetails";
-import usePermitRequests from "../../../hooks/usePermitRequests";
+import usePermitRequests from "../../../hooks/Permits/usePermitRequests";
 import LoadingContainer from "../../../components/LoadingScreen/LoadingContainer";
+import ReactPaginate from "react-paginate"; // Add pagination support
+import { formatName } from "../../../utils/DataFormatter";
 
 const CompletedTable = () => {
   const [detailsView, setDetailsView] = useState(false);
   const [selectedPermit, setSelectedPermit] = useState(null);
+  const { permitRequests, loading, error, currentPage, lastPage, changePage } =
+    usePermitRequests(); // Use the custom hook
 
-  const { permitRequests, loading, error } = usePermitRequests();
+  useEffect(() => {
+    changePage("claimed", currentPage); // Fetch completed permits
+  }, [currentPage]);
 
   const handleRowClick = (permit) => {
     setSelectedPermit(permit);
@@ -17,6 +23,10 @@ const CompletedTable = () => {
   const handleBack = () => {
     setSelectedPermit(null);
     setDetailsView(false);
+  };
+
+  const handlePageClick = (event) => {
+    changePage("claimed", event.selected + 1); // Handle pagination
   };
 
   return (
@@ -29,6 +39,7 @@ const CompletedTable = () => {
             <div className="flex items-center justify-center font-medium bg-mutedGreen p-2 text-center">
               <div className="flex-1 p-2">Name</div>
               <div className="flex-1 p-2">Completed Date</div>
+              <div className="flex-1 p-2">Claimed Date</div>
               <div className="flex-1 p-2">Type</div>
               <div className="flex-1 p-2">Status</div>
             </div>
@@ -54,12 +65,35 @@ const CompletedTable = () => {
                     {permit.resident.user.firstname}
                   </div>
                   <div className="flex-1 p-2 text-center">
-                    {permit.completed_date}
+                    {permit.completed_date || "N/A"}
+                  </div>
+                  <div className="flex-1 p-2 text-center">
+                    {permit.claimed_date || "N/A"}
                   </div>
                   <div className="flex-1 p-2 text-center">{permit.purpose}</div>
-                  <div className="flex-1 p-2 text-center">{permit.status}</div>
+                  <div className="flex-1 p-2 text-center">
+                    {formatName(permit.permit_status)}
+                  </div>
                 </div>
               ))
+            )}
+          </div>
+
+          <div className="flex justify-center mt-4">
+            {lastPage > 1 && (
+              <ReactPaginate
+                breakLabel="..."
+                nextLabel={"next >"}
+                onPageChange={handlePageClick}
+                pageRangeDisplayed={5}
+                pageCount={lastPage}
+                previousLabel={"< previous"}
+                renderOnZeroPageCount={null}
+                className={"pagination rounded-md"}
+                disabledClassName="text-grey opacity-50"
+                pageClassName="text-white"
+                activeClassName="bg-paleGreen px-2"
+              />
             )}
           </div>
         </>

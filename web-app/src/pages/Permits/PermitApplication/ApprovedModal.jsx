@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 
 const ApprovedModal = ({ isOpen, onClose, onConfirm }) => {
-  const [fees, setFees] = useState([
-    { label: "Permit Fee", amount: "" },
-    { label: "Processing Fee", amount: "" },
-  ]);
+  // const [fees, setFees] = useState([
+  //   { label: "Permit Fee", amount: "" },
+  //   { label: "Processing Fee", amount: "" },
+  // ]);
+  const [permitFee, setPermitFee] = useState(0);
+  const [processingFee, setProcessingFee] = useState(0);
   const [comment, setComment] = useState("");
 
   const handleInputChange = (index, value) => {
@@ -14,16 +16,11 @@ const ApprovedModal = ({ isOpen, onClose, onConfirm }) => {
   };
 
   const handleConfirm = () => {
-    const allFeesFilled = fees.every((fee) => fee.amount);
-    if (!allFeesFilled) {
-      alert("Please enter all fees before confirming.");
+    if (permitFee <= 0 || processingFee <= 0) {
+      alert("Please enter a fee.");
       return;
     }
-    onConfirm({
-      processing_fee: fees[0].amount,
-      permit_fee: fees[0].amount,
-      note: comment,
-    }); // Pass the fees and comment to the onConfirm function
+    onConfirm(permitFee, processingFee, comment);
   };
 
   if (!isOpen) return null;
@@ -34,18 +31,28 @@ const ApprovedModal = ({ isOpen, onClose, onConfirm }) => {
         <h2 className="text-xl font-semibold mb-4">Approval Confirmation</h2>
         <p className="mb-4">Please enter the fees for this permit:</p>
         <ul className="mb-4">
-          {fees.map((fee, index) => (
-            <li key={index} className="flex justify-between items-center mb-2">
-              <span>{fee.label}:</span>
-              <input
-                type="number"
-                className="border border-gray-300 rounded px-2 py-1 w-64"
-                value={fee.amount}
-                onChange={(e) => handleInputChange(index, e.target.value)}
-                placeholder="Enter amount"
-              />
-            </li>
-          ))}
+          <li className="flex justify-between items-center mb-2">
+            <span>Permit Fee:</span>
+            <input
+              type="number"
+              className="border border-gray-300 rounded px-2 py-1 w-64"
+              value={permitFee}
+              onChange={(e) => setPermitFee(e.target.value)}
+              placeholder="Enter amount"
+              required
+            />
+          </li>
+          <li className="flex justify-between items-center mb-2">
+            <span>Processing Fee:</span>
+            <input
+              type="number"
+              className="border border-gray-300 rounded px-2 py-1 w-64"
+              value={processingFee}
+              onChange={(e) => setProcessingFee(e.target.value)}
+              placeholder="Enter amount"
+              required
+            />
+          </li>
         </ul>
 
         <div className="mb-4">

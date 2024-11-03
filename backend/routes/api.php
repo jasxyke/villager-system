@@ -105,9 +105,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/permits/resident/{residentId}', [PermitRequestController::class, 'getPermitRequestsByResident']);
     Route::get('/payments/resident/{residentId}', [PermitPaymentController::class, 'getPaymentHistory']);
 
-    Route::get('/permit-requests', [PermitRequestController::class, 'index']);
+    Route::get('/permit-requests/{status}', [PermitRequestController::class, 'getPermitRequestsByStatus']);
     Route::post('/permit-requests/{id}/approve',[PermitRequestController::class, 'approve']);
     Route::post('/permit-requests/{id}/reject',[PermitRequestController::class, 'reject']);
+    Route::post('/permit-requests/{id}/complete', [PermitRequestController::class, 'completePermitRequest']);
+    Route::put('/permit-requests/{id}/claim', [PermitRequestController::class, 'claimPermitRequest']);
+
+    //permit payments
+    Route::post('/permit-payments/add-payment', [PermitPaymentController::class, 'addPayment']);
 
     //car sticker routes
     Route::get('/sticker-payments', [StickerPaymentController::class, 'getPaymentHistory']);

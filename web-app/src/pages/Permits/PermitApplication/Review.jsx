@@ -2,48 +2,44 @@ import React, { useState } from "react";
 import { FiArrowLeft } from "react-icons/fi";
 import RejectionModal from "./RejectionModal";
 import ApprovedModal from "./ApprovedModal";
+import { formatUserName } from "../../../utils/DataFormatter";
+import usePermitReview from "../../../hooks/Permits/usePermitReview";
 
-const PermitApplicationReview = ({
-  permit,
-  onBack,
-  rejectPermitRequest,
-  approvePermitRequest,
-}) => {
+const PermitApplicationReview = ({ permit, onBack }) => {
   const [isRejectModalOpen, setIsRejectModalOpen] = useState(false);
   const [isApprovedModalOpen, setIsApprovedModalOpen] = useState(false);
+  const { approvePermitRequest, rejectPermitRequest, loading, error, success } =
+    usePermitReview(); // Destructure hook values
 
-  // Handle the reject button click
   const handleRejectClick = () => {
     setIsRejectModalOpen(true);
   };
 
-  // Handle the approval button click
   const handleApproveClick = () => {
     setIsApprovedModalOpen(true);
   };
 
-  // Handle submission of the rejection form
   const handleRejectSubmit = async (reason) => {
     try {
       await rejectPermitRequest(permit.id, reason);
-      alert("The application has been rejected.");
+      // alert("The application has been rejected.");
       onBack();
     } catch (error) {
-      alert("An error occurred while rejecting the application.");
+      console.log(error);
+      // alert("An error occurred while rejecting the application.");
     } finally {
       setIsRejectModalOpen(false);
     }
   };
 
-  // Handle the confirmation in the approval modal
-  const handleConfirmApproval = async (data) => {
+  const handleConfirmApproval = async (permitFee, processingFee, note) => {
     try {
-      await approvePermitRequest(permit.id, data);
-      alert("The resident has been notified of the approval.");
+      await approvePermitRequest(permit.id, permitFee, processingFee, note);
+      // alert("The resident has been notified of the approval.");
       onBack();
     } catch (error) {
-      console.log(error);
-      alert("An error occurred while approving the application.");
+      // console.log(error);
+      // alert("An error occurred while approving the application.");
     } finally {
       setIsApprovedModalOpen(false);
     }
@@ -59,35 +55,40 @@ const PermitApplicationReview = ({
         />
         <div className="flex gap-4">
           <button
-            className="bg-1ime-700 border text-white px-4 py-2 rounded hover:bg-lime-600 transition-colors"
-            onClick={handleApproveClick} // Handle approval
+            className="bg-lime-700 border text-white px-4 py-2 rounded hover:bg-lime-600 transition-colors"
+            onClick={handleApproveClick}
+            disabled={loading} // Disable if loading
           >
-            Approve
+            {loading ? "Processing..." : "Approve"}
           </button>
           <button
             className="bg-red-500 border text-white px-4 py-2 rounded hover:bg-red-600 transition-colors"
-            onClick={handleRejectClick} // Handle rejection
+            onClick={handleRejectClick}
+            disabled={loading} // Disable if loading
           >
-            Reject
+            {loading ? "Processing..." : "Reject"}
           </button>
         </div>
       </div>
-
+      {error && <p className="text-red-500 mb-4">{error}</p>}{" "}
+      {/* Display error if any */}
       <form className="space-y-6 p-4">
         <div className="flex flex-wrap gap-6">
-          {/* Applicant Information */}
+          {/* Resident Information */}
           <fieldset className="flex-1 bg-green p-5 rounded-lg shadow-sm border border-gray-300">
-            <legend className="text-xl font-semibold text-white  mb-4 ">
+            <legend className="text-xl font-semibold text-white mb-4">
               Resident Information
             </legend>
             <div className="grid grid-cols-1 gap-6">
               {[
-                { label: "Name", value: permit.resident.user.firstname },
+                {
+                  label: "Name",
+                  value: formatUserName(permit.resident.user, false),
+                },
                 {
                   label: "Contact Number",
                   value: permit.resident.user.contact_number,
                 },
-
                 { label: "Email", value: permit.resident.user.email },
                 { label: "Lot Number", value: permit.resident.house.lot },
                 { label: "Block Number", value: permit.resident.house.block },
@@ -104,13 +105,11 @@ const PermitApplicationReview = ({
               ))}
             </div>
           </fieldset>
-
-          {/* Property Information */}
         </div>
 
         {/* Request Details */}
         <fieldset className="bg-green p-5 rounded-lg shadow-sm border border-gray-300">
-          <legend className="text-xl font-semibold text-white  mb-4 ">
+          <legend className="text-xl font-semibold text-white mb-4">
             Request Details
           </legend>
           <div className="grid grid-cols-1 gap-4">
@@ -134,7 +133,7 @@ const PermitApplicationReview = ({
 
         {/* Supporting Documents */}
         <fieldset className="bg-green p-5 rounded-lg shadow-sm border border-gray-300">
-          <legend className="text-xl font-semibold text-white  mb-4 ">
+          <legend className="text-xl font-semibold text-white mb-4">
             Supporting Documents
           </legend>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -152,7 +151,7 @@ const PermitApplicationReview = ({
                       aria-label={`Document ${index + 1}`}
                     >
                       <img
-                        src={doc.url}
+                        src={doc.document_url}
                         alt={`Document ${index + 1}`}
                         className="w-full h-full object-cover"
                       />
@@ -163,7 +162,6 @@ const PermitApplicationReview = ({
           </div>
         </fieldset>
       </form>
-
       {/* Modal Components */}
       <RejectionModal
         isOpen={isRejectModalOpen}

@@ -1,120 +1,192 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ReactPaginate from "react-paginate";
 import LoadingContainer from "../../../components/LoadingScreen/LoadingContainer";
-import usePermitRequests from "../../../hooks/usePermitRequests";
+import PermitDetails from "../PermitDetails"; // Import PermitDetails component
+import usePermitRequests from "../../../hooks/Permits/usePermitRequests";
+import usePermitPayments from "../../../hooks/Permits/usePermitPayments";
+import styles from "../PermitStyles.module.css";
+import { formatUserName } from "../../../utils/DataFormatter";
 
 const ToPayPermitTable = () => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize] = useState(10);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedPermit, setSelectedPermit] = useState(null);
   const [paymentAmount, setPaymentAmount] = useState(0);
   const [errorMessage, setErrorMessage] = useState("");
+  const [detailsView, setDetailsView] = useState(false); // Track details view
 
-  const { permitRequests, loading } = usePermitRequests();
+  const {
+    permitRequests,
+    loading: requestsLoading,
+    error: requestsError,
+    currentPage,
+    lastPage,
+    fetchPermitRequests,
+    changePage,
+  } = usePermitRequests();
 
-  const paginatedRequests = permitRequests.slice(
-    (currentPage - 1) * pageSize,
-    currentPage * pageSize
-  );
-  const pageCount = Math.ceil(permitRequests.length / pageSize);
+  const {
+    addPermitPayment,
+    loading: paymentLoading,
+    error: paymentError,
+    success: paymentSuccess,
+  } = usePermitPayments();
 
-  const handlePageClick = (event) => {
-    setCurrentPage(event.selected + 1);
-  };
+  useEffect(() => {
+    fetchPermitRequests("to_pay");
+  }, []);
 
-  const handleAddPaymentClick = (permit) => {
+  useEffect(() => {
+    if (paymentSuccess) {
+      setIsModalOpen(false);
+      setPaymentAmount("");
+      fetchPermitRequests("to_pay", currentPage); // Refresh permit requests on successful payment
+    }
+    if (requestsError) {
+      setErrorMessage(requestsError);
+    }
+  }, [paymentSuccess, requestsError]);
+
+  const handleRowClick = (permit) => {
     setSelectedPermit(permit);
-    setIsModalOpen(true);
+    setDetailsView(true); // Switch to details view on row click
   };
 
   const handleModalClose = () => {
     setIsModalOpen(false);
-    setPaymentAmount(0);
+    setPaymentAmount("");
     setErrorMessage("");
   };
 
-  const handlePaymentAmountChange = (e) => {
-    const value = parseFloat(e.target.value);
-    setPaymentAmount(value >= 0 ? value : 0);
+  const handleBack = () => {
+    setSelectedPermit(null);
+    setDetailsView(false); // Return to table view
+    fetchPermitRequests("to_pay", currentPage);
   };
 
-  const handleSubmitPayment = (e) => {
+  const handlePageClick = (data) => {
+    changePage("to_pay", data.selected + 1);
+  };
+
+  const handlePaymentAmountChange = (e) => {
+    setPaymentAmount(e.target.value);
+    setErrorMessage(""); // Clear error message on input change
+  };
+
+  const handleSubmitPayment = async (e) => {
     e.preventDefault();
-    if (paymentAmount <= 0) {
-      setErrorMessage("Payment amount must be greater than 0.");
-      return;
+    if (selectedPermit) {
+      const { id: permitRequestId, resident_id: residentId } = selectedPermit;
+      const totalAmount =
+        parseFloat(selectedPermit.permit_fee) +
+        parseFloat(selectedPermit.processing_fee);
+      const amount = parseFloat(paymentAmount);
+
+      if (amount <= 0) {
+        setErrorMessage("Payment amount must be greater than zero.");
+        return;
+      }
+      if (amount > totalAmount) {
+        setErrorMessage("Payment amount cannot exceed the total fee.");
+        return;
+      }
+
+      const response = await addPermitPayment(
+        permitRequestId,
+        residentId,
+        amount
+      );
+      if (response) {
+        alert(response);
+      }
     }
-    // Add logic to submit the payment using your API or state management
-    alert(
-      `Payment of ₱${paymentAmount} submitted for permit ID: ${selectedPermit.id}`
-    );
-    handleModalClose(); // Close modal after submission
   };
 
   return (
     <div className="overflow-x-auto">
-      <div className="w-full mb-2">
-        <div className="flex items-center justify-center font-medium bg-mutedGreen p-2 text-center">
-          <div className="flex-1 p-2">Name</div>
-          <div className="flex-1 p-2">Approved Date</div>
-          <div className="flex-1 p-2">Purpose</div>
-          <div className="flex-1 p-2">Status</div>
-          <div className="flex-1 p-2">Action</div>
-        </div>
-      </div>
-
-      <div>
-        {loading ? (
-          <LoadingContainer />
-        ) : paginatedRequests.length > 0 ? (
-          paginatedRequests.map((permit) => (
-            <div
-              key={permit.id}
-              className="flex border mb-2 hover:bg-darkerGreen cursor-pointer text-white"
-            >
-              <div className="flex-1 p-2 text-center">
-                {permit.resident.user.firstname}
-              </div>
-              <div className="flex-1 p-2 text-center">
-                {permit.approval_date}
-              </div>
-              <div className="flex-1 p-2 text-center">{permit.purpose}</div>
-              <div className="flex-1 p-2 text-center">To Pay</div>
-              <div className="flex-1 p-2 text-center">
-                <button
-                  className="bg-secondary text-white px-4 py-2 rounded hover:bg-greyGreen transition-colors"
-                  onClick={() => handleAddPaymentClick(permit)}
-                >
-                  ADD PAYMENT
-                </button>
-              </div>
-            </div>
-          ))
+      <div className="w-full">
+        {detailsView ? (
+          <PermitDetails permit={selectedPermit} onBack={handleBack} />
         ) : (
-          <p>No approved permit requests available.</p>
+          <div>
+            <div className="flex items-center justify-center font-medium bg-mutedGreen mb-2 p-2 text-center">
+              <div className="flex-1 p-2 text-center">Permit ID</div>
+              <div className="flex-1 p-2 text-center">Resident</div>
+              <div className="flex-1 p-2 text-center">Permit Fee</div>
+              <div className="flex-1 p-2 text-center">Processing Fee</div>
+              <div className="flex-1 p-2 text-center">Total Amount</div>
+              <div className="flex-1 p-2 text-center">Actions</div>
+            </div>
+
+            {requestsLoading ? (
+              <LoadingContainer />
+            ) : requestsError ? (
+              <p className="text-red-500">{requestsError}</p>
+            ) : permitRequests.length > 0 ? (
+              permitRequests.map((permit) => (
+                <div
+                  key={permit.id}
+                  className="flex border mb-2 hover:bg-darkerGreen cursor-pointer text-white"
+                  onClick={() => handleRowClick(permit)}
+                >
+                  <div className="flex-1 p-2 text-center">{permit.id}</div>
+                  <div className="flex-1 p-2 text-center">
+                    {formatUserName(permit.resident.user, false)}
+                  </div>
+                  <div className="flex-1 p-2 text-center">
+                    ₱{parseFloat(permit.permit_fee).toFixed(2)}
+                  </div>
+                  <div className="flex-1 p-2 text-center">
+                    ₱{parseFloat(permit.processing_fee).toFixed(2)}
+                  </div>
+                  <div className="flex-1 p-2 text-center">
+                    ₱
+                    {(
+                      parseFloat(permit.permit_fee) +
+                      parseFloat(permit.processing_fee)
+                    ).toFixed(2)}
+                  </div>
+                  <div className="flex-1 p-2 text-center">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedPermit(permit);
+                        setIsModalOpen(true);
+                      }}
+                      className="bg-secondary text-white px-4 py-2 rounded hover:bg-greyGreen transition-colors"
+                    >
+                      Add Payment
+                    </button>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p>No permit requests available</p>
+            )}
+          </div>
+        )}
+
+        {!detailsView && (
+          <div className="flex justify-center mt-4">
+            {lastPage > 1 && (
+              <ReactPaginate
+                breakLabel="..."
+                nextLabel="next >"
+                onPageChange={handlePageClick}
+                pageRangeDisplayed={5}
+                pageCount={lastPage}
+                previousLabel="< previous"
+                renderOnZeroPageCount={null}
+                className={"pagination rounded-md"}
+                disabledClassName="text-grey opacity-50"
+                pageClassName="text-white"
+                activeClassName="bg-paleGreen px-2"
+              />
+            )}
+          </div>
         )}
       </div>
 
-      {pageCount > 1 && (
-        <div className="flex justify-center mt-4">
-          <ReactPaginate
-            breakLabel="..."
-            nextLabel={"Next >"}
-            onPageChange={handlePageClick}
-            pageRangeDisplayed={5}
-            pageCount={pageCount}
-            previousLabel={"< Previous"}
-            renderOnZeroPageCount={null}
-            className={"pagination flex space-x-2"}
-            disabledClassName="text-gray-400 opacity-50"
-            pageClassName="px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-300 transition-colors"
-            activeClassName="bg-blue-600 text-white rounded-md"
-          />
-        </div>
-      )}
-
-      {isModalOpen && (
+      {isModalOpen && selectedPermit && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
             <h3 className="text-lg font-semibold">Add Payment</h3>
@@ -124,7 +196,23 @@ const ToPayPermitTable = () => {
             >
               &times;
             </button>
-
+            <div className="mt-4">
+              <p>
+                <strong>Permit Fee:</strong> ₱
+                {parseFloat(selectedPermit?.permit_fee).toFixed(2)}
+              </p>
+              <p>
+                <strong>Processing Fee:</strong> ₱
+                {parseFloat(selectedPermit?.processing_fee).toFixed(2)}
+              </p>
+              <p>
+                <strong>Total Amount to Pay:</strong> ₱
+                {(
+                  parseFloat(selectedPermit?.permit_fee) +
+                  parseFloat(selectedPermit?.processing_fee)
+                ).toFixed(2)}
+              </p>
+            </div>
             <form onSubmit={handleSubmitPayment} className="mt-4">
               <label className="block mb-2">Enter Payment Amount:</label>
               <input
@@ -132,15 +220,18 @@ const ToPayPermitTable = () => {
                 min="0"
                 value={paymentAmount}
                 onChange={handlePaymentAmountChange}
-                className="w-full p-2 border rounded"
+                className={`w-full p-2 border rounded ${
+                  errorMessage ? "border-red-500" : ""
+                }`}
                 required
               />
               {errorMessage && <p className="text-red-500">{errorMessage}</p>}
               <button
                 type="submit"
-                className="bg-secondary text-white px-4 py-2 rounded hover:bg-green-600 transition-colors mt-4"
+                className="mr-4 bg-secondary text-white px-4 py-2 rounded hover:bg-green-600 transition-colors mt-4"
+                disabled={paymentLoading}
               >
-                Submit
+                {paymentLoading ? "Processing..." : "Submit"}
               </button>
               <button
                 type="button"
@@ -149,6 +240,7 @@ const ToPayPermitTable = () => {
               >
                 Cancel
               </button>
+              {paymentError && <p className="text-red-500">{paymentError}</p>}
             </form>
           </div>
         </div>

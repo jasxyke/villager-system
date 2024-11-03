@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             AnnouncementSeeder::class,
             // ResidentSeeder::class,
             CarStickerRequestSeeder::class,
+            PermitRequestSeeder::class,
             BookingSeeder::class,
             HouseSeeder::class
        ]);

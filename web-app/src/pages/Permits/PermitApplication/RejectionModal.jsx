@@ -8,6 +8,10 @@ const RejectionModal = ({ isOpen, onClose, onSubmit }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const reason = selectedReason === "Other" ? otherReason : selectedReason;
+    if (!reason) {
+      alert("Please provide a reason for rejection.");
+      return;
+    }
     onSubmit(reason);
     setSelectedReason("");
     setOtherReason("");

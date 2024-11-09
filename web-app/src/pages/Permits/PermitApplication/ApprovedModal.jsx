@@ -1,23 +1,30 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useSettings } from "../../../contexts/SettingsContext";
+const ApprovedModal = ({ isOpen, onClose, onConfirm, permit }) => {
+  const { settings, loading, error } = useSettings(); // Get settings from the context
 
-const ApprovedModal = ({ isOpen, onClose, onConfirm }) => {
-  // const [fees, setFees] = useState([
-  //   { label: "Permit Fee", amount: "" },
-  //   { label: "Processing Fee", amount: "" },
-  // ]);
   const [permitFee, setPermitFee] = useState(0);
   const [processingFee, setProcessingFee] = useState(0);
   const [comment, setComment] = useState("");
+  const [squareMeter, setSquareMeter] = useState(permit.floor_size);
+
+  // Calculate fees based on square meter
+  useEffect(() => {
+    if (!loading && settings) {
+      const permitFeePerSquareMeter = settings.payment_per_square_meter || 0;
+
+      setPermitFee(permitFeePerSquareMeter * squareMeter);
+      setProcessingFee(settings.processing_fee);
+    }
+  }, [loading, settings, squareMeter]);
 
   const handleInputChange = (index, value) => {
-    const updatedFees = [...fees];
-    updatedFees[index].amount = value;
-    setFees(updatedFees);
+    // Handle input changes if you decide to make the fees editable
   };
 
   const handleConfirm = () => {
     if (permitFee <= 0 || processingFee <= 0) {
-      alert("Please enter a fee.");
+      alert("Please enter a valid fee.");
       return;
     }
     onConfirm(permitFee, processingFee, comment);
@@ -32,13 +39,25 @@ const ApprovedModal = ({ isOpen, onClose, onConfirm }) => {
         <p className="mb-4">Please enter the fees for this permit:</p>
         <ul className="mb-4">
           <li className="flex justify-between items-center mb-2">
+            <span>Sq. Meter:</span>
+            <input
+              type="number"
+              className="border border-gray-300 rounded px-2 py-1 w-64"
+              value={squareMeter}
+              onChange={(e) => setSquareMeter(e.target.value)}
+              placeholder="Enter square meters"
+              required
+            />
+          </li>
+          <li className="flex justify-between items-center mb-2">
             <span>Permit Fee:</span>
             <input
               type="number"
               className="border border-gray-300 rounded px-2 py-1 w-64"
               value={permitFee}
               onChange={(e) => setPermitFee(e.target.value)}
-              placeholder="Enter amount"
+              placeholder="Permit Fee"
+              // disabled
               required
             />
           </li>
@@ -49,7 +68,8 @@ const ApprovedModal = ({ isOpen, onClose, onConfirm }) => {
               className="border border-gray-300 rounded px-2 py-1 w-64"
               value={processingFee}
               onChange={(e) => setProcessingFee(e.target.value)}
-              placeholder="Enter amount"
+              placeholder="Processing Fee"
+              // disabled
               required
             />
           </li>

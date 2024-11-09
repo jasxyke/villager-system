@@ -139,6 +139,12 @@ const StickerReview = ({ sticker, onBack, onResponse }) => {
             {[
               { label: "Request Date", value: sticker.application_date },
               { label: "Status", value: sticker.request_status },
+              { label: "Approved Date", value: sticker.approval_date },
+              { label: "Completed Date", value: sticker.completed_date },
+              { label: "Claimed Date", value: sticker.claimed_date },
+              { label: "Additional Note", value: sticker.note },
+              { label: "Sticker Fee", value: sticker.sticker_fee },
+              { label: "Processing Fee", value: sticker.processing_fee },
             ].map(({ label, value }) => (
               <div key={label} className="flex items-center">
                 <label className="w-1/3 font-semibold text-white">
@@ -149,6 +155,34 @@ const StickerReview = ({ sticker, onBack, onResponse }) => {
             ))}
           </div>
         </fieldset>
+        {/* Payment Details */}
+        {sticker.request_status !== "pending" &&
+        sticker.request_status !== "approved" ? (
+          <fieldset className="bg-green p-5 rounded-lg shadow-sm border border-gray-200">
+            <legend className="text-xl font-semibold text-white mb-4">
+              Payment Details
+            </legend>
+            {sticker.sticker_payments.map((payment) => (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {[
+                  { label: "Payment Date", value: payment.payment_date },
+                  {
+                    label: "Payment Status",
+                    value: formatName(payment.payment_status),
+                  },
+                  { label: "Paid Amount", value: payment.amount },
+                ].map(({ label, value }) => (
+                  <div key={label} className="flex items-center">
+                    <label className="w-1/3 font-semibold text-white">
+                      {label}:
+                    </label>
+                    <div className="w-2/3 text-white">{value || "N/A"}</div>
+                  </div>
+                ))}
+              </div>
+            ))}
+          </fieldset>
+        ) : null}
 
         {/* Additional Documentation */}
         <fieldset className="bg-green p-5 rounded-lg shadow-sm border border-gray-200">

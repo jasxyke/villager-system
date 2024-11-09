@@ -14,6 +14,7 @@ use App\Http\Controllers\PermitPaymentController;
 use App\Http\Controllers\PermitRequestController;
 use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\ResidentController;
+use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\StickerPaymentController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserController;
@@ -140,6 +141,12 @@ Route::middleware('auth:sanctum')->group(function () {
     //REPORTS
     Route::get('/reports/resident-bills', [ReportsController::class, 'generatePdfReport']);
     Route::get('/reports/resident-bill-data', [ReportsController::class, 'fetchResidentBillData']);
+
+    //ADMIN SETTINGS
+    Route::get('/settings', [SettingsController::class, 'index']);
+    Route::post('/settings', [SettingsController::class, 'update']);
+    Route::get('/settings/{key}', [SettingsController::class, 'getSetting']);
+
 });
 
 //booking routes (avaialable to the public)

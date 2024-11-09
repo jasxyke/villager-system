@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import useCarStickerRequests from "../../../hooks/CarStickers/useCarStickerRequests";
+import { useSettings } from "../../../contexts/SettingsContext";
 
 const ApprovedModal = ({ isOpen, onClose, onConfirm, carStickerRequestId }) => {
   const [fees, setFees] = useState([
@@ -8,8 +9,28 @@ const ApprovedModal = ({ isOpen, onClose, onConfirm, carStickerRequestId }) => {
   ]);
   const [comment, setComment] = useState("");
 
+  // Use the settings context
+  const {
+    settings,
+    loading: settingsLoading,
+    error: settingsError,
+  } = useSettings();
+
   const { updateCarStickerRequest, loading, error, success } =
     useCarStickerRequests(); // Use the custom hook
+
+  // Use effect to set the initial fees from settings when they are loaded
+  useEffect(() => {
+    if (settings && !settingsLoading) {
+      setFees([
+        {
+          label: "Car Sticker Fee",
+          amount: settings.payment_per_car_sticker || "",
+        },
+        { label: "Processing Fee", amount: settings.processing_fee || "" },
+      ]);
+    }
+  }, [settings, settingsLoading]);
 
   const handleInputChange = (index, value) => {
     const updatedFees = [...fees];
@@ -49,6 +70,9 @@ const ApprovedModal = ({ isOpen, onClose, onConfirm, carStickerRequestId }) => {
   };
 
   if (!isOpen) return null;
+
+  if (settingsLoading) return <p>Loading settings...</p>;
+  if (settingsError) return <p>Error loading settings: {settingsError}</p>;
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">

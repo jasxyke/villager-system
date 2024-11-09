@@ -25,6 +25,7 @@ import {
   FiMessageSquare,
   FiUsers,
 } from "react-icons/fi";
+import { MdOutlineRoomPreferences } from "react-icons/md";
 
 const SideBar = () => {
   const { logout } = useAuthContext();
@@ -72,7 +73,7 @@ const SideBar = () => {
             to="/bills"
             ref={location.pathname === "/bills" ? activeLinkRef : null}
           >
-            <FiBook className="text-3xl mr-2" /> Collections
+            <FiBook className="text-3xl mr-2" /> Bills
           </NavLink>
         </li>
         <li>
@@ -137,6 +138,15 @@ const SideBar = () => {
           >
             <BsGraphUpArrow className="text-3xl mr-2" />
             Reports
+          </NavLink>
+        </li>
+        <li>
+          <NavLink
+            to="/admin-settings"
+            ref={location.pathname === "/admin-settings" ? activeLinkRef : null}
+          >
+            <MdOutlineRoomPreferences className="text-4xl mr-2" />
+            Admin Settings
           </NavLink>
         </li>
         <li className="bg-transparent">

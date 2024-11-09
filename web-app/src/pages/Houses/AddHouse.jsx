@@ -2,15 +2,14 @@ import React, { useState } from "react";
 import SelectInput from "../../components/forms/SelectInput";
 import TextInput from "../../components/forms/TextInput";
 import {
-  BLOCKS,
   CIVIL_STATUSES,
   HouseTypes,
   OCCUPATION_STATUSES,
   SEX_TYPES,
 } from "../../data/contants";
 
-const AddHouse = ({ onAdd, onClose, loading }) => {
-  const [blockNumber, setBlockNumber] = useState(BLOCKS[0]);
+const AddHouse = ({ onAdd, onClose, loading, blocks }) => {
+  const [blockNumber, setBlockNumber] = useState(blocks[0]);
   const [lotNumber, setLotNumber] = useState("");
   const [houseType, setHouseType] = useState(HouseTypes[0].value);
   const [lastname, setLastname] = useState("");
@@ -117,7 +116,7 @@ const AddHouse = ({ onAdd, onClose, loading }) => {
               onChange={(e) => setBlockNumber(e.target.value)}
               className="w-full border border-gray-300 p-2 rounded"
             >
-              {BLOCKS.map((block) => (
+              {blocks.map((block) => (
                 <option key={block} value={block}>
                   Block {block}
                 </option>

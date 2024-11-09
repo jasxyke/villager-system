@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Helpers\SettingsHelper;
 use App\Models\Bill;
 use App\Models\Resident;
 use Carbon\Carbon;
@@ -36,7 +37,7 @@ class MonthlyBills implements ShouldQueue
             foreach ($residents as $resident) {
                 Bill::create([
                     'resident_id' => $resident->id,
-                    'amount' => 1000, // Replace with your logic to calculate the amount
+                    'amount' => SettingsHelper::get('bill_amount_per_month'),
                     'due_date' => $now->copy()->firstOfMonth(),
                     'status' => 'pending',
                     'issue_date' => $now->copy()->lastOfMonth(),

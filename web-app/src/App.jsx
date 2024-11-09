@@ -21,6 +21,7 @@ import Reports from "./pages/Reports/Reports";
 import CommunityRulesAndRegulation from "./pages/RulesAndRegulation/CommunityRulesAndRegulation";
 import Sticker from "./pages/CarSticker/Sticker";
 import Complaints from "./pages/Complaints/Complaints";
+import AdminSettings from "./pages/Settings/AdminSettings";
 
 function App() {
   const { isLoggedIn } = useAuthContext();
@@ -49,6 +50,7 @@ function App() {
               <Route path="admins" element={<AdminPage />} />
             </Route>
             <Route path="/reports" element={<Reports />} />
+            <Route path="/admin-settings" element={<AdminSettings />} />
             <Route
               path="/guidelines"
               element={<CommunityRulesAndRegulation />}

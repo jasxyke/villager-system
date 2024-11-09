@@ -1,0 +1,16 @@
+.settingsTable {
+}
+
+.settingsTable > p {
+  color: white;
+}
+
+.settingsTable > div > div > label {
+  color: white;
+}
+
+.mainContainer {
+  display: flex;
+  flex-direction: column;
+  row-gap: 30px;
+}

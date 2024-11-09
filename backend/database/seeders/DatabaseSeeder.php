@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             CarStickerRequestSeeder::class,
             PermitRequestSeeder::class,
             BookingSeeder::class,
+            SettingsSeeder::class,
             HouseSeeder::class
        ]);
     }

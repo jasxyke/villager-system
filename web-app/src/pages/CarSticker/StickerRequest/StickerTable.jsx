@@ -5,11 +5,23 @@ import StickerDefaultTable from "../StickerDefaultTable";
 import useCarStickerRequestsByStatus from "../../../hooks/CarStickers/useCarStickerRequestsByStatus";
 import { formatName, formatUserName } from "../../../utils/DataFormatter";
 import ReactPaginate from "react-paginate";
+import SelectOptions from "../../../components/forms/SelectOptions";
 
-const StickerTable = ({ status }) => {
+const options = [
+  {
+    value: "pending",
+    text: "Pending",
+  },
+  {
+    value: "rejected",
+    text: "Rejected",
+  },
+];
+
+const StickerTable = () => {
   const [selectedSticker, setSelectedSticker] = useState(null);
   const [detailsView, setDetailsView] = useState(false);
-
+  const [status, setStatus] = useState("pending");
   // Use the custom hook to fetch car sticker requests
   const {
     fetchRequestsByStatus,
@@ -132,6 +144,16 @@ const StickerTable = ({ status }) => {
             )}
           </div>
         </>
+      )}
+
+      {!detailsView && selectedSticker === null && (
+        <SelectOptions
+          list={options}
+          onChangeValue={setStatus}
+          value={status}
+          label={"Status"}
+          width={"auto"}
+        />
       )}
     </div>
   );

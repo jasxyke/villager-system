@@ -172,10 +172,7 @@ const PermitApplicationReview = ({ permit, onBack }) => {
         isOpen={isApprovedModalOpen}
         onClose={() => setIsApprovedModalOpen(false)}
         onConfirm={handleConfirmApproval}
-        fees={[
-          { label: "Permit Fee", amount: "$50.00" },
-          { label: "Processing Fee", amount: "$10.00" },
-        ]}
+        permit={permit}
       />
     </div>
   );

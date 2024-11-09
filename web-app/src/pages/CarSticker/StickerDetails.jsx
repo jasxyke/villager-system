@@ -126,7 +126,8 @@ const StickerDetails = ({ sticker, onBack }) => {
         </fieldset>
         {/* Payment Details */}
         {sticker.request_status !== "pending" &&
-        sticker.request_status !== "approved" ? (
+        sticker.request_status !== "approved" &&
+        sticker.sticker_payments.length !== 0 ? (
           <fieldset className="bg-green p-5 rounded-lg shadow-sm border border-gray-200">
             <legend className="text-xl font-semibold text-white mb-4">
               Payment Details

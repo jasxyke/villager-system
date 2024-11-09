@@ -21,11 +21,12 @@ const Reports = () => {
           <div className="flex justify-between">
             {[
               { label: "Monthly Dues Report", value: "monthlyDuesReport" },
-              { label: "Official Receipt Report", value: "receiptReport" },
               { label: "Resident Profile Report", value: "profileReport" },
-              { label: "Amenity Usage Report", value: "usageReport" },
-              { label: "Security Logs Report", value: "logsReport" },
-              { label: "Financial Report", value: "financialReport" },
+              {
+                label: "Monthly Financial Report",
+                value: "monthlyFinancialReport",
+              },
+              { label: "Complaints Report", value: "complaintsReport" },
             ].map(({ label, value }) => (
               <button
                 key={value}
@@ -45,11 +46,9 @@ const Reports = () => {
             <div className="flex">
               {activeTab === "monthlyDuesReport" && <MonthlyDuesReport />}
               {/* Add other report components here */}
-              {/* {activeTab === "receiptReport" && <OfficialReceiptReport />} */}
               {/* {activeTab === "profileReport" && <ResidentProfileReport />} */}
-              {/* {activeTab === "usageReport" && <AmenityUsageReport />} */}
-              {/* {activeTab === "logsReport" && <SecurityLogsReport />} */}
-              {/* {activeTab === "financialReport" && <FinancialReport />} */}
+              {/* {activeTab === "monthlyFinancialReport" && <MonthlyFinancialReport />} */}
+              {/* {activeTab === "complaintsReport" && <ComplaintsReport />} */}
             </div>
           </div>
         </div>

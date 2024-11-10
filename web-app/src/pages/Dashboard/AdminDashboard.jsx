@@ -11,6 +11,8 @@ const AdminDashboard = () => {
   const [totalResidents, setTotalResidents] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [unpaidCount, setUnpaidCount] = useState(0);
+  const [totalBookings, setTotalBookings] = useState(0);
 
   useEffect(() => {
     axiosClient
@@ -64,7 +66,7 @@ const AdminDashboard = () => {
           </div>
           <div className="flex flex-col flex-grow items-start pl-8 space-y-2">
             <h2 className="text-6xl font-bold text-[#718355] tracking-tight">
-              {totalResidents}
+              {unpaidCount}
             </h2>
             <p className="text-sm text-[#87986A] uppercase font-semibold tracking-wider">
               UNPAID RESIDENTS
@@ -78,7 +80,7 @@ const AdminDashboard = () => {
           </div>
           <div className="flex flex-col flex-grow items-start pl-8 space-y-2">
             <h2 className="text-6xl font-bold text-[#718355] tracking-tight">
-              {totalResidents}
+              {totalBookings}
             </h2>
             <p className="text-sm text-[#87986A] uppercase font-semibold tracking-wider">
               MONTHLY BOOKINGS

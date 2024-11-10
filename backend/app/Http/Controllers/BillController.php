@@ -173,6 +173,21 @@ class BillController extends Controller
         return response()->json($bill);
     }
 
+    public function countUnpaidResidents(Request $request)
+    {
+        $month = $request->month;
+        $year = $request->year;
+
+        // Query to count distinct residents with unpaid bills in the given month and year
+        $unpaidResidentsCount = Bill::where('status', 'pending')
+            ->whereYear('due_date', $year)
+            ->whereMonth('due_date', $month)
+            ->distinct('resident_id')
+            ->count('resident_id');
+
+        return response()->json(['unpaid_residents_count' => $unpaidResidentsCount]);
+    }
+
     // Remove the specified bill from storage
     public function destroy($id)
     {

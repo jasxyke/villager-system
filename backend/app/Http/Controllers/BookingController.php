@@ -10,6 +10,7 @@ use App\Models\BookingPayment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\ValidationException;
+use Carbon\Carbon;
 
 class BookingController extends Controller
 {
@@ -146,6 +147,24 @@ class BookingController extends Controller
         $booking = $booking->load(['bookingPayments','amenity']);
 
         return response()->json(['success' => 'Sucessfuly updated the booking', 'booking' => $booking], 200);
+    }
+
+    /**
+     * Get total bookings for the current month.
+     */
+    public function getTotalBookingsThisMonth()
+    {
+        $currentMonth = Carbon::now()->month;  // Get current month
+        $currentYear = Carbon::now()->year;   // Get current year
+
+        // Count the bookings for the current month
+        $totalBookings = Booking::whereYear('booking_date', $currentYear)
+                                ->whereMonth('booking_date', $currentMonth)
+                                ->count();
+
+        return response()->json([
+            'total_bookings' => $totalBookings
+        ]);
     }
 
     /**

@@ -6,7 +6,7 @@ const MainLogo = () => {
       <img
         src={mainLogo}
         alt="Main Logo"
-        className={"h-auto w-[100px] mx-auto mt-5 mb-7"}
+        className={"h-auto w-[100px] mx-auto mb-7"}
       />
     </div>
   );

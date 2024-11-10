@@ -49,6 +49,10 @@ Route::middleware('auth:sanctum')->group(function () {
     [ResidentController::class, 'getResidentsPerBlock']);
     Route::apiResource('residents', ResidentController::class);
 
+    //route for total number use for dashboard
+    Route::get('/total-homeowners', [ResidentController::class, 'getTotalHomeowners']);
+
+
     //user routes
     Route::apiResource('users', UserController::class);
     Route::prefix('users')->group(function (){
@@ -147,6 +151,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/settings', [SettingsController::class, 'update']);
     Route::get('/settings/{key}', [SettingsController::class, 'getSetting']);
 
+});
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/total-residents', [ResidentController::class, 'getTotalResidents']);
 });
 
 //booking routes (avaialable to the public)

@@ -43,7 +43,7 @@ export function AuthProvider({ children }) {
           localStorage.setItem("API_TOKEN", res.data.access_token);
           console.log(res.data.access_token);
 
-          navigate("/booking");
+          navigate("/dashoard");
           //sets the logged in bool for disable routing options
           setLoggedIn(true);
           localStorage.setItem("isLoggedIn", JSON.stringify(true));

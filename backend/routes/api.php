@@ -155,8 +155,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/total-residents', [ResidentController::class, 'getTotalResidents']);
-    Route::get('/bills/unpaid-residents-count', [BillController::class, 'countUnpaidResidents']);
     Route::get('/total-bookings-this-month', [BookingController::class, 'getTotalBookingsThisMonth']);
+    Route::get('/bills/overdue-residents-count', [BillController::class, 'countOverdueResidents']);
+
 
 });
 

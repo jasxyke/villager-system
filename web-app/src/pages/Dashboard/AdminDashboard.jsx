@@ -11,8 +11,23 @@ const AdminDashboard = () => {
   const [totalResidents, setTotalResidents] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [unpaidCount, setUnpaidCount] = useState(0);
   const [totalBookings, setTotalBookings] = useState(0);
+  const [overdueCount, setOverdueCount] = useState(0);
+
+  useEffect(() => {
+    axiosClient
+      .get("/api/bills/overdue-residents-count")
+      .then((response) => {
+        console.log(
+          "Overdue residents count:",
+          response.data.overdue_residents_count
+        ); // Debug log
+        setOverdueCount(response.data.overdue_residents_count);
+      })
+      .catch((error) => {
+        console.error("Error fetching overdue residents count:", error);
+      });
+  }, []);
 
   useEffect(() => {
     axiosClient
@@ -24,6 +39,17 @@ const AdminDashboard = () => {
       .catch((err) => {
         setError("Failed to fetch total residents");
         setLoading(false);
+      });
+  }, []);
+
+  useEffect(() => {
+    axiosClient
+      .get("/total-bookings-this-month")
+      .then((response) => {
+        setTotalBookings(response.data.total_bookings);
+      })
+      .catch((err) => {
+        console.error("Failed to fetch total bookings for this month");
       });
   }, []);
 
@@ -66,7 +92,7 @@ const AdminDashboard = () => {
           </div>
           <div className="flex flex-col flex-grow items-start pl-8 space-y-2">
             <h2 className="text-6xl font-bold text-[#718355] tracking-tight">
-              {unpaidCount}
+              {overdueCount}
             </h2>
             <p className="text-sm text-[#87986A] uppercase font-semibold tracking-wider">
               UNPAID RESIDENTS

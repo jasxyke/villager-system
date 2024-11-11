@@ -182,10 +182,22 @@ class BillController extends Controller
         $unpaidResidentsCount = Bill::where('status', 'pending')
             ->whereYear('due_date', $year)
             ->whereMonth('due_date', $month)
-            ->distinct('resident_id')
-            ->count('resident_id');
+            ->select('resident_id')
+            ->distinct()
+            ->count();
 
         return response()->json(['unpaid_residents_count' => $unpaidResidentsCount]);
+    }
+
+    public function countOverdueResidents()
+    {
+        // Query to count distinct residents with overdue bills
+        $overdueResidentsCount = Bill::where('status', 'overdue')
+            ->select('resident_id')
+            ->distinct()
+            ->count();
+
+        return response()->json(['overdue_residents_count' => $overdueResidentsCount]);
     }
 
     // Remove the specified bill from storage

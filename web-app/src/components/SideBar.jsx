@@ -26,6 +26,8 @@ import {
   FiUsers,
 } from "react-icons/fi";
 import { MdOutlineRoomPreferences } from "react-icons/md";
+import { TfiHome } from "react-icons/tfi";
+import { CiGrid41 } from "react-icons/ci";
 
 const SideBar = () => {
   const { logout } = useAuthContext();
@@ -60,6 +62,14 @@ const SideBar = () => {
   return (
     <nav className={styles.sidebar}>
       <ul>
+        <li>
+          <NavLink
+            to="/dashboard"
+            ref={location.pathname === "/dashboard" ? activeLinkRef : null}
+          >
+            <CiGrid41 className="text-3xl mr-2" /> Dashboard
+          </NavLink>
+        </li>
         <li>
           <NavLink
             to="/booking"

@@ -118,6 +118,12 @@ class ResidentController extends Controller
 
     }
 
+    public function getTotalResidents()
+    {
+        $totalResidents = Resident::count(); // Get the total number of residents
+        return response()->json(['total_residents' => $totalResidents]);
+    }
+
     /**
      * Remove the specified resource from storage.
      */

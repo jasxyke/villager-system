@@ -22,6 +22,7 @@ import CommunityRulesAndRegulation from "./pages/RulesAndRegulation/CommunityRul
 import Sticker from "./pages/CarSticker/Sticker";
 import Complaints from "./pages/Complaints/Complaints";
 import AdminSettings from "./pages/Settings/AdminSettings";
+import AdminDashboard from "./pages/Dashboard/AdminDashboard";
 
 function App() {
   const { isLoggedIn } = useAuthContext();
@@ -34,6 +35,7 @@ function App() {
         <Routes>
           <Route element={<AuthenticatedMiddleRoute />}>
             <Route path="/homepage" element={<Homepage />} />
+            <Route path="/dashboard" element={<AdminDashboard />} />
             <Route path="/booking" element={<BookingPage />} />
             <Route path="/bills" element={<BillsPage />} />
             <Route path="/files">

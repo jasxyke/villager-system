@@ -182,10 +182,51 @@ class BillController extends Controller
         $unpaidResidentsCount = Bill::where('status', 'pending')
             ->whereYear('due_date', $year)
             ->whereMonth('due_date', $month)
-            ->distinct('resident_id')
-            ->count('resident_id');
+            ->select('resident_id')
+            ->distinct()
+            ->count();
 
         return response()->json(['unpaid_residents_count' => $unpaidResidentsCount]);
+    }
+
+    public function countOverdueResidents()
+    {
+        // Query to count distinct residents with overdue bills
+        $overdueResidentsCount = Bill::where('status', 'overdue')
+            ->select('resident_id')
+            ->distinct()
+            ->count();
+
+        return response()->json(['overdue_residents_count' => $overdueResidentsCount]);
+    }
+
+    public function getResidentWithMostUnpaidBills(Request $request)
+    {
+        $month = $request->month;
+        $year = $request->year;
+    
+        // Query to get the resident with the most unpaid bills
+        $residentWithMostUnpaidBills = Bill::where('status', 'pending')
+            ->whereYear('due_date', $year)
+            ->whereMonth('due_date', $month)
+            ->select('resident_id')
+            ->groupBy('resident_id')
+            ->orderByRaw('COUNT(*) DESC')
+            ->limit(1)
+            ->with(['resident.user', 'resident.house']) // Ensure 'house' is also included
+            ->first();
+    
+        return response()->json($residentWithMostUnpaidBills);
+    }
+    
+    public function getOverdueResidents()
+    {
+        $overdueResidents = Bill::with('resident.user', 'resident.house') // Include relevant relationships
+            ->where('status', 'overdue') // Filter by overdue status
+            ->orderBy('due_date', 'asc') // Order by the oldest due date
+            ->get();
+
+        return response()->json(['bills' => $overdueResidents]);
     }
 
     // Remove the specified bill from storage

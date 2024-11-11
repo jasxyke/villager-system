@@ -151,10 +151,15 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/settings', [SettingsController::class, 'update']);
     Route::get('/settings/{key}', [SettingsController::class, 'getSetting']);
 
-    //DASHBOARD
+});
+
+Route::middleware('auth:sanctum')->group(function () {
     Route::get('/total-residents', [ResidentController::class, 'getTotalResidents']);
-    Route::get('/bills/unpaid-residents-count', [BillController::class, 'countUnpaidResidents']);
     Route::get('/total-bookings-this-month', [BookingController::class, 'getTotalBookingsThisMonth']);
+    Route::get('/overdue-residents-count', [BillController::class, 'countOverdueResidents']);
+    Route::get('/{amenityId}', [BookingController::class, 'getBookingsAdmin']);
+    Route::get('/most-unpaid', [BillController::class, 'getResidentWithMostUnpaidBills']);
+    Route::get('/overdue-residents', [BillController::class, 'getOverdueBills']);
 
 });
 

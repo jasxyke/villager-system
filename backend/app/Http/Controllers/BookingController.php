@@ -166,6 +166,7 @@ class BookingController extends Controller
             'total_bookings' => $totalBookings
         ]);
     }
+    
 
     /**
      * Remove the specified resource from storage.

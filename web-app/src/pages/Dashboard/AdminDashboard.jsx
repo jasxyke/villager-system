@@ -1,69 +1,62 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import MainLogo from "../../components/MainLogo";
 import { FiUser, FiUsers } from "react-icons/fi";
 import { FiHome } from "react-icons/fi";
-import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import axiosClient from "../../utils/axios";
 import LoadingPage from "../../components/LoadingScreen/LoadingPage";
 import { TbCalendarCheck } from "react-icons/tb";
+import useOverdueResidents from "../../hooks/useOverdueResidents";
+import useTotalBookings from "../../hooks/useTotalBookings";
+import useTotalResidents from "../../hooks/useTotalResidents";
+import OngoingBookings from "./OngoingBookings";
+import MostUnpaid from "./MostUnpaid";
+import RecentApplications from "./RecentApplications";
+import OverdueModal from "./OverdueModal";
+import useOverdueResidentsList from "../../hooks/useOverdueResidentsList";
 
 const AdminDashboard = () => {
-  const [totalResidents, setTotalResidents] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [totalBookings, setTotalBookings] = useState(0);
-  const [overdueCount, setOverdueCount] = useState(0);
+  const [isModalOpen, setIsModalOpen] = useState(false); // State for modal visibility
+  const [modalContent, setModalContent] = useState(""); // State for modal content
 
-  useEffect(() => {
-    axiosClient
-      .get("/api/bills/overdue-residents-count")
-      .then((response) => {
-        console.log(
-          "Overdue residents count:",
-          response.data.overdue_residents_count
-        ); // Debug log
-        setOverdueCount(response.data.overdue_residents_count);
-      })
-      .catch((error) => {
-        console.error("Error fetching overdue residents count:", error);
-      });
-  }, []);
+  const navigate = useNavigate(); // Initialize useNavigate
 
-  useEffect(() => {
-    axiosClient
-      .get("/total-residents")
-      .then((response) => {
-        setTotalResidents(response.data.total_residents);
-        setLoading(false);
-      })
-      .catch((err) => {
-        setError("Failed to fetch total residents");
-        setLoading(false);
-      });
-  }, []);
+  const {
+    totalResidents,
+    loading: loadingResidents,
+    error: errorResidents,
+  } = useTotalResidents();
 
-  useEffect(() => {
-    axiosClient
-      .get("/total-bookings-this-month")
-      .then((response) => {
-        setTotalBookings(response.data.total_bookings);
-      })
-      .catch((err) => {
-        console.error("Failed to fetch total bookings for this month");
-      });
-  }, []);
+  const {
+    totalBookings,
+    loading: loadingBookings,
+    error: errorBookings,
+  } = useTotalBookings();
 
-  if (loading) {
-    return (
-      <div className="flex p-28">
-        <LoadingPage />
-      </div>
+  const {
+    overdueCount,
+    loading: loadingOverdue,
+    error: errorOverdue,
+  } = useOverdueResidents();
+
+  // Handle opening the modal with relevant content
+  const handleUnpaidClick = () => {
+    setModalContent(
+      "Here you can manage all the unpaid residents. You may want to add additional info here."
     );
-  }
+    setIsModalOpen(true);
+  };
 
-  if (error) {
-    return <div>{error}</div>;
-  }
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
+  // New function for navigating to the bookings page
+  const handleBookingsClick = () => {
+    navigate("/booking"); // Redirect to the Bookings page
+  };
 
   return (
     <div>
@@ -71,7 +64,10 @@ const AdminDashboard = () => {
         <MainLogo />
       </div>
       <div className="flex p-2">
-        <div className="flex flex-row items-center bg-gradient-to-r from-[#E9F5DB] to-[#CFE1B9] p-8 w-full max-w-sm cursor-pointer mx-auto rounded-xl shadow-lg transition-transform duration-300 ease-in-out transform hover:scale-105 hover:shadow-2xl">
+        <div
+          className="flex flex-row items-center bg-gradient-to-r from-[#E9F5DB] to-[#CFE1B9] p-8 w-full max-w-sm cursor-pointer mx-auto rounded-xl shadow-lg transition-transform duration-300 ease-in-out transform hover:scale-105 hover:shadow-2xl"
+          onClick={() => navigate("/houses")} // Redirect to the Houses page
+        >
           <div className="flex-shrink-0 w-1/3 flex items-center justify-center bg-[#97A97C] p-6 rounded-full shadow-md transform hover:rotate-12 hover:scale-110 transition-all duration-300 ease-in-out">
             <FiHome className="text-5xl text-[#E9F5DB]" />
           </div>
@@ -86,7 +82,10 @@ const AdminDashboard = () => {
           </div>
         </div>
 
-        <div className="flex flex-row items-center bg-gradient-to-r from-[#E9F5DB] to-[#CFE1B9] p-8 w-full max-w-sm cursor-pointer mx-auto rounded-xl shadow-lg transition-transform duration-300 ease-in-out transform hover:scale-105 hover:shadow-2xl">
+        <div
+          className="flex flex-row items-center bg-gradient-to-r from-[#E9F5DB] to-[#CFE1B9] p-8 w-full max-w-sm cursor-pointer mx-auto rounded-xl shadow-lg transition-transform duration-300 ease-in-out transform hover:scale-105 hover:shadow-2xl"
+          onClick={handleUnpaidClick} // Open the modal when clicked
+        >
           <div className="flex-shrink-0 w-1/3 flex items-center justify-center bg-[#97A97C] p-6 rounded-full shadow-md transform hover:rotate-12 hover:scale-110 transition-all duration-300 ease-in-out">
             <FiUsers className="text-5xl text-[#E9F5DB]" />
           </div>
@@ -100,7 +99,10 @@ const AdminDashboard = () => {
           </div>
         </div>
 
-        <div className="flex flex-row items-center bg-gradient-to-r from-[#E9F5DB] to-[#CFE1B9] p-8 w-full max-w-sm cursor-pointer mx-auto rounded-xl shadow-lg transition-transform duration-300 ease-in-out transform hover:scale-105 hover:shadow-2xl">
+        <div
+          className="flex flex-row items-center bg-gradient-to-r from-[#E9F5DB] to-[#CFE1B9] p-8 w-full max-w-sm cursor-pointer mx-auto rounded-xl shadow-lg transition-transform duration-300 ease-in-out transform hover:scale-105 hover:shadow-2xl"
+          onClick={handleBookingsClick} // Navigate to the bookings page when clicked
+        >
           <div className="flex-shrink-0 w-1/3 flex items-center justify-center bg-[#97A97C] p-6 rounded-full shadow-md transform hover:rotate-12 hover:scale-110 transition-all duration-300 ease-in-out">
             <TbCalendarCheck className="text-5xl text-[#E9F5DB]" />
           </div>
@@ -116,102 +118,23 @@ const AdminDashboard = () => {
       </div>
 
       <div className="flex gap-6 p-4">
-        <div className="w-full sm:w-7/12 bg-gradient-to-r from-[#E9F5DB] to-[#CFE1B9] rounded-xl shadow-lg transition-transform duration-300 ease-in-out transform hover:scale-105 hover:shadow-2xl">
-          <div className="p-4 rounded-xl max-h-[60vh] overflow-y-auto border border-gray-300">
-            <div className="bg-[#97A97C] p-4 rounded-md text-white font-semibold text-lg">
-              ONGOING BOOKINGS
-            </div>
-            <div className="bg-white">
-              <div className="flex items-center gap-6 p-4 bg-white hover:bg-gray-200 cursor-pointer rounded-md shadow-md transition-transform duration-300 transform hover:scale-105">
-                <div className="flex justify-center items-center w-16 h-16 rounded-full bg-[#97A97C] shadow-md transition-transform duration-300 transform hover:rotate-12 hover:scale-110">
-                  <FiUser className="text-3xl text-[#E9F5DB]" />
-                </div>
-                <div className="flex flex-1 flex-col">
-                  <div className="text-lg font-semibold text-gray-900">
-                    JOHN REY REBUSQUILLO
-                  </div>
-                  <div className="flex items-center justify-between mt-2">
-                    <div className="text-sm text-gray-500">
-                      BASKETBALL COURT
-                    </div>
-                    <div className="text-sm text-yellow-600 font-semibold">
-                      Pending
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="w-full sm:w-5/12 bg-gradient-to-r from-[#E9F5DB] to-[#CFE1B9] rounded-xl shadow-lg transition-transform duration-300 ease-in-out transform hover:scale-105 hover:shadow-2xl">
-          <div className="p-4 rounded-xl max-h-[60vh] overflow-y-auto border border-gray-300">
-            <div className="bg-[#97A97C] p-4 rounded-md text-white font-semibold text-lg">
-              Most Unpaid Residents
-            </div>
-            <div className="bg-white">
-              <div className="flex items-center gap-6 p-4 bg-white hover:bg-gray-200 cursor-pointer rounded-md shadow-md transition-transform duration-300 transform hover:scale-105">
-                <div className="flex flex-1 flex-col">
-                  <div className="text-lg font-semibold text-gray-900">
-                    JOHN REY REBUSQUILLO
-                  </div>
-                  <div className="flex items-center justify-between mt-2">
-                    <div className="text-sm text-gray-500">BLOCK 1 LOT 1</div>
-                    <div className="text-sm text-red-500 font-semibold">
-                      ₱1000.00
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <OngoingBookings />
+        <MostUnpaid />
       </div>
 
       <div className="p-5">
-        <div className="w-full border-2 border-gray-300 p-3 rounded-xl shadow-lg bg-gradient-to-r from-[#E9F5DB] to-[#CFE1B9]">
-          <div className="flex items-center justify-between mb-4 px-4">
-            <h2 className="text-xl font-semibold text-[#718355]">
-              Recent Applications
-            </h2>
-            <button className="text-[#718355] font-semibold cursor-pointer hover:underline transition duration-200">
-              See All
-            </button>
-          </div>
-
-          <div className="flex items-center rounded-lg bg-[#97A97C] text-white font-medium mb-2 px-6 py-3">
-            <div className="flex-1 text-center">Name</div>
-            <div className="flex-1 text-center">Date</div>
-            <div className="flex-1 text-center">Type</div>
-            <div className="flex-1 text-center">Status</div>
-          </div>
-
-          <div className="space-y-2">
-            {Array.from({ length: 3 }).map((_, idx) => (
-              <div
-                key={idx}
-                className="flex items-center justify-between p-4 bg-white rounded-lg shadow-sm border border-gray-200 hover:bg-[#F5FAF3] hover:shadow-md transition-transform duration-300 ease-in-out cursor-pointer"
-              >
-                <div className="flex-1 text-center text-gray-800 font-medium flex items-center justify-center gap-2">
-                  <FiUser className="text-[#87986A] text-lg" />
-                  John Rey Rebusquillo
-                </div>
-                <div className="flex-1 text-center text-gray-600">
-                  10/12/2024
-                </div>
-                <div className="flex-1 text-center text-gray-600">
-                  PERMIT APPLICATION
-                </div>
-                <div className="flex-1 text-center">
-                  <span className="inline-block px-3 py-1 rounded-full text-sm font-semibold bg-yellow-100 text-yellow-600">
-                    Pending
-                  </span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+        <RecentApplications />
       </div>
+
+      {/* Modal component */}
+      {/* Modal for overdue residents */}
+      <OverdueModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        overdueResidents={useOverdueResidentsList}
+        loading={loading}
+        error={error}
+      />
     </div>
   );
 };

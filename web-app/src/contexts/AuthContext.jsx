@@ -27,13 +27,6 @@ export function AuthProvider({ children }) {
   // }, []);
 
   const login = async (email, password, onError) => {
-    // try {
-    //   const res = await axiosClient.get("/admins");
-    //   console.log(res);
-    // } catch (error) {
-    //   console.log(error);
-    // }
-
     axiosClient
       .get("/sanctum/csrf-cookie", { baseURL: DOMAIN })
       .then(async (_res) => {

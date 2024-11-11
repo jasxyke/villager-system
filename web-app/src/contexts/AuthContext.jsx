@@ -21,14 +21,24 @@ export function AuthProvider({ children }) {
   // useEffect(() => {
   //   axiosClient
   //     .get("/sanctum/csrf-cookie", { baseURL: DOMAIN })
-  //     .then((_res) => {});
-  //   console.log("hello");
+  //     .then((_res) => {
+  //       console.log("scrs");
+  //     });
   // }, []);
 
   const login = async (email, password, onError) => {
+    try {
+      const res = await axiosClient.get("/admins");
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    }
+
     axiosClient
       .get("/sanctum/csrf-cookie", { baseURL: DOMAIN })
       .then(async (_res) => {
+        console.log("hellow from sanctum");
+
         setLoading(true);
         try {
           console.log(email);
@@ -39,11 +49,13 @@ export function AuthProvider({ children }) {
             isMobile: false,
           });
 
+          console.log("hello");
+
           //sets the bearer token
           localStorage.setItem("API_TOKEN", res.data.access_token);
           console.log(res.data.access_token);
 
-          navigate("/dashoard");
+          navigate("/dashboard");
           //sets the logged in bool for disable routing options
           setLoggedIn(true);
           localStorage.setItem("isLoggedIn", JSON.stringify(true));
@@ -55,6 +67,9 @@ export function AuthProvider({ children }) {
         } finally {
           setLoading(false);
         }
+      })
+      .catch((error) => {
+        console.log(error);
       });
   };
 

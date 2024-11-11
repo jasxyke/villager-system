@@ -8,32 +8,32 @@ import LoadingPage from "../../components/LoadingScreen/LoadingPage";
 import { TbCalendarCheck } from "react-icons/tb";
 
 const AdminDashboard = () => {
-  const [totalResidents, setTotalResidents] = useState(null);
+  const [totalResidents, setTotalResidents] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [unpaidCount, setUnpaidCount] = useState(0);
   const [totalBookings, setTotalBookings] = useState(0);
 
-  useEffect(() => {
-    axiosClient
-      .get("/total-residents")
-      .then((response) => {
-        setTotalResidents(response.data.total_residents);
-        setLoading(false);
-      })
-      .catch((err) => {
-        setError("Failed to fetch total residents");
-        setLoading(false);
-      });
-  }, []);
+  // useEffect(() => {
+  //   axiosClient
+  //     .get("/total-residents")
+  //     .then((response) => {
+  //       setTotalResidents(response.data.total_residents);
+  //       setLoading(false);
+  //     })
+  //     .catch((err) => {
+  //       setError("Failed to fetch total residents");
+  //       setLoading(false);
+  //     });
+  // }, []);
 
-  if (loading) {
-    return (
-      <div className="flex p-28">
-        <LoadingPage />
-      </div>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <div className="flex p-28">
+  //       <LoadingPage />
+  //     </div>
+  //   );
+  // }
 
   if (error) {
     return <div>{error}</div>;

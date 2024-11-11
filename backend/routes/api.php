@@ -151,9 +151,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/settings', [SettingsController::class, 'update']);
     Route::get('/settings/{key}', [SettingsController::class, 'getSetting']);
 
-});
-
-Route::middleware('auth:sanctum')->group(function () {
+    //DASHBOARD
     Route::get('/total-residents', [ResidentController::class, 'getTotalResidents']);
     Route::get('/bills/unpaid-residents-count', [BillController::class, 'countUnpaidResidents']);
     Route::get('/total-bookings-this-month', [BookingController::class, 'getTotalBookingsThisMonth']);

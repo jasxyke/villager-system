@@ -1,11 +1,14 @@
 // src/hooks/useSettings.js
 import { useState, useEffect } from "react";
 import axiosClient from "../../utils/axios";
+import { useAuthContext } from "../../contexts/AuthContext";
 
 const useSettings = () => {
   const [settings, setSettings] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const { loggedIn } = useAuthContext();
 
   // Fetch settings from the API
   const fetchSettings = async () => {
@@ -33,7 +36,9 @@ const useSettings = () => {
   };
 
   useEffect(() => {
-    fetchSettings();
+    if (loggedIn) {
+      fetchSettings();
+    }
   }, []);
 
   return { settings, loading, error, updateSettings };

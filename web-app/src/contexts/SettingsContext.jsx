@@ -1,6 +1,7 @@
 // src/context/SettingsContext.js
 import React, { createContext, useState, useEffect, useContext } from "react";
 import axiosClient from "../utils/axios";
+import { useAuthContext } from "./AuthContext";
 
 // Create the context
 const SettingsContext = createContext();
@@ -10,6 +11,8 @@ export const SettingsProvider = ({ children }) => {
   const [settings, setSettings] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const { loggedIn } = useAuthContext;
 
   // Fetch all settings from the API
   const fetchSettings = async () => {
@@ -48,7 +51,9 @@ export const SettingsProvider = ({ children }) => {
 
   // Load settings once on component mount
   useEffect(() => {
-    fetchSettings();
+    if (loggedIn) {
+      fetchSettings();
+    }
   }, []);
 
   // Provide the settings and functions to children

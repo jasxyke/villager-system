@@ -3,17 +3,17 @@ import { FiUser, FiUsers } from "react-icons/fi";
 
 const RecentApplications = () => {
   return (
-    <div className="w-full border-2 border-gray-300 p-3 rounded-xl shadow-lg bg-gradient-to-r from-[#E9F5DB] to-[#CFE1B9]">
+    <div className="w-full border p-3 rounded-xl shadow-lg bg-gradient-to-r from-green to-green">
       <div className="flex items-center justify-between mb-4 px-4">
-        <h2 className="text-xl font-semibold text-[#718355]">
+        <h2 className="text-xl font-semibold text-white">
           Recent Applications
         </h2>
-        <button className="text-[#718355] font-semibold cursor-pointer hover:underline transition duration-200">
+        <button className="text-white font-semibold cursor-pointer hover:underline transition duration-200">
           See All
         </button>
       </div>
 
-      <div className="flex items-center rounded-lg bg-[#97A97C] text-white font-medium mb-2 px-6 py-3">
+      <div className="flex items-center rounded-lg bg-oliveGreen text-white font-medium mb-2 px-6 py-3">
         <div className="flex-1 text-center">Name</div>
         <div className="flex-1 text-center">Date</div>
         <div className="flex-1 text-center">Type</div>

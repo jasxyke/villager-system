@@ -10,7 +10,7 @@ const useOverdueResidentsList = () => {
     const fetchOverdueResidents = async () => {
       try {
         const response = await axiosClient.get("/overdue-residents");
-        setOverdueResidents(response.data.bills); // Adjust the response data structure if needed
+        setOverdueResidents(response.data.bills);
         setLoading(false);
       } catch (error) {
         setError("Failed to fetch overdue residents");

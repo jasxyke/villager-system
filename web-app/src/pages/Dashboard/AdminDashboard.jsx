@@ -1,28 +1,27 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import MainLogo from "../../components/MainLogo";
 import { FiUser, FiUsers } from "react-icons/fi";
 import { FiHome } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
-import axiosClient from "../../utils/axios";
-import LoadingPage from "../../components/LoadingScreen/LoadingPage";
-import { TbCalendarCheck } from "react-icons/tb";
-import useOverdueResidents from "../../hooks/useOverdueResidents";
-import useTotalBookings from "../../hooks/useTotalBookings";
-import useTotalResidents from "../../hooks/useTotalResidents";
+import LoadingContainer from "../../components/LoadingScreen/LoadingContainer"; // Import LoadingContainer
+import useOverdueResidents from "../../hooks/Dashboard/useOverdueResidents";
+import useTotalBookings from "../../hooks/Dashboard/useTotalBookings";
+import useTotalResidents from "../../hooks/Dashboard/useTotalResidents";
 import OngoingBookings from "./OngoingBookings";
 import MostUnpaid from "./MostUnpaid";
 import RecentApplications from "./RecentApplications";
 import OverdueModal from "./OverdueModal";
-import useOverdueResidentsList from "../../hooks/useOverdueResidentsList";
+import useOverdueResidentsList from "../../hooks/Dashboard/useOverdueResidentsList";
+import { TbCalendarCheck } from "react-icons/tb";
+import LoadingElement from "../../components/LoadingScreen/LoadingElement";
 
 const AdminDashboard = () => {
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false); // State for modal visibility
   const [modalContent, setModalContent] = useState(""); // State for modal content
 
   const navigate = useNavigate(); // Initialize useNavigate
 
+  // Fetch data using custom hooks
   const {
     totalResidents,
     loading: loadingResidents,
@@ -40,6 +39,9 @@ const AdminDashboard = () => {
     loading: loadingOverdue,
     error: errorOverdue,
   } = useOverdueResidents();
+
+  // Check if any data is still loading
+  const isLoading = loadingResidents || loadingBookings || loadingOverdue;
 
   // Handle opening the modal with relevant content
   const handleUnpaidClick = () => {
@@ -59,7 +61,7 @@ const AdminDashboard = () => {
   };
 
   return (
-    <div>
+    <div className="pb-10">
       <div className="pt-10">
         <MainLogo />
       </div>
@@ -74,7 +76,7 @@ const AdminDashboard = () => {
 
           <div className="flex flex-col flex-grow items-start pl-8 space-y-2">
             <h2 className="text-6xl font-bold text-white tracking-tight">
-              {totalResidents}
+              {loadingResidents ? <LoadingElement /> : totalResidents}
             </h2>
             <p className="text-sm text-mutedGreen uppercase font-semibold tracking-wider">
               Total Residents
@@ -91,7 +93,7 @@ const AdminDashboard = () => {
           </div>
           <div className="flex flex-col flex-grow items-start pl-8 space-y-2">
             <h2 className="text-6xl font-bold text-white tracking-tight">
-              {overdueCount}
+              {loadingOverdue ? <LoadingElement /> : overdueCount}
             </h2>
             <p className="text-sm text-mutedGreen uppercase font-semibold tracking-wider">
               UNPAID RESIDENTS
@@ -108,7 +110,7 @@ const AdminDashboard = () => {
           </div>
           <div className="flex flex-col flex-grow items-start pl-8 space-y-2">
             <h2 className="text-6xl font-bold text-white tracking-tight">
-              {totalBookings}
+              {loadingBookings ? <LoadingElement /> : totalBookings}
             </h2>
             <p className="text-sm text-mutedGreen uppercase font-semibold tracking-wider">
               MONTHLY BOOKINGS
@@ -122,16 +124,14 @@ const AdminDashboard = () => {
         <MostUnpaid />
       </div>
 
-      <div className="p-5">
+      {/* <div className="p-5">
         <RecentApplications />
-      </div>
+      </div> */}
 
       <OverdueModal
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         overdueResidents={useOverdueResidentsList}
-        loading={loading}
-        error={error}
       />
     </div>
   );

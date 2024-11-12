@@ -79,6 +79,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/bookings',[BookingController::class,'update']);
     Route::delete('/bookings/{id}',[BookingController::class,'destroy']);
     Route::get('/bookings', [BookingController::class, 'index']);
+    Route::get('/bookings/recent-pending', [BookingController::class, 'getPendingBookings']);
 
     //amenity routes
     Route::apiResource('/amenities', AmenityController::class);
@@ -88,6 +89,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/announcements/img/{id}', 
     [AnnouncementController::class, 'updateAnnouncementImg']);
 
+    //bills (dashboard)
+    Route::get('/bills/most-unpaid-residents', [BillController::class, 'topResidentsWithUnpaidBills']);
+    
     //bills routes
     Route::get('/bills', [BillController::class, 'index']);
     Route::post('/bills', [BillController::class, 'store']);

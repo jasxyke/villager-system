@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Modal from "react-modal";
-import useBills from "../../hooks/useBills";
+import useBills from "../../hooks/Bills/useBills";
 import styles from "./EditBillsModal.module.css"; // Import CSS Module
 
 Modal.setAppElement("#root"); // Ensure that screen readers can work with the modal

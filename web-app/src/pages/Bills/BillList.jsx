@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import useBills from "../../hooks/useBills";
+import useBills from "../../hooks/Bills/useBills";
 import EditBillModal from "./EditBillModal";
 import { formatFullName, formatName } from "../../utils/DataFormatter";
 import ReactPaginate from "react-paginate";

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axiosClient from "../utils/axios"; // Adjust the import path as necessary
+import axiosClient from "../../utils/axios"; // Adjust the import path as necessary
 
 const useOverdueBills = () => {
   const [bills, setBills] = useState([]);

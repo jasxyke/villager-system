@@ -200,34 +200,30 @@ class BillController extends Controller
         return response()->json(['overdue_residents_count' => $overdueResidentsCount]);
     }
 
-    public function getResidentWithMostUnpaidBills(Request $request)
-    {
-        $month = $request->month;
-        $year = $request->year;
-    
-        // Query to get the resident with the most unpaid bills
-        $residentWithMostUnpaidBills = Bill::where('status', 'pending')
-            ->whereYear('due_date', $year)
-            ->whereMonth('due_date', $month)
-            ->select('resident_id')
-            ->groupBy('resident_id')
-            ->orderByRaw('COUNT(*) DESC')
-            ->limit(1)
-            ->with(['resident.user', 'resident.house']) // Ensure 'house' is also included
-            ->first();
-    
-        return response()->json($residentWithMostUnpaidBills);
-    }
-    
-    public function getOverdueResidents()
-    {
-        $overdueResidents = Bill::with('resident.user', 'resident.house') // Include relevant relationships
-            ->where('status', 'overdue') // Filter by overdue status
-            ->orderBy('due_date', 'asc') // Order by the oldest due date
-            ->get();
+    public function topResidentsWithUnpaidBills()
+{
+    // Get the top 3 residents with the most unpaid or overdue bills
+    $topResidents = Resident::with(['user', 'house', 'bills' => function ($query) {
+        $query->whereIn('status', ['pending', 'overdue']); // Filter for unpaid or overdue bills
+    }])
+    ->withCount(['bills' => function ($query) {
+        $query->whereIn('status', ['pending', 'overdue']); // Count only unpaid or overdue bills
+    }])
+    ->having('bills_count', '>', 0) // Only residents with unpaid or overdue bills
+    ->orderByDesc('bills_count') // Sort by the number of unpaid or overdue bills
+    ->limit(3) // Limit to top 3 residents
+    ->get();
 
-        return response()->json(['bills' => $overdueResidents]);
+    // Check if data is found
+    if ($topResidents->isEmpty()) {
+        return response()->json(['message' => 'No residents with unpaid bills found'], 404);
     }
+
+    // Return the result as a JSON response
+    return response()->json($topResidents);
+}
+
+    
 
     // Remove the specified bill from storage
     public function destroy($id)

@@ -1,24 +1,11 @@
 import React, { useEffect, useRef } from "react";
-import { NavLink, useNavigate, useLocation } from "react-router-dom";
-import homeIcon from "../assets/icons/Home_white.png";
-import bookingIcon from "../assets/icons/Calendar.png";
-import billsIcon from "../assets/icons/Book.png";
-import filesIcon from "../assets/icons/File.png";
-import usersIcon from "../assets/icons/Users.png";
-import announcementsIcon from "../assets/icons/chat_bubble.png";
-import logoutIcon from "../assets/icons/Logout.png";
-import styles from "./SideBar.module.css";
-import { useAuthContext } from "../contexts/AuthContext";
-import HouseIcon from "../assets/icons/temporaryhouse.png";
-import { CiMemoPad } from "react-icons/ci";
-import { FaCar } from "react-icons/fa6";
-import { BiCar, BiDetail } from "react-icons/bi";
+import { BiCar } from "react-icons/bi";
 import { BsGraphUpArrow } from "react-icons/bs";
+import { CiGrid41 } from "react-icons/ci";
 import {
   FiBook,
   FiCalendar,
   FiClipboard,
-  FiFileText,
   FiFlag,
   FiHome,
   FiLogOut,
@@ -26,8 +13,9 @@ import {
   FiUsers,
 } from "react-icons/fi";
 import { MdOutlineRoomPreferences } from "react-icons/md";
-import { TfiHome } from "react-icons/tfi";
-import { CiGrid41 } from "react-icons/ci";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { useAuthContext } from "../contexts/AuthContext";
+import styles from "./SideBar.module.css";
 
 const SideBar = () => {
   const { logout } = useAuthContext();

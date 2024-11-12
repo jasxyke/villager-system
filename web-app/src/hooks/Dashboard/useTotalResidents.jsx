@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axiosClient from "../utils/axios";
+import axiosClient from "../../utils/axios";
 
 const useTotalResidents = () => {
   const [totalResidents, setTotalResidents] = useState(0);

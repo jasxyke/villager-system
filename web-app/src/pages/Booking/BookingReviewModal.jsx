@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Modal from "react-modal";
 import { calculatePrice } from "./CalculatePrice";
-import useBookings from "../../hooks/useBookings";
+import useBookings from "../../hooks/Bookings/useBookings";
 import { formatTime } from "../../utils/DataFormatter";
 Modal.setAppElement("#root");
 

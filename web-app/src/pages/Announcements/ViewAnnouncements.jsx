@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import useAnnouncements from "../../hooks/useAnnouncements";
+import useAnnouncements from "../../hooks/Announcements/useAnnouncements";
 import LoadingContainer from "../../components/LoadingScreen/LoadingContainer";
 import styles from "./ViewAnnouncements.module.css";
 import noImg from "../../assets/no_image.jpg";

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { AnnouncementTypes } from "../../data/contants";
-import useAnnouncements from "../../hooks/useAnnouncements";
+import useAnnouncements from "../../hooks/Announcements/useAnnouncements";
 
 const AddAnnouncement = () => {
   // const [type, setType] = useState(AnnouncementTypes[0].value);

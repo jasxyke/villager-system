@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
-import axiosClient from "../utils/axios";
-import { formatTime } from "../utils/DataFormatter";
+import axiosClient from "../../utils/axios";
+import { formatTime } from "../../utils/DataFormatter";
 
 const useBookings = (selectedAmenity) => {
   const [bookings, setBookings] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [lastPage, setLastPage] = useState(null);

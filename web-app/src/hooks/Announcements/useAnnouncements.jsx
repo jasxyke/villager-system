@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axiosClient from "../utils/axios";
+import axiosClient from "../../utils/axios";
 
 const useAnnouncements = () => {
   const [announcements, setAnnouncements] = useState(null);

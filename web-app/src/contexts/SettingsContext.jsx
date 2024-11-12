@@ -12,7 +12,7 @@ export const SettingsProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const { loggedIn } = useAuthContext;
+  const { isLoggedIn } = useAuthContext();
 
   // Fetch all settings from the API
   const fetchSettings = async () => {
@@ -51,7 +51,7 @@ export const SettingsProvider = ({ children }) => {
 
   // Load settings once on component mount
   useEffect(() => {
-    if (loggedIn) {
+    if (isLoggedIn()) {
       fetchSettings();
     }
   }, []);

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axiosClient from "../utils/axios"; // Adjust the path if necessary
+import axiosClient from "../../utils/axios"; // Adjust the path if necessary
 
 const useOverdueResidentsList = () => {
   const [overdueResidents, setOverdueResidents] = useState([]);

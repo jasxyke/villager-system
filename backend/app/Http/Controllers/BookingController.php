@@ -166,6 +166,17 @@ class BookingController extends Controller
             'total_bookings' => $totalBookings
         ]);
     }
+
+    public function getPendingBookings(Request $request)
+    {
+        // Query to fetch ongoing and for-approval bookings, ordered by the most recent
+        $bookings = Booking::with(['amenity', 'bookingPayments'])
+            ->whereIn('booking_status', ['for_approval', 'reserved'])
+            ->orderBy('created_at', 'desc')
+            ->paginate(3);
+
+        return response()->json($bookings);
+    }
     
 
     /**

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import useOverdueBills from "../../hooks/useOverDueBills"; // Adjust the import path as necessary
+import useOverdueBills from "../../hooks/Bills/useOverDueBills"; // Adjust the import path as necessary
 import ReactPaginate from "react-paginate";
 import LoadingContainer from "../../components/LoadingScreen/LoadingContainer";
 

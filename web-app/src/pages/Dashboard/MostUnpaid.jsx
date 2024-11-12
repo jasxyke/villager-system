@@ -1,6 +1,10 @@
 import React from "react";
+import useTopResidentsWithUnpaidBills from "../../hooks/Dashboard/useTopResidentsWithUnpaidBills"; // Adjust the path as needed
+import LoadingElement from "../../components/LoadingScreen/LoadingElement"; // Ensure you import this component
 
 const MostUnpaid = () => {
+  const { residents, loading, error } = useTopResidentsWithUnpaidBills();
+
   return (
     <div className="w-full sm:w-5/12 border bg-gradient-to-r from-green to-green rounded-xl shadow-lg transition-transform duration-300 ease-in-out transform hover:scale-105 hover:shadow-2xl">
       <div className="p-4 rounded-xl max-h-[60vh] overflow-y-auto">
@@ -8,19 +12,54 @@ const MostUnpaid = () => {
           Most Unpaid Residents
         </div>
         <div className="bg-white rounded-b-md">
-          <div className="flex items-center gap-6 p-4 bg-white hover:bg-gray-200 cursor-pointer rounded-md shadow-md transition-transform duration-300 transform hover:scale-105">
-            <div className="flex flex-1 flex-col">
-              <div className="text-lg font-semibold text-gray-900">
-                JOHN REY REBUSQUILLO
-              </div>
-              <div className="flex items-center justify-between mt-2">
-                <div className="text-sm text-gray-500">BLOCK 1 LOT 1</div>
-                <div className="text-sm text-red-500 font-semibold">
-                  ₱1000.00
+          {/* Loading state */}
+          {loading && (
+            <div className="pt-5 pb-5">
+              <LoadingElement color="green" hasMargin={true} />
+            </div>
+          )}
+
+          {/* Error state */}
+          {error && (
+            <div className="p-4 text-center text-red-500">
+              Error: {error.message}
+            </div>
+          )}
+
+          {/* If residents list is empty */}
+          {!loading && !error && residents.length === 0 && (
+            <div className="p-4 text-center text-gray-500">
+              No residents with unpaid bills.
+            </div>
+          )}
+
+          {/* List of residents */}
+          {!loading &&
+            !error &&
+            residents.length > 0 &&
+            residents.map((resident) => (
+              <div
+                key={resident.id}
+                className="flex items-center gap-6 p-4 bg-white hover:bg-gray-200 cursor-pointer rounded-md shadow-md transition-transform duration-300 transform hover:scale-105"
+              >
+                <div className="flex flex-1 flex-col">
+                  <div className="text-lg font-semibold text-gray-900">
+                    {resident.user.firstname} {resident.user.lastname}
+                  </div>
+                  <div className="flex items-center justify-between mt-2">
+                    <div className="text-sm text-gray-500">
+                      {resident.house
+                        ? `BLK ${resident.house.block} LOT ${resident.house.lot}`
+                        : "Unknown House"}
+                    </div>
+                    <div className="text-sm text-red-500 font-semibold">
+                      {resident.bills_count} overdue bills
+                      {/* Assuming each unpaid bill is ₱1000 */}
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
+            ))}
         </div>
       </div>
     </div>

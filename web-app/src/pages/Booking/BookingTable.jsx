@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
-import useBookings from "../../hooks/useBookings";
-import ReactPaginate from "react-paginate";
+import { useLocation } from "react-router-dom";
+import useBookings from "../../hooks/Bookings/useBookings";
 import BookingReviewModal from "./BookingReviewModal";
+import ReactPaginate from "react-paginate";
 import Styles from "./BookingPage.module.css";
 import LoadingContainer from "../../components/LoadingScreen/LoadingContainer";
 import { formatName } from "../../utils/DataFormatter";
 
 const BookingTable = ({ selectedAmenity }) => {
+  const { state } = useLocation();
+  const { selectedBooking: initialBooking } = state || {};
   const {
     bookings,
     loading,
@@ -15,23 +18,21 @@ const BookingTable = ({ selectedAmenity }) => {
     currentPage,
     setPage,
     lastPage,
-    updateBooking,
-    addPayment,
   } = useBookings(selectedAmenity);
 
-  const [selectedBooking, setSelectedBooking] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedBooking, setSelectedBooking] = useState(initialBooking);
+  const [isModalOpen, setIsModalOpen] = useState(!!initialBooking);
 
   useEffect(() => {
     if (selectedAmenity) {
-      fetchBookings(selectedAmenity, 1); // Fetch bookings when amenity changes
+      fetchBookings(selectedAmenity, 1);
     }
   }, [selectedAmenity]);
 
   const handlePageClick = (event) => {
     const page = event.selected + 1;
     setPage(page);
-    fetchBookings(selectedAmenity, page); // Fetch bookings for the selected page
+    fetchBookings(selectedAmenity, page);
   };
 
   const handleReviewClick = (booking) => {
@@ -44,12 +45,6 @@ const BookingTable = ({ selectedAmenity }) => {
     setIsModalOpen(false);
   };
 
-  const bookingData = bookings || [];
-  const totalPages = lastPage || 0;
-
-  // if (loading) return <LoadingContainer />;
-  if (error) return <div>Error: {error.message}</div>;
-
   return (
     <div className="text-white mt-4">
       <div className="grid grid-cols-7 bg-green font-semibold">
@@ -61,11 +56,12 @@ const BookingTable = ({ selectedAmenity }) => {
         <div className="px-4 py-3 text-center">STATUS</div>
         <div className="px-4 py-3 text-center">ACTION</div>
       </div>
+
       <div className="space-y-2 mt-2 bg-green">
         {loading ? (
           <LoadingContainer />
-        ) : bookingData.length > 0 ? (
-          bookingData.map((booking, index) => (
+        ) : bookings.length > 0 ? (
+          bookings.map((booking, index) => (
             <div
               key={index}
               className={`grid grid-cols-7 items-center ${
@@ -104,26 +100,12 @@ const BookingTable = ({ selectedAmenity }) => {
           <div className="text-center py-4">No bookings available.</div>
         )}
       </div>
-      {totalPages > 0 && (
+      {lastPage > 0 && (
         <div className="flex justify-center mt-4">
           <ReactPaginate
-            breakLabel="..."
-            nextLabel={"next >"}
             onPageChange={handlePageClick}
-            pageRangeDisplayed={5}
-            pageCount={totalPages}
-            previousLabel={"< previous"}
-            renderOnZeroPageCount={null}
-            className={Styles.pagination + " rounded-md"}
-            disabledClassName="text-grey opacity-50"
-            pageClassName="page-item"
-            pageLinkClassName="page-link"
-            previousClassName="page-item"
-            previousLinkClassName="page-link"
-            nextClassName="page-item"
-            nextLinkClassName="page-link"
-            breakClassName="page-item"
-            breakLinkClassName="page-link"
+            pageCount={lastPage}
+            className={`${Styles.pagination} rounded-md`}
             activeClassName="active bg-paleGreen px-2"
           />
         </div>
@@ -133,12 +115,10 @@ const BookingTable = ({ selectedAmenity }) => {
           isOpen={isModalOpen}
           onRequestClose={() => setIsModalOpen(false)}
           booking={selectedBooking}
-          amenity={
-            selectedBooking.amenity /* You might want to pass amenities here */
-          }
+          amenity={selectedBooking.amenity}
           onUpdate={handleSave}
         />
-      )}{" "}
+      )}
     </div>
   );
 };

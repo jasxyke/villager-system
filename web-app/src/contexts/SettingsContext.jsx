@@ -54,7 +54,7 @@ export const SettingsProvider = ({ children }) => {
     if (isLoggedIn()) {
       fetchSettings();
     }
-  }, []);
+  }, [isLoggedIn()]);
 
   // Provide the settings and functions to children
   return (

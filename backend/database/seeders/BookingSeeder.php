@@ -17,7 +17,7 @@ class BookingSeeder extends Seeder
     {
         $booking = Booking::create([
             'amenity_id'=>'1',
-            'booking_date'=>'2024-08-31',
+            'booking_date'=>'2024-11-15',
             'start_time'=>'13:00',
             'end_time'=>'16:00',
             'full_name'=>'Jaspher',
@@ -29,7 +29,7 @@ class BookingSeeder extends Seeder
 
         Booking::create([
             'amenity_id'=>'2',
-            'booking_date'=>'2024-08-31',
+            'booking_date'=>'2024-11-13',
             'start_time'=>'15:00',
             'end_time'=>'18:00',
             'full_name'=>'Jaspher',
@@ -41,7 +41,7 @@ class BookingSeeder extends Seeder
 
         Booking::create([
             'amenity_id'=>'2',
-            'booking_date'=>'2024-09-02',
+            'booking_date'=>'2024-11-20',
             'start_time'=>'15:00',
             'end_time'=>'18:00',
             'full_name'=>'Jaspher',

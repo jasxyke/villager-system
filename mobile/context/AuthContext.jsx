@@ -44,14 +44,15 @@ export function AuthProvider({ children }) {
       //gets user after loggin in
       getUser();
     } catch (error) {
-      console.log(error);
+      console.log("login");
       console.log(error.response.data.message);
       const token = await getItemAsync("API_TOKEN");
       if (token) await deleteItemAsync("API_TOKEN");
       onError(error.response.data.message);
       setLoading(false);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   const register = async (

@@ -46,8 +46,7 @@ const BookingPage = () => {
           isOpen={isEditModalOpen}
           onRequestClose={() => setIsEditModalOpen(false)}
         />
-        <div className={styles.searchBarContainer + " flex justify-between"}>
-          {/* <SearchBar /> */}
+        {/* <div className={styles.searchBarContainer + " flex justify-between"}>
           <div></div>
           <button
             onClick={() => setIsEditModalOpen(true)}
@@ -55,7 +54,7 @@ const BookingPage = () => {
           >
             Edit Amenities
           </button>
-        </div>
+        </div> */}
         <div className={styles.searchBarContainer}>
           <BookingTable selectedAmenity={selectedAmenityId} />
         </div>

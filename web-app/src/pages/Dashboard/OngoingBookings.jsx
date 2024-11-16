@@ -28,7 +28,7 @@ const OngoingBookings = () => {
 
   return (
     <div className="relative w-full sm:w-7/12 bg-gradient-to-r from-green to-green rounded-xl shadow-lg transition-transform duration-300 ease-in-out transform hover:scale-105 hover:shadow-2xl">
-      <div className="p-4 rounded-xl max-h-[60vh] overflow-hidden border">
+      <div className="p-4 rounded-xl min-h-[50vh] max-h-[60vh] overflow-hidden border">
         <div className="bg-oliveGreen p-4 rounded-t-md text-white font-semibold text-lg">
           Pending BOOKINGS
         </div>
@@ -78,22 +78,23 @@ const OngoingBookings = () => {
         </div>
       </div>
       <div className="absolute top-1/2 left-0 right-0 flex justify-between px-4 transform -translate-y-1/2">
-        {currentPage > 1 && (
-          <button
-            className="p-2 bg-white rounded-full shadow-md hover:bg-gray-200 transition-transform transform hover:scale-110"
-            onClick={handlePreviousPage}
-          >
-            <FiChevronLeft className="text-2xl text-gray-700" />
-          </button>
-        )}
-        {currentPage < lastPage && (
-          <button
-            className="p-2 bg-white rounded-full shadow-md hover:bg-gray-200 transition-transform transform hover:scale-110"
-            onClick={handleNextPage}
-          >
-            <FiChevronRight className="text-2xl text-gray-700" />
-          </button>
-        )}
+        <button
+          className={`p-2 bg-white rounded-full shadow-md hover:bg-gray-200 transition-transform transform hover:scale-110 ${
+            currentPage > 1 ? "" : "invisible"
+          }`}
+          onClick={handlePreviousPage}
+        >
+          <FiChevronLeft className="text-2xl text-gray-700" />
+        </button>
+
+        <button
+          className={`p-2 bg-white rounded-full shadow-md hover:bg-gray-200 transition-transform transform hover:scale-110 ${
+            currentPage < lastPage ? "" : "invisible"
+          }`}
+          onClick={handleNextPage}
+        >
+          <FiChevronRight className="text-2xl text-gray-700" />
+        </button>
       </div>
     </div>
   );

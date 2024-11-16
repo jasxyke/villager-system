@@ -22,8 +22,8 @@ return new class extends Migration
             $table->date('approval_date')->nullable();
             $table->date('completed_date')->nullable();
             $table->date('claimed_date')->nullable();
-            $table->decimal('sticker_fee');
-            $table->decimal('processing_fee');
+            $table->decimal('sticker_fee')->nullable();
+            $table->decimal('processing_fee')->nullable();
             $table->text('note')->nullable();
             $table->timestamps();
         });

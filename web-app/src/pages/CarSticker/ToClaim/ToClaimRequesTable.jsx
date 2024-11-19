@@ -88,12 +88,12 @@ const ToClaimRequestTable = () => {
       ) : (
         <>
           <div className="w-full">
-            <div className="flex items-center justify-center font-medium bg-mutedGreen mb-2 p-2 text-center">
-              <div className="flex-1 p-2 text-center">Name</div>
-              <div className="flex-1 p-2 text-center">Plate Number</div>
-              <div className="flex-1 p-2 text-center">Completion Date</div>
-              <div className="flex-1 p-2 text-center">Status</div>
-              <div className="flex-1 p-2 text-center">Action</div>
+            <div className="grid grid-cols-5 gap-4 p-4 bg-oliveGreen text-white font-bold">
+              <div className="flex items-center justify-center">Name</div>
+              <div className="flex items-center justify-center">Plate Number</div>
+              <div className="flex items-center justify-center">Completion Date</div>
+              <div className="flex items-center justify-center">Status</div>
+              <div className="flex items-center justify-center">Action</div>
             </div>
           </div>
           <div>
@@ -109,19 +109,19 @@ const ToClaimRequestTable = () => {
                   key={sticker.id}
                   handleClick={() => handleRowClick(sticker)}
                 >
-                  <div className="flex-1 p-2 text-center">
+                  <div className="flex items-center justify-center">
                     {formatUserName(sticker.resident.user, false)}
                   </div>
-                  <div className="flex-1 p-2 text-center">
+                  <div className="flex items-center justify-center">
                     {sticker.car_plate_number}
                   </div>
-                  <div className="flex-1 p-2 text-center">
+                  <div className="flex items-center justify-center">
                     {sticker.completed_date}
                   </div>
-                  <div className="flex-1 p-2 text-center">To Claim</div>
-                  <div className="flex-1 p-2 text-center">
+                  <div className="flex items-center justify-center">To Claim</div>
+                  <div className="flex items-center justify-center">
                     <button
-                      className="bg-secondary text-white px-4 py-2 rounded hover:bg-greyGreen transition-colors"
+                      className="bg-oliveGreen text-white px-4 py-2 rounded hover:bg-greyGreen transition-colors"
                       onClick={(e) => handleSetAsClaimed(sticker, e)} // Use the claim handler
                     >
                       Set as Claimed

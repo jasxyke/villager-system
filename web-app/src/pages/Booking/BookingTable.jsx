@@ -47,7 +47,7 @@ const BookingTable = ({ selectedAmenity }) => {
 
   return (
     <div className="text-white mt-4">
-      <div className="grid grid-cols-7 bg-green font-semibold">
+      <div className="grid grid-cols-7 bg-oliveGreen font-semibold">
         <div className="px-4 py-3 text-center">FULLNAME</div>
         <div className="px-4 py-3 text-center">EMAIL</div>
         <div className="px-4 py-3 text-center">BOOKING DATE</div>
@@ -57,16 +57,16 @@ const BookingTable = ({ selectedAmenity }) => {
         <div className="px-4 py-3 text-center">ACTION</div>
       </div>
 
-      <div className="space-y-2 mt-2 bg-green">
+      <div className="divide-y divide-gray-300 h-[350px] overflow-y-auto">
         {loading ? (
-          <LoadingContainer />
+          <LoadingContainer color="green" bgColor="white"/>
         ) : bookings.length > 0 ? (
           bookings.map((booking, index) => (
             <div
               key={index}
-              className={`grid grid-cols-7 items-center ${
-                index % 2 === 0 ? "bg-darkOliverGreen" : "bg-green"
-              }`}
+              className={`grid grid-cols-7 gap-4 ${
+                index % 2 === 0 ? "bg-gray-50" : "bg-white"
+              } hover:bg-gray-100 text-black`}
             >
               <div className="px-4 py-3 text-center truncate">
                 {booking.full_name}
@@ -88,7 +88,7 @@ const BookingTable = ({ selectedAmenity }) => {
               </div>
               <div className="px-4 py-3 text-center">
                 <button
-                  className="p-2 bg-secondary rounded-md"
+                  className="p-2 bg-oliveGreen rounded-md text-white"
                   onClick={() => handleReviewClick(booking)}
                 >
                   REVIEW

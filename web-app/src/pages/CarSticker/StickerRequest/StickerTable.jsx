@@ -22,7 +22,6 @@ const StickerTable = () => {
   const [selectedSticker, setSelectedSticker] = useState(null);
   const [detailsView, setDetailsView] = useState(false);
   const [status, setStatus] = useState("pending");
-  // Use the custom hook to fetch car sticker requests
   const {
     fetchRequestsByStatus,
     requests,
@@ -34,8 +33,7 @@ const StickerTable = () => {
   } = useCarStickerRequestsByStatus();
 
   useEffect(() => {
-    // Fetch pending requests when the component mounts
-    fetchRequestsByStatus(status, currentPage); // Default to page 1 on mount
+    fetchRequestsByStatus(status, currentPage);
   }, [currentPage, status]);
 
   const handleRowClick = (sticker) => {
@@ -55,7 +53,6 @@ const StickerTable = () => {
   };
 
   const handlePageClick = (event) => {
-    // Paginate to the selected page
     changePage(status, event.selected + 1);
   };
 
@@ -79,21 +76,20 @@ const StickerTable = () => {
         />
       ) : (
         <>
-          <div className="w-full">
-            <div className="flex items-center justify-center font-medium bg-mutedGreen mb-2 p-2 text-center">
-              <div className="flex-1 p-2 text-center">Name</div>
-              <div className="flex-1 p-2 text-center">Plate Number</div>
-              <div className="flex-1 p-2 text-center">Request Date</div>
-              <div className="flex-1 p-2 text-center">Status</div>
-              <div className="flex-1 p-2 text-center">Action</div>
-            </div>
+          {/* Table Header */}
+          <div className="grid grid-cols-5 gap-4 p-4 bg-oliveGreen text-white font-bold">
+            <div className="flex items-center justify-center">Name</div>
+            <div className="flex items-center justify-center">Plate Number</div>
+            <div className="flex items-center justify-center">Request Date</div>
+            <div className="flex items-center justify-center">Status</div>
+            <div className="flex items-center justify-center">Action</div>
           </div>
+
+          {/* Table Rows */}
           <div>
             {requests.length === 0 ? (
               <StickerDefaultTable>
-                <div className="text-center p-4 w-full">
-                  No pending sticker requests found.
-                </div>
+                <div className="text-center p-4">No pending sticker requests found.</div>
               </StickerDefaultTable>
             ) : (
               requests.map((sticker) => (
@@ -101,21 +97,17 @@ const StickerTable = () => {
                   key={sticker.id}
                   handleClick={() => handleRowClick(sticker)}
                 >
-                  <div className="flex-1 p-2 text-center">
+                  <div className="flex items-center justify-center">
                     {formatUserName(sticker.resident.user, false)}
                   </div>
-                  <div className="flex-1 p-2 text-center">
-                    {sticker.car_plate_number}
-                  </div>
-                  <div className="flex-1 p-2 text-center">
-                    {sticker.application_date}
-                  </div>
-                  <div className="flex-1 p-2 text-center">
+                  <div className="flex items-center justify-center">{sticker.car_plate_number}</div>
+                  <div className="flex items-center justify-center">{sticker.application_date}</div>
+                  <div className="flex items-center justify-center">
                     {formatName(sticker.request_status)}
                   </div>
-                  <div className="flex-1 p-2 text-center">
+                  <div className="flex items-center justify-center">
                     <button
-                      className="bg-secondary text-white px-4 py-2 rounded hover:bg-greyGreen transition-colors"
+                      className="bg-oliveGreen text-white px-4 py-2 rounded hover:bg-greyGreen transition"
                       onClick={(e) => handleReviewClick(sticker, e)}
                     >
                       Review
@@ -125,34 +117,36 @@ const StickerTable = () => {
               ))
             )}
           </div>
-          {/* Pagination Controls */}
+
+          {/* Pagination */}
           <div className="flex justify-center mt-4">
             {lastPage > 1 && (
               <ReactPaginate
                 breakLabel="..."
-                nextLabel={"next>"}
+                nextLabel="next >"
                 onPageChange={handlePageClick}
                 pageRangeDisplayed={5}
                 pageCount={lastPage}
-                previousLabel={"<previous"}
+                previousLabel="< previous"
                 renderOnZeroPageCount={null}
-                className={"pagination rounded-md"}
-                disabledClassName="text-grey opacity-50"
-                pageClassName="text-white"
-                activeClassName="bg-paleGreen px-2"
+                className="pagination rounded-md text-white"
+                disabledClassName="text-gray-500 opacity-50"
+                pageClassName="px-2"
+                activeClassName="bg-paleGreen"
               />
             )}
           </div>
         </>
       )}
 
+      {/* Filter Options */}
       {!detailsView && selectedSticker === null && (
         <SelectOptions
           list={options}
           onChangeValue={setStatus}
           value={status}
-          label={"Status"}
-          width={"auto"}
+          label="Status"
+          width="auto"
         />
       )}
     </div>

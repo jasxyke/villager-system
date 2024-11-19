@@ -55,38 +55,39 @@ const ClaimedStickersTable = () => {
       ) : (
         <>
           <div className="w-full">
-            <div className="flex items-center justify-center font-medium bg-mutedGreen mb-2 p-2 text-center">
-              <div className="flex-1 p-2 text-center">Name</div>
-              <div className="flex-1 p-2 text-center">Plate Number</div>
-              <div className="flex-1 p-2 text-center">Claimed Date</div>
-              <div className="flex-1 p-2 text-center">Status</div>
+            <div className="grid grid-cols-4 gap-4 p-4 bg-oliveGreen text-white font-bold">
+              <div className="flex items-center justify-center">Name</div>
+              <div className="flex items-center justify-center">Plate Number</div>
+              <div className="flex items-center justify-center">Claimed Date</div>
+              <div className="flex items-center justify-center">Status</div>
             </div>
           </div>
           <div>
             {requests.length === 0 ? (
-              <StickerDefaultTable>
-                <div className="text-center p-4 w-full">
-                  No claimed sticker requests found.
-                </div>
-              </StickerDefaultTable>
+              <div className="text-center p-4 w-full">
+                No claimed sticker requests found.
+              </div>
             ) : (
-              requests.map((sticker) => (
-                <StickerDefaultTable
-                  key={sticker.id}
-                  handleClick={() => handleRowClick(sticker)}
-                >
-                  <div className="flex-1 p-2 text-center">
-                    {formatUserName(sticker.resident.user, false)}
+              <div className="w-full">
+                {requests.map((sticker) => (
+                  <div
+                    key={sticker.id}
+                    className="grid grid-cols-4 gap-4 p-4 border-b border-gray-300 bg-white hover:bg-gray-100 cursor-pointer"
+                    onClick={() => handleRowClick(sticker)}
+                  >
+                    <div className="flex items-center justify-center">
+                      {formatUserName(sticker.resident.user, false)}
+                    </div>
+                    <div className="flex items-center justify-center">
+                      {sticker.car_plate_number}
+                    </div>
+                    <div className="flex items-center justify-center">
+                      {sticker.claimed_date}
+                    </div>
+                    <div className="flex items-center justify-center">Claimed</div>
                   </div>
-                  <div className="flex-1 p-2 text-center">
-                    {sticker.car_plate_number}
-                  </div>
-                  <div className="flex-1 p-2 text-center">
-                    {sticker.claimed_date}
-                  </div>
-                  <div className="flex-1 p-2 text-center">Claimed</div>
-                </StickerDefaultTable>
-              ))
+                ))}
+              </div>
             )}
           </div>
           {/* Pagination Controls */}
@@ -110,6 +111,7 @@ const ClaimedStickersTable = () => {
         </>
       )}
     </div>
+
   );
 };
 

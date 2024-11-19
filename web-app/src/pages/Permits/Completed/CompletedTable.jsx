@@ -4,6 +4,7 @@ import usePermitRequests from "../../../hooks/Permits/usePermitRequests";
 import LoadingContainer from "../../../components/LoadingScreen/LoadingContainer";
 import ReactPaginate from "react-paginate"; // Add pagination support
 import { formatName } from "../../../utils/DataFormatter";
+import styles from "../PermitStyles.module.css";
 
 const CompletedTable = () => {
   const [detailsView, setDetailsView] = useState(false);
@@ -34,44 +35,48 @@ const CompletedTable = () => {
       {detailsView ? (
         <PermitDetails permit={selectedPermit} onBack={handleBack} />
       ) : (
-        <>
-          <div className="w-full mb-2">
-            <div className="flex items-center justify-center font-medium bg-mutedGreen p-2 text-center">
-              <div className="flex-1 p-2">Name</div>
-              <div className="flex-1 p-2">Completed Date</div>
-              <div className="flex-1 p-2">Claimed Date</div>
-              <div className="flex-1 p-2">Type</div>
-              <div className="flex-1 p-2">Status</div>
-            </div>
+        <div className="min-w-full rounded-t shadow-lg">
+          {/* Table Header */}
+          <div className="grid grid-cols-5 gap-4 p-2 bg-oliveGreen text-white font-semibold rounded-t">
+            <div className="flex items-center justify-center">Name</div>
+            <div className="flex items-center justify-center">Completed Date</div>
+            <div className="flex items-center justify-center">Claimed Date</div>
+            <div className="flex items-center justify-center">Type</div>
+            <div className="flex items-center justify-center">Status</div>
           </div>
 
-          <div>
+          {/* Table Body */}
+          <div className="divide-y divide-gray-300 h-[350px] overflow-y-auto">
             {loading ? (
-              <LoadingContainer />
+              <LoadingContainer color="green" bgColor="white" />
             ) : error ? (
-              <p className="text-red-500">{error}</p>
+              <p className="text-red-500 text-center p-4">{error}</p>
             ) : permitRequests.length === 0 ? (
-              <div className="text-center p-4 w-full">
+              <div className="text-center p-4 bg-white">
                 No completed permits found.
               </div>
             ) : (
-              permitRequests.map((permit) => (
+              permitRequests.map((permit, index) => (
                 <div
                   key={permit.id}
-                  className="flex border mb-2 hover:bg-darkerGreen cursor-pointer text-white"
+                  className={`grid grid-cols-5 gap-4 p-4 ${
+                    index % 2 === 0 ? "bg-gray-50" : "bg-white"
+                  } hover:bg-gray-100 cursor-pointer`}
                   onClick={() => handleRowClick(permit)}
                 >
-                  <div className="flex-1 p-2 text-center">
+                  <div className="flex items-center justify-center">
                     {permit.resident.user.firstname}
                   </div>
-                  <div className="flex-1 p-2 text-center">
+                  <div className="flex items-center justify-center">
                     {permit.completed_date || "N/A"}
                   </div>
-                  <div className="flex-1 p-2 text-center">
+                  <div className="flex items-center justify-center">
                     {permit.claimed_date || "N/A"}
                   </div>
-                  <div className="flex-1 p-2 text-center">{permit.purpose}</div>
-                  <div className="flex-1 p-2 text-center">
+                  <div className="flex items-center justify-center">
+                    {permit.purpose}
+                  </div>
+                  <div className="flex items-center justify-center">
                     {formatName(permit.permit_status)}
                   </div>
                 </div>
@@ -79,24 +84,25 @@ const CompletedTable = () => {
             )}
           </div>
 
+          {/* Pagination */}
           <div className="flex justify-center mt-4">
             {lastPage > 1 && (
               <ReactPaginate
                 breakLabel="..."
-                nextLabel={"next >"}
+                nextLabel="next >"
                 onPageChange={handlePageClick}
                 pageRangeDisplayed={5}
                 pageCount={lastPage}
-                previousLabel={"< previous"}
+                previousLabel="< previous"
                 renderOnZeroPageCount={null}
-                className={"pagination rounded-md"}
+                className="pagination rounded-md"
                 disabledClassName="text-grey opacity-50"
                 pageClassName="text-white"
                 activeClassName="bg-paleGreen px-2"
               />
             )}
           </div>
-        </>
+        </div>
       )}
     </div>
   );

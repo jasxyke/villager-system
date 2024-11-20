@@ -60,9 +60,7 @@ const PermitApplications = () => {
           <Review permit={selectedPermit} onBack={handleBack} />
         ) : (
           <div>
-            {loading ? (
-              <LoadingContainer />
-            ) : error ? (
+            {error ? (
               <p style={{ color: "red" }}>{error}</p>
             ) : (
               <>

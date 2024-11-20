@@ -5,6 +5,7 @@ import useCarStickerRequestsByStatus from "../../../hooks/CarStickers/useCarStic
 import useCarStickerRequests from "../../../hooks/CarStickers/useCarStickerRequests"; // Import the custom hook
 import { formatUserName } from "../../../utils/DataFormatter";
 import ReactPaginate from "react-paginate";
+import LoadingContainer from "../../../components/LoadingScreen/LoadingContainer";
 
 const ToClaimRequestTable = () => {
   const [selectedSticker, setSelectedSticker] = useState(null);
@@ -73,10 +74,6 @@ const ToClaimRequestTable = () => {
     changePage(event.selected + 1);
   };
 
-  if (loading || claimLoading) {
-    return <div>Loading...</div>; // Handle loading state
-  }
-
   if (error || claimError) {
     return <div>{error || claimError}</div>; // Handle error state
   }
@@ -90,14 +87,20 @@ const ToClaimRequestTable = () => {
           <div className="w-full">
             <div className="grid grid-cols-5 gap-4 p-4 bg-oliveGreen text-white font-bold">
               <div className="flex items-center justify-center">Name</div>
-              <div className="flex items-center justify-center">Plate Number</div>
-              <div className="flex items-center justify-center">Completion Date</div>
+              <div className="flex items-center justify-center">
+                Plate Number
+              </div>
+              <div className="flex items-center justify-center">
+                Completion Date
+              </div>
               <div className="flex items-center justify-center">Status</div>
               <div className="flex items-center justify-center">Action</div>
             </div>
           </div>
           <div>
-            {requests.length === 0 ? (
+            {loading ? (
+              <LoadingContainer color="green" bgColor="white" />
+            ) : requests.length === 0 ? (
               <StickerDefaultTable>
                 <div className="text-center p-4 w-full">
                   No requests found to claim.
@@ -118,7 +121,9 @@ const ToClaimRequestTable = () => {
                   <div className="flex items-center justify-center">
                     {sticker.completed_date}
                   </div>
-                  <div className="flex items-center justify-center">To Claim</div>
+                  <div className="flex items-center justify-center">
+                    To Claim
+                  </div>
                   <div className="flex items-center justify-center">
                     <button
                       className="bg-oliveGreen text-white px-4 py-2 rounded hover:bg-greyGreen transition-colors"

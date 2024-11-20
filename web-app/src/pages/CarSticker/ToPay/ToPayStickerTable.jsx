@@ -5,6 +5,7 @@ import useCarStickerRequestsByStatus from "../../../hooks/CarStickers/useCarStic
 import { formatUserName } from "../../../utils/DataFormatter";
 import ReactPaginate from "react-paginate";
 import useStickerPayments from "../../../hooks/CarStickers/useStickerPayments";
+import LoadingContainer from "../../../components/LoadingScreen/LoadingContainer";
 
 const ToPayStickerTable = () => {
   const [selectedSticker, setSelectedSticker] = useState(null);
@@ -115,22 +116,30 @@ const ToPayStickerTable = () => {
           <div className="w-full">
             <div className="grid grid-cols-5 gap-4 p-4 bg-oliveGreen text-white font-bold">
               <div className="flex items-center justify-center">Name</div>
-              <div className="flex items-center justify-center">Plate Number</div>
-              <div className="flex items-center justify-center">Approved Date</div>
+              <div className="flex items-center justify-center">
+                Plate Number
+              </div>
+              <div className="flex items-center justify-center">
+                Approved Date
+              </div>
               <div className="flex items-center justify-center">Status</div>
               <div className="flex items-center justify-center">Actions</div>
             </div>
           </div>
 
           <div>
-            {loading && <p>Loading...</p>}
             {error && <p className="text-red-500">{error}</p>}
-            {requests.length === 0 && !loading && (
-              <StickerDefaultTable>
-                <div className="text-center p-4 w-full">
-                  No approved sticker requests found.
-                </div>
-              </StickerDefaultTable>
+            {loading ? (
+              <LoadingContainer color="green" bgColor="white" />
+            ) : (
+              requests.length === 0 &&
+              !loading && (
+                <StickerDefaultTable>
+                  <div className="text-center p-4 w-full">
+                    No approved sticker requests found.
+                  </div>
+                </StickerDefaultTable>
+              )
             )}
 
             {requests.map((sticker) => (

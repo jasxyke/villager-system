@@ -37,7 +37,9 @@ const ToClaimPermitsTable = () => {
         }
       } catch (error) {
         console.error("Failed to mark permit as claimed", claimError);
-        alert("There was an error marking the permit as claimed. Please try again.");
+        alert(
+          "There was an error marking the permit as claimed. Please try again."
+        );
       }
     }
   };
@@ -66,7 +68,9 @@ const ToClaimPermitsTable = () => {
             {/* Table Header */}
             <div className="grid grid-cols-5 gap-4 p-2 bg-oliveGreen text-white font-semibold rounded-t">
               <div className="flex items-center justify-center">Name</div>
-              <div className="flex items-center justify-center">Completed Date</div>
+              <div className="flex items-center justify-center">
+                Completed Date
+              </div>
               <div className="flex items-center justify-center">Type</div>
               <div className="flex items-center justify-center">Status</div>
               <div className="flex items-center justify-center">Action</div>
@@ -75,9 +79,11 @@ const ToClaimPermitsTable = () => {
             {/* Table Body */}
             <div className="divide-y divide-gray-300 h-[350px] overflow-y-auto">
               {loading || claimLoading ? (
-                <LoadingContainer />
+                <LoadingContainer color="green" bgColor="white" />
               ) : error || claimError ? (
-                <p className="text-red-500 text-center p-4">{error || claimError}</p>
+                <p className="text-red-500 text-center p-4">
+                  {error || claimError}
+                </p>
               ) : permitRequests.length === 0 ? (
                 <div className="text-center p-4">No permits to claim.</div>
               ) : (
@@ -95,7 +101,9 @@ const ToClaimPermitsTable = () => {
                     <div className="flex items-center justify-center">
                       {permit.completed_date}
                     </div>
-                    <div className="flex items-center justify-center">{permit.purpose}</div>
+                    <div className="flex items-center justify-center">
+                      {permit.purpose}
+                    </div>
                     <div className="flex items-center justify-center">
                       {permit.permit_status}
                     </div>

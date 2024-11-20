@@ -16,7 +16,7 @@ const Table = ({ onRowClick, onReviewClick, permitRequests, loading }) => {
         </div>
 
         {/* Table Body */}
-        <div className="divide-y divide-gray-300 h-[350px] overflow-y-auto">
+        <div className="divide-y divide-gray-300 overflow-y-auto">
           {loading ? (
             <LoadingContainer color="green" bgColor="white" />
           ) : permitRequests.length > 0 ? (
@@ -56,7 +56,9 @@ const Table = ({ onRowClick, onReviewClick, permitRequests, loading }) => {
               </div>
             ))
           ) : (
-            <div className="text-center p-4 bg-white">No permit requests available</div>
+            <div className="text-center p-4 bg-white">
+              No permit requests available
+            </div>
           )}
         </div>
       </div>

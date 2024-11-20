@@ -4,6 +4,7 @@ import StickerDefaultTable from "../StickerDefaultTable";
 import ReactPaginate from "react-paginate";
 import useCarStickerRequestsByStatus from "../../../hooks/CarStickers/useCarStickerRequestsByStatus";
 import { formatUserName } from "../../../utils/DataFormatter";
+import LoadingContainer from "../../../components/LoadingScreen/LoadingContainer";
 
 const ClaimedStickersTable = () => {
   const [selectedSticker, setSelectedSticker] = useState(null);
@@ -40,10 +41,6 @@ const ClaimedStickersTable = () => {
     changePage("claimed", event.selected + 1);
   };
 
-  if (loading) {
-    return <div>Loading...</div>; // Handle loading state
-  }
-
   if (error) {
     return <div>{error}</div>; // Handle error state
   }
@@ -57,13 +54,19 @@ const ClaimedStickersTable = () => {
           <div className="w-full">
             <div className="grid grid-cols-4 gap-4 p-4 bg-oliveGreen text-white font-bold">
               <div className="flex items-center justify-center">Name</div>
-              <div className="flex items-center justify-center">Plate Number</div>
-              <div className="flex items-center justify-center">Claimed Date</div>
+              <div className="flex items-center justify-center">
+                Plate Number
+              </div>
+              <div className="flex items-center justify-center">
+                Claimed Date
+              </div>
               <div className="flex items-center justify-center">Status</div>
             </div>
           </div>
           <div>
-            {requests.length === 0 ? (
+            {loading ? (
+              <LoadingContainer color="green" bgColor="white" />
+            ) : requests.length === 0 ? (
               <div className="text-center p-4 w-full">
                 No claimed sticker requests found.
               </div>
@@ -84,7 +87,9 @@ const ClaimedStickersTable = () => {
                     <div className="flex items-center justify-center">
                       {sticker.claimed_date}
                     </div>
-                    <div className="flex items-center justify-center">Claimed</div>
+                    <div className="flex items-center justify-center">
+                      Claimed
+                    </div>
                   </div>
                 ))}
               </div>
@@ -111,7 +116,6 @@ const ClaimedStickersTable = () => {
         </>
       )}
     </div>
-
   );
 };
 

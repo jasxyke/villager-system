@@ -6,6 +6,7 @@ import useCarStickerRequestsByStatus from "../../../hooks/CarStickers/useCarStic
 import { formatName, formatUserName } from "../../../utils/DataFormatter";
 import ReactPaginate from "react-paginate";
 import SelectOptions from "../../../components/forms/SelectOptions";
+import LoadingContainer from "../../../components/LoadingScreen/LoadingContainer";
 
 const options = [
   {
@@ -56,10 +57,6 @@ const StickerTable = () => {
     changePage(status, event.selected + 1);
   };
 
-  if (loading) {
-    return <div>Loading...</div>; // Handle loading state
-  }
-
   if (error) {
     return <div>{error}</div>; // Handle error state
   }
@@ -87,9 +84,13 @@ const StickerTable = () => {
 
           {/* Table Rows */}
           <div>
-            {requests.length === 0 ? (
+            {loading ? (
+              <LoadingContainer color="green" bgColor="white" />
+            ) : requests.length === 0 ? (
               <StickerDefaultTable>
-                <div className="text-center p-4">No pending sticker requests found.</div>
+                <div className="text-center p-4">
+                  No pending sticker requests found.
+                </div>
               </StickerDefaultTable>
             ) : (
               requests.map((sticker) => (
@@ -100,8 +101,12 @@ const StickerTable = () => {
                   <div className="flex items-center justify-center">
                     {formatUserName(sticker.resident.user, false)}
                   </div>
-                  <div className="flex items-center justify-center">{sticker.car_plate_number}</div>
-                  <div className="flex items-center justify-center">{sticker.application_date}</div>
+                  <div className="flex items-center justify-center">
+                    {sticker.car_plate_number}
+                  </div>
+                  <div className="flex items-center justify-center">
+                    {sticker.application_date}
+                  </div>
                   <div className="flex items-center justify-center">
                     {formatName(sticker.request_status)}
                   </div>

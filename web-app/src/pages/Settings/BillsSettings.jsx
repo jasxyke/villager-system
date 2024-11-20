@@ -14,7 +14,7 @@ const BillsSettings = () => {
     if (!loading && settings) {
       setAllowMissedPayment(settings.allow_miss_payments || "Yes");
       setPaymentPerCollection(settings.bill_amount_per_month || 1000);
-      setInterest(settings.interest || 100);
+      setInterest(settings.additional_per_missed_payment || 100);
     }
   }, [loading, settings]);
 

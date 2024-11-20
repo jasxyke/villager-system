@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Setting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class SettingsController extends Controller
 {
@@ -19,13 +20,29 @@ class SettingsController extends Controller
         $settings = $request->all();
 
         foreach ($settings as $key => $value) {
-            Setting::updateOrCreate(['key' => $key], ['value' => $value]);
+            // Check if the setting is for an image upload
+            if (in_array($key, ['village_logo', 'city_logo']) && $request->hasFile($key)) {
+                
+                // return response()->json(['message' => in_array($key, ['village_logo', 'city_logo'])]);
+                // return response()->json(['message' => $request->hasFile($key)]);
+                $file = $request->file($key);
+
+                // Save the file to the 'public/logos' directory
+                $filePath = $file->store('logos', 'public');
+                $fileUrl = Storage::disk('public')->url($filePath);
+
+                // Update the path and URL settings
+                Setting::updateOrCreate(['key' => "{$key}_path"], ['value' => $filePath]);
+                Setting::updateOrCreate(['key' => "{$key}_url"], ['value' => $fileUrl]);
+            } else {
+                // For non-file settings, update or create as usual
+                Setting::updateOrCreate(['key' => $key], ['value' => $value]);
+            }
         }
 
         return response()->json(['message' => 'Settings updated successfully.']);
     }
-    
-    // Fetch a single setting by key
+
     public function getSetting($key)
     {
         $setting = Setting::where('key', $key)->first();

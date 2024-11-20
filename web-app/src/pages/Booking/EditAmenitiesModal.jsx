@@ -5,7 +5,9 @@ import axiosClient from "../../utils/axios";
 const EditAmenitiesModal = ({ isOpen, onRequestClose }) => {
   const [amenities, setAmenities] = useState([]);
   const [errors, setErrors] = useState({});
-
+  const [confirmDeleteId, setConfirmDeleteId] = useState(null);
+  const [isDeleteConfirmationOpen, setIsDeleteConfirmationOpen] =
+    useState(false);
   useEffect(() => {
     // Fetch the list of amenities
     const fetchAmenities = async () => {
@@ -77,14 +79,19 @@ const EditAmenitiesModal = ({ isOpen, onRequestClose }) => {
             });
             return response.data;
           } else {
-            const response = await axiosClient.post("/amenities", {
-              name: amenity.name,
-              day_price: amenity.day_price,
-              night_price: amenity.night_price,
-              guest_additional_price: amenity.guest_additional_price,
-              extension_price: amenity.extension_price,
-            });
-            return response.data;
+            try {
+              const response = await axiosClient.post("/amenities", {
+                name: amenity.name,
+                day_price: amenity.day_price,
+                night_price: amenity.night_price,
+                guest_additional_price: amenity.guest_additional_price,
+                extension_price: amenity.extension_price,
+              });
+              return response.data;
+            } catch (error) {
+              console.log(error);
+              console.error(error);
+            }
           }
         })
       );
@@ -92,7 +99,9 @@ const EditAmenitiesModal = ({ isOpen, onRequestClose }) => {
       alert("Amenities updated successfully");
       onRequestClose();
     } catch (error) {
-      console.error("Failed to update amenities:", error.response || error);
+      console.log(error);
+
+      console.error("Failed to update amenities:", error);
       alert(
         "Failed to update amenities. Please check the console for more details."
       );
@@ -114,21 +123,30 @@ const EditAmenitiesModal = ({ isOpen, onRequestClose }) => {
   };
 
   const handleDeleteAmenity = (id) => {
-    if (id) {
-      // If the amenity has an id, delete it from the database
-      axiosClient
-        .delete(`/amenities/${id}`)
-        .then(() => {
-          setAmenities(amenities.filter((amenity) => amenity.id !== id));
-        })
-        .catch((error) => {
-          console.error("Failed to delete amenity:", error);
-          alert("Failed to delete amenity. Please try again.");
-        });
-    } else {
-      // If it's a new amenity (not yet saved to the database), just remove it from the state
-      setAmenities(amenities.filter((amenity) => amenity.id !== id));
+    setConfirmDeleteId(id); // Set the amenity id to be deleted
+    setIsDeleteConfirmationOpen(true); // Open confirmation modal
+  };
+
+  const confirmDelete = async () => {
+    if (confirmDeleteId) {
+      try {
+        await axiosClient.delete(`/amenities/${confirmDeleteId}`);
+        setAmenities(
+          amenities.filter((amenity) => amenity.id !== confirmDeleteId)
+        );
+        alert("Deleted Amenity Successfully");
+      } catch (error) {
+        console.error("Failed to delete amenity:", error);
+        alert("Failed to delete amenity. Please try again.");
+      }
     }
+    setIsDeleteConfirmationOpen(false); // Close the confirmation modal
+    setConfirmDeleteId(null); // Reset the id
+  };
+
+  const cancelDelete = () => {
+    setIsDeleteConfirmationOpen(false); // Close the confirmation modal without deleting
+    setConfirmDeleteId(null); // Reset the id
   };
 
   return (
@@ -149,21 +167,18 @@ const EditAmenitiesModal = ({ isOpen, onRequestClose }) => {
       </div>
 
       {/* Column Headers */}
-      <div className="grid grid-cols-4 gap-4 mb-2 font-semibold text-sm text-gray-600">
+      <div className="grid grid-cols-6 gap-4 mb-2 font-semibold text-sm text-gray-600">
         <div className="col-span-1">Amenity Name</div>
         <div className="col-span-1 text-center">Day Price</div>
         <div className="col-span-1 text-center">Night Price</div>
         <div className="col-span-1 text-center">Guest Add. Price</div>
-        {/* <div className="col-span-1 text-center">Extension Price</div> */}
-        {/* <div className="col-span-1 text-center">Actions</div> */}
+        <div className="col-span-1 text-center">Extension Price</div>
+        <div className="col-span-1 text-center">Actions</div>
       </div>
 
       <div className="space-y-4">
         {amenities.map((amenity, index) => (
-          <div
-            key={amenity.id || Math.random()}
-            className="grid grid-cols-4 gap-4 items-center"
-          >
+          <div key={index} className="grid grid-cols-6 gap-4 items-center">
             <div className="col-span-1">
               <input
                 type="text"
@@ -238,7 +253,7 @@ const EditAmenitiesModal = ({ isOpen, onRequestClose }) => {
                 </p>
               )}
             </div>
-            {/* <div className="col-span-1 text-right">
+            <div className="col-span-1 text-right">
               <input
                 type="number"
                 value={amenity.extension_price}
@@ -258,26 +273,26 @@ const EditAmenitiesModal = ({ isOpen, onRequestClose }) => {
                   {errors[`extension_price-${index}`]}
                 </p>
               )}
-            </div> */}
-            {/* <div className="col-span-1 flex justify-center">
+            </div>
+            <div className="col-span-1 flex justify-center">
               <button
                 onClick={() => handleDeleteAmenity(amenity.id)}
                 className="text-red-500 hover:text-red-700"
               >
                 Delete
               </button>
-            </div> */}
+            </div>
           </div>
         ))}
       </div>
 
       <div className="flex justify-between mt-6">
-        {/* <button
+        <button
           onClick={handleAddAmenity}
           className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
         >
           Add Amenity
-        </button> */}
+        </button>
         <button
           onClick={handleSave}
           className="bg-green text-white px-4 py-2 rounded-md hover:bg-green-600"
@@ -285,6 +300,30 @@ const EditAmenitiesModal = ({ isOpen, onRequestClose }) => {
           Save Changes
         </button>
       </div>
+      <Modal
+        isOpen={isDeleteConfirmationOpen}
+        onRequestClose={cancelDelete}
+        className="bg-white p-6 rounded-lg max-w-md mx-auto"
+        overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
+      >
+        <h3 className="text-lg font-semibold">
+          Are you sure you want to delete this amenity?
+        </h3>
+        <div className="mt-4 flex justify-between">
+          <button
+            className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
+            onClick={confirmDelete}
+          >
+            Yes
+          </button>
+          <button
+            className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600"
+            onClick={cancelDelete}
+          >
+            No
+          </button>
+        </div>
+      </Modal>
     </Modal>
   );
 };

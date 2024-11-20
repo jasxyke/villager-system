@@ -5,6 +5,7 @@ import App from "./App";
 import { AuthProvider } from "./contexts/AuthContext";
 import "./index.css";
 import { SettingsProvider } from "./contexts/SettingsContext";
+import { AmenitiesProvider } from "./contexts/AmenitiesContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -12,7 +13,9 @@ root.render(
     <BrowserRouter>
       <AuthProvider>
         <SettingsProvider>
-          <App />
+          <AmenitiesProvider>
+            <App />
+          </AmenitiesProvider>
         </SettingsProvider>
       </AuthProvider>
     </BrowserRouter>

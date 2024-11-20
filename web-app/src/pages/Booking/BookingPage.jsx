@@ -1,17 +1,36 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./BookingPage.module.css";
 import MainLogo from "../../components/MainLogo";
 import SearchBar from "./SearchBar";
 import BookingTable from "./BookingTable";
 import EditAmenitiesModal from "./EditAmenitiesModal";
-import { AMENNITIES } from "../../data/contants";
+import LoadingPage from "../../components/LoadingScreen/LoadingPage";
+import { useAmenities } from "../../contexts/AmenitiesContext";
 
 const BookingPage = () => {
   const [selectedAmenityId, setSelectedAmenityId] = useState(1);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
+  // Use the custom hook to fetch amenities
+  const { amenities, loading, error, fetchAmenities } = useAmenities();
+
+  // Fetch amenities on mount
+  // useEffect(() => {
+  //   fetchAmenities();
+  // }, []);
+
+  // Handle error or loading states
+  if (loading) {
+    return <LoadingPage color="green" loading={loading} size={100} />;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
+  // Handle selection of amenities
   const selectedAmenity =
-    AMENNITIES.find((amenity) => amenity.id === selectedAmenityId)?.name || "";
+    amenities.find((amenity) => amenity.id === selectedAmenityId)?.name || "";
 
   const handleAmenitySelection = (id) => {
     setSelectedAmenityId(id);
@@ -19,7 +38,7 @@ const BookingPage = () => {
   };
 
   const toggleModal = () => {
-    setIsModalOpen(!isModalOpen);
+    setIsEditModalOpen(!isEditModalOpen);
   };
 
   return (
@@ -27,14 +46,15 @@ const BookingPage = () => {
       <div className={styles.bookingContainer}>
         <MainLogo />
         <div className={styles.bookingButtons}>
-          {AMENNITIES.map((amenity) => (
+          {/* Map over fetched amenities instead of the constant AMENNITIES */}
+          {amenities.map((amenity) => (
             <button
               key={amenity.id}
               className={
                 (selectedAmenityId === amenity.id
                   ? "bg-secondary"
                   : "bg-green") +
-                "  text-white p-4 rounded-lg outline-none border-paleGreen"
+                " text-white p-4 rounded-lg outline-none border-paleGreen"
               }
               onClick={() => handleAmenitySelection(amenity.id)}
             >
@@ -46,15 +66,6 @@ const BookingPage = () => {
           isOpen={isEditModalOpen}
           onRequestClose={() => setIsEditModalOpen(false)}
         />
-        {/* <div className={styles.searchBarContainer + " flex justify-between"}>
-          <div></div>
-          <button
-            onClick={() => setIsEditModalOpen(true)}
-            className="bg-green rounded-md text-white p-2"
-          >
-            Edit Amenities
-          </button>
-        </div> */}
         <div className={styles.searchBarContainer}>
           <BookingTable selectedAmenity={selectedAmenityId} />
         </div>

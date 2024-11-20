@@ -1,12 +1,7 @@
 import React, { useState } from "react";
 import MainLogo from "../../components/MainLogo";
 import MonthlyDuesReport from "./MonthlyDuesReport";
-// Import other report components as needed
-// import OfficialReceiptReport from "./OfficialReceiptReport";
-// import ResidentProfileReport from "./ResidentProfileReport";
-// import AmenityUsageReport from "./AmenityUsageReport";
-// import SecurityLogsReport from "./SecurityLogsReport";
-// import FinancialReport from "./FinancialReport";
+import ResidentProfileReport from "./ResidentProfileReport";
 
 const Reports = () => {
   const [activeTab, setActiveTab] = useState("monthlyDuesReport");
@@ -46,7 +41,7 @@ const Reports = () => {
             <div className="flex">
               {activeTab === "monthlyDuesReport" && <MonthlyDuesReport />}
               {/* Add other report components here */}
-              {/* {activeTab === "profileReport" && <ResidentProfileReport />} */}
+              {activeTab === "profileReport" && <ResidentProfileReport />}
               {/* {activeTab === "monthlyFinancialReport" && <MonthlyFinancialReport />} */}
               {/* {activeTab === "complaintsReport" && <ComplaintsReport />} */}
             </div>

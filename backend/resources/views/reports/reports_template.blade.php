@@ -63,6 +63,14 @@
             padding: 8px;
             text-align: left;
         }
+
+        .table td {
+            text-align: left;
+        }
+
+        .table th {
+            text-align: center;
+        }
         .footer {
             margin-top: 20px;
             text-align: center;
@@ -83,12 +91,6 @@
             border-top: 2px solid #000;
             margin-right: 10px;
         }
-        .certified {
-            text-align: right;
-        }
-        .certified img {
-            width: 80px;
-        }
     </style>
 </head>
 <body>
@@ -98,7 +100,8 @@
             <p>{{ $address }}</p>
             <p>{{ $phone1 }} | {{ $phone2 }}</p>
             <p>{{ $email }}</p>
-            <p>{{ $hlurbNumber }} | {{ $tin }}</p>
+            <p>{{ $hlurbNumber }}</p>
+            <p>TIN: {{ $tin }}</p>
         </div>
         <div class="logo">
             <img src="{{ $logoUrl }}" alt="Logo" style="width: 100%; height: 100%; border-radius: 50%;">

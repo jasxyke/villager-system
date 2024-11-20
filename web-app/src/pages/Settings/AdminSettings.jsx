@@ -21,7 +21,7 @@ const AdminSettings = () => {
             onClick={() => setIsEditModalOpen(true)}
             className="bg-secondary rounded-md text-white p-2 mx-auto"
           >
-            Edit Amenities Prices
+            Edit Amenities
           </button>
         </div>
         <BillsSettings />

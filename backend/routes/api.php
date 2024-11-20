@@ -147,8 +147,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::patch('/complaints/{id}/solve', [ComplaintController::class, 'solveComplaint']);
 
     //REPORTS
-    Route::get('/reports/resident-bills', [ReportsController::class, 'generatePdfReport']);
-    Route::get('/reports/resident-bill-data', [ReportsController::class, 'fetchResidentBillData']);
+    Route::get('/reports/resident-bills', [ReportsController::class, 'generateDuesPdf']);
+    Route::get('/reports/resident-bill-data', [ReportsController::class, 'generateDuesData']);
+    Route::get('/reports/profile-pdf', [ReportsController::class, 'generateResidentProfilePdf']);
+    Route::get('/reports/profile-data', [ReportsController::class, 'generateResidentProfileData']);
 
     //ADMIN SETTINGS
     Route::get('/settings', [SettingsController::class, 'index']);

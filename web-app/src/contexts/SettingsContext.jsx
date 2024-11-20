@@ -39,12 +39,41 @@ export const SettingsProvider = ({ children }) => {
   // Update settings via the API
   const updateSettings = async (newSettings) => {
     try {
-      const response = await axiosClient.post("/settings", newSettings);
-      setSettings(newSettings);
+      const formData = new FormData();
+
+      // Append each key-value pair to the FormData object
+      for (const key in newSettings) {
+        const value = newSettings[key];
+
+        // Check if the value is a file (e.g., for images)
+        if (value instanceof File) {
+          formData.append(key, value);
+        } else {
+          formData.append(key, value);
+        }
+      }
+
+      console.log(formData);
+
+      const response = await axiosClient.post("/settings", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      // Merge updated settings into the current settings
+      // setSettings((prevSettings) => ({
+      //   ...prevSettings,
+      //   ...newSettings,
+      // }));
+
+      fetchSettings();
+
       console.log(response.data.message);
 
       return response.data.message;
     } catch (err) {
+      console.log(err);
       setError(err.message);
     }
   };

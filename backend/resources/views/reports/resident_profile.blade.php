@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Overdue Bills Report</title>
+    <title>Resident Profile Report</title>
     <style>
+        /* Add your styles here */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -23,13 +24,13 @@
         .header-container table {
             width: 100%;
             margin: 0 auto;
-            border-spacing: 10px; /* space between logo and text */
+            border-spacing: 10px;
         }
         .header-container td {
-            vertical-align: middle; /* Vertically center the content in each cell */
+            vertical-align: middle;
         }
         .logo {
-            width: 100px; /* Size of the logo */
+            width: 100px;
             height: 100px;
             border-radius: 50%;
         }
@@ -71,7 +72,6 @@
         .table td {
             text-align: left;
         }
-
         .table th {
             text-align: center;
         }
@@ -120,34 +120,42 @@
             </table>
         </div>
         <div class="content">
-            <h2>Overdue Bills Report</h2>
+            <h2>Resident Profile Report</h2>
         </div>
         <div class="table-container">
             <table class="table">
                 <thead>
                     <tr>
                         <th>Resident</th>
-                        <th>Months Behind</th>
-                        <th>Overdue Months</th>
+                        <th>Birthdate</th>
+                        <th>Sex</th>
+                        <th>Civil Status</th>
+                        <th>Occupation Status</th>
+                        <th>Email</th>
+                        <th>Contact Number</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($residents as $resident)
+                    @foreach ($groupedResidents as $houseId => $group)
                         <tr>
-                            <td>{{ $resident->user->firstname }} {{ $resident->user->lastname }}</td>
-                            <td style="text-align: center">{{ $resident->bills->count() }}</td>
-                            <td>
-                                @foreach ($resident->bills as $bill)
-                                    {{ \Carbon\Carbon::parse($bill->due_date)->format('F Y') }}@if (!$loop->last), @endif
-                                @endforeach
+                            <td colspan="3" style="text-align: center; font-weight: bold;">
+                                House Block {{ $group['house']->block }} Lot {{ $group['house']->lot }}
                             </td>
                         </tr>
+                        @foreach ($group['residents'] as $resident)
+                            <tr>
+                                <td>{{ $resident->user->firstname }} {{ $resident->user->lastname }}</td>
+                                <td>{{ $resident->birthdate }}</td>
+                                <td>{{ $resident->sex }}</td>
+                                <td>{{ $resident->civil_status }}</td>
+                                <td>{{ $resident->user->email }}</td>
+                                <td>{{ $resident->user->email }}</td>
+                            </tr>
+                        @endforeach
                     @endforeach
                 </tbody>
             </table>
         </div>
-        <div class="subheader">Generated on {{ now()->format('Y-m-d') }}</div>
-
         <div class="footer">
             <div class="prepared-by">
                 <p>PREPARED BY:</p>

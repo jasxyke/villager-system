@@ -144,7 +144,7 @@ Route::middleware('auth:sanctum')->group(function () {
     //complaints
     Route::apiResource('complaints', ComplaintController::class);
     Route::get("/get-complaints/{status}", [ComplaintController::class, 'getComplaints']);
-    Route::patch('/complaints/{id}/solve', [ComplaintController::class, 'solveComplaint']);
+    Route::post('/complaints/{id}/solve', [ComplaintController::class, 'solveComplaint']);
 
     //REPORTS
     Route::get('/reports/resident-bills', [ReportsController::class, 'generateDuesPdf']);

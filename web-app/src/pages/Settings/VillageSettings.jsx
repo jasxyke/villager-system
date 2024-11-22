@@ -14,8 +14,8 @@ const VillageSettings = () => {
     village_hoa_reg_num: "",
     village_tin_no: "",
     village_blocks: 10,
-    village_logo: null,
-    city_logo: null,
+    logo_1: null,
+    logo_2: null,
   });
   const [successMessage, setSuccessMessage] = useState("");
 
@@ -55,8 +55,8 @@ const VillageSettings = () => {
     const updatedSettings = { ...formData };
 
     // Exclude null or empty fields for logos if they aren't updated
-    if (!updatedSettings.village_logo) delete updatedSettings.village_logo;
-    if (!updatedSettings.city_logo) delete updatedSettings.city_logo;
+    if (!updatedSettings.logo_1) delete updatedSettings.logo_1;
+    if (!updatedSettings.logo_2) delete updatedSettings.logo_2;
 
     const message = await updateSettings(updatedSettings);
     if (message) {
@@ -182,14 +182,14 @@ const VillageSettings = () => {
           className="border rounded-lg p-2 bg-greyGreen"
         />
 
-        {/* Village Logo */}
+        {/* Logo 1 */}
         <div className="flex justify-between items-center">
-          <label htmlFor="village_logo" className="text-white">
-            Village Logo
+          <label htmlFor="logo_1" className="text-white">
+            Logo 1
           </label>
-          {settings?.village_logo_url && (
+          {settings?.logo_1_url && (
             <img
-              src={settings.village_logo_url}
+              src={settings.logo_1_url}
               alt="Village Logo"
               className="w-16 h-16 mr-4 rounded-lg"
             />
@@ -197,21 +197,21 @@ const VillageSettings = () => {
         </div>
         <input
           type="file"
-          id="village_logo"
-          name="village_logo"
+          id="logo_1"
+          name="logo_1"
           accept="image/*"
           onChange={handleFileChange}
           className="border rounded-lg p-2 bg-greyGreen"
         />
 
-        {/* City Logo */}
+        {/* Logo 2 */}
         <div className="flex justify-between items-center">
-          <label htmlFor="city_logo" className="text-white">
-            City Logo
+          <label htmlFor="logo_2" className="text-white">
+            Logo 2
           </label>
-          {settings?.city_logo_url && (
+          {settings?.logo_2_url && (
             <img
-              src={settings.city_logo_url}
+              src={settings.logo_2_url}
               alt="City Logo"
               className="w-16 h-16 mr-4 rounded-lg"
             />
@@ -219,8 +219,8 @@ const VillageSettings = () => {
         </div>
         <input
           type="file"
-          id="city_logo"
-          name="city_logo"
+          id="logo_2"
+          name="logo_2"
           accept="image/*"
           onChange={handleFileChange}
           className="border rounded-lg p-2 bg-greyGreen"

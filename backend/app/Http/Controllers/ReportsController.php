@@ -82,7 +82,7 @@ class ReportsController extends Controller
     }
 
     
-    public function generateDuesPdf()
+    public function generateDuesPdf(Request $request)
     {
         try {
             $residents = Resident::with('user', 'bills')
@@ -94,6 +94,7 @@ class ReportsController extends Controller
             if ($residents->isEmpty()) {
                 return response()->json(['error' => 'No residents found with overdue bills'], 404);
             }
+
 
             $headerData = $this->getHeaderData();
 
@@ -159,12 +160,12 @@ class ReportsController extends Controller
 
     private function getHeaderData()
     {
-        // Convert village logo to Base64
-        $villageLogoPath = public_path('storage/' . SettingsHelper::get('village_logo_path')); // Path to your village logo
-        $cityLogoPath = public_path('storage/' . SettingsHelper::get('city_logo_path')); // Path to your city logo
+        // Convert village logo to Base64 if path exists and file is valid
+        $logo1Path = SettingsHelper::get('logo_1_path') ? public_path('storage/' . SettingsHelper::get('logo_1_path')) : null;
+        $logo2Path = SettingsHelper::get('logo_2_path') ? public_path('storage/' . SettingsHelper::get('logo_2_path')) : null;
 
-        $villageLogoBase64 = $this->convertToBase64($villageLogoPath);
-        $cityLogoBase64 = $this->convertToBase64($cityLogoPath);
+        $logo1Base64 = $this->convertToBase64($logo1Path);
+        $logo2Base64 = $this->convertToBase64($logo2Path);
 
         return [
             'villageName' => SettingsHelper::get('village_name'),
@@ -174,8 +175,8 @@ class ReportsController extends Controller
             'email' => SettingsHelper::get('village_email'),
             'hoaRegNum' => SettingsHelper::get('village_hoa_reg_num'),
             'tinNum' => SettingsHelper::get('village_tin_no'),
-            'villageLogo' => $villageLogoBase64,
-            'cityLogo' => $cityLogoBase64,
+            'villageLogo' => $logo1Base64,
+            'cityLogo' => $logo2Base64,
         ];
     }
 }

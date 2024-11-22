@@ -62,6 +62,7 @@ class ComplaintController extends Controller
            'type' => 'required|in:Noise,Dispute',
            'date_sent' => 'required|date',
            'message'=>"required|string",
+           'remarks' => "required|string"
        ]);
 
        $complaint->update($request->all());
@@ -69,14 +70,17 @@ class ComplaintController extends Controller
    }
 
    // Method to mark complaint as solved
-   public function solveComplaint($id)
+   public function solveComplaint(Request $request, $id)
    {
        try {
+            //get remarks
+            $remarks = $request->remarks;
            // Find the complaint by ID
            $complaint = Complaint::findOrFail($id);
 
            // Update the status to 'Solved'
            $complaint->status = 'Solved';
+           $complaint->remarks = $remarks;
            $complaint->save();
 
            return response()->json([

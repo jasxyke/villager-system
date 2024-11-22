@@ -18,6 +18,7 @@ return new class extends Migration
             $table->enum("type",["Noise", "Dispute"]);
             $table->date("date_sent");
             $table->string("message");
+            $table->string("remarks")->nullable();
             $table->timestamps();
         });
     }

@@ -21,9 +21,9 @@ class SettingsController extends Controller
 
         foreach ($settings as $key => $value) {
             // Check if the setting is for an image upload
-            if (in_array($key, ['village_logo', 'city_logo']) && $request->hasFile($key)) {
+            if (in_array($key, ['logo_1', 'logo_2']) && $request->hasFile($key)) {
                 
-                // return response()->json(['message' => in_array($key, ['village_logo', 'city_logo'])]);
+                // return response()->json(['message' => in_array($key, ['logo_1', 'logo_2'])]);
                 // return response()->json(['message' => $request->hasFile($key)]);
                 $file = $request->file($key);
 

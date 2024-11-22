@@ -5,6 +5,8 @@ import useComplaintsByStatus from "../../hooks/useComplaints";
 const Pending = () => {
   const [viewing, setViewing] = useState(false);
   const [selectedComplaint, setSelectedComplaint] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [remarks, setRemarks] = useState("");
 
   // Fetch complaints with 'Pending' status
   const { complaints, loading, error, solveComplaint, fetchComplaints } =
@@ -19,10 +21,18 @@ const Pending = () => {
     setViewing(false);
   };
 
-  const handleSolved = async (complaintId) => {
-    await solveComplaint(complaintId); // Mark complaint as solved
-    setViewing(false);
-    fetchComplaints(); // Refresh complaints after solving one
+  const handleSolveClick = (complaint) => {
+    setSelectedComplaint(complaint);
+    setShowModal(true); // Open modal
+  };
+
+  const handleSolveComplaint = async () => {
+    if (selectedComplaint && remarks.trim()) {
+      await solveComplaint(selectedComplaint.id, remarks); // Pass complaint ID and remarks
+      setShowModal(false);
+      setRemarks(""); // Clear remarks
+      fetchComplaints(); // Refresh complaints
+    }
   };
 
   return (
@@ -31,7 +41,7 @@ const Pending = () => {
         <View
           complaint={selectedComplaint}
           onBack={handleBack}
-          onSolved={() => handleSolved(selectedComplaint.id)} // Pass complaint ID
+          onSolved={() => handleSolveClick(selectedComplaint)} // Pass complaint to open modal
         />
       ) : (
         <>
@@ -69,6 +79,12 @@ const Pending = () => {
                   >
                     View
                   </button>
+                  <button
+                    className="text-white px-2 py-1 rounded bg-blue-500 hover:bg-blue-600 ml-2"
+                    onClick={() => handleSolveClick(item)}
+                  >
+                    Solve
+                  </button>
                 </div>
               </div>
             ))
@@ -78,6 +94,36 @@ const Pending = () => {
             </div>
           )}
         </>
+      )}
+
+      {/* Modal for solving complaint */}
+      {showModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white p-5 rounded shadow-md w-1/3">
+            <h2 className="text-xl font-semibold mb-4">Solve Complaint</h2>
+            <textarea
+              className="w-full border rounded p-2 mb-4"
+              rows="4"
+              placeholder="Enter remarks..."
+              value={remarks}
+              onChange={(e) => setRemarks(e.target.value)}
+            ></textarea>
+            <div className="flex justify-end">
+              <button
+                className="bg-gray-500 text-white px-4 py-2 rounded mr-2"
+                onClick={() => setShowModal(false)}
+              >
+                Cancel
+              </button>
+              <button
+                className="bg-blue-500 text-white px-4 py-2 rounded"
+                onClick={handleSolveComplaint}
+              >
+                Submit
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

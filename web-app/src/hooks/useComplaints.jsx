@@ -22,10 +22,12 @@ const useComplaintsByStatus = (status) => {
   };
 
   // Function to solve a complaint
-  const solveComplaint = async (complaintId) => {
+  const solveComplaint = async (complaintId, remarks) => {
     try {
       // API request to mark complaint as solved
-      await axiosClient.patch(`/complaints/${complaintId}/solve`);
+      await axiosClient.post(`/complaints/${complaintId}/solve`, {
+        remarks: remarks,
+      });
 
       // Update complaints list to remove the solved complaint
       setComplaints((prevComplaints) =>

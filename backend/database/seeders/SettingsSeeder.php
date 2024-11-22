@@ -29,10 +29,10 @@ class SettingsSeeder extends Seeder
             ['key' => 'village_hoa_reg_num', 'value' => 'HLURB No. NCR-HOA 17-0212'],
             ['key' => 'village_tin_no', 'value' => '44-966-234-00000'],
             ['key' => 'village_blocks', 'value' => '10'],
-            ['key' => 'village_logo_path', 'value' => ''],
-            ['key' => 'village_logo_url', 'value' => ''],
-            ['key' => 'city_logo_path', 'value' => ''],
-            ['key' => 'city_logo_url', 'value' => ''],
+            ['key' => 'logo_1_path', 'value' => ''],
+            ['key' => 'logo_1_url', 'value' => ''],
+            ['key' => 'logo_2_path', 'value' => ''],
+            ['key' => 'logo_2_url', 'value' => ''],
         ];
 
         DB::table('settings')->insert($settings);

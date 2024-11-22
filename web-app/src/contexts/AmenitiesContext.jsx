@@ -86,10 +86,6 @@ export const AmenitiesProvider = ({ children }) => {
     }
   };
 
-  useEffect(() => {
-    fetchAmenities();
-  }, []);
-
   return (
     <AmenitiesContext.Provider
       value={{
@@ -111,6 +107,10 @@ export const AmenitiesProvider = ({ children }) => {
 // Custom hook to use the Amenities context
 export const useAmenities = () => {
   const context = useContext(AmenitiesContext);
+
+  useEffect(() => {
+    fetchAmenities();
+  }, []);
   if (!context) {
     throw new Error("useAmenities must be used within an AmenitiesProvider");
   }

@@ -3,10 +3,8 @@
 namespace Database\Seeders;
 
 use App\Models\Booking;
-use App\Models\BookingPayment;
-use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Carbon\Carbon;
 
 class BookingSeeder extends Seeder
 {
@@ -15,45 +13,34 @@ class BookingSeeder extends Seeder
      */
     public function run(): void
     {
-        $booking = Booking::create([
-            'amenity_id'=>'1',
-            'booking_date'=>'2024-11-15',
-            'start_time'=>'13:00',
-            'end_time'=>'16:00',
-            'full_name'=>'Jaspher',
-            'email'=>'jasxyke24.jxc@gmail.com',
-            'contact_number'=>'09487834861',
-            'booking_status'=>'reserved',
-            'payment_status'=>'paid'
-        ]);
+        // Generate unique booking dates and times
+        $dates = [];
+        $bookings = [
+            ['amenity_id' => 1, 'start_time' => '13:00', 'end_time' => '16:00'],
+            ['amenity_id' => 2, 'start_time' => '16:00', 'end_time' => '19:00'],
+            ['amenity_id' => 2, 'start_time' => '14:00', 'end_time' => '17:00'],
+        ];
 
-        Booking::create([
-            'amenity_id'=>'2',
-            'booking_date'=>'2024-11-13',
-            'start_time'=>'15:00',
-            'end_time'=>'18:00',
-            'full_name'=>'Jaspher',
-            'email'=>'jasxyke24.jxc@gmail.com',
-            'contact_number'=>'09487834861',
-            'booking_status'=>'reserved',
-            'payment_status'=>'paid'
-        ]);
+        foreach ($bookings as $booking) {
+            do {
+                $date = Carbon::today()->addDays(rand(5, 10))->toDateString();
+            } while (isset($dates[$date]) && in_array($booking['start_time'], $dates[$date]));
 
-        Booking::create([
-            'amenity_id'=>'2',
-            'booking_date'=>'2024-11-20',
-            'start_time'=>'15:00',
-            'end_time'=>'18:00',
-            'full_name'=>'Jaspher',
-            'email'=>'jasxyke24.jxc@gmail.com',
-            'contact_number'=>'09487834861',
-            'booking_status'=>'reserved',
-            'payment_status'=>'paid'
-        ]);
+            // Store the date and time to avoid conflicts
+            $dates[$date][] = $booking['start_time'];
 
-        // BookingPayment::create([
-        //     'booking_id'=> $booking->id,
-        //     'amount'=>
-        // ])
+            // Create the booking
+            Booking::create([
+                'amenity_id' => $booking['amenity_id'],
+                'booking_date' => $date,
+                'start_time' => $booking['start_time'],
+                'end_time' => $booking['end_time'],
+                'full_name' => 'Jaspher',
+                'email' => 'jasxyke24.jxc@gmail.com',
+                'contact_number' => '09487834861',
+                'booking_status' => 'reserved',
+                'payment_status' => 'paid',
+            ]);
+        }
     }
 }

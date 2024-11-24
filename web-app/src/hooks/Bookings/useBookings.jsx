@@ -59,7 +59,7 @@ const useBookings = (selectedAmenity) => {
       };
       console.log(data);
 
-      const response = await axiosClient.put("/bookings/", data);
+      const response = await axiosClient.put("/bookings", data);
       console.log(response);
 
       return response.data.success;

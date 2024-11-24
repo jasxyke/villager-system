@@ -1,10 +1,8 @@
 import React, { useState } from "react";
 import MainLogo from "../../components/MainLogo";
 import PermitApplications from "./PermitApplication/PermitApplications";
-import PermitTransactionLog from "./TransactionLog/PermitTransactionLog";
 import InProgressPermit from "./InProgress/InProgressPermit";
 import CompletedPermit from "./Completed/CompletedPermit";
-import ToPay from "./ToPay";
 import ToClaim from "./ToClaim/ToClaim";
 import ToPayPermit from "./ToPay/ToPayPermit";
 

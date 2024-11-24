@@ -55,9 +55,10 @@ const Sticker = () => {
               }`}
               onClick={() => setActiveTab("to_claim")}
             >
-              To Claim
+              {/*To Claim*/}
+              Completed
             </button>
-            <button
+            {/*<button
               className={`relative flex-1 py-2 px-4 text-center cursor-pointer transition-colors duration-300 ${
                 activeTab === "claimed"
                   ? "bg-mutedGreen text-black"
@@ -66,7 +67,7 @@ const Sticker = () => {
               onClick={() => setActiveTab("claimed")}
             >
               Claimed
-            </button>
+            </button>*/}
           </div>
         </div>
 
@@ -76,7 +77,7 @@ const Sticker = () => {
           {activeTab === "in_progress" && <InProgressSticker />}
           {activeTab === "to_claim" && <ToClaimRequest />}
           {/* Render CompletedRequest component */}
-          {activeTab === "claimed" && <ClaimedStickers />}
+          {/*activeTab === "claimed" && <ClaimedStickers />*/}
         </div>
       </div>
     </div>

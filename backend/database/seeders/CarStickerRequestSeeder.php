@@ -34,6 +34,7 @@ class CarStickerRequestSeeder extends Seeder
                     'sticker_fee' => rand(400, 600),
                     'processing_fee' => rand(100, 200),
                     'note' => $status === 'rejected' ? 'Reason for rejection' : null,
+                    'sticker_type' => 'two-wheel', // Random sticker type
                 ]);
 
                 // Create dummy sticker document for each request

@@ -10,6 +10,10 @@ const ToClaimPermitsTable = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [detailsView, setDetailsView] = useState(false);
   const [selectedPermit, setSelectedPermit] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [orNumber, setOrNumber] = useState("");
+  const [modalPermit, setModalPermit] = useState(null);
+
   const { permitRequests, loading, error, lastPage, changePage } =
     usePermitRequests();
 
@@ -24,15 +28,19 @@ const ToClaimPermitsTable = () => {
     changePage("to_claim", currentPage);
   }, [currentPage]);
 
-  const handleSetClaimed = async (permit) => {
+  const handleSetClaimed = async () => {
     const confirm = window.confirm(
       "Are you sure this permit is already claimed?"
     );
-    if (confirm) {
+    if (confirm && modalPermit && orNumber.trim()) {
       try {
-        const responseSuccess = await claimPermitRequest(permit.id);
+        const responseSuccess = await claimPermitRequest(modalPermit.id, {
+          or_number: orNumber,
+        });
         if (responseSuccess) {
           alert(responseSuccess);
+          setShowModal(false);
+          setOrNumber("");
           changePage("to_claim", currentPage); // Refresh data
         }
       } catch (error) {
@@ -42,6 +50,17 @@ const ToClaimPermitsTable = () => {
         );
       }
     }
+  };
+
+  const handleOpenModal = (permit) => {
+    setModalPermit(permit);
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setOrNumber("");
+    setModalPermit(null);
   };
 
   const handleRowClick = (permit) => {
@@ -112,7 +131,7 @@ const ToClaimPermitsTable = () => {
                         className="bg-oliveGreen text-white px-4 py-2 rounded hover:bg-greyGreen transition-colors"
                         onClick={(e) => {
                           e.stopPropagation(); // Prevent row click event
-                          handleSetClaimed(permit);
+                          handleOpenModal(permit);
                         }}
                       >
                         Set as Claimed
@@ -142,6 +161,38 @@ const ToClaimPermitsTable = () => {
               )}
             </div>
           </div>
+
+          {/* Modal */}
+          {showModal && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+              <div className="bg-white rounded p-6 w-96">
+                <h2 className="text-lg font-semibold mb-4">
+                  Enter OR Number for {modalPermit?.purpose}
+                </h2>
+                <input
+                  type="text"
+                  className="w-full border rounded p-2 mb-4"
+                  placeholder="Enter OR Number"
+                  value={orNumber}
+                  onChange={(e) => setOrNumber(e.target.value)}
+                />
+                <div className="flex justify-end gap-4">
+                  <button
+                    className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+                    onClick={handleCloseModal}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    className="px-4 py-2 bg-oliveGreen text-white rounded hover:bg-greyGreen"
+                    onClick={handleSetClaimed}
+                  >
+                    Confirm
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </>
       )}
     </div>

@@ -78,7 +78,7 @@ const StickerTable = () => {
             <div className="flex items-center justify-center">Name</div>
             <div className="flex items-center justify-center">Plate Number</div>
             <div className="flex items-center justify-center">Request Date</div>
-            <div className="flex items-center justify-center">Status</div>
+            <div className="flex items-center justify-center">Type</div>
             <div className="flex items-center justify-center">Action</div>
           </div>
 
@@ -87,16 +87,17 @@ const StickerTable = () => {
             {loading ? (
               <LoadingContainer color="green" bgColor="white" />
             ) : requests.length === 0 ? (
-              <StickerDefaultTable>
-                <div className="text-center p-4">
+              <div className="grid grid-cols-6 gap-4 p-4">
+                <div className="col-span-6 text-center">
                   No pending sticker requests found.
                 </div>
-              </StickerDefaultTable>
+              </div>
             ) : (
               requests.map((sticker) => (
-                <StickerDefaultTable
+                <div
                   key={sticker.id}
-                  handleClick={() => handleRowClick(sticker)}
+                  className="grid grid-cols-5 gap-4 p-4 bg-white"
+                  onClick={() => handleRowClick(sticker)}
                 >
                   <div className="flex items-center justify-center">
                     {formatUserName(sticker.resident.user, false)}
@@ -108,7 +109,7 @@ const StickerTable = () => {
                     {sticker.application_date}
                   </div>
                   <div className="flex items-center justify-center">
-                    {formatName(sticker.request_status)}
+                    {sticker.sticker_type}
                   </div>
                   <div className="flex items-center justify-center">
                     <button
@@ -118,7 +119,7 @@ const StickerTable = () => {
                       Review
                     </button>
                   </div>
-                </StickerDefaultTable>
+                </div>
               ))
             )}
           </div>

@@ -17,6 +17,7 @@ class CarStickerRequest extends Model
         'application_date',
         'approval_date',
         'note',
+       // 'sticker_type'
     ];
 
     public function resident()

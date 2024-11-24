@@ -73,6 +73,20 @@ class UserSeeder extends Seeder
             'picture_url' => Storage::disk('public')->url('default_img.jpg'),
             'picture_path' => 'default_img.jpg',
         ]);
+
+        $residentUser = User::create([
+            'lastname'=>'Rebusquillo',
+            'firstname'=>'John Rey',
+            'middlename'=>'Kintao',
+            'role_type'=>'home_owner',
+            'email'=>'rey@gmail.com',
+            'password'=>Hash::make('password'),
+            'remember_token'=>Str::random(10),
+            'contact_number'=>'09109912324',
+            'picture_url' => Storage::disk('public')->url('default_img.jpg'),
+            'picture_path' => 'default_img.jpg',
+        ]);
+
         Resident::factory(['user_id'=>$residentUser->id])
             ->create();
 

@@ -23,6 +23,7 @@ import Sticker from "./pages/CarSticker/Sticker";
 import Complaints from "./pages/Complaints/Complaints";
 import AdminSettings from "./pages/Settings/AdminSettings";
 import AdminDashboard from "./pages/Dashboard/AdminDashboard";
+import Expenses from "./pages/Expenses/Expenses";
 
 function App() {
   const { isLoggedIn } = useAuthContext();
@@ -59,6 +60,7 @@ function App() {
             />
             <Route path="/sticker" element={<Sticker />} />
             <Route path="/complaints" element={<Complaints />} />
+            <Route path="/expenses" element={<Expenses />} />
           </Route>
           <Route element={<LoginMiddleRoute />}>
             <Route path="/" element={<Login />} />

@@ -24,11 +24,11 @@ const PaymentHistory = () => {
       </Text>
       <Text style={styles.paymentText}>
         <Text style={styles.boldText}>Car Model:</Text>{" "}
-        {item.sticker_request.car_model}
+        {item.car_sticker_request.car_model}
       </Text>
       <Text style={styles.paymentText}>
         <Text style={styles.boldText}>Car Plate Number:</Text>{" "}
-        {item.sticker_request.car_plate_number}
+        {item.car_sticker_request.car_plate_number}
       </Text>
       <Text style={styles.paymentText}>
         <Text style={styles.boldText}>Amount:</Text> ${item.amount}

@@ -85,7 +85,7 @@ const ToClaimRequestTable = () => {
       ) : (
         <>
           <div className="w-full">
-            <div className="grid grid-cols-5 gap-4 p-4 bg-oliveGreen text-white font-bold">
+            <div className="grid grid-cols-4 gap-4 p-4 bg-oliveGreen text-white font-bold">
               <div className="flex items-center justify-center">Name</div>
               <div className="flex items-center justify-center">
                 Plate Number
@@ -93,8 +93,8 @@ const ToClaimRequestTable = () => {
               <div className="flex items-center justify-center">
                 Completion Date
               </div>
-              <div className="flex items-center justify-center">Status</div>
-              <div className="flex items-center justify-center">Action</div>
+              <div className="flex items-center justify-center">Type</div>
+              {/*<div className="flex items-center justify-center">Action</div>*/}
             </div>
           </div>
           <div>
@@ -108,8 +108,9 @@ const ToClaimRequestTable = () => {
               </StickerDefaultTable>
             ) : (
               requests.map((sticker) => (
-                <StickerDefaultTable
+                <div
                   key={sticker.id}
+                  className="grid grid-cols-4 gap-4 p-4 bg-white"
                   handleClick={() => handleRowClick(sticker)}
                 >
                   <div className="flex items-center justify-center">
@@ -122,17 +123,17 @@ const ToClaimRequestTable = () => {
                     {sticker.completed_date}
                   </div>
                   <div className="flex items-center justify-center">
-                    To Claim
+                    {sticker.sticker_type}
                   </div>
-                  <div className="flex items-center justify-center">
+                  {/*<div className="flex items-center justify-center">
                     <button
                       className="bg-oliveGreen text-white px-4 py-2 rounded hover:bg-greyGreen transition-colors"
                       onClick={(e) => handleSetAsClaimed(sticker, e)} // Use the claim handler
                     >
                       Set as Claimed
                     </button>
-                  </div>
-                </StickerDefaultTable>
+                  </div>*/}
+                </div>
               ))
             )}
           </div>

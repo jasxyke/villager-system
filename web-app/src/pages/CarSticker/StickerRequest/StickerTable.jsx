@@ -74,11 +74,11 @@ const StickerTable = () => {
       ) : (
         <>
           {/* Table Header */}
-          <div className="grid grid-cols-5 gap-4 p-4 bg-oliveGreen text-white font-bold">
+          <div className="grid grid-cols-4 gap-4 p-4 bg-oliveGreen text-white font-bold">
             <div className="flex items-center justify-center">Name</div>
             <div className="flex items-center justify-center">Plate Number</div>
             <div className="flex items-center justify-center">Request Date</div>
-            <div className="flex items-center justify-center">Type</div>
+            {/* <div className="flex items-center justify-center">Type</div> */}
             <div className="flex items-center justify-center">Action</div>
           </div>
 
@@ -87,7 +87,7 @@ const StickerTable = () => {
             {loading ? (
               <LoadingContainer color="green" bgColor="white" />
             ) : requests.length === 0 ? (
-              <div className="grid grid-cols-6 gap-4 p-4">
+              <div className="grid grid-cols-5 gap-4 p-4">
                 <div className="col-span-6 text-center">
                   No pending sticker requests found.
                 </div>
@@ -96,7 +96,7 @@ const StickerTable = () => {
               requests.map((sticker) => (
                 <div
                   key={sticker.id}
-                  className="grid grid-cols-5 gap-4 p-4 bg-white"
+                  className="grid grid-cols-4 gap-4 p-4 bg-white"
                   onClick={() => handleRowClick(sticker)}
                 >
                   <div className="flex items-center justify-center">
@@ -108,9 +108,9 @@ const StickerTable = () => {
                   <div className="flex items-center justify-center">
                     {sticker.application_date}
                   </div>
-                  <div className="flex items-center justify-center">
+                  {/* <div className="flex items-center justify-center">
                     {sticker.sticker_type}
-                  </div>
+                  </div> */}
                   <div className="flex items-center justify-center">
                     <button
                       className="bg-oliveGreen text-white px-4 py-2 rounded hover:bg-greyGreen transition"

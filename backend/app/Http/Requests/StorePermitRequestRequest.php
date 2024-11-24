@@ -28,7 +28,7 @@ class StorePermitRequestRequest extends FormRequest
             'expect_end_date'=>'required|date',
             // 'floorSize' => 'nullable|numeric',
             'documents' => 'required',
-            'documents.*' => 'required|file|mimes:jpeg,png,pdf|max:2048', // Adjust file type and size as needed
+            'documents.*' => 'required|file|mimes:jpeg,png,pdf', // Adjust file type and size as needed
             'descriptions.*' => 'nullable|string|max:255',
         ];
     }

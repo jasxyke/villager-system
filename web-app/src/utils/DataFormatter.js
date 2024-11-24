@@ -86,3 +86,10 @@ export function formatTime(timeString) {
   // Format the time as hh:mm
   return `${hours}:${minutes}`;
 }
+
+export const formatToReadableDate = (dateString) => {
+  if (!dateString) return null;
+  const date = new Date(dateString);
+  const options = { year: "numeric", month: "short", day: "numeric" };
+  return date.toLocaleDateString("en-US", options);
+};

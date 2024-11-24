@@ -6,16 +6,28 @@ const usePermitRequest = () => {
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
 
-  const submitPermitRequest = async ({ purpose, floorSize, documents }) => {
+  const submitPermitRequest = async ({
+    purpose,
+    startDate,
+    endDate,
+    documents,
+    clearanceType,
+  }) => {
+    //floorSize
     setLoading(true);
     setError(null);
     setSuccessMessage(null);
+
+    console.log(startDate);
 
     try {
       // Create FormData object to handle file uploads
       const formData = new FormData();
       formData.append("purpose", purpose);
-      formData.append("floorSize", floorSize);
+      formData.append("expect_start_date", startDate);
+      formData.append("expect_end_date", endDate);
+      formData.append("clearanceType", clearanceType);
+      // formData.append("floorSize", floorSize);
 
       if (documents && documents.length > 0) {
         documents.forEach((doc, index) => {

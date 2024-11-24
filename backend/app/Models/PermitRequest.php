@@ -16,7 +16,9 @@ class PermitRequest extends Model
         'approval_date',
         'note',
         'purpose',
-        'floor_size'
+        'expect_start_date',
+        'expect_end_date'
+        // 'floor_size'
     ];
 
     public function resident()

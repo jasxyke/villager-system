@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import MainLogo from "../../components/MainLogo";
-import PermitApplications from "./PermitApplication/PermitApplications";
-import InProgressPermit from "./InProgress/InProgressPermit";
 import CompletedPermit from "./Completed/CompletedPermit";
+import InProgressPermit from "./InProgress/InProgressPermit";
+import PermitApplications from "./PermitApplication/PermitApplications";
 import ToClaim from "./ToClaim/ToClaim";
 import ToPayPermit from "./ToPay/ToPayPermit";
 
@@ -25,7 +25,7 @@ const Permits = () => {
               }`}
               onClick={() => setActiveTab("applications")}
             >
-              Permit Applications
+              Clearance Applications
             </button>
             <button
               className={`relative flex-1 py-2 px-4 text-center cursor-pointer transition-colors duration-300 ${

@@ -39,6 +39,7 @@ export function AuthProvider({ children }) {
         router.dismissAll();
       }
       router.replace("../home");
+      console.log("Logged in!");
       //sets the logged in bool for disable routing options
       setLoggedIn(true);
       //gets user after loggin in
@@ -87,6 +88,8 @@ export function AuthProvider({ children }) {
       router.replace("../home");
       //sets the logged in bool for disable routing options
       setLoggedIn(true);
+      console.log("Logged in!");
+
       //gets user after loggin in
       getUser();
       setLoading(false);
@@ -100,6 +103,7 @@ export function AuthProvider({ children }) {
   const getUser = async () => {
     try {
       const res = await axiosClient.get("/me");
+
       const responseUser = res.data;
       if (
         responseUser.resident !== null ||
@@ -120,7 +124,9 @@ export function AuthProvider({ children }) {
       await deleteItemAsync("API_TOKEN");
       router.navigate("../sign-in");
       console.log(error?.response?.data?.message);
-      onError(error?.response?.data?.message);
+      console.log(error);
+
+      // onError(error?.response?.data?.message);
     }
   };
 

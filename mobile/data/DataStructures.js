@@ -23,3 +23,8 @@ export const COMPLAINT_TYPES = [
   { label: "Noise", value: "Noise" },
   { label: "Dispute", value: "Dispute" },
 ];
+
+export const CLEARANCE_TYPES = [
+  { label: "Building Clearance", value: "Building Clearance" },
+  { label: "Construction Clearance", value: "Construction Clearance" },
+];

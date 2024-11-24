@@ -177,3 +177,7 @@ Route::get('/bookings/{id}',[BookingController::class, 'show']);
 
 //test notification only
 Route::get('/send-test-notification', [NotificationController::class, 'sendTestNotification']);
+
+Route::get('/testing', function () {
+    return response()->json(['message'=>'hello']);
+});

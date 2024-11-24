@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import axiosClient from "../utils/axios";
+import { useAuthContext } from "./AuthContext";
 
 // Create the context
 const AmenitiesContext = createContext();
@@ -9,6 +10,7 @@ export const AmenitiesProvider = ({ children }) => {
   const [amenities, setAmenities] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const { isLoggedIn } = useAuthContext();
 
   // Fetch all amenities
   const fetchAmenities = async () => {
@@ -86,6 +88,12 @@ export const AmenitiesProvider = ({ children }) => {
     }
   };
 
+  useEffect(() => {
+    if (isLoggedIn()) {
+      fetchAmenities();
+    }
+  }, [isLoggedIn()]);
+
   return (
     <AmenitiesContext.Provider
       value={{
@@ -108,9 +116,6 @@ export const AmenitiesProvider = ({ children }) => {
 export const useAmenities = () => {
   const context = useContext(AmenitiesContext);
 
-  useEffect(() => {
-    fetchAmenities();
-  }, []);
   if (!context) {
     throw new Error("useAmenities must be used within an AmenitiesProvider");
   }

@@ -68,19 +68,19 @@ const SideBar = () => {
         </li>
         <li>
           <NavLink
-            to="/bills"
-            ref={location.pathname === "/bills" ? activeLinkRef : null}
+            to="/monthly-dues"
+            ref={location.pathname === "/monthly-dues" ? activeLinkRef : null}
           >
-            <FiBook className="text-3xl mr-2" /> Bills
+            <FiBook className="text-3xl mr-2" /> Monthly Dues
           </NavLink>
         </li>
         <li>
           <NavLink
-            to="/permits"
-            ref={location.pathname === "/permits" ? activeLinkRef : null}
+            to="/clearance"
+            ref={location.pathname === "/clearance" ? activeLinkRef : null}
           >
             <FiClipboard className="text-3xl mr-2" />
-            Permits
+            Clearance
           </NavLink>
         </li>
         <li>

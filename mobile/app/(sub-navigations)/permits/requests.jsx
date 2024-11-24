@@ -29,12 +29,12 @@ const PermitRequests = () => {
         <Text style={styles.cardTitle}>{item.purpose}</Text>
         <View style={styles.cardContent}>
           {/* Conditionally render Floor Size only if it has a valid value */}
-          {item.floor_size != null && item.floor_size > 0 && (
+          {/* {item.floor_size != null && item.floor_size > 0 && (
             <Text style={styles.cardText}>
               <Text style={styles.cardLabel}>Floor Size:</Text>{" "}
               {item.floor_size} m²
             </Text>
-          )}
+          )} */}
           <Text style={styles.cardText}>
             <Text style={styles.cardLabel}>Status:</Text> {item.permit_status}
           </Text>

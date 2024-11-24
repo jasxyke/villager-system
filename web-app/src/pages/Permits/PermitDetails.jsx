@@ -2,7 +2,11 @@ import React, { useState } from "react";
 import { FiArrowLeft } from "react-icons/fi";
 import { IoChevronBack, IoChevronForward } from "react-icons/io5";
 import { IoIosClose } from "react-icons/io";
-import { formatName, formatUserName } from "../../utils/DataFormatter";
+import {
+  formatName,
+  formatToReadableDate,
+  formatUserName,
+} from "../../utils/DataFormatter";
 
 const PermitDetails = ({ permit, onBack }) => {
   console.log(permit);
@@ -22,14 +26,14 @@ const PermitDetails = ({ permit, onBack }) => {
   };
 
   const handleNextImage = () => {
-    if (currentImageIndex < permit.uploadedDocuments.length - 1) {
-      setCurrentImageIndex(currentImageIndex + 1);
+    if (currentImageIndex < permit.permit_documents.length - 1) {
+      setCurrentImageIndex((prevIndex) => prevIndex + 1); // Using functional update to ensure proper state update
     }
   };
 
   const handlePrevImage = () => {
     if (currentImageIndex > 0) {
-      setCurrentImageIndex(currentImageIndex - 1);
+      setCurrentImageIndex((prevIndex) => prevIndex - 1); // Using functional update to ensure proper state update
     }
   };
 
@@ -55,10 +59,10 @@ const PermitDetails = ({ permit, onBack }) => {
 
       <form className="space-y-6 p-4">
         <div className="flex flex-wrap gap-6">
-          {/* Applicant Information */}
-          <fieldset className="flex-1 bg-green p-5 rounded-lg shadow-sm border">
+          {/* Resident Information */}
+          <fieldset className="flex-1 bg-green p-5 rounded-lg shadow-sm border border-gray-300">
             <legend className="text-xl font-semibold text-primary font-roboto p-3 border bg-mutedGreen rounded-lg">
-              APPLICANT INFORMATION
+              Resident Information
             </legend>
             <div className="grid grid-cols-1 gap-6">
               {[
@@ -71,37 +75,17 @@ const PermitDetails = ({ permit, onBack }) => {
                   value: permit.resident.user.contact_number,
                 },
                 { label: "Email", value: permit.resident.user.email },
+                { label: "Lot Number", value: permit.resident.house.lot },
+                { label: "Block Number", value: permit.resident.house.block },
               ].map(({ label, value }) => (
                 <div
                   key={label}
                   className="grid grid-cols-1 md:grid-cols-2 gap-4"
                 >
-                  <span className="font-semibold text-white">{label}:</span>
-                  <span className="text-white">{value || "N/A"}</span>
-                </div>
-              ))}
-            </div>
-          </fieldset>
-
-          {/* Property Information */}
-          <fieldset className="flex-1 bg-green p-5 rounded-lg shadow-sm border">
-            <legend className="text-xl font-semibold text-primary font-roboto p-3 border bg-mutedGreen rounded-lg">
-              PROPERTY INFORMATION
-            </legend>
-            <div className="flex flex-col gap-4">
-              {[
-                {
-                  label: "Property Address",
-                  value: "Pamahay Village",
-                },
-                { label: "Block Number", value: permit.resident.house.block },
-                { label: "Lot Number", value: permit.resident.house.lot },
-              ].map(({ label, value }) => (
-                <div key={label} className="flex items-center space-x-4">
-                  <span className="font-semibold text-white w-1/3">
+                  <span className="text-x1 font-semibold text-white">
                     {label}:
                   </span>
-                  <span className="text-white">{value || "N/A"}</span>
+                  <span className="text-x1 text-white">{value || "N/A"}</span>
                 </div>
               ))}
             </div>
@@ -115,28 +99,43 @@ const PermitDetails = ({ permit, onBack }) => {
           </legend>
           <div className="grid grid-cols-2 gap-4">
             {[
+              { label: "Clearance Type", value: permit.permit_type },
               { label: "Reason for Request", value: permit.purpose },
-              { label: "Floor size", value: permit.floor_size },
               {
-                label: "Permit Status",
+                label: "Expected Start Date",
+                value: formatToReadableDate(permit.expect_start_date),
+              },
+              {
+                label: "Expected End Date",
+                value: formatToReadableDate(permit.expect_end_date),
+              },
+              // { label: "Floor size", value: permit.floor_size },
+              {
+                label: "Clearance Status",
                 value: formatName(permit.permit_status),
               },
               {
                 label: "Requested Date",
-                value: permit.application_date || "N/A",
+                value: formatToReadableDate(permit.application_date) || "N/A",
               },
-              { label: "Approved Date", value: permit.approval_Date || "N/A" },
+              {
+                label: "Approved Date",
+                value: formatToReadableDate(permit.approval_Date) || "N/A",
+              },
               {
                 label: "Completed Date",
-                value: permit.completed_date || "N/A",
+                value: formatToReadableDate(permit.completed_date) || "N/A",
               },
-              { label: "Claimed Date", value: permit.claimed_date || "N/A" },
-              { label: "Note/Remarks", value: permit.note || "N/A" },
-              { label: "Permit Fee", value: permit.permit_fee || "N/A" },
+              {
+                label: "Claimed Date",
+                value: formatToReadableDate(permit.claimed_date) || "N/A",
+              },
+              { label: "Clearance Fee", value: permit.permit_fee || "N/A" },
               {
                 label: "Processing Fee",
                 value: permit.processing_fee || "N/A",
               },
+              { label: "Note/Remarks", value: permit.note || "N/A" },
             ].map(({ label, value }) => (
               <div
                 key={label}
@@ -153,7 +152,7 @@ const PermitDetails = ({ permit, onBack }) => {
         {shouldShowPayments && (
           <fieldset className="bg-green p-5 rounded-lg shadow-sm border border-gray-300">
             <legend className="text-xl font-semibold text-primary font-roboto p-3 border bg-mutedGreen rounded-lg">
-              PERMIT PAYMENTS
+              Clearance Payments
             </legend>
             <div className="grid grid-cols-1 gap-4">
               {permit.permit_payments && permit.permit_payments.length > 0 ? (

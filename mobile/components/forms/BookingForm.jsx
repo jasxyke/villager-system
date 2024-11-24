@@ -8,7 +8,10 @@ import {
 } from "react-native";
 import useBookings from "../../hooks/bookings/useBookings";
 import { colors } from "../../styles/colors";
-import { formatTo12Hour } from "../../utils/DataFormatter";
+import {
+  formatTimeTwentyFour,
+  formatTo12Hour,
+} from "../../utils/DataFormatter";
 import { AMENNITIES } from "../../data/DataStructures";
 
 const BookingForm = ({
@@ -57,14 +60,6 @@ const BookingForm = ({
     if (error) {
       alert(error);
     }
-  };
-
-  // Format time to 24-hour HH:mm format
-  const formatTimeTwentyFour = (date) => {
-    if (!date) return "N/A";
-    const hours = date.getHours().toString().padStart(2, "0");
-    const minutes = date.getMinutes().toString().padStart(2, "0");
-    return `${hours}:${minutes}`;
   };
 
   return (

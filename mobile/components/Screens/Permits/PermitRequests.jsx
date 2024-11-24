@@ -14,7 +14,7 @@ const PermitRequests = () => {
     {
       resident_name: "John Doe",
       purpose: "Building a shed",
-      floor_size: 20,
+      // floor_size: 20,
       permit_status: "pending",
       application_date: "2024-08-15",
       approval_date: null,
@@ -22,7 +22,7 @@ const PermitRequests = () => {
     {
       resident_name: "Jane Smith",
       purpose: "Extending a patio",
-      floor_size: 35,
+      // floor_size: 35,
       permit_status: "approved",
       application_date: "2024-08-10",
       approval_date: "2024-08-20",

@@ -34,7 +34,7 @@ const StickerDetails = ({ sticker, onBack }) => {
   };
 
   return (
-    <div className="p-6 bg-green border border-gray-300 rounded-lg shadow-lg">
+    <div className="p-6 bg-greenGradient border border-gray-300 rounded-lg shadow-lg">
       <div className="flex items-center justify-between mb-6">
         <FiArrowLeft
           className="text-2xl text-neutral-50 cursor-pointer hover:text-gray-800 transition"

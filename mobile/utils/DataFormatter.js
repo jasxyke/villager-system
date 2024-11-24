@@ -49,3 +49,22 @@ export const formatTo12Hour = (time24) => {
 
   return `${hour12}:${minutesFormatted} ${period}`;
 };
+
+// Format time to 24-hour HH:mm format
+export function formatTimeTwentyFour(date) {
+  if (!date) return "N/A";
+  const hours = date.getHours().toString().padStart(2, "0");
+  const minutes = date.getMinutes().toString().padStart(2, "0");
+  return `${hours}:${minutes}`;
+}
+
+export function convertDateToLaravelFormat(date) {
+  if (!(date instanceof Date) || isNaN(date)) return null; // Ensure valid Date object
+
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, "0"); // Months are zero-indexed
+  const day = date.getDate().toString().padStart(2, "0");
+
+  // Return format for date only (YYYY-MM-DD)
+  return `${year}-${month}-${day}`;
+}

@@ -22,8 +22,11 @@ class StorePermitRequestRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'clearanceType' => 'required|string',
             'purpose' => 'required|string|max:255',
-            'floorSize' => 'nullable|numeric',
+            'expect_start_date'=>'required|date',
+            'expect_end_date'=>'required|date',
+            // 'floorSize' => 'nullable|numeric',
             'documents' => 'required',
             'documents.*' => 'required|file|mimes:jpeg,png,pdf|max:2048', // Adjust file type and size as needed
             'descriptions.*' => 'nullable|string|max:255',

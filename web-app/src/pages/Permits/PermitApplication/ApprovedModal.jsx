@@ -1,22 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { useSettings } from "../../../contexts/SettingsContext";
 const ApprovedModal = ({ isOpen, onClose, onConfirm, permit }) => {
-  const { settings, loading, error } = useSettings(); // Get settings from the context
+  // const { settings, loading, error } = useSettings(); // Get settings from the context
 
   const [permitFee, setPermitFee] = useState(0);
   const [processingFee, setProcessingFee] = useState(0);
   const [comment, setComment] = useState("");
-  const [squareMeter, setSquareMeter] = useState(permit.floor_size);
+  // const [squareMeter, setSquareMeter] = useState(permit.floor_size);
 
   // Calculate fees based on square meter
-  useEffect(() => {
-    if (!loading && settings) {
-      const permitFeePerSquareMeter = settings.payment_per_square_meter || 0;
+  // useEffect(() => {
+  //   if (!loading && settings) {
+  //     const permitFeePerSquareMeter = settings.payment_per_square_meter || 0;
 
-      setPermitFee(permitFeePerSquareMeter * squareMeter);
-      setProcessingFee(settings.processing_fee);
-    }
-  }, [loading, settings, squareMeter]);
+  //     setPermitFee(permitFeePerSquareMeter * squareMeter);
+  //     setProcessingFee(settings.processing_fee);
+  //   }
+  // }, [loading, settings, squareMeter]);
 
   const handleInputChange = (index, value) => {
     // Handle input changes if you decide to make the fees editable
@@ -38,7 +38,7 @@ const ApprovedModal = ({ isOpen, onClose, onConfirm, permit }) => {
         <h2 className="text-xl font-semibold mb-4">Approval Confirmation</h2>
         <p className="mb-4">Please enter the fees for this permit:</p>
         <ul className="mb-4">
-          <li className="flex justify-between items-center mb-2">
+          {/* <li className="flex justify-between items-center mb-2">
             <span>Sq. Meter:</span>
             <input
               type="number"
@@ -48,7 +48,7 @@ const ApprovedModal = ({ isOpen, onClose, onConfirm, permit }) => {
               placeholder="Enter square meters"
               required
             />
-          </li>
+          </li> */}
           <li className="flex justify-between items-center mb-2">
             <span>Permit Fee:</span>
             <input

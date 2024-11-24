@@ -3,21 +3,21 @@ import { Alert } from "react-native";
 
 export const usePermitFormLogic = () => {
   const [purpose, setPurpose] = useState("");
-  const [squareMeters, setSquareMeters] = useState("");
+  // const [squareMeters, setSquareMeters] = useState("");
   const [images, setImages] = useState([]);
-  const handleSquareMetersChange = (value) => {
-    setSquareMeters(value);
-  };
+  // const handleSquareMetersChange = (value) => {
+  //   setSquareMeters(value);
+  // };
 
   const validateForm = () => {
     if (!purpose.trim()) {
       Alert.alert("Validation Error", "Purpose is required.");
       return false;
     }
-    if (squareMeters && isNaN(squareMeters)) {
-      Alert.alert("Validation Error", "Floor Size must be a number.");
-      return false;
-    }
+    // if (squareMeters && isNaN(squareMeters)) {
+    //   Alert.alert("Validation Error", "Floor Size must be a number.");
+    //   return false;
+    // }
     return true;
   };
 
@@ -26,7 +26,7 @@ export const usePermitFormLogic = () => {
 
     const newTransaction = {
       purpose: purpose,
-      floorSize: squareMeters,
+      // floorSize: squareMeters,
       images: images,
     };
 
@@ -36,10 +36,10 @@ export const usePermitFormLogic = () => {
   return {
     purpose,
     setPurpose,
-    squareMeters,
-    handleSquareMetersChange,
+    // squareMeters,
+    // handleSquareMetersChange,
     handleSubmit,
-    setSquareMeters,
+    // setSquareMeters,
     images,
     setImages,
   };

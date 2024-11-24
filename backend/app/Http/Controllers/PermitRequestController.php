@@ -31,9 +31,12 @@ class PermitRequestController extends Controller
         $permitRequest = PermitRequest::create([
             'resident_id' => $user->resident->id, // assuming the user is a resident
             'purpose' => $validated['purpose'],
-            'floor_size' => $validated['floorSize'],
+            'permit_type'=>$validated['clearanceType'],
+            // 'floor_size' => $validated['floorSize'],
             'permit_status' => 'pending',
             'application_date' => now(),
+            'expect_start_date'=>$validated['expect_start_date'],
+            'expect_end_date'=>$validated['expect_end_date'],
         ]);
 
         // Handle document uploads

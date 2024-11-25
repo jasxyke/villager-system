@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styles from "../Users.module.css";
 import { formatFullName } from "../../../utils/DataFormatter";
+
 const ResidentsList = ({ residents, handleViewDetails, selectedResident }) => {
   return (
     <>
@@ -23,16 +24,17 @@ const ResidentsList = ({ residents, handleViewDetails, selectedResident }) => {
             )}
           </div>
           <div className={styles.residentItem}>
-            {resident.resident.house.block}
+            {resident?.resident?.house?.block || "N/A"}
           </div>
           <div className={styles.residentItem}>
-            {resident.resident.house.lot}
+            {resident?.resident?.house?.lo || "N/A"}
           </div>
-          <div className={styles.residentItem}>{resident.email}</div>
-          <div className={styles.residentItem}>{resident.role_type}</div>
+          <div className={styles.residentItem}>{resident.email || "N/A"}</div>
+          <div className={styles.residentItem}>
+            {resident.role_type || "N/A"}
+          </div>
         </div>
       ))}
-      ;
     </>
   );
 };

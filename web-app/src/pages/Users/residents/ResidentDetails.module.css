@@ -1,0 +1,180 @@
+/* Global container for the page */
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background: linear-gradient(135deg, #f1f5f9, #e4e8f0);
+  min-height: 100vh;
+  font-family: "Inter", sans-serif;
+  padding: 32px;
+}
+
+/* Card with floating shadow and rounded edges */
+.card {
+  background-color: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 15px 25px rgba(0, 0, 0, 0.08), 0 10px 15px rgba(0, 0, 0, 0.1);
+  padding: 32px;
+  width: 100%;
+  max-width: 1200px;
+  transition: all 0.3s ease;
+  margin-bottom: 32px;
+  position: relative;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+/* Header Section */
+.header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.header h1 {
+  font-size: 34px;
+  color: #333;
+  font-weight: 700;
+}
+
+.header p {
+  font-size: 16px;
+  color: #666;
+}
+
+/* Avatar with soft shadow */
+.avatarWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 32px;
+}
+
+.avatar {
+  background-color: #007bff;
+  color: white;
+  font-size: 64px;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+}
+
+.avatar:hover {
+  transform: scale(1.05);
+}
+
+.name {
+  font-size: 28px;
+  color: #333;
+  font-weight: 700;
+}
+
+.role {
+  font-size: 18px;
+  color: #666;
+  margin-top: 8px;
+}
+
+/* Form fields */
+.inputField {
+  width: 100%;
+  padding: 16px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  background-color: #f9fafb;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+  margin-bottom: 24px;
+}
+
+.inputField:focus {
+  border-color: #007bff;
+  background-color: #ffffff;
+  box-shadow: 0 4px 16px rgba(0, 123, 255, 0.2);
+}
+
+.inputLabel {
+  font-size: 14px;
+  font-weight: 600;
+  color: #444;
+  margin-bottom: 8px;
+}
+
+/* Button with hover effect */
+.buttonSave {
+  background-color: #007bff;
+  color: white;
+  padding: 12px 28px;
+  border-radius: 50px;
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
+  transition: all 0.3s ease;
+  margin-top: 20px;
+}
+
+.buttonSave:hover {
+  background-color: #0056b3;
+  transform: translateY(-4px);
+}
+
+.buttonSave:active {
+  transform: translateY(2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Section for Additional Info */
+.section {
+  margin-bottom: 32px;
+}
+
+.sectionTitle {
+  font-size: 24px;
+  color: #333;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+/* Member List styling */
+.memberList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.memberListItem {
+  background-color: #f1f5f9;
+  padding: 16px;
+  border-radius: 12px;
+  font-size: 16px;
+  color: #333;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.memberListItem:hover {
+  background-color: #007bff;
+  color: white;
+  transform: translateY(-4px);
+}
+
+/* Back Button */
+.backButton {
+  font-size: 24px;
+  color: #007bff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.backButton:hover {
+  transform: translateX(-4px);
+}

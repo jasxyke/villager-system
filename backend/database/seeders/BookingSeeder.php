@@ -36,10 +36,10 @@ class BookingSeeder extends Seeder
                 'start_time' => $booking['start_time'],
                 'end_time' => $booking['end_time'],
                 'full_name' => 'Jaspher',
-                'email' => 'jasxyke24.jxc@gmail.com',
+                'email' => 'spochatku1@gmail.com',
                 'contact_number' => '09487834861',
                 'booking_status' => 'reserved',
-                'payment_status' => 'paid',
+                'payment_status' => 'pending',
             ]);
         }
     }

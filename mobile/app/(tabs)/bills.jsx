@@ -193,7 +193,7 @@ const styles = StyleSheet.create({
   modalContainer: {
     width: "80%",
     padding: 20,
-    backgroundColor: colors.white,
+    backgroundColor: colors.greyGreen,
     borderRadius: 10,
     alignItems: "center",
     marginBottom: 10,
@@ -205,6 +205,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     width: "100%",
+    marginTop: 10,
   },
   downloadButton: {
     flex: 1,

@@ -122,6 +122,8 @@ const ToPayStickerTable = () => {
               <div className="flex items-center justify-center">
                 Approved Date
               </div>
+              <div className="flex items-center justify-center">Type</div>
+
               <div className="flex items-center justify-center">Actions</div>
             </div>
           </div>
@@ -156,6 +158,10 @@ const ToPayStickerTable = () => {
                 <div className="flex items-center justify-center">
                   {sticker.approval_date}
                 </div>
+                <div className="flex items-center justify-center">
+                  {sticker.sticker_type}
+                </div>
+
                 <div className="flex items-center justify-center">
                   <button
                     className="bg-oliveGreen text-white px-4 py-2 rounded hover:bg-greyGreen transition-colors"

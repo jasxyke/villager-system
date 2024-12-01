@@ -70,7 +70,7 @@ class CarStickerRequestController extends Controller
             'resident_id' => $user->resident->id,
             'car_model' => $request->car_model,
             'car_plate_number' => $request->car_plate_number,
-            //'sticker_type' => $request->sticker_type, // New field
+            'sticker_type' => $request->sticker_type, // New field
             'request_status' => 'pending',
             'application_date' => now()
         ]);

@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Arr; // Import the Arr class
 
 class CarStickerRequestSeeder extends Seeder
 {
@@ -17,6 +18,7 @@ class CarStickerRequestSeeder extends Seeder
     public function run(): void
     {
         $statuses = ['pending', 'approved', 'rejected', 'in_progress', 'completed', 'claimed'];
+        $stickerTypes = ['two_wheel', 'four_wheel', 'delivery_truck']; // Sticker types array
         $dummyImageUrl = 'https://via.placeholder.com/150'; // Dummy image URL
 
         foreach ($statuses as $status) {
@@ -34,7 +36,7 @@ class CarStickerRequestSeeder extends Seeder
                     'sticker_fee' => rand(400, 600),
                     'processing_fee' => rand(100, 200),
                     'note' => $status === 'rejected' ? 'Reason for rejection' : null,
-                    //'sticker_type' => 'two-wheel', // Random sticker type
+                    'sticker_type' => Arr::random($stickerTypes), // Randomize sticker type
                 ]);
 
                 // Create dummy sticker document for each request

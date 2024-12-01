@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class PermitRequest extends Model
 {
@@ -17,9 +18,19 @@ class PermitRequest extends Model
         'note',
         'purpose',
         'expect_start_date',
-        'expect_end_date'
+        'expect_end_date',
+        'reference_number'
         // 'floor_size'
     ];
+
+    public static function generateUniqueReference(): string
+    {
+        do {
+            $reference = 'CR-' . strtoupper(Str::random(10));
+        } while (self::where('reference_number', $reference)->exists());
+
+        return $reference;
+    }
 
     public function resident()
     {

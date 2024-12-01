@@ -10,6 +10,8 @@ use App\Models\Resident;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\PermitClaimNotification;
 
 class PermitRequestController extends Controller
 {
@@ -27,22 +29,23 @@ class PermitRequestController extends Controller
         $validated = $request->validated();
 
         $user = $request->user();
-        // Create the permit request
+
+        // Create the permit request with the generated reference number
         $permitRequest = PermitRequest::create([
             'resident_id' => $user->resident->id, // assuming the user is a resident
             'purpose' => $validated['purpose'],
-            'permit_type'=>$validated['clearanceType'],
-            // 'floor_size' => $validated['floorSize'],
+            'permit_type' => $validated['clearanceType'],
             'permit_status' => 'pending',
             'application_date' => now(),
-            'expect_start_date'=>$validated['expect_start_date'],
-            'expect_end_date'=>$validated['expect_end_date'],
+            'expect_start_date' => $validated['expect_start_date'],
+            'expect_end_date' => $validated['expect_end_date'],
+            'reference_number' => PermitRequest::generateUniqueReference(), // Use the model method
         ]);
 
         // Handle document uploads
         if ($request->has('documents')) {
             foreach ($request->file('documents') as $index => $document) {
-                $path = $document->store('permit_documents','public');
+                $path = $document->store('permit_documents', 'public');
                 $url = Storage::disk('public')->url($path);
                 $permitRequest->permitDocuments()->create([
                     'description' => $request->input('descriptions')[$index] ?? '',
@@ -58,6 +61,7 @@ class PermitRequestController extends Controller
             'permit_request' => $permitRequest,
         ], 201);
     }
+
 
     public function getPermitRequestsByResident($residentId)
     {
@@ -172,6 +176,7 @@ public function approve(Request $request, $id)
         }
     }
 
+    
     public function completePermitRequest($id)
     {
         // Find the permit request by ID
@@ -182,29 +187,33 @@ public function approve(Request $request, $id)
         }
 
         // Check if the request is eligible to be completed (must be approved or in_progress)
-        if ($permitRequest->permit_status !== 'approved' && $permitRequest->permit_status !== 'in_progress') {
+        if ($permitRequest->permit_status !== 'in_progress') {
             return response()->json(['error' => 'Permit request is not eligible to be completed.'], 400);
         }
 
-        // Update the request status to "completed" and set the completed date
-        $permitRequest->permit_status = 'to_claim'; // Assuming claimed means completed
-        $permitRequest->completed_date = now(); // Or Carbon::now()
+        // Update the request status to "to_claim" and set the completed date
+        $permitRequest->permit_status = 'to_claim';
+        $permitRequest->completed_date = now();
         $permitRequest->save();
 
         // Create a new permit entry
         $permit = new Permit();
         $permit->resident_id = $permitRequest->resident_id;
         $permit->permit_request_id = $permitRequest->id;
-        $permit->permit_type = 'building'; // Set this according to your application logic
+        $permit->permit_type = 'building'; // Adjust logic as needed
         $permit->permit_status = 'active';
-        $permit->issue_date = now();  // Set issue date to now
-        $permit->expiry_date = now()->addYear();  // Expiry date set to one year from now
+        $permit->issue_date = now();
+        $permit->expiry_date = now()->addYear();
         $permit->save();
 
+        // Send email notification with the claim stub
+        Mail::to($permitRequest->resident->user->email) // Assuming resident is related to user with an email
+            ->send(new PermitClaimNotification($permitRequest));
+
         return response()->json([
-            'message' => 'Permit request marked as completed and permit created successfully.',
+            'message' => 'Permit request marked as completed and permit created successfully. Notification email sent.',
             'permit_request' => $permitRequest,
-            'permit' => $permit
+            'permit' => $permit,
         ], 200);
     }
 

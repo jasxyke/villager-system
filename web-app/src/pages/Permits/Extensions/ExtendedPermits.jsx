@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import InProgressTable from "./InProgressTable";
 import Filter from "../Filter";
 import SearchBar from "../SearchBar";
+import ExtendedPermitsTable from "./ExtendedPermitsTable";
 
-const InProgressPermit = () => {
+const ExtendedPermits = () => {
   return (
     <div className="w-full max-w-7xl">
       <div className="mt-2">
@@ -12,11 +12,11 @@ const InProgressPermit = () => {
               <Filter />
               <SearchBar />
             </div> */}
-          <InProgressTable />
+          <ExtendedPermitsTable />
         </div>
       </div>
     </div>
   );
 };
 
-export default InProgressPermit;
+export default ExtendedPermits;

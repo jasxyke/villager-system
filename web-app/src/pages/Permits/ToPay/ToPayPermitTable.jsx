@@ -103,161 +103,162 @@ const ToPayPermitTable = () => {
 
   return (
     <div className="overflow-x-auto">
-  <div className="min-w-full rounded-t shadow-lg">
-    {detailsView ? (
-      <PermitDetails permit={selectedPermit} onBack={handleBack} />
-    ) : (
-      <div>
-        {/* Table Header */}
-        <div className="grid grid-cols-6 gap-4 p-2 bg-oliveGreen text-white font-semibold rounded-t">
-          <div className="flex items-center justify-center">Permit ID</div>
-          <div className="flex items-center justify-center">Resident</div>
-          <div className="flex items-center justify-center">Permit Fee</div>
-          <div className="flex items-center justify-center">Processing Fee</div>
-          <div className="flex items-center justify-center">Total Fee</div>
-          <div className="flex items-center justify-center">Actions</div>
-        </div>
-
-        {/* Table Body */}
-        <div className="divide-y divide-gray-300 h-[350px] overflow-y-auto">
-          {requestsLoading ? (
-            <LoadingContainer color="green" bgColor="white" />
-          ) : requestsError ? (
-            <p className="text-red-500 text-center p-4">{requestsError}</p>
-          ) : permitRequests.length > 0 ? (
-            permitRequests.map((permit, index) => (
-              <div
-                key={permit.id}
-                className={`grid grid-cols-6 gap-4 p-4 ${
-                  index % 2 === 0 ? "bg-gray-50" : "bg-white"
-                } hover:bg-gray-100 cursor-pointer`}
-                onClick={() => handleRowClick(permit)}
-              >
-                <div className="flex items-center justify-center">
-                  {permit.id}
-                </div>
-                <div className="flex items-center justify-center">
-                  {formatUserName(permit.resident.user, false)}
-                </div>
-                <div className="flex items-center justify-center">
-                  ₱{parseFloat(permit.permit_fee).toFixed(2)}
-                </div>
-                <div className="flex items-center justify-center">
-                  ₱{parseFloat(permit.processing_fee).toFixed(2)}
-                </div>
-                <div className="flex items-center justify-center">
-                  ₱
-                  {(
-                    parseFloat(permit.permit_fee) +
-                    parseFloat(permit.processing_fee)
-                  ).toFixed(2)}
-                </div>
-                <div className="flex items-center justify-center">
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setSelectedPermit(permit);
-                      setIsModalOpen(true);
-                    }}
-                    className="text-white bg-oliveGreen rounded-xl px-4 py-2 hover:underline transition-colors"
-                  >
-                    Add Payment
-                  </button>
-                </div>
+      <div className="min-w-full rounded-t shadow-lg">
+        {detailsView ? (
+          <PermitDetails permit={selectedPermit} onBack={handleBack} />
+        ) : (
+          <div>
+            {/* Table Header */}
+            <div className="grid grid-cols-6 gap-4 p-2 bg-oliveGreen text-white font-semibold rounded-t">
+              <div className="flex items-center justify-center">Permit ID</div>
+              <div className="flex items-center justify-center">Resident</div>
+              <div className="flex items-center justify-center">Permit Fee</div>
+              <div className="flex items-center justify-center">
+                Processing Fee
               </div>
-            ))
-          ) : (
-            <div className="text-center p-4 bg-white">
-              No permit requests available
+              <div className="flex items-center justify-center">Total Fee</div>
+              <div className="flex items-center justify-center">Actions</div>
             </div>
-          )}
-        </div>
-      </div>
-    )}
 
-    {!detailsView && (
-      <div className="flex justify-center mt-4">
-        {lastPage > 1 && (
-          <ReactPaginate
-            breakLabel="..."
-            nextLabel="next >"
-            onPageChange={handlePageClick}
-            pageRangeDisplayed={5}
-            pageCount={lastPage}
-            previousLabel="< previous"
-            renderOnZeroPageCount={null}
-            className="pagination rounded-md"
-            disabledClassName="text-grey opacity-50"
-            pageClassName="text-white"
-            activeClassName="bg-paleGreen px-2"
-          />
+            {/* Table Body */}
+            <div className="divide-y divide-gray-300 h-[350px] overflow-y-auto">
+              {requestsLoading ? (
+                <LoadingContainer color="green" bgColor="white" />
+              ) : requestsError ? (
+                <p className="text-red-500 text-center p-4">{requestsError}</p>
+              ) : permitRequests.length > 0 ? (
+                permitRequests.map((permit, index) => (
+                  <div
+                    key={permit.id}
+                    className={`grid grid-cols-6 gap-4 p-4 ${
+                      index % 2 === 0 ? "bg-gray-50" : "bg-white"
+                    } hover:bg-gray-100 cursor-pointer`}
+                    onClick={() => handleRowClick(permit)}
+                  >
+                    <div className="flex items-center justify-center">
+                      {permit.id}
+                    </div>
+                    <div className="flex items-center justify-center">
+                      {formatUserName(permit.resident.user, false)}
+                    </div>
+                    <div className="flex items-center justify-center">
+                      ₱{parseFloat(permit.permit_fee).toFixed(2)}
+                    </div>
+                    <div className="flex items-center justify-center">
+                      ₱{parseFloat(permit.processing_fee).toFixed(2)}
+                    </div>
+                    <div className="flex items-center justify-center">
+                      ₱
+                      {(
+                        parseFloat(permit.permit_fee) +
+                        parseFloat(permit.processing_fee)
+                      ).toFixed(2)}
+                    </div>
+                    <div className="flex items-center justify-center">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSelectedPermit(permit);
+                          setIsModalOpen(true);
+                        }}
+                        className="text-white bg-oliveGreen rounded-xl px-4 py-2 hover:underline transition-colors"
+                      >
+                        Add Payment
+                      </button>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="text-center p-4 bg-gray-50">
+                  No permit requests available
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {!detailsView && (
+          <div className="flex justify-center mt-4">
+            {lastPage > 1 && (
+              <ReactPaginate
+                breakLabel="..."
+                nextLabel="next >"
+                onPageChange={handlePageClick}
+                pageRangeDisplayed={5}
+                pageCount={lastPage}
+                previousLabel="< previous"
+                renderOnZeroPageCount={null}
+                className="pagination rounded-md"
+                disabledClassName="text-grey opacity-50"
+                pageClassName="text-white"
+                activeClassName="bg-paleGreen px-2"
+              />
+            )}
+          </div>
         )}
       </div>
-    )}
-  </div>
 
-  {/* Payment Modal */}
-  {isModalOpen && selectedPermit && (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
-        <h3 className="text-lg font-semibold">Add Payment</h3>
-        <button
-          className="text-gray-500 hover:text-gray-700 absolute top-2 right-2"
-          onClick={handleModalClose}
-        >
-          &times;
-        </button>
-        <div className="mt-4">
-          <p>
-            <strong>Permit Fee:</strong> ₱
-            {parseFloat(selectedPermit?.permit_fee).toFixed(2)}
-          </p>
-          <p>
-            <strong>Processing Fee:</strong> ₱
-            {parseFloat(selectedPermit?.processing_fee).toFixed(2)}
-          </p>
-          <p>
-            <strong>Total Amount to Pay:</strong> ₱
-            {(
-              parseFloat(selectedPermit?.permit_fee) +
-              parseFloat(selectedPermit?.processing_fee)
-            ).toFixed(2)}
-          </p>
+      {/* Payment Modal */}
+      {isModalOpen && selectedPermit && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+            <h3 className="text-lg font-semibold">Add Payment</h3>
+            <button
+              className="text-gray-500 hover:text-gray-700 absolute top-2 right-2"
+              onClick={handleModalClose}
+            >
+              &times;
+            </button>
+            <div className="mt-4">
+              <p>
+                <strong>Permit Fee:</strong> ₱
+                {parseFloat(selectedPermit?.permit_fee).toFixed(2)}
+              </p>
+              <p>
+                <strong>Processing Fee:</strong> ₱
+                {parseFloat(selectedPermit?.processing_fee).toFixed(2)}
+              </p>
+              <p>
+                <strong>Total Amount to Pay:</strong> ₱
+                {(
+                  parseFloat(selectedPermit?.permit_fee) +
+                  parseFloat(selectedPermit?.processing_fee)
+                ).toFixed(2)}
+              </p>
+            </div>
+            <form onSubmit={handleSubmitPayment} className="mt-4">
+              <label className="block mb-2">Enter Payment Amount:</label>
+              <input
+                type="number"
+                min="0"
+                value={paymentAmount}
+                onChange={handlePaymentAmountChange}
+                className={`w-full p-2 border rounded ${
+                  errorMessage ? "border-red-500" : ""
+                }`}
+                required
+              />
+              {errorMessage && <p className="text-red-500">{errorMessage}</p>}
+              <button
+                type="submit"
+                className="mr-4 bg-secondary text-white px-4 py-2 rounded hover:bg-green-600 transition-colors mt-4"
+                disabled={paymentLoading}
+              >
+                {paymentLoading ? "Processing..." : "Submit"}
+              </button>
+              <button
+                type="button"
+                onClick={handleModalClose}
+                className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition-colors mt-2"
+              >
+                Cancel
+              </button>
+              {paymentError && <p className="text-red-500">{paymentError}</p>}
+            </form>
+          </div>
         </div>
-        <form onSubmit={handleSubmitPayment} className="mt-4">
-          <label className="block mb-2">Enter Payment Amount:</label>
-          <input
-            type="number"
-            min="0"
-            value={paymentAmount}
-            onChange={handlePaymentAmountChange}
-            className={`w-full p-2 border rounded ${
-              errorMessage ? "border-red-500" : ""
-            }`}
-            required
-          />
-          {errorMessage && <p className="text-red-500">{errorMessage}</p>}
-          <button
-            type="submit"
-            className="mr-4 bg-secondary text-white px-4 py-2 rounded hover:bg-green-600 transition-colors mt-4"
-            disabled={paymentLoading}
-          >
-            {paymentLoading ? "Processing..." : "Submit"}
-          </button>
-          <button
-            type="button"
-            onClick={handleModalClose}
-            className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition-colors mt-2"
-          >
-            Cancel
-          </button>
-          {paymentError && <p className="text-red-500">{paymentError}</p>}
-        </form>
-      </div>
+      )}
     </div>
-  )}
-</div>
-
   );
 };
 

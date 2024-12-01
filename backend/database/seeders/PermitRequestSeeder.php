@@ -24,11 +24,13 @@ class PermitRequestSeeder extends Seeder
                 $expectedStartDate = Carbon::now()->addDays(rand(1, 30))->toDateString();
                 $expectedEndDate = Carbon::parse($expectedStartDate)->addDays(rand(1, 15))->toDateString();
 
+                // Generate a unique reference number using the model's method
+                $referenceNumber = PermitRequest::generateUniqueReference();
+
                 // Create permit request
                 $permitRequest = PermitRequest::create([
                     'resident_id' => 1,
-                    'purpose' => 'Purpose for permit request ' . $i,
-                    // 'floor_size' => rand(50, 150),
+                    'purpose' => 'Purpose for clearance request ' . $i,
                     'permit_status' => $status,
                     'processing_fee' => rand(100, 200),
                     'permit_fee' => rand(400, 600),
@@ -39,6 +41,7 @@ class PermitRequestSeeder extends Seeder
                     'completed_date' => $status === 'to_claim' ? Carbon::now()->subDays(rand(1, 15))->toDateString() : null,
                     'claimed_date' => $status === 'claimed' ? Carbon::now()->subDays(rand(1, 7))->toDateString() : null,
                     'note' => $status === 'rejected' ? 'Reason for rejection' : null,
+                    'reference_number' => $referenceNumber, // Use generated reference number
                 ]);
 
                 // Create dummy permit document for each request

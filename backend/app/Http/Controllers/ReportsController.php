@@ -38,7 +38,8 @@ class ReportsController extends Controller
             $headerData = $this->getHeaderData();
     
             // Load the PDF view and pass grouped residents and header data
-            $pdf = PDF::loadView('reports.resident_profile', compact('groupedResidents', 'headerData'));
+            $pdf = PDF::loadView('reports.resident_profile', compact('groupedResidents', 'headerData'))
+                                ->setPaper('a4', 'landscape');
     
             if (!$pdf) {
                 return response()->json(['error' => 'PDF generation failed'], 500);

@@ -23,7 +23,7 @@ const Table = ({ onRowClick, onReviewClick, permitRequests, loading }) => {
             permitRequests.map((permit, index) => (
               <div
                 key={permit.id}
-                className={`grid grid-cols-5 gap-4 p-4 ${
+                className={`grid grid-cols-5 gap-4 p-4 cursor-pointer ${
                   index % 2 === 0 ? "bg-gray-50" : "bg-white"
                 } hover:bg-gray-100`}
                 onClick={() => onRowClick(permit)}
@@ -56,7 +56,7 @@ const Table = ({ onRowClick, onReviewClick, permitRequests, loading }) => {
               </div>
             ))
           ) : (
-            <div className="text-center p-4 bg-white">
+            <div className="text-center p-4 bg-gray-50">
               No permit requests available
             </div>
           )}

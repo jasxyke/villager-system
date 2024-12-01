@@ -11,7 +11,6 @@ const ToClaimPermitsTable = () => {
   const [detailsView, setDetailsView] = useState(false);
   const [selectedPermit, setSelectedPermit] = useState(null);
   const [showModal, setShowModal] = useState(false);
-  const [orNumber, setOrNumber] = useState("");
   const [modalPermit, setModalPermit] = useState(null);
 
   const { permitRequests, loading, error, lastPage, changePage } =
@@ -29,18 +28,12 @@ const ToClaimPermitsTable = () => {
   }, [currentPage]);
 
   const handleSetClaimed = async () => {
-    const confirm = window.confirm(
-      "Are you sure this permit is already claimed?"
-    );
-    if (confirm && modalPermit && orNumber.trim()) {
+    if (modalPermit) {
       try {
-        const responseSuccess = await claimPermitRequest(modalPermit.id, {
-          or_number: orNumber,
-        });
+        const responseSuccess = await claimPermitRequest(modalPermit.id);
         if (responseSuccess) {
           alert(responseSuccess);
           setShowModal(false);
-          setOrNumber("");
           changePage("to_claim", currentPage); // Refresh data
         }
       } catch (error) {
@@ -59,7 +52,6 @@ const ToClaimPermitsTable = () => {
 
   const handleCloseModal = () => {
     setShowModal(false);
-    setOrNumber("");
     setModalPermit(null);
   };
 
@@ -85,13 +77,12 @@ const ToClaimPermitsTable = () => {
         <>
           <div className="min-w-full rounded-t shadow-lg">
             {/* Table Header */}
-            <div className="grid grid-cols-5 gap-4 p-2 bg-oliveGreen text-white font-semibold rounded-t">
+            <div className="grid grid-cols-4 gap-4 p-2 bg-oliveGreen text-white font-semibold rounded-t">
               <div className="flex items-center justify-center">Name</div>
               <div className="flex items-center justify-center">
                 Completed Date
               </div>
               <div className="flex items-center justify-center">Type</div>
-              <div className="flex items-center justify-center">Status</div>
               <div className="flex items-center justify-center">Action</div>
             </div>
 
@@ -104,12 +95,14 @@ const ToClaimPermitsTable = () => {
                   {error || claimError}
                 </p>
               ) : permitRequests.length === 0 ? (
-                <div className="text-center p-4">No permits to claim.</div>
+                <div className="text-center p-4 bg-gray-50">
+                  No permits to claim.
+                </div>
               ) : (
                 permitRequests.map((permit, index) => (
                   <div
                     key={permit.id}
-                    className={`grid grid-cols-5 gap-4 p-4 ${
+                    className={`grid grid-cols-4 gap-4 p-4 ${
                       index % 2 === 0 ? "bg-gray-50" : "bg-white"
                     } hover:bg-gray-100 cursor-pointer text-black`}
                     onClick={() => handleRowClick(permit)}
@@ -123,9 +116,7 @@ const ToClaimPermitsTable = () => {
                     <div className="flex items-center justify-center">
                       {permit.purpose}
                     </div>
-                    <div className="flex items-center justify-center">
-                      {permit.permit_status}
-                    </div>
+
                     <div className="flex items-center justify-center">
                       <button
                         className="bg-oliveGreen text-white px-4 py-2 rounded hover:bg-greyGreen transition-colors"
@@ -167,15 +158,16 @@ const ToClaimPermitsTable = () => {
             <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
               <div className="bg-white rounded p-6 w-96">
                 <h2 className="text-lg font-semibold mb-4">
-                  Enter OR Number for {modalPermit?.purpose}
+                  Confirm Reference Number
                 </h2>
-                <input
-                  type="text"
-                  className="w-full border rounded p-2 mb-4"
-                  placeholder="Enter OR Number"
-                  value={orNumber}
-                  onChange={(e) => setOrNumber(e.target.value)}
-                />
+                <p className="mb-2">
+                  <strong>Resident Name:</strong>{" "}
+                  {formatUserName(modalPermit.resident.user, false)}
+                </p>
+                <p className="mb-4">
+                  <strong>Reference Number:</strong>{" "}
+                  {modalPermit.reference_number}
+                </p>
                 <div className="flex justify-end gap-4">
                   <button
                     className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"

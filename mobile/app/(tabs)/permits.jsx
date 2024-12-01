@@ -17,6 +17,11 @@ const Permits = () => {
   const handleShowPayment = () => {
     router.navigate("../permits/history");
   };
+
+  const handleShowCurrentPermit = () => {
+    router.navigate("../forms/current-permits");
+  };
+
   return (
     <View style={styles.safeArea}>
       <TabsGradient />
@@ -40,6 +45,10 @@ const Permits = () => {
 
           <TouchableOpacity style={[styles.button]} onPress={handleShowPayment}>
             <Text style={styles.buttonText}>Payment History</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={[styles.button]} onPress={handleShowCurrentPermit}>
+            <Text style={styles.buttonText}>Current Permits</Text>
           </TouchableOpacity>
         </>
       </View>

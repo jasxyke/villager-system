@@ -36,7 +36,7 @@ class BookingSeeder extends Seeder
                 'start_time' => $booking['start_time'],
                 'end_time' => $booking['end_time'],
                 'full_name' => 'Jaspher',
-                'email' => 'spochatku1@gmail.com',
+                'email' => 'rydelfabellon53@gmail.com',
                 'contact_number' => '09487834861',
                 'booking_status' => 'reserved',
                 'payment_status' => 'pending',

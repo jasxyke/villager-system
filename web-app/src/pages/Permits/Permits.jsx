@@ -5,6 +5,7 @@ import InProgressPermit from "./InProgress/InProgressPermit";
 import PermitApplications from "./PermitApplication/PermitApplications";
 import ToClaim from "./ToClaim/ToClaim";
 import ToPayPermit from "./ToPay/ToPayPermit";
+import ExtendedPermits from "./Extensions/ExtendedPermits";
 
 const Permits = () => {
   const [activeTab, setActiveTab] = useState("applications");
@@ -67,15 +68,26 @@ const Permits = () => {
             >
               Completed
             </button>
+            <button
+              className={`relative flex-1 py-2 px-4 text-center cursor-pointer transition-colors duration-300 ${
+                activeTab === "extended"
+                  ? "bg-mutedGreen text-black"
+                  : "text-white hover:text-mutedGreen"
+              }`}
+              onClick={() => setActiveTab("extended")}
+            >
+              Extended
+            </button>
           </div>
         </div>
 
-        <div className="pt-6">
+        <div className="">
           {activeTab === "applications" && <PermitApplications />}
           {activeTab === "toPay" && <ToPayPermit />}
           {activeTab === "inProgress" && <InProgressPermit />}
           {activeTab === "toClaim" && <ToClaim />}
           {activeTab === "completed" && <CompletedPermit />}
+          {activeTab === "extended" && <ExtendedPermits />}
         </div>
       </div>
     </div>

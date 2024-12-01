@@ -114,7 +114,7 @@ const ToPayStickerTable = () => {
       ) : (
         <>
           <div className="w-full">
-            <div className="grid grid-cols-5 gap-4 p-4 bg-oliveGreen text-white font-bold">
+            <div className="grid grid-cols-4 gap-4 p-4 bg-oliveGreen text-white font-bold">
               <div className="flex items-center justify-center">Name</div>
               <div className="flex items-center justify-center">
                 Plate Number
@@ -123,6 +123,7 @@ const ToPayStickerTable = () => {
                 Approved Date
               </div>
               <div className="flex items-center justify-center">Type</div>
+
               <div className="flex items-center justify-center">Actions</div>
             </div>
           </div>
@@ -146,6 +147,7 @@ const ToPayStickerTable = () => {
               <StickerDefaultTable
                 key={sticker.id}
                 handleClick={() => handleRowClick(sticker)}
+                cols={"4"}
               >
                 <div className="flex items-center justify-center">
                   {formatUserName(sticker.resident.user, false)}
@@ -159,6 +161,7 @@ const ToPayStickerTable = () => {
                 <div className="flex items-center justify-center">
                   {sticker.sticker_type}
                 </div>
+
                 <div className="flex items-center justify-center">
                   <button
                     className="bg-oliveGreen text-white px-4 py-2 rounded hover:bg-greyGreen transition-colors"

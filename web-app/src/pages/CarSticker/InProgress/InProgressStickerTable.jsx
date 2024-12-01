@@ -83,7 +83,7 @@ const InProgressStickerTable = () => {
       ) : (
         <>
           <div className="w-full">
-            <div className="grid grid-cols-5 gap-4 p-4 bg-oliveGreen text-white font-bold">
+            <div className="grid grid-cols-4 gap-4 p-4 bg-oliveGreen text-white font-bold">
               <div className="flex items-center justify-center">Name</div>
               <div className="flex items-center justify-center">
                 Plate Number
@@ -91,7 +91,6 @@ const InProgressStickerTable = () => {
               <div className="flex items-center justify-center">
                 Approved Date
               </div>
-              <div className="flex items-center justify-center">Status</div>
               <div className="flex items-center justify-center">Actions</div>
             </div>
           </div>
@@ -109,6 +108,7 @@ const InProgressStickerTable = () => {
                 <StickerDefaultTable
                   key={sticker.id}
                   handleClick={() => handleRowClick(sticker)}
+                  cols={"4"}
                 >
                   <div className="flex items-center justify-center">
                     {formatUserName(sticker.resident.user, false)}
@@ -118,9 +118,6 @@ const InProgressStickerTable = () => {
                   </div>
                   <div className="flex items-center justify-center">
                     {sticker.approval_date}
-                  </div>
-                  <div className="flex items-center justify-center">
-                    In Progress
                   </div>
                   <div className="flex items-center justify-center">
                     <button

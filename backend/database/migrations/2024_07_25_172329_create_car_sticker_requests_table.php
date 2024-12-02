@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('car_sticker_requests', function (Blueprint $table) {
             $table->id();
             $table->foreignId('resident_id')->constrained('residents');
+            $table->string('reference_number', 20)->unique();
             $table->string('car_model');
             $table->string('car_plate_number');
             $table->enum('request_status',['pending','approved',

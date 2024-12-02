@@ -126,14 +126,14 @@ const ToPayStickerTable = () => {
             </div>
           </div>
 
-          <div>
+          <div className="max-h-[400px] overflow-auto">
             {error && <p className="text-red-500">{error}</p>}
             {loading ? (
               <LoadingContainer color="green" bgColor="white" />
             ) : (
               requests.length === 0 &&
               !loading && (
-                <StickerDefaultTable>
+                <StickerDefaultTable cols={"1"}>
                   <div className="text-center p-4 w-full">
                     No approved sticker requests found.
                   </div>

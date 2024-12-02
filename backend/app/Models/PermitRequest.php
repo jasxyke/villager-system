@@ -26,7 +26,7 @@ class PermitRequest extends Model
     public static function generateUniqueReference(): string
     {
         do {
-            $reference = 'CR-' . strtoupper(Str::random(10));
+            $reference = 'CR-' . strtoupper(Str::random(7));
         } while (self::where('reference_number', $reference)->exists());
 
         return $reference;

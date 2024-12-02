@@ -83,15 +83,15 @@ const StickerTable = () => {
           </div>
 
           {/* Table Rows */}
-          <div>
+          <div className="max-h-[400px] overflow-auto">
             {loading ? (
               <LoadingContainer color="green" bgColor="white" />
             ) : requests.length === 0 ? (
-              <div className="grid grid-cols-5 gap-4 p-4">
-                <div className="col-span-6 text-center">
+              <StickerDefaultTable cols={"1"}>
+                <div className="text-center p-4 w-full">
                   No pending sticker requests found.
                 </div>
-              </div>
+              </StickerDefaultTable>
             ) : (
               requests.map((sticker) => (
                 <div

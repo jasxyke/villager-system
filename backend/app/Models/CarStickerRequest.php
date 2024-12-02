@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class CarStickerRequest extends Model
 {
@@ -11,6 +12,7 @@ class CarStickerRequest extends Model
 
     protected $fillable = [
         'resident_id',
+        'reference_number',
         'car_model',
         'car_plate_number',
         'request_status',
@@ -19,6 +21,15 @@ class CarStickerRequest extends Model
         'note',
        // 'sticker_type'
     ];
+
+    public static function generateUniqueReference(): string
+    {
+        do {
+            $reference = 'CS-' . strtoupper(Str::random(7));
+        } while (self::where('reference_number', $reference)->exists());
+
+        return $reference;
+    }
 
     public function resident()
     {

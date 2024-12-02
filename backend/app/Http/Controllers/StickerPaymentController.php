@@ -2,18 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\HeaderHelper;
+use App\Helpers\SettingsHelper;
 use App\Models\StickerPayment;
 use App\Http\Requests\StoreStickerPaymentRequest;
 use App\Http\Requests\UpdateStickerPaymentRequest;
+use App\Mail\CarStickerPaymentReceipt;
 use App\Models\CarStickerRequest;
 use Carbon\Carbon;
+use Dompdf\Dompdf;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+
 
 class StickerPaymentController extends Controller
 {
-      /**
-     * Add a payment for a car sticker request and update its status.
-     */
     public function addPayment(Request $request)
     {
         // Validate the incoming request
@@ -41,12 +44,66 @@ class StickerPaymentController extends Controller
         $stickerRequest->completed_date = Carbon::now(); // Set completion date
         $stickerRequest->save();
 
+        // Generate the receipt PDF
+        $receiptPdf = $this->generateReceiptPdf($payment->id);
+
+        // Send the receipt via email
+        $resident = $payment->resident->user;
+        Mail::to($resident->email)->send(new CarStickerPaymentReceipt($resident, $payment, $receiptPdf));
+
         // Return a success response
         return response()->json([
-            'message' => 'Payment added and car sticker request status updated.',
+            'message' => 'Payment added, car sticker request status updated, and email sent with receipt.',
             'payment' => $payment,
             'sticker_request' => $stickerRequest
         ], 201);
+    }
+
+    public function generateReceiptPdf($paymentId)
+    {
+        // Fetch the payment, car sticker request, and resident data
+        $payment = StickerPayment::findOrFail($paymentId);
+        $carStickerRequest = $payment->carStickerRequest;
+        $resident = $payment->resident->user;
+
+        // Subdivision name
+        $headerData = HeaderHelper::getHeaderData();
+
+        // Format data for the receipt
+        $formattedAmount = number_format((float) $payment->amount, 2);
+        $formattedPaymentDate = Carbon::parse($payment->payment_date)->format('F d, Y');
+
+        // Generate the receipt as a PDF
+        $dompdf = new Dompdf();
+        $dompdf->loadHtml(view('invoices.car_stickers_receipt', compact('payment', 'carStickerRequest', 'resident', 'headerData', 'formattedAmount', 'formattedPaymentDate'))->render());
+        $dompdf->setPaper('A4', 'portrait');
+        $dompdf->render();
+
+        // Return the PDF output
+        return $dompdf->output(); // For emailing
+    }
+
+    public function downloadReceipt($paymentId)
+    {
+        // Fetch the payment, car sticker request, and resident data
+        $payment = StickerPayment::findOrFail($paymentId);
+        $carStickerRequest = $payment->carStickerRequest;
+        $resident = $payment->resident;
+
+        // Subdivision name
+        $headerData = HeaderHelper::getHeaderData();
+
+        //format payment amount string to float
+        $payment->amount = (float) $payment->amount;
+
+        // Generate the receipt as a PDF
+        $dompdf = new Dompdf();
+        $dompdf->loadHtml(view('invoices.car_stickers_receipt', compact('payment', 'carStickerRequest', 'resident', 'headerData'))->render());
+        $dompdf->setPaper('A4', 'portrait');
+        $dompdf->render();
+
+        // Stream the PDF to the browser
+        return $dompdf->stream('car_sticker_payment_receipt.pdf');
     }
 
     public function getPaymentHistory(Request $request)

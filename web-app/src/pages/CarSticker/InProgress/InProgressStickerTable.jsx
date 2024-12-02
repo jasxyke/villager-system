@@ -94,11 +94,11 @@ const InProgressStickerTable = () => {
               <div className="flex items-center justify-center">Actions</div>
             </div>
           </div>
-          <div>
+          <div className="max-h-[400px] overflow-auto">
             {loading || completeLoading ? (
               <LoadingContainer color="green" bgColor="white" />
             ) : requests.length === 0 ? (
-              <StickerDefaultTable>
+              <StickerDefaultTable cols={"1"}>
                 <div className="text-center p-4 w-full">
                   No in-progress sticker requests found.
                 </div>

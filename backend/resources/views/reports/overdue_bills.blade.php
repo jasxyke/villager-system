@@ -99,26 +99,7 @@
 </head>
 <body>
     <div class="container">
-        <div class="header-container">
-            <table>
-                <tr>
-                    <td style="width: 100px;">
-                        <img src="{{ $headerData['villageLogo'] }}" alt="Village Logo" class="logo">
-                    </td>
-                    <td class="header">
-                        <h5>{{ $headerData['villageName'] }}</h5>
-                        <p>{{ $headerData['address'] }}</p>
-                        <p>{{ $headerData['phone1'] }} | {{ $headerData['phone2'] }}</p>
-                        <p>{{ $headerData['email'] }}</p>
-                        <p>{{ $headerData['hoaRegNum'] }}</p>
-                        <p>TIN: {{ $headerData['tinNum'] }}</p>
-                    </td>
-                    <td style="width: 100px;">
-                        <img src="{{ $headerData['cityLogo'] }}" alt="City Logo" class="logo">
-                    </td>
-                </tr>
-            </table>
-        </div>
+        @include('partials.header', ['headerData' => $headerData])
         <div class="content">
             <h2>Overdue Bills Report</h2>
         </div>

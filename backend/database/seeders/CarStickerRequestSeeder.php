@@ -21,11 +21,17 @@ class CarStickerRequestSeeder extends Seeder
         $stickerTypes = ['two_wheel', 'four_wheel', 'delivery_truck']; // Sticker types array
         $dummyImageUrl = 'https://via.placeholder.com/150'; // Dummy image URL
 
+
+
         foreach ($statuses as $status) {
             for ($i = 1; $i <= 3; $i++) {
+                //generate reference number
+                $referenceNumber = CarStickerRequest::generateUniqueReference();
+
                 // Create car sticker request
                 $stickerRequest = CarStickerRequest::create([
                     'resident_id' => 1,
+                    'reference_number' => $referenceNumber,
                     'car_model' => 'Car Model ' . $i,
                     'car_plate_number' => 'ABC' . rand(1000, 9999),
                     'request_status' => $status,

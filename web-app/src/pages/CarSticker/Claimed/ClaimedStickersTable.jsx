@@ -63,7 +63,7 @@ const ClaimedStickersTable = () => {
               <div className="flex items-center justify-center">Status</div>
             </div>
           </div>
-          <div>
+          <div className="max-h-[400px] overflow-auto">
             {loading ? (
               <LoadingContainer color="green" bgColor="white" />
             ) : requests.length === 0 ? (

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->decimal('amount', 10, 2);
             $table->date('payment_date');
             $table->enum('payment_status',['completed','cancelled']);
-            // $table->string('payment_method'); // e.g., 'credit_card', 'bank_transfer'
+            //$table->enum('payment_method', ['Gcash', 'Cash']); // e.g., 'credit_card', 'bank_transfer'
             $table->text('transaction_id')->nullable(); // For tracking payment transaction ID
             $table->timestamps();
         });

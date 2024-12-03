@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import StickerDetails from "../StickerDetails";
 import StickerDefaultTable from "../StickerDefaultTable";
 import useCarStickerRequestsByStatus from "../../../hooks/CarStickers/useCarStickerRequestsByStatus";
-import { formatUserName } from "../../../utils/DataFormatter";
+import { formatName, formatUserName } from "../../../utils/DataFormatter";
 import ReactPaginate from "react-paginate";
 import useStickerPayments from "../../../hooks/CarStickers/useStickerPayments";
 import LoadingContainer from "../../../components/LoadingScreen/LoadingContainer";
@@ -114,7 +114,7 @@ const ToPayStickerTable = () => {
       ) : (
         <>
           <div className="w-full">
-            <div className="grid grid-cols-4 gap-4 p-4 bg-oliveGreen text-white font-bold">
+            <div className="grid grid-cols-5 gap-4 p-4 bg-oliveGreen text-white font-bold">
               <div className="flex items-center justify-center">Name</div>
               <div className="flex items-center justify-center">
                 Plate Number
@@ -147,7 +147,7 @@ const ToPayStickerTable = () => {
               <StickerDefaultTable
                 key={sticker.id}
                 handleClick={() => handleRowClick(sticker)}
-                cols={"4"}
+                cols={"5"}
               >
                 <div className="flex items-center justify-center">
                   {formatUserName(sticker.resident.user, false)}
@@ -159,7 +159,7 @@ const ToPayStickerTable = () => {
                   {sticker.approval_date}
                 </div>
                 <div className="flex items-center justify-center">
-                  {sticker.sticker_type}
+                  {formatName(sticker.sticker_type)}
                 </div>
 
                 <div className="flex items-center justify-center">

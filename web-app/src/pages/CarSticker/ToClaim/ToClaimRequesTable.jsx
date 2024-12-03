@@ -3,7 +3,7 @@ import StickerDetails from "../StickerDetails";
 import StickerDefaultTable from "../StickerDefaultTable";
 import useCarStickerRequestsByStatus from "../../../hooks/CarStickers/useCarStickerRequestsByStatus";
 import useCarStickerRequests from "../../../hooks/CarStickers/useCarStickerRequests"; // Import the custom hook
-import { formatUserName } from "../../../utils/DataFormatter";
+import { formatName, formatUserName } from "../../../utils/DataFormatter";
 import ReactPaginate from "react-paginate";
 import LoadingContainer from "../../../components/LoadingScreen/LoadingContainer";
 
@@ -44,30 +44,30 @@ const ToClaimRequestTable = () => {
     setDetailsView(false);
   };
 
-  const handleSetAsClaimed = async (sticker, e) => {
-    e.stopPropagation();
-    const isConfirmed = window.confirm(
-      "Are you sure you want to mark this sticker request as claimed?"
-    );
+  // const handleSetAsClaimed = async (sticker, e) => {
+  //   e.stopPropagation();
+  //   const isConfirmed = window.confirm(
+  //     "Are you sure you want to mark this sticker request as claimed?"
+  //   );
 
-    if (isConfirmed) {
-      try {
-        // Use the custom hook function to mark the request as claimed
-        const responseSuccess = await claimCarStickerRequest(sticker.id);
+  //   if (isConfirmed) {
+  //     try {
+  //       // Use the custom hook function to mark the request as claimed
+  //       const responseSuccess = await claimCarStickerRequest(sticker.id);
 
-        if (responseSuccess) {
-          alert("Sticker request has been marked as claimed.");
-          // Optionally refresh the data after marking as claimed
-          fetchRequestsByStatus("completed", currentPage);
-        }
-      } catch (error) {
-        console.error("Failed to mark the sticker as claimed", claimError);
-        alert(
-          "There was an error marking the sticker as claimed. Please try again."
-        );
-      }
-    }
-  };
+  //       if (responseSuccess) {
+  //         alert("Sticker request has been marked as claimed.");
+  //         // Optionally refresh the data after marking as claimed
+  //         fetchRequestsByStatus("completed", currentPage);
+  //       }
+  //     } catch (error) {
+  //       console.error("Failed to mark the sticker as claimed", claimError);
+  //       alert(
+  //         "There was an error marking the sticker as claimed. Please try again."
+  //       );
+  //     }
+  //   }
+  // };
 
   const handlePageClick = (event) => {
     // Paginate to the selected page
@@ -110,8 +110,8 @@ const ToClaimRequestTable = () => {
               requests.map((sticker) => (
                 <div
                   key={sticker.id}
-                  className="grid grid-cols-4 gap-4 p-4 bg-white"
-                  handleClick={() => handleRowClick(sticker)}
+                  className="grid grid-cols-4 gap-4 p-4 bg-white cursor-pointer"
+                  onClick={() => handleRowClick(sticker)}
                 >
                   <div className="flex items-center justify-center">
                     {formatUserName(sticker.resident.user, false)}
@@ -123,7 +123,7 @@ const ToClaimRequestTable = () => {
                     {sticker.completed_date}
                   </div>
                   <div className="flex items-center justify-center">
-                    {sticker.sticker_type}
+                    {formatName(sticker.sticker_type)}
                   </div>
                   {/*<div className="flex items-center justify-center">
                     <button

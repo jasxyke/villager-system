@@ -109,7 +109,7 @@ const StickerTable = () => {
                     {sticker.application_date}
                   </div>
                   <div className="flex items-center justify-center">
-                    {sticker.sticker_type}
+                    {formatName(sticker.sticker_type)}
                   </div>
                   <div className="flex items-center justify-center">
                     <button

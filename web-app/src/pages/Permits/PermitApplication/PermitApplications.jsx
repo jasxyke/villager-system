@@ -70,13 +70,16 @@ const PermitApplications = () => {
                   permitRequests={permitRequests}
                   loading={loading}
                 />
-                <SelectOptions
-                  list={options}
-                  onChangeValue={setStatus}
-                  value={status}
-                  label="Status"
-                  width="auto"
-                />
+                <div className="mt-5">
+                  <SelectOptions
+                    list={options}
+                    onChangeValue={setStatus}
+                    value={status}
+                    label="Status"
+                    width="auto"
+                  />
+                </div>
+
                 <div className="flex justify-center mt-4">
                   {lastPage > 1 && (
                     <ReactPaginate

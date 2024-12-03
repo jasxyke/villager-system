@@ -4,12 +4,14 @@ import StickerDefaultTable from "../StickerDefaultTable";
 import ReactPaginate from "react-paginate";
 import useCarStickerRequestsByStatus from "../../../hooks/CarStickers/useCarStickerRequestsByStatus";
 import useCarStickerRequests from "../../../hooks/CarStickers/useCarStickerRequests"; // Import the custom hook
-import { formatUserName } from "../../../utils/DataFormatter";
+import { formatName, formatUserName } from "../../../utils/DataFormatter";
 import LoadingContainer from "../../../components/LoadingScreen/LoadingContainer";
 
 const InProgressStickerTable = () => {
   const [selectedSticker, setSelectedSticker] = useState(null);
   const [detailsView, setDetailsView] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [modalSticker, setModalSticker] = useState(null);
 
   // Use the custom hook to fetch car sticker requests
   const {
@@ -44,31 +46,33 @@ const InProgressStickerTable = () => {
     setDetailsView(false);
   };
 
-  const handleMarkAsDone = async (sticker, e) => {
-    e.stopPropagation(); // Prevent row click from being triggered
+  const handleOpenModal = (sticker) => {
+    setModalSticker(sticker);
+    setShowModal(true);
+  };
 
-    const isConfirmed = window.confirm(
-      "Are you sure you want to mark this sticker request as done?"
-    );
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setModalSticker(null);
+  };
 
-    if (isConfirmed) {
+  const handleSetAsDone = async () => {
+    if (modalSticker) {
       try {
-        // Call the completeCarStickerRequest function
-        const response = await completeCarStickerRequest(sticker.id);
-
+        const response = await completeCarStickerRequest(modalSticker.id);
         if (response) {
-          // Refresh or update the state to reflect the completed status
-          console.log(`Sticker ${sticker.id} marked as done.`);
-          fetchRequestsByStatus("in_progress", currentPage); // Optionally refetch the current page of data
+          alert("Sticker marked as done successfully.");
+          setShowModal(false);
+          fetchRequestsByStatus("in_progress", currentPage); // Refresh data
         }
       } catch (error) {
         console.error("Failed to mark the sticker request as done:", error);
+        alert("Failed to mark the sticker request as done. Please try again.");
       }
     }
   };
 
   const handlePageClick = (event) => {
-    // Paginate to the selected page
     changePage("in_progress", event.selected + 1);
   };
 
@@ -83,7 +87,7 @@ const InProgressStickerTable = () => {
       ) : (
         <>
           <div className="w-full">
-            <div className="grid grid-cols-4 gap-4 p-4 bg-oliveGreen text-white font-bold">
+            <div className="grid grid-cols-5 gap-4 p-4 bg-oliveGreen text-white font-bold">
               <div className="flex items-center justify-center">Name</div>
               <div className="flex items-center justify-center">
                 Plate Number
@@ -109,7 +113,7 @@ const InProgressStickerTable = () => {
                 <StickerDefaultTable
                   key={sticker.id}
                   handleClick={() => handleRowClick(sticker)}
-                  cols={"4"}
+                  cols={"5"}
                 >
                   <div className="flex items-center justify-center">
                     {formatUserName(sticker.resident.user, false)}
@@ -121,13 +125,15 @@ const InProgressStickerTable = () => {
                     {sticker.approval_date}
                   </div>
                   <div className="flex items-center justify-center">
-                    {sticker.sticker_type}
+                    {formatName(sticker.sticker_type)}
                   </div>
                   <div className="flex items-center justify-center">
-
                     <button
                       className="bg-oliveGreen text-white px-4 py-2 rounded hover:bg-greyGreen transition-colors"
-                      onClick={(e) => handleMarkAsDone(sticker, e)} // Pass event to handler
+                      onClick={(e) => {
+                        e.stopPropagation(); // Prevent row click
+                        handleOpenModal(sticker);
+                      }}
                     >
                       Mark as Done
                     </button>
@@ -154,6 +160,42 @@ const InProgressStickerTable = () => {
               />
             )}
           </div>
+
+          {/* Modal */}
+          {showModal && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+              <div className="bg-white rounded p-6 w-96">
+                <h2 className="text-lg font-semibold mb-4">
+                  Confirm Completion
+                </h2>
+                <p className="mb-2">
+                  <strong>Reference Number:</strong>{" "}
+                  {modalSticker.reference_number}
+                </p>
+                <p className="mb-2">
+                  <strong>Resident Name:</strong>{" "}
+                  {formatUserName(modalSticker.resident.user, false)}
+                </p>
+                <p className="mb-4">
+                  <strong>Plate Number:</strong> {modalSticker.car_plate_number}
+                </p>
+                <div className="flex justify-end gap-4">
+                  <button
+                    className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+                    onClick={handleCloseModal}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    className="px-4 py-2 bg-oliveGreen text-white rounded hover:bg-greyGreen"
+                    onClick={handleSetAsDone}
+                  >
+                    Confirm
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </>
       )}
     </div>

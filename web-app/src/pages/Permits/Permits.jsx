@@ -26,7 +26,7 @@ const Permits = () => {
               }`}
               onClick={() => setActiveTab("applications")}
             >
-              Clearance Applications
+              Clearance Requests
             </button>
             <button
               className={`relative flex-1 py-2 px-4 text-center cursor-pointer transition-colors duration-300 ${
@@ -68,7 +68,7 @@ const Permits = () => {
             >
               Completed
             </button>
-            <button
+            {/* <button
               className={`relative flex-1 py-2 px-4 text-center cursor-pointer transition-colors duration-300 ${
                 activeTab === "extended"
                   ? "bg-mutedGreen text-black"
@@ -77,7 +77,7 @@ const Permits = () => {
               onClick={() => setActiveTab("extended")}
             >
               Extended
-            </button>
+            </button> */}
           </div>
         </div>
 

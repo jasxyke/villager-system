@@ -1,12 +1,15 @@
 {
   "cli": {
-    "version": ">= 10.2.1",
+    "version": ">=10.2.1",
     "requireCommit": true
   },
   "build": {
     "development": {
       "developmentClient": true,
-      "distribution": "internal"
+      "distribution": "internal",
+      "android": {
+        "buildType": "apk"
+      }
     },
     "preview": {
       "ios": {
@@ -16,20 +19,18 @@
         "buildType": "apk"
       }
     },
-    "preview2": {
+    "production": {
+      "distribution": "store",
       "android": {
-        "gradleCommand": ":app:assembleRelease"
+        "buildType": "apk"
       }
-    },
-    "preview3": {
-      "developmentClient": true
-    },
-    "preview4": {
-      "distribution": "internal"
-    },
-    "production": {}
+    }
   },
   "submit": {
-    "production": {}
+    "production": {
+      "android": {
+        "serviceAccountKeyPath": "./path-to-service-account-key.json"
+      }
+    }
   }
 }

@@ -19,7 +19,7 @@ const Permits = () => {
   };
 
   const handleShowCurrentPermit = () => {
-    router.navigate("../forms/current-permits");
+    router.navigate("../permits/current-permits");
   };
 
   return (
@@ -47,7 +47,10 @@ const Permits = () => {
             <Text style={styles.buttonText}>Payment History</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={[styles.button]} onPress={handleShowCurrentPermit}>
+          <TouchableOpacity
+            style={[styles.button]}
+            onPress={handleShowCurrentPermit}
+          >
             <Text style={styles.buttonText}>Current Permits</Text>
           </TouchableOpacity>
         </>

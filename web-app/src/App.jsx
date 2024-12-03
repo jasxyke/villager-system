@@ -60,7 +60,7 @@ function App() {
             />
             <Route path="/sticker" element={<Sticker />} />
             <Route path="/complaints" element={<Complaints />} />
-            <Route path="/expenses" element={<Expenses />} />
+            <Route path="/expenses-income" element={<Expenses />} />
           </Route>
           <Route element={<LoginMiddleRoute />}>
             <Route path="/" element={<Login />} />

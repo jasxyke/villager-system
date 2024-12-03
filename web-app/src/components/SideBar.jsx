@@ -12,6 +12,7 @@ import {
   FiMessageSquare,
   FiUsers,
 } from "react-icons/fi";
+import { PiMoneyWavy } from "react-icons/pi";
 import { MdOutlineRoomPreferences } from "react-icons/md";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useAuthContext } from "../contexts/AuthContext";
@@ -127,6 +128,17 @@ const SideBar = () => {
             ref={location.pathname === "/complaints" ? activeLinkRef : null}
           >
             <FiFlag className="text-3xl mr-2" /> Complaints
+          </NavLink>
+        </li>
+        <li>
+          <NavLink
+            to="/expenses-income"
+            ref={
+              location.pathname === "/expenses-income" ? activeLinkRef : null
+            }
+          >
+            <PiMoneyWavy className="text-3xl mr-2" />
+            Expenses and Income
           </NavLink>
         </li>
         <li>

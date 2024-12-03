@@ -1,19 +1,19 @@
 import React, { useState } from "react";
-import { 
-  View, 
-  Text, 
-  StyleSheet, 
-  Image, 
-  Button, 
-  ScrollView, 
-  TextInput, 
-  Modal, 
-  TouchableOpacity, 
-  TouchableWithoutFeedback 
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  Button,
+  ScrollView,
+  TextInput,
+  Modal,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
 } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker"; // Import the new date picker
-import { colors } from "../../styles/colors";
-import TabsGradient from "../../components/gradients/TabsGradient";
+import { colors } from "../../../styles/colors";
+import TabsGradient from "../../../components/gradients/TabsGradient";
 
 const ClearanceDetailedView = ({ permitDetails, onRequestExtension }) => {
   const [extensionReason, setExtensionReason] = useState("");
@@ -58,13 +58,28 @@ const ClearanceDetailedView = ({ permitDetails, onRequestExtension }) => {
         <View style={styles.detailSection}>
           <Text style={styles.detailTitle}>Requested Details</Text>
           {[
-            { label: "Description of Request", value: permitDetails?.descriptionOfRequest },
-            { label: "Reason for Request", value: permitDetails?.reasonForRequest },
-            { label: "Requested Permit", value: permitDetails?.requestedPermit },
+            {
+              label: "Description of Request",
+              value: permitDetails?.descriptionOfRequest,
+            },
+            {
+              label: "Reason for Request",
+              value: permitDetails?.reasonForRequest,
+            },
+            {
+              label: "Requested Permit",
+              value: permitDetails?.requestedPermit,
+            },
             { label: "Permit Purpose", value: permitDetails?.phoneNumber },
             { label: "Requested Date", value: permitDetails?.startDate },
-            { label: "Expected Starting Date", value: permitDetails?.startDate },
-            { label: "Expected Completion Date", value: permitDetails?.endDate },
+            {
+              label: "Expected Starting Date",
+              value: permitDetails?.startDate,
+            },
+            {
+              label: "Expected Completion Date",
+              value: permitDetails?.endDate,
+            },
           ].map(({ label, value }) => (
             <View key={label} style={styles.detailRow}>
               <Text style={styles.detailLabel}>{label}:</Text>
@@ -97,10 +112,19 @@ const ClearanceDetailedView = ({ permitDetails, onRequestExtension }) => {
           </View>
         </View>
 
-        <Button title="Request for Extension" onPress={() => setIsModalVisible(true)} color={colors.primary} />
+        <Button
+          title="Request for Extension"
+          onPress={() => setIsModalVisible(true)}
+          color={colors.primary}
+        />
       </ScrollView>
 
-      <Modal visible={isModalVisible} animationType="slide" transparent={true} onRequestClose={() => setIsModalVisible(false)}>
+      <Modal
+        visible={isModalVisible}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={() => setIsModalVisible(false)}
+      >
         <TouchableWithoutFeedback onPress={() => setIsModalVisible(false)}>
           <View style={styles.modalOverlay}>
             <View style={styles.modalContent}>
@@ -138,7 +162,9 @@ const ClearanceDetailedView = ({ permitDetails, onRequestExtension }) => {
               {/* Submit Button */}
               <TouchableOpacity>
                 <View style={styles.submitButton}>
-                  <Text style={styles.submitButtonText}>Submit Extension Request</Text>
+                  <Text style={styles.submitButtonText}>
+                    Submit Extension Request
+                  </Text>
                 </View>
               </TouchableOpacity>
 
@@ -164,7 +190,6 @@ const ClearanceDetailedView = ({ permitDetails, onRequestExtension }) => {
     </View>
   );
 };
-
 
 const styles = StyleSheet.create({
   container: {
@@ -249,10 +274,10 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   invalidInput: {
-    borderColor: 'red',  // Highlight invalid input
+    borderColor: "red", // Highlight invalid input
   },
   errorText: {
-    color: 'red',
+    color: "red",
     fontSize: 12,
   },
   paymentSection: {
@@ -311,11 +336,9 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     paddingHorizontal: 10,
     fontSize: 14,
-    alignItems: 'flex-start',
+    alignItems: "flex-start",
   },
-  datePickerText: {
-    
-  },
+  datePickerText: {},
 });
 
 export default ClearanceDetailedView;

@@ -7,25 +7,31 @@ import {
   FlatList,
   TouchableOpacity,
 } from "react-native";
-import { colors } from "../../styles/colors";
-import TabsGradient from "../../components/gradients/TabsGradient";
-import { useAuthContext } from "../../context/AuthContext";
-import useFetchPaymentHistory from "../../hooks/permits/usePaymentHistory";
+import { colors } from "../../../styles/colors";
+import TabsGradient from "../../../components/gradients/TabsGradient";
+import { useAuthContext } from "../../../context/AuthContext";
+import useFetchPaymentHistory from "../../../hooks/permits/usePaymentHistory";
 
 const CurrentPermit = () => {
-  const { payments, loading, error, refetch, message } = useFetchPaymentHistory();
+  const { payments, loading, error, refetch, message } =
+    useFetchPaymentHistory();
   const { user } = useAuthContext();
 
   // Dummy permit data for demonstration
   const dummyPermits = [
     { id: 1, type: "Building Permit", status: "Approved", amount: "5000" },
-    { id: 2, type: "Construction Supply Permit", status: "Pending", amount: "2000" },
+    {
+      id: 2,
+      type: "Construction Supply Permit",
+      status: "Pending",
+      amount: "2000",
+    },
     { id: 3, type: "Car Sticker", status: "Rejected", amount: "500" },
   ];
 
   const handleShowDetailedView = (permit) => {
     console.log("Selected Permit:", permit);
-    router.push("../forms/ClearanceDetailsView"); // Navigate to details page
+    router.push("./ClearanceDetailsView"); // Navigate to details page
   };
 
   useEffect(() => {

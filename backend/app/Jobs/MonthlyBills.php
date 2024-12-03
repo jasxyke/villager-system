@@ -12,6 +12,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class MonthlyBills implements ShouldQueue
 {
@@ -24,44 +25,41 @@ class MonthlyBills implements ShouldQueue
     {
         //
     }
-
+    
     /**
      * Execute the job.
      */
     public function handle(): void
     {
+        // Log::info('Monthly Bills Generated');
+
         $residents = Resident::all();
         $now = Carbon::now();
 
-        DB::transaction(function () use ($residents, $now) {
-            foreach ($residents as $resident) {
-                Bill::create([
-                    'resident_id' => $resident->id,
-                    'amount' => SettingsHelper::get('bill_amount_per_month'),
-                    'due_date' => $now->copy()->firstOfMonth(),
-                    'status' => 'pending',
-                    'issue_date' => $now->copy()->lastOfMonth(),
-                ]);
-            }
-        });
-    }
-    // Generate bills for all residents every month
-    public function generateMonthlyBills()
-    {
-        
-        $residents = Resident::all();
-        $now = Carbon::now();
+        Log::info('Resident count: ' . Resident::count());
 
-        DB::transaction(function () use ($residents, $now) {
-            foreach ($residents as $resident) {
-                Bill::create([
-                    'resident_id' => $resident->id,
-                    'amount' => 1000, // Replace with your logic to calculate the amount
-                    'due_date' => $now->copy()->nextWeekday(),
-                    'status' => 'pending',
-                    'issue_date' => $now->copy()->nextWeekday(),
-                ]);
-            }
+
+        // Retrieve the bill amount from settings
+        $billAmount = SettingsHelper::get('bill_amount_per_month') ?? 1000;
+
+        // Prepare data for bulk insert
+        $bills = $residents->map(function ($resident) use ($now, $billAmount) {
+            return [
+                'resident_id' => $resident->id,
+                'amount' => $billAmount,
+                'issue_date' => $now->copy()->firstOfMonth(), // Set issue date as the first day of the month
+                'due_date' => $now->copy()->firstOfMonth()->addDays(6), // Set due date as the 7th day of the month
+                'status' => 'pending',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+        })->toArray();
+
+        // Use a transaction for safety
+        DB::transaction(function () use ($bills) {
+            Bill::insert($bills);
         });
+
+        return;
     }
 }

@@ -15,12 +15,12 @@ class SettingsSeeder extends Seeder
     {
         $settings = [
             ['key' => 'allow_miss_payments', 'value' => true],
-            ['key' => 'bill_amount_per_month', 'value' => '1000'],
-            ['key' => 'additional_per_missed_payment', 'value' => '100'],
-            ['key' => 'payment_per_square_meter', 'value' => '50'],
-            ['key' => 'payment_per_car_sticker', 'value' => '200'],
-            ['key' => 'payment_for_guest_car_permits', 'value' => '150'],
-            ['key' => 'processing_fee', 'value' => '100'],
+            ['key' => 'bill_amount_per_month', 'value' => 1000],
+            ['key' => 'additional_per_missed_payment', 'value' => 100],
+            ['key' => 'payment_per_square_meter', 'value' => 50],
+            ['key' => 'payment_per_car_sticker', 'value' => 200],
+            ['key' => 'payment_for_guest_car_permits', 'value' => 150],
+            ['key' => 'processing_fee', 'value' => 100],
             ['key' => 'village_name', 'value' => 'PAMAHAY VILLAGE HOMEOWNERS ASSOCIATION'],
             ['key' => 'village_address', 'value' => 'Barangay San Jose, Rodriguez Rizal'],
             ['key' => 'village_contact_number_1', 'value' => '0908-173-3190'],

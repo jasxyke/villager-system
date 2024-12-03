@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import axiosClient, { guestAxios } from "../utils/axios";
+import axiosClient, { DOMAIN, guestAxios } from "../utils/axios";
 import { router } from "expo-router";
 import { deleteItemAsync, getItemAsync, setItemAsync } from "expo-secure-store";
 // import { MMKVLoader, useMMKVStorage } from "react-native-mmkv-storage";
@@ -19,6 +19,15 @@ export function AuthProvider({ children }) {
 
   const login = async (email, password, onError) => {
     setLoading(true);
+
+    try {
+      await axiosClient.get("/sanctum/csrf-cookie", { baseURL: DOMAIN });
+      console.log("Registered santum");
+    } catch (error) {
+      console.log("Error getting sanctum");
+      console.log(error.response.data.message);
+    }
+
     try {
       const res = await axiosClient.post("/login", {
         email: email,
@@ -105,9 +114,13 @@ export function AuthProvider({ children }) {
       const res = await axiosClient.get("/me");
 
       const responseUser = res.data;
+      console.log("user: ");
+      console.log(responseUser);
+
       if (
         responseUser.resident !== null ||
-        responseUser.resident !== undefined
+        responseUser.resident !== undefined ||
+        responseUser === null
       ) {
         setLoggedIn(true);
       } else {

@@ -35,9 +35,9 @@ const Expenses = () => {
         <div className="mb-6">
           <h2 className="text-xl text-white font-semibold mb-4">INCOME</h2>
           <div className="grid grid-cols-2 gap-4">
-            {/* Monthly Fees */}
+            {/* Monthly Dues */}
             <div className="flex items-center">
-              <div className="text-white font-medium w-1/3">Monthly Fees</div>
+              <div className="text-white font-medium w-1/3">Monthly Dues</div>
               <div className="w-2/3 p-2 rounded-md bg-greyGreen outline-none">
                 $124
               </div>
@@ -64,7 +64,7 @@ const Expenses = () => {
               </div>
             </div>
             {/* Total Income */}
-            <div className="flex items-center">
+            <div className="flex items-center mt-6">
               <div className="text-white font-medium w-1/3">Total Income</div>
               <div className="w-2/3 p-2 rounded-md bg-greyGreen outline-none">
                 $124
@@ -126,10 +126,10 @@ const Expenses = () => {
         </div>
 
         {/* Generate Report Button */}
-        <div className="flex justify-end mt-6">
-          <FaFile />
-          <button className="flex items-center bg-mute text-white px-4 py-2 rounded-md">
+        <div className="flex justify-end items-center mt-6">
+          <button className="bg-secondary flex items-center bg-mute text-white px-4 py-2 rounded-md">
             Generate Report
+            <FaFile className="text-2xl text-white ml-2" />
           </button>
         </div>
       </div>

@@ -16,13 +16,10 @@ const _layout = () => {
         },
       }}
     >
-      <Stack.Screen name="history" options={{ title: "Permit Payments" }} />
-      <Stack.Screen name="requests" options={{ title: "Permit Requests" }} />
+      <Stack.Screen name="history" options={{ title: "Clearance Payments" }} />
+      <Stack.Screen name="requests" options={{ title: "Clearanace Requests" }} />
       <Stack.Screen name="current-permits" options={{ title: "Clearances" }} />
-      <Stack.Screen
-        name="ClearanceDetailsView"
-        options={{ title: "Clearance Details View" }}
-      />
+      <Stack.Screen name="ClearanceDetailsView" options={{ title: "Clearance Details" }} />
     </Stack>
   );
 };

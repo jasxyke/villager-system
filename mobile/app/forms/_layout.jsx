@@ -15,7 +15,7 @@ export default function FormsLayout() {
       }}
     >
       <Stack.Screen name="sticker-form" options={{ title: "Car Stickers" }} />
-      <Stack.Screen name="permit-form" options={{ title: "House Permit" }} />
+      <Stack.Screen name="permit-form" options={{ title: " Buiding Permit Clearance" }} />
     </Stack>
   );
 }

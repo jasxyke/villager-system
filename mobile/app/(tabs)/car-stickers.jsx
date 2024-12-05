@@ -35,6 +35,13 @@ const carStickers = () => {
         >
           <Text style={styles.buttonText}>Payment History</Text>
         </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => router.navigate("../stickers/current-stickers")}
+        >
+          <Text style={styles.buttonText}>Car Stickers</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );

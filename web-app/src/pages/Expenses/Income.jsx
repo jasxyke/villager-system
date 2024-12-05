@@ -1,111 +1,79 @@
-import React, { useState } from "react";
-import MonthlyDuesIncome from "./Incomes/MonthlyDuesIncome";
-import ClearanceIncome from "./Incomes/ClearanceIncome";
-import AmenitiesIncome from "./Incomes/AmenitiesIncome";
-import StickersIncome from "./Incomes/StickersIncome";
-import DateRangeSelector from "./Incomes/DateRangeSelector";
+import React, { useState, useEffect } from "react";
+import MonthlyDuesIncome from "./MonthlyDuesIncome/MonthlyDuesIncome";
+import ClearanceIncome from "./ClearanceIncome/ClearanceIncome";
+import AmenitiesIncome from "./AmenitiesIncome/AmenitiesIncome";
+import StickersIncome from "./StickersIncome/StickersIncome";
+import useIncomes from "../../hooks/IncomeExpenses/useIncomes";
+import YearMonthSelector from "./YearMonthSelector";
 
 const Income = () => {
-  const currentDate = new Date();
-  const [selectedStartDay, setSelectedStartDay] = useState(
-    currentDate.getDate()
-  );
-  const [selectedStartMonth, setSelectedStartMonth] = useState(
-    currentDate.getMonth()
-  );
-  const [selectedStartYear, setSelectedStartYear] = useState(
-    currentDate.getFullYear()
-  );
+  const [year, setYear] = useState(new Date().getFullYear()); // Default to current year
+  const [month, setMonth] = useState(new Date().getMonth() + 1); // Default to current month
 
-  const [selectedEndDay, setSelectedEndDay] = useState(currentDate.getDate());
-  const [selectedEndMonth, setSelectedEndMonth] = useState(
-    currentDate.getMonth()
-  );
-  const [selectedEndYear, setSelectedEndYear] = useState(
-    currentDate.getFullYear()
-  );
+  // Using the useIncomes hook
+  const { incomes, loading, error, fetchIncomes } = useIncomes();
 
-  const handleStartDayChange = (event) =>
-    setSelectedStartDay(event.target.value);
-  const handleStartMonthChange = (event) =>
-    setSelectedStartMonth(event.target.value);
-  const handleStartYearChange = (event) =>
-    setSelectedStartYear(event.target.value);
+  // Fetch the incomes when the component mounts or when year/month changes
+  useEffect(() => {
+    fetchIncomes({ year, month });
+  }, [year, month, fetchIncomes]);
 
-  const handleEndDayChange = (event) => setSelectedEndDay(event.target.value);
-  const handleEndMonthChange = (event) =>
-    setSelectedEndMonth(event.target.value);
-  const handleEndYearChange = (event) => setSelectedEndYear(event.target.value);
-
-  const getDateRange = () => {
-    const startDate = new Date(
-      selectedStartYear,
-      selectedStartMonth,
-      selectedStartDay
-    );
-    const endDate = new Date(selectedEndYear, selectedEndMonth, selectedEndDay);
-    return `${startDate.toLocaleDateString(
-      "en-US"
-    )} to ${endDate.toLocaleDateString("en-US")}`;
+  const formatIncome = (income) => {
+    return income && !isNaN(income) ? `₱${income}` : "₱0.00";
   };
 
   return (
-    <div className="bg-mutedGreen rounded-2xl shadow-xl mb-2">
-      <div className="p-6">
-        <div className="flex justify-between items-center">
-          <div className="text-xl text-white font-semibold">
-            TOTAL INCOME: ₱{"10999999999.00"}
+    <div className="rounded-2xl shadow-xl mb-2">
+      <div className="bg-lime-50 rounded-lg flex flex-col lg:flex-row justify-between items-center p-6">
+        <div className="text-3xl text-primary lg:text-4xl font-semibold mb-4 lg:mb-0">
+          <strong>Total Income:</strong>
+          <div className="mt-2 text-2xl font-bold">
+            {loading ? (
+              <span className="animate-pulse">Loading...</span>
+            ) : error ? (
+              <span className="text-red-300">{`Error: ${error.message}`}</span>
+            ) : incomes ? (
+              formatIncome(incomes.total_income.toFixed(2)) // Ensure two decimal places
+            ) : (
+              "₱0.00"
+            )}
           </div>
-
-          {/* Date Range */}
-          <div className="text-md text-white">{`Date: ${getDateRange()}`}</div>
         </div>
-      </div>
 
-      {/* LINE */}
-      <div>
-        <hr className="border-2 border-black" />
-      </div>
-
-      {/* Date Range Selector Component */}
-      <div className="p-6">
-        <DateRangeSelector
-          selectedStartDay={selectedStartDay}
-          selectedStartMonth={selectedStartMonth}
-          selectedStartYear={selectedStartYear}
-          selectedEndDay={selectedEndDay}
-          selectedEndMonth={selectedEndMonth}
-          selectedEndYear={selectedEndYear}
-          onStartDayChange={handleStartDayChange}
-          onStartMonthChange={handleStartMonthChange}
-          onStartYearChange={handleStartYearChange}
-          onEndDayChange={handleEndDayChange}
-          onEndMonthChange={handleEndMonthChange}
-          onEndYearChange={handleEndYearChange}
+        {/* Year and Month Selector Component */}
+        <YearMonthSelector
+          year={year}
+          month={month}
+          onYearChange={setYear}
+          onMonthChange={setMonth}
         />
       </div>
+      {/* 
+      <div>
+        <hr className="border-2 border-green" />
+      </div> */}
 
       {/* INCOME COMPONENTS */}
-      <div className="p-6">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+      <div className=" rounded-lg mt-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
           {/* Monthly Dues */}
-          <div className="p-2">
-            <MonthlyDuesIncome />
+          <div className="">
+            <MonthlyDuesIncome year={year} month={month} />
           </div>
 
           {/* Clearance Income */}
-          <div className="p-2">
-            <ClearanceIncome />
+          <div className="">
+            <ClearanceIncome year={year} month={month} />
           </div>
 
           {/* Amenities Income */}
-          <div className="p-2">
-            <AmenitiesIncome />
+          <div className="">
+            <AmenitiesIncome year={year} month={month} />
           </div>
 
           {/* Stickers Income */}
-          <div className="p-2">
-            <StickersIncome />
+          <div className="">
+            <StickersIncome year={year} month={month} />
           </div>
         </div>
       </div>

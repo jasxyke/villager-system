@@ -16,6 +16,8 @@ import Modal from "react-native-modal";
 import TabsGradient from "../../components/gradients/TabsGradient";
 import useCarStickers from "../../hooks/stickers/useCarStickers"; // Updated import path
 import { router } from "expo-router";
+import DropDownPicker from "react-native-dropdown-picker";
+import { STICKER_TYPES } from "../../data/DataStructures";
 import * as ImagePicker from "expo-image-picker";
 
 const CarStickerForm = ({ setShowCarStickerForm }) => {
@@ -24,6 +26,8 @@ const CarStickerForm = ({ setShowCarStickerForm }) => {
   const [images, setImages] = useState([]);
   const [selectedImage, setSelectedImage] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [vehicleType, setVehicleType] = useState(null); // State for selected permit type
+  const [openVehicleType, setOpenVehicleType] = useState(false);
 
   const { createCarStickerRequest, loading, error, success } = useCarStickers();
 
@@ -106,6 +110,7 @@ const CarStickerForm = ({ setShowCarStickerForm }) => {
             </Text>
           )}
 
+          <Text style={styles.Label}>Car Model</Text>
           <View style={styles.row}>
             <TextInput
               placeholder="Car Model (e.g., Toyota Corolla)"
@@ -115,12 +120,29 @@ const CarStickerForm = ({ setShowCarStickerForm }) => {
             />
           </View>
 
+          <Text style={styles.Label}>Plate Number</Text>
           <View style={styles.row}>
             <TextInput
               placeholder="Plate Number (e.g., ABC-1234)"
               style={styles.input}
               value={plateNumber}
               onChangeText={setPlateNumber}
+            />
+          </View>
+          
+          <View style={styles.stickerRow}>
+            <Text style={styles.dropdownLabel}>Type of Vehicle</Text>
+            <DropDownPicker
+              open={openVehicleType}
+              setOpen={setOpenVehicleType}
+              value={vehicleType}
+              items={STICKER_TYPES}
+              setValue={setVehicleType}
+              placeholder="Select Vehicle Type"
+              containerStyle={styles.dropdownContainer}
+              style={styles.dropdownStyle}
+              dropDownStyle={styles.dropdownList}
+              listMode="SCROLLVIEW"
             />
           </View>
 
@@ -233,18 +255,19 @@ const styles = StyleSheet.create({
     color: colors.white,
   },
   row: {
-    flexDirection: "row",
-    alignItems: "center",
+    display: "row",
     marginBottom: 15,
+    alignItems: "center",
   },
   input: {
     flex: 1,
-    height: 53,
     borderColor: "black",
     borderWidth: 1,
     borderRadius: 5,
     paddingHorizontal: 10,
     backgroundColor: colors.white,
+    height: 50,
+    width: "100%",
   },
   additionalContainer: {
     marginBottom: 20,
@@ -342,6 +365,33 @@ const styles = StyleSheet.create({
   },
   loadingIndicator: {
     marginTop: 20,
+  },
+  dropdownLabel: {
+    fontSize: 16,
+    marginBottom: 5,
+    color: colors.white,
+  },
+  dropdownContainer: {
+    height: 50,
+    width: "100%",
+  },
+  dropdownStyle: {
+    backgroundColor: colors.white,
+    borderColor: colors.primary,
+    borderWidth: 1,
+  },
+  dropdownList: {
+    backgroundColor: colors.white,
+    maxHeight: 200, // Limits the dropdown's height to prevent overflow
+  },
+  stickerRow: {
+    display: "flex",
+    marginBottom: 15,
+  },
+  Label: {
+    fontSize: 16,
+    marginBottom: 5,
+    color: colors.white,
   },
 });
 

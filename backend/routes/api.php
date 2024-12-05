@@ -8,7 +8,9 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\CarStickerRequestController;
 use App\Http\Controllers\ComplaintController;
+use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\HouseController;
+use App\Http\Controllers\IncomeExpensesController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PermitPaymentController;
 use App\Http\Controllers\PermitRequestController;
@@ -157,9 +159,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/settings', [SettingsController::class, 'update']);
     Route::get('/settings/{key}', [SettingsController::class, 'getSetting']);
 
-});
-
-Route::middleware('auth:sanctum')->group(function () {
+    //DASHBOARD
     Route::get('/total-residents', [ResidentController::class, 'getTotalResidents']);
     Route::get('/total-bookings-this-month', [BookingController::class, 'getTotalBookingsThisMonth']);
     Route::get('/overdue-residents-count', [BillController::class, 'countOverdueResidents']);
@@ -167,6 +167,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/most-unpaid', [BillController::class, 'getResidentWithMostUnpaidBills']);
     Route::get('/overdue-residents', [BillController::class, 'getOverdueBills']);
 
+    //INCOME AND EXPENSES
+    Route::apiResource('expenses', ExpenseController::class);
+    Route::post('/income-totals', [IncomeExpensesController::class, 'getTotalIncome']);
+    
 });
 
 //booking routes (avaialable to the public)

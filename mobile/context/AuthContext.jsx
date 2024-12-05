@@ -115,7 +115,7 @@ export function AuthProvider({ children }) {
 
       const responseUser = res.data;
       console.log("user: ");
-      console.log(responseUser);
+      console.log(responseUser.firstname);
 
       if (
         responseUser.resident !== null ||

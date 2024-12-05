@@ -17,6 +17,10 @@ const _layout = () => {
       }}
     >
       <Stack.Screen name="complaint" options={{ title: "Send a Complaint" }} />
+      <Stack.Screen
+        name="announcement"
+        options={{ title: "Announcement Details" }}
+      />
     </Stack>
   );
 };

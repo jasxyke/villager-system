@@ -28,7 +28,11 @@ const Home = () => {
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
     getAnnouncements();
-    refetch(user.resident.id);
+    if (user !== null) {
+      refetch(user.resident.id);
+    } else {
+      console.log("user is null");
+    }
     setTimeout(() => {
       setRefreshing(false);
     }, 1000);

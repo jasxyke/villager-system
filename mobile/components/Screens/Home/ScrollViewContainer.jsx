@@ -12,6 +12,7 @@ import {
   Button,
 } from "react-native";
 import { colors } from "../../../styles/colors";
+import { router } from "expo-router";
 
 const width = 320;
 
@@ -69,9 +70,12 @@ const ScrollViewContainer = ({ data = [], loading = false }) => {
     setIsManualScroll(false);
   };
 
+  // Navigate to the Announcement screen
   const handleItemPress = (item) => {
-    setSelectedItem(item);
-    setModalVisible(true);
+    router.push({
+      pathname: "../home-tab/announcement",
+      params: { announcementId: item.id },
+    });
   };
 
   const renderItem = ({ item, index: itemIndex }) => {
@@ -156,32 +160,6 @@ const ScrollViewContainer = ({ data = [], loading = false }) => {
         decelerationRate="fast"
       />
       <Indicator />
-      {modalVisible && selectedItem && (
-        <Modal
-          transparent={true}
-          animationType="slide"
-          visible={modalVisible}
-          onRequestClose={() => setModalVisible(false)}
-        >
-          <View style={styles.modalContainer}>
-            <View style={styles.modalContent}>
-              <Text style={styles.modalTitle}>{selectedItem.title}</Text>
-              {selectedItem.picture_url && (
-                <Image
-                  source={{ uri: selectedItem.picture_url }}
-                  style={styles.modalImage}
-                />
-              )}
-              <Text style={styles.modalText}>{selectedItem.content}</Text>
-              <Button
-                title="Close"
-                onPress={() => setModalVisible(false)}
-                color={colors.primary}
-              />
-            </View>
-          </View>
-        </Modal>
-      )}
     </View>
   );
 };
@@ -236,35 +214,6 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     backgroundColor: "#1A2902",
     marginHorizontal: 5,
-  },
-  modalContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-  },
-  modalContent: {
-    width: "80%",
-    backgroundColor: colors.greyGreen,
-    borderRadius: 10,
-    padding: 20,
-    alignItems: "center",
-  },
-  modalTitle: {
-    fontSize: 20,
-    fontWeight: "bold",
-    marginBottom: 10,
-  },
-  modalText: {
-    fontSize: 16,
-    textAlign: "center",
-    marginBottom: 20,
-  },
-  modalImage: {
-    width: "100%",
-    height: 200,
-    marginBottom: 20,
-    borderRadius: 10,
   },
 });
 

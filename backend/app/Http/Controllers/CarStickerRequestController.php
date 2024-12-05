@@ -65,9 +65,11 @@ class CarStickerRequestController extends Controller
     public function store(StoreCarStickerRequestRequest $request)
     {
         $user = $request->user();
+        $referenceNumber = CarStickerRequest::generateUniqueReference();
         // Create the car sticker request
         $carStickerRequest = CarStickerRequest::create([
             'resident_id' => $user->resident->id,
+            'reference_number'=> $referenceNumber,
             'car_model' => $request->car_model,
             'car_plate_number' => $request->car_plate_number,
             'sticker_type' => $request->sticker_type, // New field

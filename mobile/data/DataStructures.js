@@ -28,3 +28,9 @@ export const CLEARANCE_TYPES = [
   { label: "Building Clearance", value: "Building Clearance" },
   { label: "Construction Clearance", value: "Construction Clearance" },
 ];
+
+export const STICKER_TYPES = [
+  { label: "Two Wheel", value: "two_wheel" },
+  { label: "Four Wheel", value: "four_wheel" },
+  { label: "Delivery Truck", value: "delivery_truck" },
+];

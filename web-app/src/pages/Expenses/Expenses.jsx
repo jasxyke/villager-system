@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { FaTrash, FaEdit, FaPlusCircle } from "react-icons/fa";
 import MainLogo from "../../components/MainLogo";
 import { FaFile } from "react-icons/fa";
+import Income from "./Income";
+
 const Expenses = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newExpense, setNewExpense] = useState({
@@ -30,48 +32,9 @@ const Expenses = () => {
       </div>
 
       {/* Main Container */}
-      <div className="w-full max-w-4xl bg-green rounded-lg p-6">
-        {/* Income Section */}
-        <div className="mb-6">
-          <h2 className="text-xl text-white font-semibold mb-4">INCOME</h2>
-          <div className="grid grid-cols-2 gap-4">
-            {/* Monthly Dues */}
-            <div className="flex items-center">
-              <div className="text-white font-medium w-1/3">Monthly Dues</div>
-              <div className="w-2/3 p-2 rounded-md bg-greyGreen outline-none">
-                $124
-              </div>
-            </div>
-            {/* Permits */}
-            <div className="flex items-center">
-              <div className="text-white font-medium w-1/3">Clearance</div>
-              <div className="w-2/3 p-2 rounded-md bg-greyGreen outline-none">
-                $124
-              </div>
-            </div>
-            {/* Amenities */}
-            <div className="flex items-center">
-              <div className="text-white font-medium w-1/3">Amenities</div>
-              <div className="w-2/3 p-2 rounded-md bg-greyGreen outline-none">
-                $124
-              </div>
-            </div>
-            {/* Stickers */}
-            <div className="flex items-center">
-              <div className="text-white font-medium w-1/3">Stickers</div>
-              <div className="w-2/3 p-2 rounded-md bg-greyGreen outline-none">
-                $124
-              </div>
-            </div>
-            {/* Total Income */}
-            <div className="flex items-center mt-6">
-              <div className="text-white font-medium w-1/3">Total Income</div>
-              <div className="w-2/3 p-2 rounded-md bg-greyGreen outline-none">
-                $124
-              </div>
-            </div>
-          </div>
-        </div>
+      <div className="w-full max-w-5xl bg-green rounded-lg p-6">
+        {/* INCOME SECTION */}
+        <Income />
 
         {/* Expense Section */}
         <div>

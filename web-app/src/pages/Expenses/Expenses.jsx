@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import { FaTrash, FaEdit, FaPlusCircle } from "react-icons/fa";
 import MainLogo from "../../components/MainLogo";
 import { FaFile } from "react-icons/fa";
+import Income from "./Income";
+import ExpensesContainer from "./Expenses/ExpensesContainer";
+
 const Expenses = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newExpense, setNewExpense] = useState({
@@ -30,98 +33,16 @@ const Expenses = () => {
       </div>
 
       {/* Main Container */}
-      <div className="w-full max-w-4xl bg-green rounded-lg p-6">
-        {/* Income Section */}
-        <div className="mb-6">
-          <h2 className="text-xl text-white font-semibold mb-4">INCOME</h2>
-          <div className="grid grid-cols-2 gap-4">
-            {/* Monthly Dues */}
-            <div className="flex items-center">
-              <div className="text-white font-medium w-1/3">Monthly Dues</div>
-              <div className="w-2/3 p-2 rounded-md bg-greyGreen outline-none">
-                $124
-              </div>
-            </div>
-            {/* Permits */}
-            <div className="flex items-center">
-              <div className="text-white font-medium w-1/3">Clearance</div>
-              <div className="w-2/3 p-2 rounded-md bg-greyGreen outline-none">
-                $124
-              </div>
-            </div>
-            {/* Amenities */}
-            <div className="flex items-center">
-              <div className="text-white font-medium w-1/3">Amenities</div>
-              <div className="w-2/3 p-2 rounded-md bg-greyGreen outline-none">
-                $124
-              </div>
-            </div>
-            {/* Stickers */}
-            <div className="flex items-center">
-              <div className="text-white font-medium w-1/3">Stickers</div>
-              <div className="w-2/3 p-2 rounded-md bg-greyGreen outline-none">
-                $124
-              </div>
-            </div>
-            {/* Total Income */}
-            <div className="flex items-center mt-6">
-              <div className="text-white font-medium w-1/3">Total Income</div>
-              <div className="w-2/3 p-2 rounded-md bg-greyGreen outline-none">
-                $124
-              </div>
-            </div>
-          </div>
+      <div className="w-full max-w-5xl bg-green rounded-lg p-6">
+        {/* INCOME SECTION */}
+        <div>
+          <Income />
         </div>
 
         {/* Expense Section */}
-        <div>
-          <h2 className="text-xl text-white font-semibold mb-4">EXPENSE</h2>
-          <div className="space-y-4">
-            {/* Expense Item */}
-            {[
-              {
-                name: "Salary and Wages",
-                amount: "PHP 500.00",
-                date: "October 21, 2020",
-              },
-              {
-                name: "Transportation",
-                amount: "PHP 1,500.00",
-                date: "October 21, 2020",
-              },
-              {
-                name: "Electricity",
-                amount: "PHP 5,500.00",
-                date: "October 29, 2020",
-              },
-            ].map((expense, index) => (
-              <div
-                key={index}
-                className="flex items-center justify-between bg-[#B5C99A] p-4 rounded-md"
-              >
-                <div>
-                  <p className="font-medium">{expense.name}</p>
-                  <p className="text-sm">{`${expense.amount} | ${expense.date}`}</p>
-                </div>
-                <div className="flex items-center space-x-4">
-                  <button className="text-[#718355]">
-                    <FaEdit />
-                  </button>
-                  <button className="text-red-500">
-                    <FaTrash />
-                  </button>
-                </div>
-              </div>
-            ))}
-
-            {/* Add Expense Button */}
-            <button
-              className="flex items-center space-x-2 text-[#718355] mt-4"
-              onClick={() => setIsModalOpen(true)}
-            >
-              <FaPlusCircle />
-              <span className="font-medium">Add Expenses</span>
-            </button>
+        <div className="mt-10">
+          <div>
+            <ExpensesContainer />
           </div>
         </div>
 
@@ -133,76 +54,6 @@ const Expenses = () => {
           </button>
         </div>
       </div>
-
-      {/* Modal */}
-      {isModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-          <div className="bg-white p-6 rounded-md w-full max-w-sm">
-            <h2 className="text-lg font-semibold mb-4">Add Expense</h2>
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium">
-                  Expense Name
-                </label>
-                <input
-                  type="text"
-                  name="name"
-                  value={newExpense.name}
-                  onChange={handleInputChange}
-                  className="w-full p-2 border rounded-md"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium">Amount</label>
-                <input
-                  type="text"
-                  name="amount"
-                  value={newExpense.amount}
-                  onChange={handleInputChange}
-                  className="w-full p-2 border rounded-md"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium">
-                  Official Receipt Number
-                </label>
-                <input
-                  type="text"
-                  name="receipt"
-                  value={newExpense.amount}
-                  onChange={handleInputChange}
-                  className="w-full p-2 border rounded-md"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium">Date</label>
-                <input
-                  type="date"
-                  name="date"
-                  value={newExpense.date}
-                  onChange={handleInputChange}
-                  className="w-full p-2 border rounded-md"
-                />
-              </div>
-            </div>
-            <div className="flex justify-end space-x-2 mt-4">
-              <button
-                className="px-4 py-2 bg-red-500 text-white rounded-md"
-                onClick={() => setIsModalOpen(false)}
-              >
-                Cancel
-              </button>
-              <button
-                className="px-4 py-2 bg-green text-white rounded-md"
-                onClick={handleAddExpense}
-              >
-                Add
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

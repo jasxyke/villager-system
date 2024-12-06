@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
 import MainLogo from "../../components/MainLogo";
 import MonthlyIncomeTable from "./MonthlyIncomeTable";
 import UnpaidResidentsTable from "./UnpaidResidentsTable";
 import AmenitiesSchedule from "./AmenitiesSchedule";
 import ClearanceRequest from "./ClearanceRequest";
 import StickerRequest from "./StickerRequest";
+import TrialLang from "./TrialLang";
 
 const HomePage = () => {
   return (
@@ -14,21 +15,21 @@ const HomePage = () => {
         <MainLogo />
       </div>
 
-      {/* Income and Expenses Section */}
-      <MonthlyIncomeTable />
+      <div className="bg-white p-6">
+        <div className="mb-5">COMPONENTS</div>
 
-      {/* UNPAID RESIDENTS TABLE */}
-      <UnpaidResidentsTable />
-
-      <div>
-        <div className="flex grid-cols-2">
-          <div className="p-4 bg-green mt-5 text-white">
-            {/* AMENITIES SCHEDULE */}
-            <AmenitiesSchedule />
+        <div className="flex justify-between gap-5">
+          <div className="bg-green p-2 max-w-60 text-white">
+            <TrialLang />
           </div>
-          <div className="p-4 bg-green mt-5 text-white">
-            <ClearanceRequest />
-            <StickerRequest />
+          <div className="bg-green p-2 max-w-60 text-white">
+            helasfagasgasgsags
+          </div>
+          <div className="bg-green p-2 max-w-60 text-white">
+            helasfagasgasgsags
+          </div>
+          <div className="bg-green p-2 max-w-60 text-white">
+            helasfagasgasgsags
           </div>
         </div>
       </div>

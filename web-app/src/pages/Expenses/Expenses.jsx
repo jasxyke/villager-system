@@ -1,14 +1,20 @@
 import React, { useState } from "react";
-import { FaTrash, FaEdit, FaPlusCircle } from "react-icons/fa";
+import { FaTrash, FaEdit, FaPlusCircle, FaFile } from "react-icons/fa";
 import MainLogo from "../../components/MainLogo";
-import { FaFile } from "react-icons/fa";
 import Income from "./Income";
 import ExpensesContainer from "./Expenses/ExpensesContainer";
 import YearMonthSelector from "./YearMonthSelector";
+import useExportIncomeExpenses from "../../hooks/IncomeExpenses/useExportIncomeExpenses";
 
 const Expenses = () => {
   const [year, setYear] = useState(new Date().getFullYear()); // Default to current year
   const [month, setMonth] = useState(new Date().getMonth() + 1); // Default to current month
+
+  const { loading, error, exportReport } = useExportIncomeExpenses(); // Initialize the hook
+
+  const handleGenerateReport = () => {
+    exportReport(year, month);
+  };
 
   return (
     <div className="min-h-screen p-6 flex flex-col items-center">
@@ -30,6 +36,7 @@ const Expenses = () => {
             onMonthChange={setMonth}
           />
         </div>
+
         {/* INCOME SECTION */}
         <div>
           <Income year={year} month={month} />
@@ -44,11 +51,20 @@ const Expenses = () => {
 
         {/* Generate Report Button */}
         <div className="flex justify-end items-center mt-6">
-          <button className="bg-secondary flex items-center bg-mute text-white px-4 py-2 rounded-md">
-            Generate Report (Excel)
+          <button
+            onClick={handleGenerateReport}
+            disabled={loading} // Disable button while loading
+            className={`${
+              loading ? "bg-gray-400 cursor-not-allowed" : "bg-secondary"
+            } flex items-center bg-mute text-white px-4 py-2 rounded-md`}
+          >
+            {loading ? "Generating..." : "Generate Report (Excel)"}
             <FaFile className="text-2xl text-white ml-2" />
           </button>
         </div>
+
+        {/* Error Message */}
+        {error && <p className="text-red-500 mt-4">{error}</p>}
       </div>
     </div>
   );

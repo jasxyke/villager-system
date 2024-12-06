@@ -2,11 +2,28 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\IncomeExpensesReportExport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class IncomeExpensesController extends Controller
 {
+    public function exportIncomeExpenses(Request $request)
+    {
+        $validated = $request->validate([
+            'year' => 'required|integer',
+            'month' => 'required|integer|min:1|max:12',
+        ]);
+
+        $year = $validated['year'];
+        $month = $validated['month'];
+
+        return Excel::download(new IncomeExpensesReportExport($year, $month), 
+                    "Income_Expenses_Report_{$year}_{$month}.xlsx");
+    }
+
+
     public function getTotalIncome(Request $request)
     {
         $validated = $request->validate([

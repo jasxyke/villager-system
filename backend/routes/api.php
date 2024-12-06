@@ -171,7 +171,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('expenses', ExpenseController::class);
     Route::post('/get-expenses', [ExpenseController::class,'getExpenses']);
     Route::post('/income-totals', [IncomeExpensesController::class, 'getTotalIncome']);
-    
+    Route::post('/export-income-expenses', [IncomeExpensesController::class, 'exportIncomeExpenses']);
 });
 
 //booking routes (avaialable to the public)

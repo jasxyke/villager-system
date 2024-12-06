@@ -12,8 +12,9 @@ class Expense extends Model
     protected $fillable = [
         'expense_name',
         'amount',
-        'expense_date',
-        'or_number'
+        'expenses_date',
+        'or_number',
+        'or_date'
     ];
 
     

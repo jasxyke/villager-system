@@ -169,6 +169,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     //INCOME AND EXPENSES
     Route::apiResource('expenses', ExpenseController::class);
+    Route::post('/get-expenses', [ExpenseController::class,'getExpenses']);
     Route::post('/income-totals', [IncomeExpensesController::class, 'getTotalIncome']);
     
 });

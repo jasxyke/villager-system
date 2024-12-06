@@ -8,7 +8,7 @@ const ExpensesList = ({ expenses, handleEdit, handleDelete }) => {
         {expenses.map((expense, index) => (
           <div
             key={index}
-            className="flex justify-between items-center bg-[#B5C99A] text-[#2C3E50] rounded-lg px-4 py-3 shadow-lg border border-[#97A97C]"
+            className="flex justify-between items-center bg-lime-50 text-[#2C3E50] rounded-lg px-4 py-3 shadow-lg border border-[#97A97C]"
           >
             {/* Expense Name */}
             <div className="font-medium text-lg">{expense.expense_name}</div>

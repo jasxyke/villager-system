@@ -1,22 +1,18 @@
-import React, { useState, useEffect } from "react";
-import MonthlyDuesIncome from "./MonthlyDuesIncome/MonthlyDuesIncome";
-import ClearanceIncome from "./ClearanceIncome/ClearanceIncome";
-import AmenitiesIncome from "./AmenitiesIncome/AmenitiesIncome";
-import StickersIncome from "./StickersIncome/StickersIncome";
+import React, { useEffect } from "react";
 import useIncomes from "../../hooks/IncomeExpenses/useIncomes";
-import YearMonthSelector from "./YearMonthSelector";
+import AmenitiesIncome from "./AmenitiesIncome/AmenitiesIncome";
+import ClearanceIncome from "./ClearanceIncome/ClearanceIncome";
+import MonthlyDuesIncome from "./MonthlyDuesIncome/MonthlyDuesIncome";
+import StickersIncome from "./StickersIncome/StickersIncome";
 
-const Income = () => {
-  const [year, setYear] = useState(new Date().getFullYear()); // Default to current year
-  const [month, setMonth] = useState(new Date().getMonth() + 1); // Default to current month
-
+const Income = ({ year, month }) => {
   // Using the useIncomes hook
   const { incomes, loading, error, fetchIncomes } = useIncomes();
 
   // Fetch the incomes when the component mounts or when year/month changes
   useEffect(() => {
-    fetchIncomes({ year, month });
-  }, [year, month, fetchIncomes]);
+    fetchIncomes(year, month);
+  }, [year, month]);
 
   const formatIncome = (income) => {
     return income && !isNaN(income) ? `₱${income}` : "₱0.00";
@@ -26,7 +22,7 @@ const Income = () => {
     <div className="rounded-2xl shadow-xl mb-2">
       <div className="bg-lime-50 rounded-lg flex flex-col lg:flex-row justify-between items-center p-6">
         <div className="text-3xl text-primary lg:text-4xl font-semibold mb-4 lg:mb-0">
-          <strong>Total Income:</strong>
+          Total Income:
           <div className="mt-2 text-2xl font-bold">
             {loading ? (
               <span className="animate-pulse">Loading...</span>
@@ -39,14 +35,6 @@ const Income = () => {
             )}
           </div>
         </div>
-
-        {/* Year and Month Selector Component */}
-        <YearMonthSelector
-          year={year}
-          month={month}
-          onYearChange={setYear}
-          onMonthChange={setMonth}
-        />
       </div>
       {/* 
       <div>
@@ -58,22 +46,34 @@ const Income = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
           {/* Monthly Dues */}
           <div className="">
-            <MonthlyDuesIncome year={year} month={month} />
+            <MonthlyDuesIncome
+              loading={loading}
+              error={error}
+              incomes={incomes}
+            />
           </div>
 
           {/* Clearance Income */}
           <div className="">
-            <ClearanceIncome year={year} month={month} />
+            <ClearanceIncome
+              loading={loading}
+              error={error}
+              incomes={incomes}
+            />
           </div>
 
           {/* Amenities Income */}
           <div className="">
-            <AmenitiesIncome year={year} month={month} />
+            <AmenitiesIncome
+              loading={loading}
+              error={error}
+              incomes={incomes}
+            />
           </div>
 
           {/* Stickers Income */}
           <div className="">
-            <StickersIncome year={year} month={month} />
+            <StickersIncome loading={loading} error={error} incomes={incomes} />
           </div>
         </div>
       </div>

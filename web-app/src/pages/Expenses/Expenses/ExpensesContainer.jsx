@@ -1,16 +1,27 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ExpensesList from "./ExpensesList";
 import useExpenses from "../../../hooks/IncomeExpenses/useExpenses";
+import LoadingContainer from "../../../components/LoadingScreen/LoadingContainer";
 
-const ExpensesContainer = () => {
-  const { expenses, createExpense, fetchExpenses } = useExpenses(); // Destructure necessary functions from the hook
+const ExpensesContainer = ({ year, month }) => {
+  const { expenses, createExpense, fetchExpenses, totalExpenses } =
+    useExpenses(); // Destructure necessary functions from the hook
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({
     expense_name: "",
     amount: "",
-    expenses_date: "", // Correct key name
+    expenses_date: "",
     or_number: "",
+    or_date: "", // Added or_date field
   });
+
+  useEffect(() => {
+    fetchExpenses(year, month, "");
+  }, [year, month]);
+
+  // useEffect(() => {
+  //   fetchExpenses(year, month, "");
+  // }, []);
 
   const [isEditing, setIsEditing] = useState(null); // Track which expense is being edited
 
@@ -30,7 +41,7 @@ const ExpensesContainer = () => {
 
     try {
       await createExpense(formData); // Ensure this sends the correct data
-      fetchExpenses();
+      fetchExpenses(year, month, "");
 
       // Reset form state
       setFormData({
@@ -38,6 +49,7 @@ const ExpensesContainer = () => {
         amount: "",
         expenses_date: "",
         or_number: "",
+        or_date: "",
       });
       setIsModalOpen(false);
     } catch (error) {
@@ -52,7 +64,7 @@ const ExpensesContainer = () => {
     <div>
       <div className="bg-lime-50 rounded-lg flex flex-col lg:flex-row justify-between items-center p-6">
         <div className="text-3xl text-primary lg:text-4xl font-semibold mb-4 lg:mb-0">
-          TOTAL EXPENSES:
+          Total Expenses: ₱{totalExpenses}
         </div>
       </div>
 
@@ -110,7 +122,7 @@ const ExpensesContainer = () => {
                 <input
                   type="date"
                   id="expenses_date"
-                  name="expenses_date" // Ensure this matches the backend's expectation
+                  name="expenses_date"
                   value={formData.expenses_date}
                   onChange={handleInputChange}
                   className="w-full p-2 border border-gray-300 rounded"
@@ -132,7 +144,23 @@ const ExpensesContainer = () => {
                   value={formData.or_number}
                   onChange={handleInputChange}
                   className="w-full p-2 border border-gray-300 rounded"
-                  required
+                />
+              </div>
+
+              <div className="mb-4">
+                <label
+                  className="block text-sm font-medium mb-2"
+                  htmlFor="or_date"
+                >
+                  OR Date
+                </label>
+                <input
+                  type="date"
+                  id="or_date"
+                  name="or_date"
+                  value={formData.or_date}
+                  onChange={handleInputChange}
+                  className="w-full p-2 border border-gray-300 rounded"
                 />
               </div>
 
@@ -159,7 +187,7 @@ const ExpensesContainer = () => {
       {/* Render the ExpensesList component */}
       {expenses.length > 0 && <ExpensesList expenses={expenses} />}
 
-      <div>
+      <div className="mt-5">
         <button onClick={toggleModal} className="bg-mutedGreen p-5 rounded-md">
           Add expenses
         </button>

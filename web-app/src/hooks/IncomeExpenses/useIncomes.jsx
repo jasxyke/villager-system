@@ -6,7 +6,7 @@ const useIncomes = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const fetchIncomes = useCallback(async ({ year, month }) => {
+  const fetchIncomes = useCallback(async (year, month) => {
     setLoading(true);
     setError(null);
 

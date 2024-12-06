@@ -17,7 +17,7 @@ const AmenitiesIncomeDetails = ({ onClose }) => {
   };
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-5xl left-36 relative">
+    <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-5xl left-36">
       <div>
         {/* Back Button */}
         <div className="flex justify-end p-4">

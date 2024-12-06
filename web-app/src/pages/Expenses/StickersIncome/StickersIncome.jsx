@@ -1,19 +1,11 @@
-import React, { useState, useEffect } from "react";
-import useIncomes from "../../../hooks/IncomeExpenses/useIncomes";
-import { FiBook } from "react-icons/fi";
+import React, { useState } from "react";
 import { BiTrendingUp } from "react-icons/bi";
-import { FiArrowRight } from "react-icons/fi";
+import { FiArrowRight, FiBook } from "react-icons/fi";
 import StickerIncomeDetails from "./StickerIncomeDetails";
 
-const StickersIncome = ({ year, month }) => {
+const StickersIncome = ({ loading, incomes, error }) => {
   // Accept year and month as props
   const [showDetails, setShowDetails] = useState(false);
-  const { incomes, loading, error, fetchIncomes } = useIncomes();
-
-  // Fetch the incomes whenever the year or month changes
-  useEffect(() => {
-    fetchIncomes({ year, month });
-  }, [fetchIncomes, year, month]); // Dependency on year and month
 
   const toggleDetails = () => {
     setShowDetails(!showDetails);

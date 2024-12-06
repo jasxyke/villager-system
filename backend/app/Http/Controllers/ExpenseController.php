@@ -3,14 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Expense;
-use Illuminate\Http\Client\Request;
+use Illuminate\Http\Request;
 
 class ExpenseController extends Controller
 {
     /**
      * Display a listing of the expenses.
      */
-    public function index(Request $request)
+    public function getExpenses(Request $request)
     {
         // Get year and month filters
         $year = $request->input('year');
@@ -32,15 +32,25 @@ class ExpenseController extends Controller
         if ($search) {
             $query->where(function ($q) use ($search) {
                 $q->where('expense_name', 'like', '%' . $search . '%')
-                  ->orWhere('or_number', 'like', '%' . $search . '%');
+                ->orWhere('or_number', 'like', '%' . $search . '%');
             });
         }
+
+        // Calculate total expenses
+        $totalExpenses = $query->sum('amount');
 
         // Paginate results
         $expenses = $query->orderBy('expenses_date', 'desc')->paginate(10);
 
-        return response()->json($expenses, 200);
+        // Append total expenses to the response
+        $response = [
+            'expenses' => $expenses,
+            'total_expenses' => $totalExpenses,
+        ];
+
+        return response()->json($response, 200);
     }
+
 
     /**
      * Store a newly created expense in storage.
@@ -52,8 +62,8 @@ class ExpenseController extends Controller
             'expense_name' => 'required|string|max:255',
             'amount' => 'required|numeric|min:0',
             'expenses_date' => 'required|date',
-            'or_date' => 'required|date',
-            'or_number' => 'required|string|max:255',
+            'or_date' => 'nullable|date',
+            'or_number' => 'nullable|string|max:255',
         ]);
 
         // Create the expense

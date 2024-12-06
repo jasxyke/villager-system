@@ -16,8 +16,8 @@ return new class extends Migration
             $table->string('expense_name');
             $table->decimal('amount',10,2);
             $table->date('expenses_date');
-            $table->date('or_date');
-            $table->string('or_number');
+            $table->date('or_date')->nullable();
+            $table->string('or_number')->nullable();
             $table->timestamps();
         });
     }

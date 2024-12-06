@@ -2,17 +2,21 @@ import React, { useEffect, useState } from "react";
 import ExpensesList from "./ExpensesList";
 import useExpenses from "../../../hooks/IncomeExpenses/useExpenses";
 import LoadingContainer from "../../../components/LoadingScreen/LoadingContainer";
+import ReactPaginate from "react-paginate";
 
 const ExpensesContainer = ({ year, month }) => {
   const {
     expenses,
     createExpense,
-    updateExpense, // Add updateExpense function in your hook
+    updateExpense,
     fetchExpenses,
     totalExpenses,
     deleteExpense,
     loading,
+    currentPage,
+    lastPage,
   } = useExpenses();
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({
     expense_name: "",
@@ -21,14 +25,13 @@ const ExpensesContainer = ({ year, month }) => {
     or_number: "",
     or_date: "",
   });
-  const [isEditing, setIsEditing] = useState(null); // Track if editing
-  const [isViewing, setIsViewing] = useState(false); // Track if viewing
+  const [isEditing, setIsEditing] = useState(null);
+  const [isViewing, setIsViewing] = useState(false);
 
   useEffect(() => {
-    fetchExpenses(year, month, "");
-  }, [year, month]);
+    fetchExpenses(year, month, "", currentPage);
+  }, [year, month, currentPage]);
 
-  // Handle form field changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -37,18 +40,15 @@ const ExpensesContainer = ({ year, month }) => {
     }));
   };
 
-  // Handle form submission (Add or Edit)
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       if (isEditing !== null) {
-        // Update existing expense
         await updateExpense(isEditing, formData);
       } else {
-        // Create new expense
         await createExpense(formData);
       }
-      fetchExpenses(year, month, "");
+      fetchExpenses(year, month, "", currentPage);
       resetForm();
     } catch (error) {
       console.error("Error saving expense:", error.response?.data || error);
@@ -77,14 +77,14 @@ const ExpensesContainer = ({ year, month }) => {
       or_number: expenseToEdit.or_number,
       or_date: expenseToEdit.or_date,
     });
-    setIsEditing(id); // Set editing ID
+    setIsEditing(id);
     setIsModalOpen(true);
   };
 
   const handleDelete = async (id) => {
     try {
       await deleteExpense(id);
-      fetchExpenses(year, month, "");
+      fetchExpenses(year, month, "", currentPage);
     } catch (error) {
       console.error("Error deleting expense:", error.response?.data || error);
     }
@@ -103,10 +103,13 @@ const ExpensesContainer = ({ year, month }) => {
     setIsViewing(false);
   };
 
-  // Handle modal toggle
   const toggleModal = () => {
     if (isEditing !== null || isViewing) resetForm();
     setIsModalOpen(!isModalOpen);
+  };
+
+  const handlePageClick = ({ selected }) => {
+    fetchExpenses(year, month, "", selected + 1);
   };
 
   return (
@@ -117,7 +120,6 @@ const ExpensesContainer = ({ year, month }) => {
         </div>
       </div>
 
-      {/* Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50">
           <div className="bg-white p-6 rounded-lg w-96">
@@ -267,7 +269,6 @@ const ExpensesContainer = ({ year, month }) => {
         </div>
       )}
 
-      {/* Expenses List */}
       {loading ? (
         <LoadingContainer />
       ) : (
@@ -281,11 +282,24 @@ const ExpensesContainer = ({ year, month }) => {
         )
       )}
 
-      <div className="mt-5">
-        <button onClick={toggleModal} className="bg-mutedGreen p-5 rounded-md">
-          Add Expense
-        </button>
-      </div>
+      {/* Pagination Controls */}
+      {lastPage > 1 && (
+        <div className="flex justify-center mt-4">
+          <ReactPaginate
+            previousLabel={"Previous"}
+            nextLabel={"Next"}
+            breakLabel={"..."}
+            pageCount={lastPage}
+            onPageChange={handlePageClick}
+            containerClassName={"pagination"}
+            pageClassName={"page-item"}
+            pageLinkClassName={"page-link"}
+            previousClassName={"previous-item"}
+            nextClassName={"next-item"}
+            activeClassName={"active"}
+          />
+        </div>
+      )}
     </div>
   );
 };

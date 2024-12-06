@@ -43,10 +43,6 @@ const ClearanceIncome = ({ loading, incomes, error }) => {
               : "₱0.00"}
           </div>
         )}
-        <div className="flex items-center text-green-500 text-xs font-medium bg-green-100 px-1 py-1 rounded-lg">
-          <BiTrendingUp className="mr-1 text-sm" />
-          100.00%
-        </div>
       </div>
 
       <hr className="my-3 border-t border-gray-300" />

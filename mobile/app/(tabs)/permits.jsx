@@ -28,12 +28,12 @@ const Permits = () => {
       <AppHeader />
       <View style={styles.content}>
         <>
-          <Text style={styles.title}>House Permits</Text>
+          <Text style={styles.title}>Building Clearance</Text>
           <TouchableOpacity
             style={[styles.button]}
             onPress={handleShowPermitForm}
           >
-            <Text style={styles.buttonText}>Request a Permit</Text>
+            <Text style={styles.buttonText}>Request a Clearance</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -51,7 +51,7 @@ const Permits = () => {
             style={[styles.button]}
             onPress={handleShowCurrentPermit}
           >
-            <Text style={styles.buttonText}>Current Permits</Text>
+            <Text style={styles.buttonText}>Current Clearances</Text>
           </TouchableOpacity>
         </>
       </View>

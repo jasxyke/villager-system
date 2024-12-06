@@ -73,7 +73,7 @@ const MainLayout = () => {
                 icon={PERMITS}
                 color={color}
                 focused={focused}
-                name={"Permits"}
+                name={"Clearances"}
               />
             ),
           }}

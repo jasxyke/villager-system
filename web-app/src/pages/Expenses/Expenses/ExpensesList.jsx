@@ -1,14 +1,25 @@
 import React from "react";
 import { FaEdit, FaTrashAlt } from "react-icons/fa";
 
-const ExpensesList = ({ expenses, handleEdit, handleDelete }) => {
+const ExpensesList = ({ expenses, handleView, handleEdit, handleDelete }) => {
+  const confirmDelete = (id) => {
+    if (window.confirm("Are you sure you want to delete this expense?")) {
+      handleDelete(id);
+    }
+  };
+
+  const handleButtonClick = (e) => {
+    e.stopPropagation(); // Prevents the row's onClick from firing
+  };
+
   return (
     <div className="mt-6">
       <div className="space-y-4">
         {expenses.map((expense, index) => (
           <div
             key={index}
-            className="flex justify-between items-center bg-lime-50 text-[#2C3E50] rounded-lg px-4 py-3 shadow-lg border border-[#97A97C]"
+            onClick={() => handleView(expense.id)}
+            className="flex justify-between items-center bg-lime-50 text-[#2C3E50] rounded-lg px-4 py-3 shadow-lg border border-[#97A97C] cursor-pointer"
           >
             {/* Expense Name */}
             <div className="font-medium text-lg">{expense.expense_name}</div>
@@ -21,18 +32,24 @@ const ExpensesList = ({ expenses, handleEdit, handleDelete }) => {
             {/* Action Buttons */}
             <div className="flex space-x-4">
               <button
-                onClick={() => handleEdit(index)}
-                className="p-2 text-[#FFEB3B] hover:text-[#F9D835]"
+                onClick={(e) => {
+                  handleButtonClick(e);
+                  handleEdit(expense.id);
+                }}
+                className="p-4 text-[#FFEB3B] hover:text-[#F9D835]"
                 aria-label="Edit Expense"
               >
-                <FaEdit size={20} />
+                <FaEdit size={25} />
               </button>
               <button
-                onClick={() => handleDelete(index)}
-                className="p-2 text-[#E74C3C] hover:text-[#C0392B]"
+                onClick={(e) => {
+                  handleButtonClick(e);
+                  confirmDelete(expense.id);
+                }}
+                className="p-4 text-[#E74C3C] hover:text-[#C0392B]"
                 aria-label="Delete Expense"
               >
-                <FaTrashAlt size={20} />
+                <FaTrashAlt size={25} />
               </button>
             </div>
           </div>

@@ -102,8 +102,8 @@ class ExpenseController extends Controller
             'expense_name' => 'sometimes|required|string|max:255',
             'amount' => 'sometimes|required|numeric|min:0',
             'expenses_date' => 'sometimes|required|date',
-            'or_date' => 'sometimes|required|date',
-            'or_number' => 'sometimes|required|string|max:255',
+            'or_date' => 'sometimes|nullable|date',
+            'or_number' => 'sometimes|nullable|string|max:255',
         ]);
 
         // Update the expense

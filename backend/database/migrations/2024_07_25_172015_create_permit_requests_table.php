@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('reference_number', 20)->unique();
             $table->string('purpose',300);
             // $table->decimal('floor_size',8,2)->nullable()->default(0);
-            $table->enum('permit_status', ['pending', 'rejected', 'to_pay','in_progress','to_claim','claimed','extension_request', 'extended']); // Status of the permit request
+            $table->enum('permit_status', ['pending', 'rejected', 'to_pay','in_progress','to_claim','claimed']); // Status of the permit request
             $table->decimal('processing_fee',6,2)->nullable();
             $table->decimal('permit_fee',6,2)->nullable();
             $table->date('expect_start_date'); 

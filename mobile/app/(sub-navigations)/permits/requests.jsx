@@ -10,6 +10,7 @@ import { colors } from "../../../styles/colors";
 import TabsGradient from "../../../components/gradients/TabsGradient";
 import { useAuthContext } from "../../../context/AuthContext";
 import useFetchPermitRequests from "../../../hooks/permits/useFetchPermitRequests";
+import { formatName } from "../../../utils/DataFormatter";
 
 const PermitRequests = () => {
   const { permitRequests, loading, error, refetch } = useFetchPermitRequests();
@@ -36,15 +37,12 @@ const PermitRequests = () => {
             </Text>
           )} */}
           <Text style={styles.cardText}>
-            <Text style={styles.cardLabel}>Status:</Text> {item.permit_status}
+            <Text style={styles.cardLabel}>Status:</Text>{" "}
+            {formatName(item.permit_status)}
           </Text>
           <Text style={styles.cardText}>
             <Text style={styles.cardLabel}>Application Date:</Text>{" "}
             {item.application_date}
-          </Text>
-          <Text style={styles.cardText}>
-            <Text style={styles.cardLabel}>Approval Date:</Text>{" "}
-            {item.approval_date || "N/A"}
           </Text>
         </View>
       </View>

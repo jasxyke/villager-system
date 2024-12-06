@@ -53,7 +53,7 @@ class CarStickerRequestController extends Controller
 
         // Fetch pending car sticker requests
         $requests = CarStickerRequest::where('resident_id', $user->resident->id)
-            ->where('request_status', 'pending')
+            ->whereIn('request_status', ['pending','rejected'])
             ->get();
 
         return response()->json($requests);

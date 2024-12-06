@@ -115,7 +115,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/permit-requests', [PermitRequestController::class, 'store']);
     Route::get('/permits/resident/{residentId}', [PermitRequestController::class, 'getPermitRequestsByResident']);
     Route::get('/payments/resident/{residentId}', [PermitPaymentController::class, 'getPaymentHistory']);
-
+    Route::get('/approved-permits/{residentId}', [PermitRequestController::class, 'getApprovedRequests']);
+    //permit but for admin
     Route::get('/permit-requests/{status}', [PermitRequestController::class, 'getPermitRequestsByStatus']);
     Route::post('/permit-requests/{id}/approve',[PermitRequestController::class, 'approve']);
     Route::post('/permit-requests/{id}/reject',[PermitRequestController::class, 'reject']);

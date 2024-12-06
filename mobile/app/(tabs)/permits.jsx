@@ -51,7 +51,7 @@ const Permits = () => {
             style={[styles.button]}
             onPress={handleShowCurrentPermit}
           >
-            <Text style={styles.buttonText}>Active Clearances</Text>
+            <Text style={styles.buttonText}>Approved Clearances</Text>
           </TouchableOpacity>
         </>
       </View>

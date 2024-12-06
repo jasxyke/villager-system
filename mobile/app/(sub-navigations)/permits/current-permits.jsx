@@ -1,104 +1,93 @@
-import React, { useState, useEffect } from "react";
 import { router } from "expo-router";
+import React, { useEffect, useState } from "react";
 import {
+  StyleSheet,
   View,
   Text,
-  StyleSheet,
-  FlatList,
   TouchableOpacity,
+  ActivityIndicator,
+  FlatList,
 } from "react-native";
-import { colors } from "../../../styles/colors";
 import TabsGradient from "../../../components/gradients/TabsGradient";
 import { useAuthContext } from "../../../context/AuthContext";
-import useFetchPaymentHistory from "../../../hooks/permits/usePaymentHistory";
+import { colors } from "../../../styles/colors";
+import useFetchApprovedRequests from "../../../hooks/permits/useFetchApprovedRequests";
+import { formatName } from "../../../utils/DataFormatter";
 
 const CurrentPermit = () => {
-  const { payments, loading, error, refetch, message } =
-    useFetchPaymentHistory();
   const { user } = useAuthContext();
+  const { approvedRequests, loading, error, refetch } =
+    useFetchApprovedRequests(); // Use the hook
+  const [refreshing, setRefreshing] = useState(false);
 
-  // Dummy permit data for demonstration
-  const dummyPermits = [
-    { id: 1, type: "Building Permit", status: "Approved", amount: "5000" },
-    {
-      id: 2,
-      type: "Construction Supply Permit",
-      status: "Pending",
-      amount: "2000",
-    },
-    { id: 3, type: "Car Sticker", status: "Rejected", amount: "500" },
-  ];
-
-  const handleShowDetailedView = (permit) => {
-    console.log("Selected Permit:", permit);
-    router.push("./ClearanceDetailsView"); // Navigate to details page
-  };
-
+  // Fetch approved requests for the current user when component mounts
   useEffect(() => {
-    if (user) {
-      refetch(user.resident.id); // Fetch payment history when the component mounts
+    if (user?.resident.id) {
+      refetch(user.resident.id);
     }
   }, [user]);
 
-  const renderPaymentItem = ({ item }) => (
-    <TouchableOpacity
-      style={styles.card}
-      onPress={() => handleShowDetailedView(item)} // Demonstrating touchability
-    >
-      <Text style={styles.cardTitle}>{item.payment_date}</Text>
-      <View style={styles.cardContent}>
-        <Text style={styles.cardText}>
-          <Text style={styles.cardLabel}>Status:</Text> {item.payment_status}
-        </Text>
-        <Text style={styles.cardText}>
-          <Text style={styles.cardLabel}>Amount:</Text> PHP {item.amount}
-        </Text>
-      </View>
-    </TouchableOpacity>
-  );
+  const handleShowDetailedView = (permit) => {
+    console.log("Selected Permit:", permit);
+    router.push("./ClearanceDetailsView"); // Navigate to the details page
+  };
 
-  const renderDummyPermitItem = ({ item }) => (
-    <TouchableOpacity
-      style={styles.card}
-      onPress={() => handleShowDetailedView(item)}
-    >
-      <Text style={styles.cardTitle}>{item.type}</Text>
-      <View style={styles.cardContent}>
-        <Text style={styles.cardText}>
-          <Text style={styles.cardLabel}>Status:</Text> {item.status}
-        </Text>
-        <Text style={styles.cardText}>
-          <Text style={styles.cardLabel}>Amount:</Text> PHP {item.amount}
-        </Text>
+  const handleRefresh = async () => {
+    setRefreshing(true);
+    if (user?.resident.id) {
+      await refetch(user.resident.id); // Refetch the data
+    }
+    setRefreshing(false);
+  };
+
+  if (error) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.errorText}>{error}</Text>
       </View>
-    </TouchableOpacity>
-  );
+    );
+  }
 
   return (
     <View style={{ flex: 1 }}>
       <TabsGradient />
       <View style={styles.container}>
-        <Text style={styles.sectionTitle}>Payment History</Text>
+        {/* FlatList for scrollable list with pull-to-refresh */}
         {loading ? (
-          <Text>Loading...</Text>
-        ) : error ? (
-          <Text>{error}</Text>
+          <ActivityIndicator size="large" color={colors.green} />
+        ) : approvedRequests.length === 0 ? (
+          <Text>No approved permits found.</Text>
         ) : (
           <FlatList
-            data={payments} // Using real payment data here
-            renderItem={renderPaymentItem}
-            keyExtractor={(item, index) => `payment-${index}`}
-            contentContainerStyle={styles.paymentHistoryList}
+            data={approvedRequests}
+            renderItem={({ item }) => (
+              <TouchableOpacity
+                key={item.id}
+                style={styles.card}
+                onPress={() => handleShowDetailedView(item)}
+              >
+                <Text style={styles.cardTitle}>{item.purpose}</Text>
+                <View style={styles.cardContent}>
+                  <Text style={styles.cardText}>
+                    <Text style={styles.cardLabel}>Reference Number:</Text>{" "}
+                    {item.reference_number}
+                  </Text>
+                  <Text style={styles.cardText}>
+                    <Text style={styles.cardLabel}>Permit Type:</Text>{" "}
+                    {item.permit_type}
+                  </Text>
+                  <Text style={styles.cardText}>
+                    <Text style={styles.cardLabel}>Status:</Text>{" "}
+                    {formatName(item.permit_status)}
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            )}
+            keyExtractor={(item) => item.id.toString()}
+            refreshing={refreshing}
+            onRefresh={handleRefresh} // Pull-to-refresh functionality
           />
         )}
-
-        <Text style={styles.sectionTitle}>Permits</Text>
-        <FlatList
-          data={dummyPermits} // Dummy permits for demonstration
-          renderItem={renderDummyPermitItem}
-          keyExtractor={(item) => item.id.toString()}
-          contentContainerStyle={styles.paymentHistoryList}
-        />
       </View>
     </View>
   );
@@ -148,6 +137,11 @@ const styles = StyleSheet.create({
   },
   paymentHistoryList: {
     marginBottom: 10,
+  },
+  errorText: {
+    color: colors.red,
+    textAlign: "center",
+    fontSize: 16,
   },
 });
 

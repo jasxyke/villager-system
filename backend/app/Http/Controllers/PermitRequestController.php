@@ -68,6 +68,7 @@ class PermitRequestController extends Controller
         try {
             // Fetch permit requests for the given resident ID
             $permitRequests = PermitRequest::where('resident_id', $residentId)
+                ->whereIn('permit_status',['pending','rejected'])
                 // ->with('permitDocuments')  // Include related documents
                 ->get();
 
@@ -83,6 +84,23 @@ class PermitRequestController extends Controller
                 'error' => $e->getMessage(),
             ], 500);
         }
+    }
+
+    public function getApprovedRequests($residentId)
+    {
+
+        $relationships = ['resident', 'resident.user', 
+        'resident.house', 'permitDocuments', 'permitPayments'];
+
+
+        // Fetch all the requests of the user excluding 'pending' and 'rejected' statuses
+        $requests = PermitRequest::with($relationships)
+            ->where('resident_id', $residentId)
+            ->whereNotIn('permit_status', ['pending', 'rejected'])  // Exclude pending and rejected
+            ->orderBy('approval_date', 'desc')  // Sort by newest first
+            ->get();
+
+        return response()->json($requests);
     }
 
     public function getPermitRequestsByStatus($status)

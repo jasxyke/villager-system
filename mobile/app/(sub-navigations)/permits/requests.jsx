@@ -51,17 +51,6 @@ const PermitRequests = () => {
     );
   };
 
-  // Conditional rendering based on loading, error, and data states
-  if (loading) {
-    return (
-      <ActivityIndicator
-        size="large"
-        color={colors.primary}
-        style={{ marginTop: 20 }}
-      />
-    );
-  }
-
   if (error) {
     return (
       <Text style={{ color: "red", textAlign: "center", marginTop: 20 }}>
@@ -74,12 +63,22 @@ const PermitRequests = () => {
     <View style={{ flex: 1 }}>
       <TabsGradient />
       <View style={styles.container}>
-        <FlatList
-          data={permitRequests}
-          renderItem={renderItem}
-          keyExtractor={(item, index) => `permit-${index}`}
-          contentContainerStyle={styles.permitRequestsList}
-        />
+        {loading ? (
+          <ActivityIndicator
+            size="large"
+            color={colors.primary}
+            style={{ marginTop: 20 }}
+          />
+        ) : permitRequests.length === 0 ? (
+          <Text>No pending clearance requests found.</Text>
+        ) : (
+          <FlatList
+            data={permitRequests}
+            renderItem={renderItem}
+            keyExtractor={(item, index) => `permit-${index}`}
+            contentContainerStyle={styles.permitRequestsList}
+          />
+        )}
       </View>
     </View>
   );

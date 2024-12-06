@@ -28,7 +28,7 @@ const Permits = () => {
       <AppHeader />
       <View style={styles.content}>
         <>
-          <Text style={styles.title}>Building Clearance</Text>
+          <Text style={styles.title}>Clearances</Text>
           <TouchableOpacity
             style={[styles.button]}
             onPress={handleShowPermitForm}
@@ -51,7 +51,7 @@ const Permits = () => {
             style={[styles.button]}
             onPress={handleShowCurrentPermit}
           >
-            <Text style={styles.buttonText}>Current Clearances</Text>
+            <Text style={styles.buttonText}>Active Clearances</Text>
           </TouchableOpacity>
         </>
       </View>

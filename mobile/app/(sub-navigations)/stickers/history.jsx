@@ -39,16 +39,6 @@ const PaymentHistory = () => {
     </View>
   );
 
-  if (loading) {
-    return (
-      <ActivityIndicator
-        size="large"
-        color={colors.primary}
-        style={{ marginTop: 20 }}
-      />
-    );
-  }
-
   if (error) {
     return (
       <Text style={{ color: "red", textAlign: "center", marginTop: 20 }}>
@@ -61,7 +51,13 @@ const PaymentHistory = () => {
     <View style={{ flex: 1 }}>
       <TabsGradient />
       <View style={styles.container}>
-        {payments.length === 0 ? (
+        {loading ? (
+          <ActivityIndicator
+            size="large"
+            color={colors.primary}
+            style={{ marginTop: 20 }}
+          />
+        ) : payments.length === 0 ? (
           <Text style={styles.noPaymentsText}>No payments found.</Text>
         ) : (
           <FlatList

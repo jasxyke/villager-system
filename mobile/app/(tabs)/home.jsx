@@ -45,6 +45,10 @@ const Home = () => {
     }
   }, [user]);
 
+  useEffect(() => {
+    getAnnouncements();
+  }, []);
+
   if (!user) {
     return (
       <View style={styles.centered}>
@@ -82,10 +86,7 @@ const Home = () => {
             announcements={announcements}
           />
         ) : announcements.length === 0 ? (
-          <LoadingEmptyAnnouncements
-            loading={loading}
-            announcements={announcements}
-          />
+          <Text>No Announcements</Text>
         ) : (
           <ScrollViewContainer data={announcements} />
         )}

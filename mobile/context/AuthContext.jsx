@@ -57,7 +57,10 @@ export function AuthProvider({ children }) {
       console.log("login");
       console.log(error.response.data.message);
       const token = await getItemAsync("API_TOKEN");
-      if (token) await deleteItemAsync("API_TOKEN");
+      if (token) {
+        await deleteItemAsync("API_TOKEN");
+        setUser(null);
+      }
       onError(error.response.data.message);
       setLoading(false);
     } finally {
@@ -134,6 +137,7 @@ export function AuthProvider({ children }) {
       console.log("response user: " + responseUser.resident.id);
     } catch (error) {
       console.log("user error");
+      setUser(null);
       await deleteItemAsync("API_TOKEN");
       router.navigate("../sign-in");
       console.log(error?.response?.data?.message);

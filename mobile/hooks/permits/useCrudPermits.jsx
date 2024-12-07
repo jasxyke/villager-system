@@ -16,8 +16,8 @@ const useCrudPermits = () => {
     try {
       const response = await axiosClient.get(`/get-permit-request/${id}`);
       setData(response.data);
-      console.log("permit request:");
-      console.log(response.data);
+      //   console.log("permit request:");
+      //   console.log(response.data);
     } catch (err) {
       setError(
         err.response?.data?.error ||

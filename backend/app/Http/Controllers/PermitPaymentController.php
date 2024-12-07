@@ -101,13 +101,17 @@ class PermitPaymentController extends Controller
 
         // Generate the receipt as a PDF
         $dompdf = new Dompdf();
-        $dompdf->loadHtml(view('invoices.permit_receipt', compact('payment', 'permitRequest', 'resident', 'headerData'))->render());
+        $dompdf->loadHtml(view('invoices.clearance_receipt', compact('payment', 'permitRequest', 'resident', 'headerData'))->render());
         $dompdf->setPaper('A4', 'portrait');
         $dompdf->render();
 
-        // Stream the PDF to the browser
-        return $dompdf->stream('permit_payment_receipt.pdf');
+        // Return the generated PDF for download
+        return response($dompdf->output(), 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'attachment; filename="permit_payment_receipt.pdf"',
+        ]);
     }
+
 
     public function getPaymentHistory($residentId)
     {

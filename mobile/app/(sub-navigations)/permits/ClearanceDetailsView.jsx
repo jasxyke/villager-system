@@ -98,8 +98,6 @@ const ClearanceDetailedView = ({ onRequestExtension }) => {
     );
   }
 
-  console.log(permitDetails);
-
   return (
     <View style={styles.container}>
       <TabsGradient />
@@ -228,9 +226,6 @@ const ClearanceDetailedView = ({ onRequestExtension }) => {
               No payments have been made yet.
             </Text>
           )}
-          {downloadError && (
-            <Text style={styles.errorText}>Error: {downloadError}</Text>
-          )}
         </View>
 
         {/* Supporting Documents Section */}
@@ -260,7 +255,9 @@ const ClearanceDetailedView = ({ onRequestExtension }) => {
           {permitDetails?.permit_payments?.length > 0 && (
             <View style={styles.buttonWrapper}>
               <Button
-                onPress={() => downloadReceipt(permit_payments[0].id)}
+                onPress={() =>
+                  downloadReceipt(permitDetails?.permit_payments[0].id)
+                }
                 title="Download Receipt"
                 disabled={downloading}
                 color={colors.primary}

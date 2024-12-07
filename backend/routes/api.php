@@ -126,7 +126,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     //permit payments
     Route::post('/permit-payments/add-payment', [PermitPaymentController::class, 'addPayment']);
-
+    Route::get('/permit-payments/download-receipt/{paymentId}', [PermitPaymentController::class, 'downloadReceipt']);
+    
     //car sticker routes
     Route::get('/sticker-payments', [StickerPaymentController::class, 'getPaymentHistory']);
     Route::post('/sticker-payments/add-payment', [StickerPaymentController::class, 'addPayment']);

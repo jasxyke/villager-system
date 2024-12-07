@@ -252,7 +252,7 @@ const ClearanceDetailedView = ({ onRequestExtension }) => {
             />
           </View>
 
-          {permitDetails?.permit_payments?.length > 0 && (
+          {/* {permitDetails?.permit_payments?.length > 0 && (
             <View style={styles.buttonWrapper}>
               <Button
                 onPress={() =>
@@ -263,7 +263,7 @@ const ClearanceDetailedView = ({ onRequestExtension }) => {
                 color={colors.primary}
               />
             </View>
-          )}
+          )} */}
         </View>
       </ScrollView>
 

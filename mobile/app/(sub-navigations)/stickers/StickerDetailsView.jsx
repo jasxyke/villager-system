@@ -111,19 +111,22 @@ const StickerDetailedView = ({ stickerDetails }) => {
           <View style={styles.documentContainer}>
             {stickerDetails?.sticker_documents?.map((doc, index) => (
               <View key={index} style={styles.documentBox}>
-                <Image source={{ uri: doc.document_url }} style={styles.documentImage} />
+                <Image
+                  source={{ uri: doc.document_url }}
+                  style={styles.documentImage}
+                />
               </View>
             ))}
           </View>
         </View>
-        <View style={styles.buttonContainer}>
+        {/* <View style={styles.buttonContainer}>
           <View style={styles.buttonWrapper}>
             <Button
               title="Download Reciept"
               color={colors.primary}
             />
           </View>
-          </View>
+          </View> */}
       </ScrollView>
     </View>
   );

@@ -1,97 +1,81 @@
 import { useState, useCallback } from "react";
-import { Alert, Platform } from "react-native";
-import * as FileSystem from "expo-file-system";
-import * as MediaLibrary from "expo-media-library";
-import * as Sharing from "expo-sharing";
 import axiosClient from "../../utils/axios";
-
-// Helper to convert ArrayBuffer to Base64
-const arrayBufferToBase64 = (buffer) => {
-  let binary = "";
-  const bytes = new Uint8Array(buffer);
-  const len = bytes.byteLength;
-  for (let i = 0; i < len; i++) {
-    binary += String.fromCharCode(bytes[i]);
-  }
-  return btoa(binary);
-};
+import * as FileSystem from "expo-file-system";
+import * as Sharing from "expo-sharing";
+import { Alert } from "react-native";
 
 const useDownloadPermitReceipt = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [fileUri, setFileUri] = useState(null);
 
+  /**
+   * Fetch the receipt URL and download the receipt.
+   */
   const downloadReceipt = useCallback(async (paymentId) => {
     setLoading(true);
     setError(null);
 
     try {
+      // Fetch the URL from the backend
       const response = await axiosClient.get(
-        `/permit-payments/download-receipt/${paymentId}`,
-        {
-          responseType: "arraybuffer", // Get binary data
-        }
+        `/permit-payments/download-receipt/${paymentId}`
       );
+      const receiptUrl = response.data.url;
 
-      // Convert ArrayBuffer to Base64
-      const base64Data = arrayBufferToBase64(response.data);
+      if (receiptUrl) {
+        // Define the local path where the receipt will be saved
+        const localUri =
+          FileSystem.documentDirectory +
+          `permit_payment_receipt_${paymentId}.pdf`;
 
-      let fileUri;
-
-      if (Platform.OS === "android") {
-        // Request permission to write to the Downloads folder
-        const { status } = await MediaLibrary.requestPermissionsAsync();
-        if (status !== "granted") {
-          throw new Error("Permission to access media library is required.");
-        }
-
-        // Define the path for the Downloads folder
-        const downloadsDir = FileSystem.documentDirectory + "downloads/";
-
-        // Ensure the Downloads folder exists
-        await FileSystem.makeDirectoryAsync(downloadsDir, {
-          intermediates: true,
-        });
-
-        // Set the file path
-        fileUri = downloadsDir + `permit_payment_receipt_${paymentId}.pdf`;
-
-        // Write the Base64 data to the file in the Downloads folder
-        await FileSystem.writeAsStringAsync(fileUri, base64Data, {
-          encoding: FileSystem.EncodingType.Base64,
-        });
-
-        // Add 'file:///' prefix to the fileUri (required for Android)
-        const androidFileUri = "file://" + fileUri;
-
-        // Now move the file to the public Downloads directory
-        const asset = await MediaLibrary.createAssetAsync(androidFileUri);
-        await MediaLibrary.createAlbumAsync("Download", asset, false);
-
-        Alert.alert(
-          "Receipt Saved",
-          "The receipt has been saved to the Downloads folder."
+        // Download the file to local storage
+        const downloadResumable = FileSystem.createDownloadResumable(
+          receiptUrl,
+          localUri
         );
-      } else if (Platform.OS === "ios") {
-        // Use Sharing API to allow the user to save or share the file
-        const fileUri = `${FileSystem.documentDirectory}permit_payment_receipt_${paymentId}.pdf`;
+        const result = await downloadResumable.downloadAsync();
 
-        // Write the Base64 data to the file in the document directory
-        await FileSystem.writeAsStringAsync(fileUri, base64Data, {
-          encoding: FileSystem.EncodingType.Base64,
-        });
+        // Store the file URI to use later (e.g., opening or sharing the file)
+        setFileUri(result.uri);
 
-        // Share the file using Sharing API (to iCloud or Files)
+        // Show success alert with the file URI
+        // Alert.alert(
+        //   "Download Successful",
+        //   `Receipt downloaded to: ${result.uri}`,
+        //   [{ text: "OK" }]
+        // );
+
+        // Now copy the file to the cache directory for sharing
+        const publicUri =
+          FileSystem.cacheDirectory + `permit_payment_receipt_${paymentId}.pdf`;
+        await FileSystem.copyAsync({ from: result.uri, to: publicUri });
+
+        // Ensure that the file is accessible and then share it
         if (await Sharing.isAvailableAsync()) {
-          await Sharing.shareAsync(fileUri);
+          await Sharing.shareAsync(publicUri, {
+            mimeType: "application/pdf", // Explicitly set the MIME type for PDF
+          });
         } else {
-          throw new Error("Sharing is not available on this device.");
+          Alert.alert(
+            "Sharing Not Available",
+            "Your device does not support sharing.",
+            [{ text: "OK" }]
+          );
         }
+      } else {
+        setError("Receipt URL not found.");
+        Alert.alert("Error", "Receipt URL not found.", [{ text: "OK" }]);
       }
     } catch (err) {
-      console.error(err.response?.data?.message || err.message);
       setError(
-        err.response?.data?.message ||
+        err.response?.data?.error ||
           "An error occurred while downloading the receipt."
+      );
+      Alert.alert(
+        "Download Failed",
+        err.response?.data?.error || "Something went wrong.",
+        [{ text: "OK" }]
       );
     } finally {
       setLoading(false);
@@ -101,6 +85,7 @@ const useDownloadPermitReceipt = () => {
   return {
     loading,
     error,
+    fileUri,
     downloadReceipt,
   };
 };

@@ -15,6 +15,8 @@ import DateTimePickerModal from "react-native-modal-datetime-picker"; // Import 
 import { colors } from "../../../styles/colors";
 import TabsGradient from "../../../components/gradients/TabsGradient";
 
+
+
 const ClearanceDetailedView = ({ permitDetails, onRequestExtension }) => {
   const [extensionReason, setExtensionReason] = useState("");
   const [extensionEndDate, setExtensionEndDate] = useState(new Date());
@@ -53,33 +55,35 @@ const ClearanceDetailedView = ({ permitDetails, onRequestExtension }) => {
   return (
     <View style={styles.container}>
       <TabsGradient />
-      <Text style={styles.modalTitle}>Previous Requested Permit</Text>
+      <Text style={styles.modalTitle}>Detailed Permit Information</Text>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
+
+        {/* Applicant Details Section */}
+        <View style={styles.detailSection}>
+          <Text style={styles.detailTitle}>Applicant Details</Text>
+          {[
+            { label: "Name", value: permitDetails?.name },
+            { label: "Contact Number", value: permitDetails?.phoneNumber },
+            { label: "Email", value: permitDetails?.emailAddress },
+          ].map(({ label, value }) => (
+            <View key={label} style={styles.detailRow}>
+              <Text style={styles.detailLabel}>{label}:</Text>
+              <Text style={styles.detailValue}>{value || "N/A"}</Text>
+            </View>
+          ))}
+        </View>
+        
+        {/* Requested Details Section */}
         <View style={styles.detailSection}>
           <Text style={styles.detailTitle}>Requested Details</Text>
           {[
-            {
-              label: "Description of Request",
-              value: permitDetails?.descriptionOfRequest,
-            },
-            {
-              label: "Reason for Request",
-              value: permitDetails?.reasonForRequest,
-            },
-            {
-              label: "Requested Permit",
-              value: permitDetails?.requestedPermit,
-            },
-            { label: "Permit Purpose", value: permitDetails?.phoneNumber },
-            { label: "Requested Date", value: permitDetails?.startDate },
-            {
-              label: "Expected Starting Date",
-              value: permitDetails?.startDate,
-            },
-            {
-              label: "Expected Completion Date",
-              value: permitDetails?.endDate,
-            },
+            { label: "Permit Type", value: permitDetails?.descriptionOfRequest },
+            { label: "Permit Description", value: permitDetails?.descriptionOfRequest },
+            { label: "Status", value: permitDetails?.reasonForRequest },
+            { label: "Approval Date", value: permitDetails?.approvalDate },
+            { label: "Requested Date", value: permitDetails?.requestedDate },
+            { label: "Expected Starting Date", value: permitDetails?.startDate },
+            { label: "Expected Completion Date", value: permitDetails?.endDate },
           ].map(({ label, value }) => (
             <View key={label} style={styles.detailRow}>
               <Text style={styles.detailLabel}>{label}:</Text>
@@ -88,6 +92,22 @@ const ClearanceDetailedView = ({ permitDetails, onRequestExtension }) => {
           ))}
         </View>
 
+        {/* Property Information Section */}
+        <View style={styles.detailSection}>
+          <Text style={styles.detailTitle}>Property Information</Text>
+          {[
+            { label: "Property Address", value: permitDetails?.propertyAddress },
+            { label: "Lot Number", value: permitDetails?.lotNumber },
+            { label: "Block Number", value: permitDetails?.blockNumber },
+          ].map(({ label, value }) => (
+            <View key={label} style={styles.detailRow}>
+              <Text style={styles.detailLabel}>{label}:</Text>
+              <Text style={styles.detailValue}>{value || "N/A"}</Text>
+            </View>
+          ))}
+        </View>
+
+        {/* Fees and Payments Section */}
         <View style={styles.detailSection}>
           <Text style={styles.detailTitle}>Fees and Payments</Text>
           {[
@@ -101,6 +121,7 @@ const ClearanceDetailedView = ({ permitDetails, onRequestExtension }) => {
           ))}
         </View>
 
+        {/* Supporting Documents Section */}
         <View style={styles.detailSection}>
           <Text style={styles.detailTitle}>Documents</Text>
           <View style={styles.documentContainer}>
@@ -111,14 +132,26 @@ const ClearanceDetailedView = ({ permitDetails, onRequestExtension }) => {
             ))}
           </View>
         </View>
+        
+        <View style={styles.buttonContainer}>
+          <View style={styles.buttonWrapper}>
+            <Button
+              title="Request for Extension"
+              onPress={() => setIsModalVisible(true)}
+              color={colors.primary}
+            />
+          </View>
 
-        <Button
-          title="Request for Extension"
-          onPress={() => setIsModalVisible(true)}
-          color={colors.primary}
-        />
+          <View style={styles.buttonWrapper}>
+            <Button
+              title="Download Receipt"
+              color={colors.primary}
+            />
+          </View>
+        </View>
       </ScrollView>
 
+      {/* Extension Request Modal */}
       <Modal
         visible={isModalVisible}
         animationType="slide"
@@ -160,7 +193,7 @@ const ClearanceDetailedView = ({ permitDetails, onRequestExtension }) => {
               </View>
 
               {/* Submit Button */}
-              <TouchableOpacity>
+              <TouchableOpacity onPress={handleExtensionSubmit}>
                 <View style={styles.submitButton}>
                   <Text style={styles.submitButtonText}>
                     Submit Extension Request
@@ -228,7 +261,6 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   detailLabel: {
-    fontWeight: "bold",
     color: colors.black,
   },
   detailValue: {
@@ -306,6 +338,12 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     width: "80%",
     maxWidth: 400,
+  },
+  buttonContainer: {
+    marginTop: 20, // Optional, for overall spacing
+  },
+  buttonWrapper: {
+    marginBottom: 10, // Adjust this value for desired spacing between buttons
   },
   submitButton: {
     backgroundColor: colors.greyGreen,

@@ -49,7 +49,7 @@ const Home = () => {
     getAnnouncements();
   }, []);
 
-  if (!user) {
+  if (!user || !announcements) {
     return (
       <View style={styles.centered}>
         <TabsGradient />

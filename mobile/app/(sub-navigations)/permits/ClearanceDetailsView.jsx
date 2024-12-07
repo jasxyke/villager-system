@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -14,15 +14,40 @@ import {
 import DateTimePickerModal from "react-native-modal-datetime-picker"; // Import the new date picker
 import { colors } from "../../../styles/colors";
 import TabsGradient from "../../../components/gradients/TabsGradient";
+import { formatName, formatUserName } from "../../../utils/DataFormatter";
+import { useLocalSearchParams } from "expo-router";
+import useCrudPermits from "../../../hooks/permits/useCrudPermits";
+import LoadingScreen from "../../../components/common/LoadingScreen";
+import useDownloadPermitReceipt from "../../../hooks/permits/useDownloadPermitReceipt";
 
-
-
-const ClearanceDetailedView = ({ permitDetails, onRequestExtension }) => {
+const ClearanceDetailedView = ({ onRequestExtension }) => {
   const [extensionReason, setExtensionReason] = useState("");
   const [extensionEndDate, setExtensionEndDate] = useState(new Date());
   const [paymentAmount, setPaymentAmount] = useState(0);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+
+  // Import functions and states from the useCrudPermits hook
+  const {
+    data: permitDetails,
+    fetchPermitRequest,
+    loading,
+    error,
+  } = useCrudPermits();
+
+  const {
+    loading: downloading,
+    error: downloadError,
+    downloadReceipt,
+  } = useDownloadPermitReceipt();
+
+  const { permitId } = useLocalSearchParams();
+
+  useEffect(() => {
+    if (permitId) {
+      fetchPermitRequest(permitId); // Fetch the permit details using the hook
+    }
+  }, [permitId]);
 
   // Function to calculate the extension payment
   const calculatePayment = (endDate) => {
@@ -52,19 +77,47 @@ const ClearanceDetailedView = ({ permitDetails, onRequestExtension }) => {
     setIsModalVisible(false); // Hide the modal after submitting
   };
 
+  // Handle loading and error states
+  if (loading) {
+    return <LoadingScreen />;
+  }
+
+  if (error) {
+    return (
+      <View style={styles.errorContainer}>
+        <Text style={styles.errorText}>{error}</Text>
+      </View>
+    );
+  }
+
+  if (!permitDetails) {
+    return (
+      <View style={styles.errorContainer}>
+        <Text style={styles.errorText}>No permit details available.</Text>
+      </View>
+    );
+  }
+
+  console.log(permitDetails);
+
   return (
     <View style={styles.container}>
       <TabsGradient />
-      <Text style={styles.modalTitle}>Detailed Permit Information</Text>
+      {/* <Text style={styles.modalTitle}>Detailed Permit Information</Text> */}
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-
         {/* Applicant Details Section */}
         <View style={styles.detailSection}>
           <Text style={styles.detailTitle}>Applicant Details</Text>
           {[
-            { label: "Name", value: permitDetails?.name },
-            { label: "Contact Number", value: permitDetails?.phoneNumber },
-            { label: "Email", value: permitDetails?.emailAddress },
+            {
+              label: "Name",
+              value: formatUserName(permitDetails?.resident.user, true),
+            },
+            {
+              label: "Contact Number",
+              value: permitDetails.resident.user.contact_number,
+            },
+            { label: "Email", value: permitDetails?.resident.user.email },
           ].map(({ label, value }) => (
             <View key={label} style={styles.detailRow}>
               <Text style={styles.detailLabel}>{label}:</Text>
@@ -72,18 +125,32 @@ const ClearanceDetailedView = ({ permitDetails, onRequestExtension }) => {
             </View>
           ))}
         </View>
-        
+
         {/* Requested Details Section */}
         <View style={styles.detailSection}>
-          <Text style={styles.detailTitle}>Requested Details</Text>
           {[
-            { label: "Permit Type", value: permitDetails?.descriptionOfRequest },
-            { label: "Permit Description", value: permitDetails?.descriptionOfRequest },
-            { label: "Status", value: permitDetails?.reasonForRequest },
-            { label: "Approval Date", value: permitDetails?.approvalDate },
-            { label: "Requested Date", value: permitDetails?.requestedDate },
-            { label: "Expected Starting Date", value: permitDetails?.startDate },
-            { label: "Expected Completion Date", value: permitDetails?.endDate },
+            {
+              label: "Permit Type",
+              value: permitDetails?.permit_type,
+            },
+            {
+              label: "Permit Description",
+              value: permitDetails?.purpose,
+            },
+            {
+              label: "Status",
+              value: formatName(permitDetails?.permit_status),
+            },
+            { label: "Requested Date", value: permitDetails?.application_date },
+            {
+              label: "Expected Starting Date",
+              value: permitDetails?.expect_start_date,
+            },
+            {
+              label: "Expected Completion Date",
+              value: permitDetails?.expect_end_date,
+            },
+            { label: "Approval Date", value: permitDetails?.approval_date },
           ].map(({ label, value }) => (
             <View key={label} style={styles.detailRow}>
               <Text style={styles.detailLabel}>{label}:</Text>
@@ -96,9 +163,12 @@ const ClearanceDetailedView = ({ permitDetails, onRequestExtension }) => {
         <View style={styles.detailSection}>
           <Text style={styles.detailTitle}>Property Information</Text>
           {[
-            { label: "Property Address", value: permitDetails?.propertyAddress },
-            { label: "Lot Number", value: permitDetails?.lotNumber },
-            { label: "Block Number", value: permitDetails?.blockNumber },
+            {
+              label: "Block Number",
+              value: permitDetails?.resident.house.block,
+            },
+
+            { label: "Lot Number", value: permitDetails?.resident.house.lot },
           ].map(({ label, value }) => (
             <View key={label} style={styles.detailRow}>
               <Text style={styles.detailLabel}>{label}:</Text>
@@ -111,8 +181,8 @@ const ClearanceDetailedView = ({ permitDetails, onRequestExtension }) => {
         <View style={styles.detailSection}>
           <Text style={styles.detailTitle}>Fees and Payments</Text>
           {[
-            { label: "Permit Fee", value: permitDetails?.permitFee },
-            { label: "Processing Fee", value: permitDetails?.processingFee },
+            { label: "Permit Fee", value: permitDetails?.permit_fee },
+            { label: "Processing Fee", value: permitDetails?.processing_fee },
           ].map(({ label, value }) => (
             <View key={label} style={styles.detailRow}>
               <Text style={styles.detailLabel}>{label}:</Text>
@@ -121,18 +191,63 @@ const ClearanceDetailedView = ({ permitDetails, onRequestExtension }) => {
           ))}
         </View>
 
+        {/* Payments Section */}
+        <View style={styles.detailSection}>
+          <Text style={styles.detailTitle}>Payment History</Text>
+          {permitDetails?.permit_payments?.length > 0 ? (
+            permitDetails.permit_payments.map((payment, index) => (
+              <View key={index} style={styles.paymentRow}>
+                <View style={styles.paymentColumn}>
+                  <Text style={styles.paymentLabel}>
+                    Amount:{" "}
+                    <Text style={styles.paymentValue}>
+                      PHP {payment.amount}
+                    </Text>
+                  </Text>
+                </View>
+                <View style={styles.paymentColumn}>
+                  <Text style={styles.paymentLabel}>
+                    Date:{" "}
+                    <Text style={styles.paymentValue}>
+                      {new Date(payment.payment_date).toLocaleDateString()}
+                    </Text>
+                  </Text>
+                </View>
+                <View style={styles.paymentColumn}>
+                  <Text style={styles.paymentLabel}>
+                    Status:{" "}
+                    <Text style={styles.paymentValue}>
+                      {formatName(payment.payment_status)}
+                    </Text>
+                  </Text>
+                </View>
+              </View>
+            ))
+          ) : (
+            <Text style={styles.noPaymentsText}>
+              No payments have been made yet.
+            </Text>
+          )}
+          {downloadError && (
+            <Text style={styles.errorText}>Error: {downloadError}</Text>
+          )}
+        </View>
+
         {/* Supporting Documents Section */}
         <View style={styles.detailSection}>
           <Text style={styles.detailTitle}>Documents</Text>
           <View style={styles.documentContainer}>
-            {permitDetails?.uploadedDocuments?.map((doc, index) => (
+            {permitDetails?.permit_documents?.map((doc, index) => (
               <View key={index} style={styles.documentBox}>
-                <Image source={{ uri: doc }} style={styles.documentImage} />
+                <Image
+                  source={{ uri: doc.document_url }}
+                  style={styles.documentImage}
+                />
               </View>
             ))}
           </View>
         </View>
-        
+
         <View style={styles.buttonContainer}>
           <View style={styles.buttonWrapper}>
             <Button
@@ -142,12 +257,16 @@ const ClearanceDetailedView = ({ permitDetails, onRequestExtension }) => {
             />
           </View>
 
-          <View style={styles.buttonWrapper}>
-            <Button
-              title="Download Receipt"
-              color={colors.primary}
-            />
-          </View>
+          {permitDetails?.permit_payments?.length > 0 && (
+            <View style={styles.buttonWrapper}>
+              <Button
+                onPress={() => downloadReceipt(permit_payments[0].id)}
+                title="Download Receipt"
+                disabled={downloading}
+                color={colors.primary}
+              />
+            </View>
+          )}
         </View>
       </ScrollView>
 
@@ -188,7 +307,9 @@ const ClearanceDetailedView = ({ permitDetails, onRequestExtension }) => {
 
               {/* Payment Calculation */}
               <View style={styles.paymentSection}>
-                <Text style={styles.paymentLabel}>Total Payment:</Text>
+                <Text style={styles.paymentLabel}>
+                  Total Payment: PHP {paymentAmount}
+                </Text>
                 <Text style={styles.paymentAmount}>PHP {paymentAmount}</Text>
               </View>
 
@@ -248,12 +369,14 @@ const styles = StyleSheet.create({
   },
   detailSection: {
     marginBottom: 20,
+    backgroundColor: colors.primary,
+    padding: 20,
   },
   detailTitle: {
     fontSize: 16,
     fontWeight: "bold",
     marginBottom: 10,
-    color: colors.black,
+    color: colors.white,
   },
   detailRow: {
     flexDirection: "row",
@@ -261,16 +384,16 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   detailLabel: {
-    color: colors.black,
+    color: colors.white,
   },
   detailValue: {
     fontSize: 14,
-    color: colors.black,
+    color: colors.white,
   },
   documentContainer: {
     flexDirection: "row",
     flexWrap: "wrap",
-    justifyContent: "space-evenly",
+    justifyContent: "space-between",
   },
   documentBox: {
     width: 100,

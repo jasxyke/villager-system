@@ -260,36 +260,67 @@ public function approve(Request $request, $id)
         ], 200);
     }
 
-
     /**
      * Display the specified resource.
      */
-    public function show(PermitRequest $permitRequest)
+    public function show($id)
     {
-        //
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(PermitRequest $permitRequest)
-    {
-        //
+        $relationships = ['resident', 'resident.user', 
+        'resident.house', 'permitDocuments', 'permitPayments'];
+
+        $permitRequest = PermitRequest::with($relationships)
+                                ->find($id);
+
+        if (!$permitRequest) {
+            return response()->json(['error' => 'Permit request not found.'], 404);
+        }
+
+        return response()->json($permitRequest, 200);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdatePermitRequestRequest $request, PermitRequest $permitRequest)
+    public function update(Request $request, $id)
     {
-        //
+        $permitRequest = PermitRequest::find($id);
+
+        if (!$permitRequest) {
+            return response()->json(['error' => 'Permit request not found.'], 404);
+        }
+
+        $validated = $request->validate([
+            'resident_id' => 'sometimes|exists:residents,id',
+            'reference_number' => 'sometimes|string|max:20|unique:permit_requests,reference_number,' . $permitRequest->id,
+            'purpose' => 'sometimes|string|max:300',
+            'permit_status' => 'sometimes|in:pending,rejected,to_pay,in_progress,to_claim,claimed',
+            'processing_fee' => 'nullable|numeric|min:0',
+            'permit_fee' => 'nullable|numeric|min:0',
+            'expect_start_date' => 'sometimes|date',
+            'expect_end_date' => 'sometimes|date|after:expect_start_date',
+            'permit_type' => 'sometimes|in:Building Clearance,Construction Clearance',
+            'note' => 'nullable|string',
+        ]);
+
+        $permitRequest->update($validated);
+
+        return response()->json($permitRequest, 200);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(PermitRequest $permitRequest)
+    public function destroy($id)
     {
-        //
+        $permitRequest = PermitRequest::find($id);
+
+        if (!$permitRequest) {
+            return response()->json(['error' => 'Permit request not found.'], 404);
+        }
+
+        $permitRequest->delete();
+
+        return response()->json(['message' => 'Permit request deleted successfully.'], 200);
     }
 }

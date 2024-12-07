@@ -28,8 +28,10 @@ const CurrentPermit = () => {
   }, [user]);
 
   const handleShowDetailedView = (permit) => {
-    console.log("Selected Permit:", permit);
-    router.push("./ClearanceDetailsView"); // Navigate to the details page
+    router.push({
+      pathname: "./ClearanceDetailsView",
+      params: { permitId: permit.id },
+    }); // Navigate to the details page
   };
 
   const handleRefresh = async () => {

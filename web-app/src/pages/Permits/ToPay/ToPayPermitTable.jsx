@@ -109,13 +109,12 @@ const ToPayPermitTable = () => {
         ) : (
           <div>
             {/* Table Header */}
-            <div className="grid grid-cols-5 gap-4 p-2 bg-oliveGreen text-white font-semibold rounded-t">
+            <div className="grid grid-cols-4 gap-4 p-2 bg-oliveGreen text-white font-semibold rounded-t">
               <div className="flex items-center justify-center">Resident</div>
-              <div className="flex items-center justify-center">Permit Fee</div>
+              <div className="flex items-center justify-center">Purpose</div>
               <div className="flex items-center justify-center">
-                Processing Fee
+                Reference Number
               </div>
-              <div className="flex items-center justify-center">Total Fee</div>
               <div className="flex items-center justify-center">Actions</div>
             </div>
 
@@ -129,7 +128,7 @@ const ToPayPermitTable = () => {
                 permitRequests.map((permit, index) => (
                   <div
                     key={permit.id}
-                    className={`grid grid-cols-5 gap-4 p-4 ${
+                    className={`grid grid-cols-4 gap-4 p-4 ${
                       index % 2 === 0 ? "bg-gray-50" : "bg-white"
                     } hover:bg-gray-100 cursor-pointer`}
                     onClick={() => handleRowClick(permit)}
@@ -138,17 +137,10 @@ const ToPayPermitTable = () => {
                       {formatUserName(permit.resident.user, false)}
                     </div>
                     <div className="flex items-center justify-center">
-                      ₱{parseFloat(permit.permit_fee).toFixed(2)}
+                      {permit.purpose}
                     </div>
                     <div className="flex items-center justify-center">
-                      ₱{parseFloat(permit.processing_fee).toFixed(2)}
-                    </div>
-                    <div className="flex items-center justify-center">
-                      ₱
-                      {(
-                        parseFloat(permit.permit_fee) +
-                        parseFloat(permit.processing_fee)
-                      ).toFixed(2)}
+                      {permit.reference_number}
                     </div>
                     <div className="flex items-center justify-center">
                       <button

@@ -27,6 +27,15 @@ export function formatName(name) {
   return name;
 }
 
+export function formatUserName(user, lastNameFirst) {
+  return formatFullName(
+    user.firstname,
+    user.middlename,
+    user.lastname,
+    lastNameFirst
+  );
+}
+
 export const formatTime = (time) => {
   const [hour, minute] = time.split(":");
   const hourInt = parseInt(hour, 10);

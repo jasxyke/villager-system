@@ -113,6 +113,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     //permit routes
     Route::post('/permit-requests', [PermitRequestController::class, 'store']);
+    Route::get('/get-permit-request/{id}', [PermitRequestController::class, 'show']);
     Route::get('/permits/resident/{residentId}', [PermitRequestController::class, 'getPermitRequestsByResident']);
     Route::get('/payments/resident/{residentId}', [PermitPaymentController::class, 'getPaymentHistory']);
     Route::get('/approved-permits/{residentId}', [PermitRequestController::class, 'getApprovedRequests']);

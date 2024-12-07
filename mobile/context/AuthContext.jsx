@@ -132,7 +132,6 @@ export function AuthProvider({ children }) {
         return;
       }
       setUser(responseUser);
-      console.log(responseUser);
 
       console.log("response user: " + responseUser.resident.id);
     } catch (error) {

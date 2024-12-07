@@ -61,6 +61,8 @@ const StickerTable = () => {
     return <div>{error}</div>; // Handle error state
   }
 
+  console.log(`status: ${status}`);
+
   return (
     <div className="overflow-x-auto">
       {detailsView ? (
@@ -74,11 +76,10 @@ const StickerTable = () => {
       ) : (
         <>
           {/* Table Header */}
-          <div className="grid grid-cols-5 gap-4 p-4 bg-oliveGreen text-white font-bold">
+          <div className="grid grid-cols-4 gap-4 p-4 bg-oliveGreen text-white font-bold">
             <div className="flex items-center justify-center">Name</div>
             <div className="flex items-center justify-center">Plate Number</div>
             <div className="flex items-center justify-center">Request Date</div>
-            <div className="flex items-center justify-center">Type</div>
             <div className="flex items-center justify-center">Action</div>
           </div>
 
@@ -89,14 +90,14 @@ const StickerTable = () => {
             ) : requests.length === 0 ? (
               <StickerDefaultTable cols={"1"}>
                 <div className="text-center p-4 w-full">
-                  No pending sticker requests found.
+                  No {status} sticker requests found.
                 </div>
               </StickerDefaultTable>
             ) : (
               requests.map((sticker) => (
                 <div
                   key={sticker.id}
-                  className="grid grid-cols-5 gap-4 p-4 bg-white"
+                  className="grid grid-cols-4 gap-4 p-4 bg-white cursor-pointer"
                   onClick={() => handleRowClick(sticker)}
                 >
                   <div className="flex items-center justify-center">
@@ -109,15 +110,16 @@ const StickerTable = () => {
                     {sticker.application_date}
                   </div>
                   <div className="flex items-center justify-center">
-                    {formatName(sticker.sticker_type)}
-                  </div>
-                  <div className="flex items-center justify-center">
-                    <button
-                      className="bg-oliveGreen text-white px-4 py-2 rounded hover:bg-greyGreen transition"
-                      onClick={(e) => handleReviewClick(sticker, e)}
-                    >
-                      Review
-                    </button>
+                    {status !== "rejected" ? (
+                      <button
+                        className="bg-oliveGreen text-white px-4 py-2 rounded hover:bg-greyGreen transition"
+                        onClick={(e) => handleReviewClick(sticker, e)}
+                      >
+                        Review
+                      </button>
+                    ) : (
+                      <span className="text-gray-500">N/A</span>
+                    )}
                   </div>
                 </div>
               ))

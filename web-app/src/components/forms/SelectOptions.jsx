@@ -2,7 +2,11 @@ import React from "react";
 
 const SelectOptions = ({ list, onChangeValue, value, label, width = 0 }) => {
   const options = list.map((item, index) => (
-    <option key={index} value={item.value} className="text-black">
+    <option
+      key={index}
+      value={item.value}
+      className="text-black cursor-pointer"
+    >
       {item.text}
     </option>
   ));
@@ -16,7 +20,7 @@ const SelectOptions = ({ list, onChangeValue, value, label, width = 0 }) => {
       ? "100%"
       : `${width}`;
   return (
-    <div>
+    <div className="cursor-pointer">
       <p className="text-white mb-1">{label}</p>
       <select
         className={`bg-greyGreen rounded-md p-2 text-black`}

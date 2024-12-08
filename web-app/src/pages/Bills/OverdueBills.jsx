@@ -1,61 +1,60 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import OverdueViewDetails from "./OverdueViewDetails";
-import { FaRegEye } from "react-icons/fa";
+import useOverdueBills from "../../hooks/Bills/useOverDueBills"; // Adjust the import path as necessary
+import ReactPaginate from "react-paginate";
+import LoadingContainer from "../../components/LoadingScreen/LoadingContainer";
 
 const OverdueBills = () => {
   const [selectedBill, setSelectedBill] = useState(null);
 
-  const overdueData = [
-    {
-      name: "John Doe",
-      overdueMonths: "January - May",
-      numberOfOverdue: 5,
-      amount: 500,
-      action: "Send Reminder",
-    },
-    {
-      name: "Jane Smith",
-      overdueMonths: "April - May",
-      numberOfOverdue: 2,
-      amount: 200,
-      action: "Follow Up Email",
-    },
-    {
-      name: "Alice Johnson",
-      overdueMonths: "January - June",
-      numberOfOverdue: 1,
-      amount: 1500,
-      action: "Final Notice",
-    },
-    {
-      name: "Bob Brown",
-      overdueMonths: "October - November",
-      numberOfOverdue: 3,
-      amount: 300,
-      action: "Call Customer",
-    },
-    {
-      name: "Charlie White",
-      overdueMonths: "January - June",
-      numberOfOverdue: 4,
-      amount: 1200,
-      action: "Suspension Notice",
-    },
-    {
-      name: "Mary Lee",
-      overdueMonths: "October - November",
-      numberOfOverdue: 2,
-      amount: 400,
-      action: "Send Reminder",
-    },
-    {
-      name: "David Green",
-      overdueMonths: "January - May",
-      numberOfOverdue: 1,
-      amount: 50,
-      action: "No Action",
-    },
-  ];
+  const {
+    bills,
+    loading,
+    error,
+    currentPage,
+    lastPage,
+    fetchBills,
+    changePage,
+    notifyResidents,
+  } = useOverdueBills();
+
+  const [selectedBills, setSelectedBills] = useState([]);
+  const [selectAll, setSelectAll] = useState(false);
+
+  useEffect(() => {
+    if (selectAll) {
+      setSelectedBills(bills.map((bill) => bill.id));
+    } else {
+      setSelectedBills([]);
+    }
+  }, [selectAll, bills]);
+
+  const handlePageClick = (event) => {
+    changePage(event.selected + 1);
+  };
+
+  const handleCheckboxChange = (billId) => {
+    setSelectedBills((prevSelected) =>
+      prevSelected.includes(billId)
+        ? prevSelected.filter((id) => id !== billId)
+        : [...prevSelected, billId]
+    );
+  };
+
+  const handleSelectAll = () => {
+    setSelectAll(!selectAll);
+  };
+
+  const handleNotify = () => {
+    if (selectedBills.length > 0) {
+      notifyResidents(selectedBills);
+    } else {
+      alert("Please select at least one bill to notify.");
+    }
+  };
+
+  if (loading) return <LoadingContainer />;
+  if (error) return <div>Error: {error.message}</div>;
 
   const handleViewClick = (bill) => setSelectedBill(bill);
   const handleBack = () => setSelectedBill(null);
@@ -78,20 +77,21 @@ const OverdueBills = () => {
 
         {/* Data rows */}
         <div className="divide-y">
-          {overdueData.map((bill, index) => (
+          {bills.map((bill, index) => (
             <div
-              key={index}
+              key={bill.id} // Use bill.id for better key uniqueness
               className={`grid grid-cols-6 p-2 ${
                 index % 2 === 0 ? "bg-white" : "bg-gray-50"
               } hover:bg-green-100`}
             >
-              <div className="text-center p-2">{bill.name}</div>
-              <div className="text-center p-2">{bill.overdueMonths}</div>
-              <div className="text-center p-2">{bill.numberOfOverdue}</div>
-              <div className="text-center p-2">${bill.amount}</div>
-              <div className="text-center p-2">${bill.amount}</div>{" "}
-              {/* Fee/Interest */}
-              <div className="text-center ">
+              <div className="text-center p-2">
+                {bill.resident.user.firstname} {bill.resident.user.lastname}
+              </div>
+              <div className="text-center p-2"></div>
+              <div className="text-center p-2"></div>
+              <div className="text-center p-2"></div>
+              <div className="text-center p-2"></div>
+              <div className="text-center">
                 <button
                   className="bg-green p-2 text-white rounded-lg hover:bg-secondary w-20"
                   onClick={() => handleViewClick(bill)}
@@ -102,6 +102,18 @@ const OverdueBills = () => {
             </div>
           ))}
         </div>
+      </div>
+
+      {/* Pagination */}
+      <div className="flex justify-center mt-4">
+        <ReactPaginate
+          pageCount={lastPage}
+          pageRangeDisplayed={5}
+          marginPagesDisplayed={2}
+          onPageChange={handlePageClick}
+          containerClassName="pagination"
+          activeClassName="active"
+        />
       </div>
     </div>
   );

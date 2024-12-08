@@ -24,43 +24,45 @@ const Expenses = () => {
 
       {/* Main Container */}
       <div className="w-full max-w-5xl bg-green rounded-lg p-6">
-        <div className="bg-lime-50 p-5 rounded-lg mb-10 justify-between flex">
-          {/* Year and Month Selector Component */}
-          <div className="text-3xl text-primary lg:text-4xl font-semibold mb-4 lg:mb-0">
-            <strong>Income and Expenses </strong>
+        <div className="p-4 rounded-lg  bg-opacity-10">
+          {/* TITLE and DATE */}
+          <div className="p-4 rounded-lg justify-between flex bg-primary bg-opacity-15 mb-2">
+            <div className="w-full max-w-md border-l-8 text-white text-4xl border-b-2 bg-primary bg-opacity-55 border-opacity-60 rounded-xl border-primary p-4">
+              <strong>Income and Expenses </strong>
+            </div>
+            <YearMonthSelector
+              year={year}
+              month={month}
+              onYearChange={setYear}
+              onMonthChange={setMonth}
+            />
           </div>
-          <YearMonthSelector
-            year={year}
-            month={month}
-            onYearChange={setYear}
-            onMonthChange={setMonth}
-          />
-        </div>
 
-        {/* INCOME SECTION */}
-        <div>
-          <Income year={year} month={month} />
-        </div>
-
-        {/* Expense Section */}
-        <div className="mt-10">
+          {/* INCOME SECTION */}
           <div>
-            <ExpensesContainer year={year} month={month} />
+            <Income year={year} month={month} />
           </div>
-        </div>
 
-        {/* Generate Report Button */}
-        <div className="flex justify-end items-center mt-6">
-          <button
-            onClick={handleGenerateReport}
-            disabled={loading} // Disable button while loading
-            className={`${
-              loading ? "bg-gray-400 cursor-not-allowed" : "bg-secondary"
-            } flex items-center bg-mute text-white px-4 py-2 rounded-md`}
-          >
-            {loading ? "Generating..." : "Generate Report (Excel)"}
-            <FaFile className="text-2xl text-white ml-2" />
-          </button>
+          {/* Expense Section */}
+          <div className="mt-5">
+            <div>
+              <ExpensesContainer year={year} month={month} />
+            </div>
+          </div>
+
+          {/* Generate Report Button */}
+          <div className="flex justify-end items-center mt-6">
+            <button
+              onClick={handleGenerateReport}
+              disabled={loading} // Disable button while loading
+              className={`${
+                loading ? "bg-gray-400 cursor-not-allowed" : "bg-secondary"
+              } flex items-center bg-mute text-white px-4 py-2 rounded-md`}
+            >
+              {loading ? "Generating..." : "Generate Report (Excel)"}
+              <FaFile className="text-2xl text-white ml-2" />
+            </button>
+          </div>
         </div>
 
         {/* Error Message */}

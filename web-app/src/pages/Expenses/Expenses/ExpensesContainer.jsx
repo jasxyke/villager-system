@@ -3,6 +3,8 @@ import ExpensesList from "./ExpensesList";
 import useExpenses from "../../../hooks/IncomeExpenses/useExpenses";
 import LoadingContainer from "../../../components/LoadingScreen/LoadingContainer";
 import ReactPaginate from "react-paginate";
+import TotalExpensesCard from "./TotalExpensesCard";
+import { BiFilter } from "react-icons/bi";
 
 const ExpensesContainer = ({ year, month }) => {
   const {
@@ -113,17 +115,18 @@ const ExpensesContainer = ({ year, month }) => {
   };
 
   return (
-    <div>
-      <div className="bg-lime-50 rounded-lg flex flex-col lg:flex-row justify-between items-center p-6">
-        <div className="text-3xl text-primary lg:text-4xl font-semibold mb-4 lg:mb-0">
-          Total Expenses: ₱{totalExpenses}
-        </div>
-      </div>
+    <div className="rounded-2xl shadow-xl mb-2 bg-primary bg-opacity-20 p-2">
+      {/* Total Expenses Card */}
+      <TotalExpensesCard
+        totalExpenses={totalExpenses}
+        onAddExpenseClick={toggleModal}
+      />
 
+      {/* Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white p-6 rounded-lg w-96">
-            <h2 className="text-xl font-semibold mb-4">
+        <div className="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center z-50">
+          <div className="bg-white p-6 rounded-2xl shadow-lg w-96">
+            <h2 className="text-2xl font-bold text-gray-700 mb-4">
               {isViewing
                 ? "Expense Details"
                 : isEditing !== null
@@ -132,26 +135,25 @@ const ExpensesContainer = ({ year, month }) => {
             </h2>
             {isViewing ? (
               <div>
-                <p>
+                <div className="mb-2">
                   <strong>Expense Name:</strong> {formData.expense_name}
-                </p>
-                <p>
+                </div>
+                <div className="mb-2">
                   <strong>Amount:</strong> PHP {formData.amount}
-                </p>
-                <p>
+                </div>
+                <div className="mb-2">
                   <strong>Expense Date:</strong> {formData.expenses_date}
-                </p>
-                <p>
+                </div>
+                <div className="mb-2">
                   <strong>OR Number:</strong> {formData.or_number || "N/A"}
-                </p>
-                <p>
+                </div>
+                <div className="mb-4">
                   <strong>OR Date:</strong> {formData.or_date || "N/A"}
-                </p>
-                <div className="flex justify-end mt-4">
+                </div>
+                <div className="flex justify-end">
                   <button
-                    type="button"
                     onClick={toggleModal}
-                    className="bg-gray-300 text-black px-4 py-2 rounded"
+                    className="bg-red-500 text-white px-4 py-2 rounded-lg shadow hover:bg-red-600 transition"
                   >
                     Close
                   </button>
@@ -159,106 +161,39 @@ const ExpensesContainer = ({ year, month }) => {
               </div>
             ) : (
               <form onSubmit={handleSubmit}>
-                {/* Form Fields */}
-                <div className="mb-4">
-                  <label
-                    className="block text-sm font-medium mb-2"
-                    htmlFor="expense_name"
-                  >
-                    Expense Name
-                  </label>
-                  <input
-                    type="text"
-                    id="expense_name"
-                    name="expense_name"
-                    value={formData.expense_name}
-                    onChange={handleInputChange}
-                    className="w-full p-2 border border-gray-300 rounded"
-                    required
-                  />
-                </div>
-
-                <div className="mb-4">
-                  <label
-                    className="block text-sm font-medium mb-2"
-                    htmlFor="amount"
-                  >
-                    Amount
-                  </label>
-                  <input
-                    type="number"
-                    id="amount"
-                    name="amount"
-                    value={formData.amount}
-                    onChange={handleInputChange}
-                    className="w-full p-2 border border-gray-300 rounded"
-                    required
-                  />
-                </div>
-
-                <div className="mb-4">
-                  <label
-                    className="block text-sm font-medium mb-2"
-                    htmlFor="expenses_date"
-                  >
-                    Expense Date
-                  </label>
-                  <input
-                    type="date"
-                    id="expenses_date"
-                    name="expenses_date"
-                    value={formData.expenses_date}
-                    onChange={handleInputChange}
-                    className="w-full p-2 border border-gray-300 rounded"
-                    required
-                  />
-                </div>
-
-                <div className="mb-4">
-                  <label
-                    className="block text-sm font-medium mb-2"
-                    htmlFor="or_number"
-                  >
-                    OR Number
-                  </label>
-                  <input
-                    type="text"
-                    id="or_number"
-                    name="or_number"
-                    value={formData.or_number}
-                    onChange={handleInputChange}
-                    className="w-full p-2 border border-gray-300 rounded"
-                  />
-                </div>
-
-                <div className="mb-4">
-                  <label
-                    className="block text-sm font-medium mb-2"
-                    htmlFor="or_date"
-                  >
-                    OR Date
-                  </label>
-                  <input
-                    type="date"
-                    id="or_date"
-                    name="or_date"
-                    value={formData.or_date}
-                    onChange={handleInputChange}
-                    className="w-full p-2 border border-gray-300 rounded"
-                  />
-                </div>
-
-                <div className="flex justify-end">
+                {/* Input Fields */}
+                {[
+                  "expense_name",
+                  "amount",
+                  "expenses_date",
+                  "or_number",
+                  "or_date",
+                ].map((field, index) => (
+                  <div className="mb-4" key={index}>
+                    <label className="block text-gray-700 font-medium mb-2 capitalize">
+                      {field.replace("_", " ")}
+                    </label>
+                    <input
+                      type={field.includes("date") ? "date" : "text"}
+                      name={field}
+                      value={formData[field]}
+                      onChange={handleInputChange}
+                      className="w-full border-2 border-gray-300 rounded-lg px-4 py-2 focus:border-green-500 transition"
+                      required={field !== "or_number" && field !== "or_date"}
+                    />
+                  </div>
+                ))}
+                {/* Form Buttons */}
+                <div className="flex justify-end gap-4">
                   <button
                     type="submit"
-                    className="bg-primary text-white px-4 py-2 rounded mr-2"
+                    className="bg-green text-white px-4 py-2 rounded-lg shadow hover:bg-green-600 transition"
                   >
                     {isEditing !== null ? "Save Changes" : "Add Expense"}
                   </button>
                   <button
-                    type="button"
                     onClick={toggleModal}
-                    className="bg-gray-300 text-black px-4 py-2 rounded"
+                    className="bg-gray-400 text-white px-4 py-2 rounded-lg shadow hover:bg-gray-500 transition"
                   >
                     Cancel
                   </button>
@@ -268,35 +203,32 @@ const ExpensesContainer = ({ year, month }) => {
           </div>
         </div>
       )}
-
+      {/* Expenses List or Loading */}
       {loading ? (
         <LoadingContainer />
+      ) : expenses.length > 0 ? (
+        <ExpensesList
+          expenses={expenses}
+          handleView={handleView}
+          handleEdit={handleEdit}
+          handleDelete={handleDelete}
+        />
       ) : (
-        expenses.length > 0 && (
-          <ExpensesList
-            expenses={expenses}
-            handleView={handleView}
-            handleEdit={handleEdit}
-            handleDelete={handleDelete}
-          />
-        )
+        <div className="text-center text-gray-500 text-xl mt-4">
+          No expenses found for this period.
+        </div>
       )}
-
-      {/* Pagination Controls */}
+      {/* Pagination */}
       {lastPage > 1 && (
-        <div className="flex justify-center mt-4">
+        <div className="flex justify-center mt-8">
           <ReactPaginate
-            previousLabel={"Previous"}
-            nextLabel={"Next"}
-            breakLabel={"..."}
+            previousLabel={"«"}
+            nextLabel={"»"}
             pageCount={lastPage}
             onPageChange={handlePageClick}
-            containerClassName={"pagination"}
-            pageClassName={"page-item"}
-            pageLinkClassName={"page-link"}
-            previousClassName={"previous-item"}
-            nextClassName={"next-item"}
-            activeClassName={"active"}
+            containerClassName="flex items-center gap-2"
+            pageClassName="px-4 py-2 bg-gray-200 rounded-lg shadow hover:bg-green-300 transition"
+            activeClassName="bg-green-500 text-white"
           />
         </div>
       )}

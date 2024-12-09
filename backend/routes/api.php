@@ -131,8 +131,18 @@ Route::middleware('auth:sanctum')->group(function () {
     //car sticker routes
     Route::get('/sticker-payments', [StickerPaymentController::class, 'getPaymentHistory']);
     Route::post('/sticker-payments/add-payment', [StickerPaymentController::class, 'addPayment']);
-    //requests
+    Route::get('approved-sticker-request/{id}', [CarStickerRequestController::class, 'show']);
+    Route::prefix('car-sticker-requests')->group(function () {
+   
+        // Route to update a specific car sticker request by ID
+        Route::put('{id}', [CarStickerRequestController::class, 'update']);
+    
+        // Route to delete a specific car sticker request by ID
+        Route::delete('{id}', [CarStickerRequestController::class, 'destroy']);
+    });
+    //requests (for resident)
     Route::post('/car-sticker-requests', [CarStickerRequestController::class, 'store']);
+    Route::get("/approved-sticker-requests/{residentId}", [CarStickerRequestController::class, 'getApprovedRequests']);
     //FOR ADMIN
     Route::get('/car-sticker-requests/status/{status}', [CarStickerRequestController::class, 'getRequestsByStatus']);
     Route::put('/car-sticker-requests/{id}/complete', [CarStickerRequestController::class, 'completeStickerRequest']);

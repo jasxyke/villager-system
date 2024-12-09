@@ -28,19 +28,19 @@ const carStickers = () => {
           <Text style={styles.buttonText}>Sticker Requests</Text>
         </TouchableOpacity>
 
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => router.navigate("../stickers/current-stickers")}
+        >
+          <Text style={styles.buttonText}>Approved Car Sticker Requests</Text>
+        </TouchableOpacity>
+
         {/* Button to navigate to Pending Requests */}
         <TouchableOpacity
           style={styles.button}
           onPress={() => router.navigate("../stickers/history")}
         >
           <Text style={styles.buttonText}>Payment History</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => router.navigate("../stickers/current-stickers")}
-        >
-          <Text style={styles.buttonText}>Car Stickers</Text>
         </TouchableOpacity>
       </View>
     </View>

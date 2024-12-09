@@ -78,3 +78,10 @@ export function convertDateToLaravelFormat(date) {
   // Return format for date only (YYYY-MM-DD)
   return `${year}-${month}-${day}`;
 }
+
+export const formatToReadableDate = (dateString) => {
+  if (!dateString) return null;
+  const date = new Date(dateString);
+  const options = { year: "numeric", month: "short", day: "numeric" };
+  return date.toLocaleDateString("en-US", options);
+};

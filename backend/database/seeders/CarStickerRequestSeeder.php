@@ -36,7 +36,7 @@ class CarStickerRequestSeeder extends Seeder
                     'car_plate_number' => 'ABC' . rand(1000, 9999),
                     'request_status' => $status,
                     'application_date' => Carbon::now()->subDays(rand(1, 30))->toDateString(),
-                    'approval_date' => in_array($status, ['approved', 'in_progress', 'claimed']) ? Carbon::now()->subDays(rand(1, 30))->toDateString() : null,
+                    'approval_date' => in_array($status, ['approved', 'to_pay', 'in_progress', 'completed']) ? Carbon::now()->subDays(rand(1, 30))->toDateString() : null,
                     'completed_date' => $status === 'completed' ? Carbon::now()->subDays(rand(1, 30))->toDateString() : null,
                     'claimed_date' => $status === 'claimed' ? Carbon::now()->subDays(rand(1, 30))->toDateString() : null,
                     'sticker_fee' => rand(400, 600),

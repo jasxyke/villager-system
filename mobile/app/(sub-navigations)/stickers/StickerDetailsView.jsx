@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   View,
   Text,
@@ -6,11 +6,51 @@ import {
   StyleSheet,
   Image,
   ScrollView,
+  ActivityIndicator,
 } from "react-native";
 import { colors } from "../../../styles/colors";
 import TabsGradient from "../../../components/gradients/TabsGradient";
+import { useLocalSearchParams } from "expo-router";
+import useCrudCarStickerRequests from "../../../hooks/stickers/useCrudStickerRequests";
+import LoadingScreen from "../../../components/common/LoadingScreen";
+import { formatUserName } from "../../../utils/DataFormatter";
 
-const StickerDetailedView = ({ stickerDetails }) => {
+const StickerDetailedView = () => {
+  const { stickerId } = useLocalSearchParams();
+  const {
+    loading,
+    error,
+    data: stickerDetails,
+    fetchCarStickerRequest,
+  } = useCrudCarStickerRequests();
+
+  // Fetch sticker details when component mounts
+  useEffect(() => {
+    if (stickerId) {
+      fetchCarStickerRequest(stickerId);
+    }
+  }, [stickerId]);
+
+  if (loading) {
+    return <LoadingScreen />;
+  }
+
+  if (error) {
+    return (
+      <View style={styles.centered}>
+        <Text style={styles.errorText}>{error}</Text>
+      </View>
+    );
+  }
+
+  if (!stickerDetails) {
+    return (
+      <View style={styles.errorContainer}>
+        <Text style={styles.errorText}>No permit details available.</Text>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
       <TabsGradient />
@@ -20,7 +60,10 @@ const StickerDetailedView = ({ stickerDetails }) => {
         <View style={styles.detailSection}>
           <Text style={styles.detailTitle}>Resident Information</Text>
           {[
-            { label: "Name", value: stickerDetails?.resident?.user?.name },
+            {
+              label: "Name",
+              value: formatUserName(stickerDetails?.resident?.user, false),
+            },
             { label: "Block", value: stickerDetails?.resident?.house?.block },
             { label: "Lot", value: stickerDetails?.resident?.house?.lot },
             {
@@ -83,9 +126,7 @@ const StickerDetailedView = ({ stickerDetails }) => {
         </View>
 
         {/* Payment Details */}
-        {stickerDetails?.request_status !== "pending" &&
-        stickerDetails?.request_status !== "approved" &&
-        stickerDetails?.sticker_payments?.length > 0 ? (
+        {stickerDetails?.sticker_payments?.length > 0 ? (
           <View style={styles.detailSection}>
             <Text style={styles.detailTitle}>Payment Details</Text>
             {stickerDetails?.sticker_payments.map((payment, index) => (
@@ -119,19 +160,10 @@ const StickerDetailedView = ({ stickerDetails }) => {
             ))}
           </View>
         </View>
-        {/* <View style={styles.buttonContainer}>
-          <View style={styles.buttonWrapper}>
-            <Button
-              title="Download Reciept"
-              color={colors.primary}
-            />
-          </View>
-          </View> */}
       </ScrollView>
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -171,7 +203,7 @@ const styles = StyleSheet.create({
   documentContainer: {
     flexDirection: "row",
     flexWrap: "wrap",
-    justifyContent: "space-evenly",
+    justifyContent: "space-between",
   },
   documentBox: {
     width: 100,

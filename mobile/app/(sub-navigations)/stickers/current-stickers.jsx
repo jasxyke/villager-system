@@ -11,89 +11,57 @@ import {
 import { colors } from "../../../styles/colors";
 import TabsGradient from "../../../components/gradients/TabsGradient";
 import { useAuthContext } from "../../../context/AuthContext";
-import useFetchPaymentHistory from "../../../hooks/stickers/usePaymentHistory";
+import useFetchApprovedStickerRequests from "../../../hooks/stickers/useApprovedStickers";
+import { formatName, formatToReadableDate } from "../../../utils/DataFormatter";
 
 const CurrentStickers = () => {
-  const { payments, loading, error, fetchPayments } = useFetchPaymentHistory();
+  const { approvedStickerRequests, loading, error, refetch } =
+    useFetchApprovedStickerRequests();
   const { user } = useAuthContext();
 
-  // Dummy data for demonstration purposes
-  const dummyPayments = [
-    {
-      id: 1,
-      payment_date: "2024-12-01",
-      car_sticker_request: {
-        car_model: "Toyota Corolla",
-        car_plate_number: "ABC1234",
-      },
-      amount: "1500",
-      status: "Approved",
-    },
-    {
-      id: 2,
-      payment_date: "2024-11-15",
-      car_sticker_request: {
-        car_model: "Honda Civic",
-        car_plate_number: "XYZ5678",
-      },
-      amount: "2000",
-      status: "Pending",
-    },
-    {
-      id: 3,
-      payment_date: "2024-10-20",
-      car_sticker_request: {
-        car_model: "Ford Mustang",
-        car_plate_number: "MUS1234",
-      },
-      amount: "3000",
-      status: "Rejected",
-    },
-  ];
-
+  // Fetch approved sticker requests when the user is available
   useEffect(() => {
     if (user) {
-      fetchPayments(user.resident.id); // Fetch car sticker payment history
+      refetch(user.resident.id);
     }
   }, [user]);
 
   const handleShowDetailedView = (sticker) => {
-    console.log("Selected Sticker:", sticker);
-    router.push("./StickerDetailsView"); // Navigate to details page
+    router.push({
+      pathname: "./StickerDetailsView",
+      params: { stickerId: sticker.id },
+    }); // Navigate to details page
   };
 
-  const renderPaymentItem = ({ item }) => (
+  const renderStickerItem = ({ item }) => (
     <TouchableOpacity
       style={styles.card}
       onPress={() => handleShowDetailedView(item)}
     >
-      <Text style={styles.cardTitle}>{item.payment_date}</Text>
+      <Text style={styles.cardTitle}>
+        {formatToReadableDate(item.approval_date)}
+      </Text>
       <View style={styles.cardContent}>
         <Text style={styles.cardText}>
-          <Text style={styles.cardLabel}>Car Model:</Text>{" "}
-          {item.car_sticker_request.car_model}
+          <Text style={styles.cardLabel}>Car Model:</Text> {item.car_model}
         </Text>
         <Text style={styles.cardText}>
           <Text style={styles.cardLabel}>Car Plate Number:</Text>{" "}
-          {item.car_sticker_request.car_plate_number}
+          {item.car_plate_number}
         </Text>
         <Text style={styles.cardText}>
-          <Text style={styles.cardLabel}>Amount:</Text> PHP {item.amount}
-        </Text>
-        <Text style={styles.cardText}>
-          <Text style={styles.cardLabel}>Status:</Text> {item.status}
+          <Text style={styles.cardLabel}>Status:</Text>{" "}
+          {formatName(item.request_status)}
         </Text>
       </View>
     </TouchableOpacity>
   );
 
-  const displayPayments = payments.length > 0 ? payments : dummyPayments;
-
   return (
     <View style={{ flex: 1 }}>
       <TabsGradient />
       <View style={styles.container}>
-        <Text style={styles.sectionTitle}>Current Car Sticker</Text>
+        <Text style={styles.sectionTitle}>Approved Car Stickers</Text>
         {loading ? (
           <ActivityIndicator
             size="large"
@@ -102,13 +70,17 @@ const CurrentStickers = () => {
           />
         ) : error ? (
           <Text style={styles.errorText}>{error}</Text>
-        ) : (
+        ) : approvedStickerRequests.length > 0 ? (
           <FlatList
-            data={displayPayments}
-            renderItem={renderPaymentItem}
+            data={approvedStickerRequests}
+            renderItem={renderStickerItem}
             keyExtractor={(item) => item.id.toString()}
-            contentContainerStyle={styles.paymentHistoryList}
+            contentContainerStyle={styles.stickerList}
           />
+        ) : (
+          <Text style={styles.noStickersText}>
+            No approved car stickers available.
+          </Text>
         )}
       </View>
     </View>
@@ -157,7 +129,7 @@ const styles = StyleSheet.create({
   cardLabel: {
     fontWeight: "bold",
   },
-  paymentHistoryList: {
+  stickerList: {
     marginBottom: 10,
   },
   errorText: {
@@ -165,7 +137,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginTop: 20,
   },
-  noPaymentsText: {
+  noStickersText: {
     color: colors.white,
     fontSize: 16,
     textAlign: "center",

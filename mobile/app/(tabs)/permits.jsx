@@ -43,15 +43,15 @@ const Permits = () => {
             <Text style={styles.buttonText}>Pending Requests</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={[styles.button]} onPress={handleShowPayment}>
-            <Text style={styles.buttonText}>Payment History</Text>
-          </TouchableOpacity>
-
           <TouchableOpacity
             style={[styles.button]}
             onPress={handleShowCurrentPermit}
           >
-            <Text style={styles.buttonText}>Approved Clearances</Text>
+            <Text style={styles.buttonText}>Approved Clearance Requests</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={[styles.button]} onPress={handleShowPayment}>
+            <Text style={styles.buttonText}>Payment History</Text>
           </TouchableOpacity>
         </>
       </View>

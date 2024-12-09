@@ -59,6 +59,22 @@ class CarStickerRequestController extends Controller
         return response()->json($requests);
     }
 
+    public function getApprovedRequests($residentId)
+    {
+        $relationships = ['resident','resident.user',
+        'resident.house','stickerDocuments', 'stickerPayments'];
+
+        // Fetch all the requests of the user excluding 'pending' and 'rejected' statuses
+        $requests = CarStickerRequest::with($relationships)
+            ->where('resident_id', $residentId)
+            ->whereNotIn('request_status', ['pending', 'rejected', 'to_pay', 'claimed'])
+            ->orderBy('approval_date', 'desc')
+            ->get();
+        
+        return response()->json($requests);
+    }
+    
+
     /**
      * Store a new car sticker request.
      */
@@ -233,26 +249,78 @@ class CarStickerRequestController extends Controller
     }
 
     /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {
+        $requests = CarStickerRequest::all();
+        return response()->json($requests);
+    }
+
+    /**
      * Display the specified resource.
      */
-    public function show(CarStickerRequest $carStickerRequest)
+    public function show($id)
     {
-        //
+        $relationships = ['resident','resident.user',
+        'resident.house','stickerDocuments', 'stickerPayments'];
+
+        $request = CarStickerRequest::with($relationships)
+                    ->find($id);
+
+        if (!$request) {
+            return response()->json(['message' => 'Car sticker request not found'], 404);
+        }
+
+        return response()->json($request);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateCarStickerRequestRequest $request, CarStickerRequest $carStickerRequest)
+    public function update(Request $request, $id)
     {
-        //
+        $carStickerRequest = CarStickerRequest::find($id);
+
+        if (!$carStickerRequest) {
+            return response()->json(['message' => 'Car sticker request not found'], 404);
+        }
+
+        $validatedData = $request->validate([
+            'car_model' => 'string|max:255',
+            'car_plate_number' => 'string|max:255',
+            'request_status' => 'in:pending,approved,rejected,in_progress,completed,claimed',
+            'application_date' => 'date',
+            'approval_date' => 'nullable|date',
+            'completed_date' => 'nullable|date',
+            'claimed_date' => 'nullable|date',
+            'sticker_fee' => 'nullable|numeric|min:0',
+            'processing_fee' => 'nullable|numeric|min:0',
+            'sticker_type' => 'in:two_wheel,four_wheel,delivery_truck',
+            'note' => 'nullable|string',
+        ]);
+
+        $carStickerRequest->update($validatedData);
+
+        return response()->json([
+            'message' => 'Car sticker request updated successfully',
+            'carStickerRequest' => $carStickerRequest
+        ]);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(CarStickerRequest $carStickerRequest)
+    public function destroy($id)
     {
-        //
+        $carStickerRequest = CarStickerRequest::find($id);
+
+        if (!$carStickerRequest) {
+            return response()->json(['message' => 'Car sticker request not found'], 404);
+        }
+
+        $carStickerRequest->delete();
+
+        return response()->json(['message' => 'Car sticker request deleted successfully']);
     }
 }

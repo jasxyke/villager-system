@@ -54,7 +54,7 @@ export function AuthProvider({ children }) {
       //gets user after loggin in
       getUser();
     } catch (error) {
-      console.log("login");
+      console.log("login error");
       console.log(error.response.data.message);
       const token = await getItemAsync("API_TOKEN");
       if (token) {

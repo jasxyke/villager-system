@@ -68,6 +68,8 @@
         .table th, .table td {
             border: 1px solid #ddd;
             padding: 4px;
+            word-wrap: break-word; /* Allows words to break and wrap onto the next line */
+            white-space: normal;   /* Ensures the text can wrap in cells */
         }
         .table td {
             text-align: left;
@@ -138,7 +140,7 @@
                 <tbody>
                     @foreach ($groupedResidents as $houseId => $group)
                         <tr>
-                            <td colspan="3" style="text-align: center; font-weight: bold;">
+                            <td colspan="7" style="text-align: center; font-weight: bold;">
                                 House Block {{ $group['house']->block }} Lot {{ $group['house']->lot }}
                             </td>
                         </tr>
@@ -148,8 +150,9 @@
                                 <td>{{ $resident->birthdate }}</td>
                                 <td>{{ $resident->sex }}</td>
                                 <td>{{ $resident->civil_status }}</td>
+                                <td>{{ $resident->user->occupation_status }}</td>
                                 <td>{{ $resident->user->email }}</td>
-                                <td>{{ $resident->user->email }}</td>
+                                <td>{{ $resident->user->contact_number }}</td>
                             </tr>
                         @endforeach
                     @endforeach

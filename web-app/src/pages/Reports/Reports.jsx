@@ -13,15 +13,15 @@ const Reports = () => {
       </div>
       <div className="bg-green shadow-md rounded-lg overflow-hidden p-2">
         <div className="relative w-full p-1 rounded-sm">
-          <div className="flex justify-between">
+          <div className="flex justify-start">
             {[
               { label: "Monthly Dues Report", value: "monthlyDuesReport" },
               { label: "Resident Profile Report", value: "profileReport" },
-              {
-                label: "Monthly Financial Report",
-                value: "monthlyFinancialReport",
-              },
-              { label: "Complaints Report", value: "complaintsReport" },
+              // {
+              //   label: "Monthly Financial Report",
+              //   value: "monthlyFinancialReport",
+              // },
+              // { label: "Complaints Report", value: "complaintsReport" },
             ].map(({ label, value }) => (
               <button
                 key={value}

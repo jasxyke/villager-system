@@ -20,15 +20,15 @@ export function AuthProvider({ children }) {
   const login = async (email, password, onError) => {
     setLoading(true);
 
-    try {
-      await axiosClient.get("/sanctum/csrf-cookie", { baseURL: DOMAIN });
-      console.log("Registered santum");
-    } catch (error) {
-      console.log("Error getting sanctum");
-      console.log(error.response.data.message);
-      console.log(error);
-      setLoading(false);
-    }
+    // try {
+    //   await axiosClient.get("/sanctum/csrf-cookie", { baseURL: DOMAIN });
+    //   console.log("Registered santum");
+    // } catch (error) {
+    //   console.log("Error getting sanctum");
+    //   console.log(error.response.data.message);
+    //   console.log(error);
+    //   setLoading(false);
+    // }
 
     try {
       const res = await axiosClient.post("/login", {

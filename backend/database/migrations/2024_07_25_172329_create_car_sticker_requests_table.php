@@ -24,8 +24,8 @@ return new class extends Migration
             $table->date('completed_date')->nullable();
             $table->date('claimed_date')->nullable();
             $table->decimal('sticker_fee')->nullable();
-            $table->decimal('processing_fee')->nullable();
-            $table->enum('sticker_type', ['two_wheel', 'four_wheel', 'delivery_truck']); // Add sticker_type
+            // $table->decimal('processing_fee')->nullable();
+            $table->enum('sticker_type', ['two_wheel', 'four_wheel', 'delivery_truck','pass_through']); // Add sticker_type
             $table->text('note')->nullable();
             $table->timestamps();
         });

@@ -5,6 +5,7 @@ import PermitsSettings from "./PermitSettings";
 import styles from "./AdminSettings.module.css";
 import EditAmenitiesModal from "../Booking/EditAmenitiesModal";
 import VillageSettings from "./VillageSettings";
+import CarStickerSettings from "./CarStickerSettings";
 
 const AdminSettings = () => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -27,6 +28,7 @@ const AdminSettings = () => {
         <BillsSettings />
         {/* <BookingSettings /> */}
         <PermitsSettings />
+        <CarStickerSettings />
         <VillageSettings />
       </div>
 

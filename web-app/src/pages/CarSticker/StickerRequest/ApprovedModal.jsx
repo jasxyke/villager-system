@@ -2,11 +2,8 @@ import React, { useState, useEffect } from "react";
 import useCarStickerRequests from "../../../hooks/CarStickers/useCarStickerRequests";
 import { useSettings } from "../../../contexts/SettingsContext";
 
-const ApprovedModal = ({ isOpen, onClose, onConfirm, carStickerRequestId }) => {
-  const [fees, setFees] = useState([
-    { label: "Car Sticker Fee", amount: "" },
-    { label: "Processing Fee", amount: "" },
-  ]);
+const ApprovedModal = ({ isOpen, onClose, onConfirm, carStickerRequest }) => {
+  const [fees, setFees] = useState([{ label: "Car Sticker Fee", amount: "" }]);
   const [comment, setComment] = useState("");
 
   // Use the settings context
@@ -19,18 +16,28 @@ const ApprovedModal = ({ isOpen, onClose, onConfirm, carStickerRequestId }) => {
   const { updateCarStickerRequest, loading, error, success } =
     useCarStickerRequests(); // Use the custom hook
 
-  // Use effect to set the initial fees from settings when they are loaded
+  // Map sticker types to their respective settings keys
+  const stickerTypeMapping = {
+    two_wheel: "payment_per_car_sticker_two_wheel",
+    four_wheel: "payment_per_car_sticker_four_wheel",
+    delivery_truck: "payment_per_car_sticker_delivery_truck",
+    pass_through: "payment_per_car_sticker_pass_through",
+  };
+
+  // Use effect to set the initial fees from settings based on sticker type
   useEffect(() => {
-    if (settings && !settingsLoading) {
+    if (settings && !settingsLoading && carStickerRequest?.sticker_type) {
+      const settingKey = stickerTypeMapping[carStickerRequest.sticker_type];
+      const stickerFee = settings[settingKey] || "";
+
       setFees([
         {
           label: "Car Sticker Fee",
-          amount: settings.payment_per_car_sticker || "",
+          amount: stickerFee,
         },
-        { label: "Processing Fee", amount: settings.processing_fee || "" },
       ]);
     }
-  }, [settings, settingsLoading]);
+  }, [settings, settingsLoading, carStickerRequest]);
 
   const handleInputChange = (index, value) => {
     const updatedFees = [...fees];
@@ -46,14 +53,12 @@ const ApprovedModal = ({ isOpen, onClose, onConfirm, carStickerRequestId }) => {
     }
 
     const stickerFee = fees[0].amount; // Car Sticker Fee
-    const processingFee = fees[1].amount; // Processing Fee
 
     try {
       // Call the update function from the hook to submit the form data
       const res = await updateCarStickerRequest(
-        carStickerRequestId,
+        carStickerRequest.id,
         stickerFee,
-        processingFee,
         comment
       );
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSettings } from "../../../contexts/SettingsContext";
 const ApprovedModal = ({ isOpen, onClose, onConfirm, permit }) => {
-  // const { settings, loading, error } = useSettings(); // Get settings from the context
+  const { settings, loading, error } = useSettings(); // Get settings from the context
 
   const [permitFee, setPermitFee] = useState(0);
   const [processingFee, setProcessingFee] = useState(0);
@@ -17,6 +17,20 @@ const ApprovedModal = ({ isOpen, onClose, onConfirm, permit }) => {
   //     setProcessingFee(settings.processing_fee);
   //   }
   // }, [loading, settings, squareMeter]);
+
+  console.log(permit);
+
+  useEffect(() => {
+    if (settings && !loading) {
+      setProcessingFee(settings.processing_fee);
+      if (permit.permit_type === "Building Clearance") {
+        setPermitFee(settings.building_clearance_fee);
+      }
+      if (permit.permit_type === "Construction Clearance") {
+        setPermitFee(settings.construction_clearance_fee);
+      }
+    }
+  }, [settings]);
 
   const handleInputChange = (index, value) => {
     // Handle input changes if you decide to make the fees editable

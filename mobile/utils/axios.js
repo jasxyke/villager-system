@@ -1,5 +1,7 @@
 import axios from "axios";
+import { router } from "expo-router";
 import * as SecureStore from "expo-secure-store";
+
 axios.defaults.withCredentials = true;
 
 export const DOMAIN = `${process.env.EXPO_PUBLIC_API_URL}`;

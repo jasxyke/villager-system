@@ -11,7 +11,7 @@
     <p>Please pay the following fees to continue with your sticker application: </p>
     
     <p><strong>Sticker Fee:</strong> {{ $stickerRequest->sticker_fee }}</p>
-    <p><strong>Processing Fee:</strong> {{ $stickerRequest->processing_fee }}</p>
+    {{-- <p><strong>Processing Fee:</strong> {{ $stickerRequest->processing_fee }}</p> --}}
 
     @if($stickerRequest->note)
         <p><strong>Note:</strong> {{ $stickerRequest->note }}</p>

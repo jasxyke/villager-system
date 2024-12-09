@@ -105,7 +105,7 @@ const EditBillModal = ({ isOpen, onRequestClose, bill, onSucess }) => {
             disabled
           />
         </div>
-        <div className={styles.formGroup}>
+        {/* <div className={styles.formGroup}>
           <label className={styles.label}>New Amount:</label>
           <input
             type="number"
@@ -117,7 +117,7 @@ const EditBillModal = ({ isOpen, onRequestClose, bill, onSucess }) => {
           {errors.new_amount && (
             <span className={styles.error}>{errors.new_amount}</span>
           )}
-        </div>
+        </div> */}
         <div className={styles.formGroup}>
           <label className={styles.label}>New Status:</label>
           <select

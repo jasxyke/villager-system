@@ -17,7 +17,7 @@ const _layout = () => {
       }}
     >
       <Stack.Screen name="history" options={{ title: "Clearance Payments" }} />
-      <Stack.Screen name="requests" options={{ title: "Clearanace Requests" }} />
+      <Stack.Screen name="requests" options={{ title: "Clearance Requests" }} />
       <Stack.Screen name="current-permits" options={{ title: "Clearances" }} />
       <Stack.Screen name="ClearanceDetailsView" options={{ title: "Clearance Details" }} />
     </Stack>

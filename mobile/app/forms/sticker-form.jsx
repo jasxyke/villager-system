@@ -76,18 +76,18 @@ const CarStickerForm = ({ setShowCarStickerForm }) => {
   };
 
   const handleSubmitRequest = async () => {
-    if (!carModel || !plateNumber) {
-      Alert.alert("Error", "Please fill in all required fields.");
+    if (!carModel || !plateNumber || !vehicleType) {
+      Alert.alert("Error", "Please fill in all required fields, including the vehicle type.");
       return;
     }
-
+  
     if (images.length === 0) {
       Alert.alert("Error", "Please upload at least one supporting document.");
       return;
     }
-
+  
     try {
-      const msg = await createCarStickerRequest(carModel, plateNumber, images);
+      const msg = await createCarStickerRequest(carModel, plateNumber, vehicleType, images);
       if (msg) {
         Alert.alert("Success", msg);
         router.back();
@@ -96,7 +96,6 @@ const CarStickerForm = ({ setShowCarStickerForm }) => {
       Alert.alert("Error", error.message || "An error occurred.");
     }
   };
-
   return (
     <View style={{ flex: 1 }}>
       <TabsGradient />

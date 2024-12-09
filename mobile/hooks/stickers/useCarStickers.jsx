@@ -6,7 +6,7 @@ const useCarStickers = () => {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
 
-  const createCarStickerRequest = async (carModel, plateNumber, images) => {
+  const createCarStickerRequest = async (carModel, plateNumber, vehicleType, images) => {
     setLoading(true);
     setError(null);
     setSuccess(null);
@@ -16,6 +16,7 @@ const useCarStickers = () => {
       const formData = new FormData();
       formData.append("car_model", carModel);
       formData.append("car_plate_number", plateNumber);
+      formData.append("sticker_type", vehicleType); // Add sticker_type to the form data
 
       if (images && images.length > 0) {
         images.forEach((image, index) => {

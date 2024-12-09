@@ -45,7 +45,7 @@ const OngoingBookings = () => {
           )}
           {!loading && !error && bookings.length === 0 && (
             <div className="p-4 text-center text-gray-500">
-              No bookings available.
+              No pending bookings.
             </div>
           )}
           {!loading &&

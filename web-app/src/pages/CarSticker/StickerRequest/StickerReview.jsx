@@ -5,7 +5,7 @@ import { IoIosClose } from "react-icons/io";
 //import RejectModal from "./RejectModal"; // Ensure you have this component
 import ApprovedModal from "./ApprovedModal";
 import RejectionModal from "./RejectionModal";
-import { formatUserName } from "../../../utils/DataFormatter";
+import { formatName, formatUserName } from "../../../utils/DataFormatter";
 
 const StickerReview = ({ sticker, onBack, onResponse }) => {
   const [isRejectModalOpen, setIsRejectModalOpen] = useState(false);
@@ -118,6 +118,10 @@ const StickerReview = ({ sticker, onBack, onResponse }) => {
               {
                 label: "License Plate Number",
                 value: sticker.car_plate_number,
+              },
+              {
+                label: "Vehicle Type",
+                value: formatName(sticker.sticker_type),
               },
             ].map(({ label, value }) => (
               <div key={label} className="flex items-center">

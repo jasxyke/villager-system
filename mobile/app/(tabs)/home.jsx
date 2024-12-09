@@ -41,13 +41,10 @@ const Home = () => {
   useEffect(() => {
     if (user) {
       refetch(user.resident.id);
+      getAnnouncements();
       // usePushNotifications(user.id);
     }
   }, [user]);
-
-  useEffect(() => {
-    getAnnouncements();
-  }, []);
 
   if (!user || !announcements) {
     return (

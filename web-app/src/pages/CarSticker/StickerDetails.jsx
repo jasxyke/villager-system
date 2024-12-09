@@ -33,6 +33,8 @@ const StickerDetails = ({ sticker, onBack }) => {
     }
   };
 
+  console.log(sticker);
+
   return (
     <div className="p-6 bg-greenGradient border border-gray-300 rounded-lg shadow-lg">
       <div className="flex items-center justify-between mb-6">
@@ -87,6 +89,10 @@ const StickerDetails = ({ sticker, onBack }) => {
               {
                 label: "License Plate Number",
                 value: sticker.car_plate_number,
+              },
+              {
+                label: "Vehicle Type",
+                value: formatName(sticker.sticker_type),
               },
             ].map(({ label, value }) => (
               <div key={label} className="flex items-center">

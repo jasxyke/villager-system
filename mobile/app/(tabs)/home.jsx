@@ -17,7 +17,7 @@ import LoadingEmptyAnnouncements from "../../components/Screens/Home/LoadingEmpt
 import useAnnouncement from "../../hooks/announcements/useAnnouncement";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import useBills from "../../hooks/useBills";
-import { usePushNotifications } from "../../hooks/useNotifications";
+// import { usePushNotifications } from "../../hooks/useNotifications";
 import { router } from "expo-router";
 const Home = () => {
   const [refreshing, setRefreshing] = useState(false);

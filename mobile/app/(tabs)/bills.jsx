@@ -16,15 +16,18 @@ import useBills from "../../hooks/useBills";
 import { useAuthContext } from "../../context/AuthContext";
 import LoadingScreen from "../../components/common/LoadingScreen";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+import { useSettings } from "../../context/SettingsContext";
+import * as MediaLibrary from "expo-media-library";
+import * as FileSystem from "expo-file-system";
+import { Alert } from "react-native";
 
 const Bills = () => {
   const [refreshing, setRefreshing] = useState(false);
   const [qrModalVisible, setQrModalVisible] = useState(false);
-  const [qrImage, setQrImage] = useState(
-    "https://api.qrserver.com/v1/create-qr-code/?data=Sample+QR+Code&size=200x200"
-  );
+  const [qrImage, setQrImage] = useState("");
 
   const { user } = useAuthContext();
+  const { settings } = useSettings();
   const { bills, loading, error, refetch, totalBalance } = useBills();
 
   useEffect(() => {
@@ -33,15 +36,50 @@ const Bills = () => {
     }
   }, [user]);
 
+  useEffect(() => {
+    if (settings) {
+      setQrImage(settings.e_wallet_pic_url);
+    }
+  }, [settings]);
+
   const onRefresh = async () => {
     setRefreshing(true);
     await refetch(user.resident.id);
     setRefreshing(false);
   };
 
-  const handleDownload = () => {
-    console.log("Download QR image:", qrImage);
-    // Add download logic if needed
+  const handleDownload = async () => {
+    try {
+      // Check and request permissions
+      const { granted } = await MediaLibrary.requestPermissionsAsync();
+      if (!granted) {
+        Alert.alert(
+          "Permission Denied",
+          "You need to grant permission to save images."
+        );
+        return;
+      }
+
+      // Generate a file URI in the device's FileSystem
+      const filename = qrImage.split("/").pop(); // Extract the file name from the URL
+      const localUri = FileSystem.cacheDirectory + filename;
+
+      // Download the image to the local file system
+      const downloadResumable = FileSystem.createDownloadResumable(
+        qrImage,
+        localUri
+      );
+      const { uri } = await downloadResumable.downloadAsync();
+
+      // Save the image to the user's photo album
+      const asset = await MediaLibrary.createAssetAsync(uri);
+      await MediaLibrary.createAlbumAsync("Download", asset, false);
+
+      Alert.alert("Success", "QR Code saved to your album.");
+    } catch (error) {
+      console.error("Error downloading image:", error);
+      Alert.alert("Error", "An error occurred while downloading the QR code.");
+    }
   };
 
   if (loading) return <LoadingScreen />;
@@ -65,7 +103,9 @@ const Bills = () => {
         <View style={styles.row}>
           <View style={styles.card}>
             <View style={styles.paymentDetails}>
-              <Text style={styles.paymentText}>09309200555</Text>
+              <Text style={styles.paymentText}>
+                {settings.e_wallet_number || ""}
+              </Text>
               <Text style={styles.paymentText}>Gcash</Text>
             </View>
             <TouchableOpacity
@@ -105,9 +145,7 @@ const Bills = () => {
                 Status:{" "}
                 {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
               </Text>
-              <Text style={styles.billDetail}>
-                Balance: PHP {item.balance}
-              </Text>
+              <Text style={styles.billDetail}>Balance: PHP {item.balance}</Text>
             </View>
           )}
         />
@@ -152,7 +190,11 @@ const Bills = () => {
 const styles = StyleSheet.create({
   container: { flex: 1 },
   content: { flex: 1, alignItems: "center" },
-  balanceContainer: { flexDirection: "row", alignItems: "center", marginTop: 20 },
+  balanceContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 20,
+  },
   txtBalance: { fontSize: 40, fontWeight: "bold", marginLeft: 10 },
   txtTitleBalance: { fontSize: 16, color: colors.white, marginVertical: 10 },
   errorText: { color: "red" },

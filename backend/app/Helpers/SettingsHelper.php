@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Helpers;
 
 use App\Models\Setting;
@@ -14,5 +15,15 @@ class SettingsHelper
     public static function set($key, $value)
     {
         Setting::updateOrCreate(['key' => $key], ['value' => $value]);
+    }
+
+    /**
+     * Get all settings as key-value pairs.
+     *
+     * @return array
+     */
+    public static function all()
+    {
+        return Setting::pluck('value', 'key')->toArray();
     }
 }

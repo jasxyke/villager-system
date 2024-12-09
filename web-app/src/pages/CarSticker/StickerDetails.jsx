@@ -113,7 +113,7 @@ const StickerDetails = ({ sticker, onBack }) => {
               { label: "Claimed Date", value: sticker.claimed_date },
               { label: "Additional Note", value: sticker.note },
               { label: "Sticker Fee", value: sticker.sticker_fee },
-              { label: "Processing Fee", value: sticker.processing_fee },
+              // { label: "Processing Fee", value: sticker.processing_fee },
             ].map(({ label, value }) => (
               <div key={label} className="flex items-center">
                 <label className="w-1/3 font-semibold text-white">

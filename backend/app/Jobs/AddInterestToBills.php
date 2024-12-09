@@ -34,7 +34,7 @@ class AddInterestToBills implements ShouldQueue
         if($allowMissedPayments) return;
 
 
-        $interestRate = SettingsHelper::get('additional_per_missed_payment'); // Get interest rate from settings
+        $interestRate = SettingsHelper::get('interest_per_missed_payment'); // Get interest rate from settings
         $now = Carbon::now();
 
         DB::transaction(function () use ($interestRate, $now) {
@@ -45,7 +45,7 @@ class AddInterestToBills implements ShouldQueue
 
             foreach ($bills as $bill) {
                 // Calculate the new amount with interest added
-                $interestAmount = $bill->amount + $interestRate;
+                $interestAmount = $bill->amount * $interestRate;
                 $bill->amount += $interestAmount;
                 $bill->save();
             }

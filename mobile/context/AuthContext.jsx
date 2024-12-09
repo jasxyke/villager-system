@@ -26,6 +26,8 @@ export function AuthProvider({ children }) {
     } catch (error) {
       console.log("Error getting sanctum");
       console.log(error.response.data.message);
+      console.log(error);
+      setLoading(false);
     }
 
     try {
@@ -112,6 +114,11 @@ export function AuthProvider({ children }) {
     }
   };
 
+  // const isLoggedIn = () => {
+  //   const loggedInBa = localStorage.getItem("isLoggedIn");
+  //   return JSON.parse(loggedInBa);
+  // };
+
   const getUser = async () => {
     try {
       const res = await axiosClient.get("/me");
@@ -165,6 +172,7 @@ export function AuthProvider({ children }) {
     setUser,
     logout,
     register,
+    // isLoggedIn,
   };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

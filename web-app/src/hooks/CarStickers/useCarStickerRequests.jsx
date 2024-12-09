@@ -10,7 +10,7 @@ const useCarStickerRequests = () => {
   const updateCarStickerRequest = async (
     id,
     stickerFee,
-    processingFee,
+    // processingFee,
     note
   ) => {
     try {
@@ -21,7 +21,7 @@ const useCarStickerRequests = () => {
       // Prepare the data payload
       const data = {
         sticker_fee: stickerFee,
-        processing_fee: processingFee,
+        // processing_fee: processingFee,
         note: note,
       };
 

@@ -116,7 +116,7 @@ const StickerDetailedView = () => {
           <Text style={styles.detailTitle}>Fees and Payments</Text>
           {[
             { label: "Sticker Fee", value: stickerDetails?.sticker_fee },
-            { label: "Processing Fee", value: stickerDetails?.processing_fee },
+            // { label: "Processing Fee", value: stickerDetails?.processing_fee },
           ].map(({ label, value }) => (
             <View key={label} style={styles.detailRow}>
               <Text style={styles.detailLabel}>{label}:</Text>

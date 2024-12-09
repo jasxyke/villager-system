@@ -178,7 +178,7 @@ class CarStickerRequestController extends Controller
         // Validate the request
         $validatedData = $request->validate([
             'sticker_fee' => 'required|numeric|min:0',
-            'processing_fee' => 'required|numeric|min:0',
+            // 'processing_fee' => 'required|numeric|min:0',
             'note' => 'nullable|string'
         ]);
 
@@ -187,7 +187,7 @@ class CarStickerRequestController extends Controller
 
         // Update the car sticker request fields
         $stickerRequest->sticker_fee = $validatedData['sticker_fee'];
-        $stickerRequest->processing_fee = $validatedData['processing_fee'];
+        // $stickerRequest->processing_fee = $validatedData['processing_fee'];
         $stickerRequest->note = $validatedData['note'] ?? null;
         $stickerRequest->request_status = 'approved';
         $stickerRequest->approval_date = now()->toDateString();
@@ -295,7 +295,7 @@ class CarStickerRequestController extends Controller
             'completed_date' => 'nullable|date',
             'claimed_date' => 'nullable|date',
             'sticker_fee' => 'nullable|numeric|min:0',
-            'processing_fee' => 'nullable|numeric|min:0',
+            // 'processing_fee' => 'nullable|numeric|min:0',
             'sticker_type' => 'in:two_wheel,four_wheel,delivery_truck',
             'note' => 'nullable|string',
         ]);

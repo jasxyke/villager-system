@@ -33,4 +33,5 @@ export const STICKER_TYPES = [
   { label: "Two Wheel", value: "two_wheel" },
   { label: "Four Wheel", value: "four_wheel" },
   { label: "Delivery Truck", value: "delivery_truck" },
+  { label: "Pass Through", value: "'pass_through'" },
 ];

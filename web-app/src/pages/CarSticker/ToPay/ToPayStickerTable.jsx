@@ -217,10 +217,10 @@ const ToPayStickerTable = () => {
                 <span className="font-medium">Sticker Fee:</span>{" "}
                 <b>₱{stickerFee.toFixed(2)}</b>
               </p>
-              <p>
+              {/* <p>
                 <span className="font-medium">Processing Fee:</span>{" "}
                 <b>₱{processingFee.toFixed(2)}</b>
-              </p>
+              </p> */}
               <p>
                 <span className="font-medium">Total Amount to Pay:</span>{" "}
                 <b>₱{totalAmount.toFixed(2)}</b>

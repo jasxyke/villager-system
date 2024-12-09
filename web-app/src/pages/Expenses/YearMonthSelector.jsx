@@ -54,35 +54,30 @@ const YearMonthSelector = ({ year, month, onYearChange, onMonthChange }) => {
   };
 
   return (
-    <div className="flex items-center gap-6">
+    <div className="flex items-center gap-6 border-l-8 bg-primary bg-opacity-45 border-opacity-50 rounded-2xl border-primary hover:bg-darkerGreen hover:border-primary hover:border-b-4 hover:border-opacity-90 hover:bg-opacity-70 p-4 shadow-lg">
       {/* Display the selected month and year, along with the calendar icon */}
       {!showSelectors ? (
-        <>
-          <div className="text-lg font-semibold text-gray-700">
+        <div
+          onClick={handleIconClick}
+          className="cursor-pointer p-2 rounded-xl transition-all flex items-center space-x-3 "
+        >
+          <div className="text-lg font-bold text-white">
             {months[currentMonth - 1]} {currentYear}
           </div>
-          <div
-            onClick={handleIconClick}
-            className="cursor-pointer p-3 rounded-lg hover:bg-gray-200 transition-all"
-          >
-            <FiCalendar className="text-2xl text-gray-700" />
-          </div>
-        </>
+          <FiCalendar className="text-2xl text-white" />
+        </div>
       ) : (
-        <>
-          {/* Display the month and year selectors */}
-          <div className="flex flex-col">
-            <label
-              htmlFor="month"
-              className="text-sm font-semibold text-gray-300 mb-1"
-            >
+        <div className="flex gap-2 items-center">
+          {/* Month Selector */}
+          <div className="relative flex flex-col">
+            <legend className="text-xs pl-1 pr-1 rounded-md text-white bg-green left-2 border-2 border-green absolute transform -translate-y-1/2">
               Month
-            </label>
+            </legend>
             <select
               id="month"
               value={currentMonth}
               onChange={handleMonthChange}
-              className="bg-white text-gray-800 p-2 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className=" bg-white text-black border-primary border-2 p-2 rounded-md shadow-xl focus:outline-none focus:ring-1 focus:ring-primary"
             >
               {months.map((monthName, index) => (
                 <option key={index} value={index + 1}>
@@ -92,29 +87,29 @@ const YearMonthSelector = ({ year, month, onYearChange, onMonthChange }) => {
             </select>
           </div>
 
-          <div className="flex flex-col ml-4">
-            <label
-              htmlFor="year"
-              className="text-sm font-semibold text-gray-300 mb-1"
-            >
+          {/* Year Selector */}
+          <fieldset className="relative flex flex-col">
+            <legend className="text-xs pl-1 pr-1 rounded-md text-white bg-green left-2 border-2 border-green absolute transform -translate-y-1/2">
+              {" "}
               Year
-            </label>
+            </legend>
             <input
               type="number"
               id="year"
               value={currentYear}
               onChange={handleYearChange}
-              className="bg-white text-gray-800 p-2 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className=" bg-white text-black border-green border-2 p-2 rounded-md shadow-xl focus:outline-none focus:ring-1 focus:ring-primary"
             />
-          </div>
+          </fieldset>
 
+          {/* Calendar Icon Button */}
           <div
             onClick={handleIconClick}
-            className="cursor-pointer ml-4 text-gray-500 text-lg"
+            className="cursor-pointer text-white text-2xl hover:text-secondary hover:bg-gray-200 rounded-lg p-1"
           >
             <FiCalendar />
           </div>
-        </>
+        </div>
       )}
     </div>
   );

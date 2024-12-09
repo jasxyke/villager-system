@@ -1,69 +1,42 @@
 import React, { useState } from "react";
-import { BiTrendingUp } from "react-icons/bi";
 import { FiArrowRight, FiBook } from "react-icons/fi";
-import MonthlyDuesIncomeDetails from "./MonthlyDuesIncomeDetails";
+import { BiDotsVerticalRounded } from "react-icons/bi";
 
 const MonthlyDuesIncome = ({ loading, incomes, error }) => {
-  // Accept year and month as props
-  const [showDetails, setShowDetails] = useState(false);
-
-  const toggleDetails = () => {
-    setShowDetails(!showDetails);
-  };
-
   const formatIncome = (income) => {
     return income && !isNaN(income) ? `₱${income}` : "₱0.00";
   };
 
   return (
-    <div className="p-4 bg-lime-50 rounded-lg shadow-sm w-full max-w-xs">
-      <div className="flex items-center justify-between mb-3">
-        <div className="flex items-center gap-2">
-          <div className="w-10 h-10 flex items-center justify-center bg-green text-white text-lg rounded-full">
-            <FiBook />
-          </div>
-          <div>
-            <div className="text-sm font-semibold text-gray-800">
-              Monthly Dues
-            </div>
-          </div>
+    <div className="border-l-8 bg-primary bg-opacity-45 border-opacity-50 rounded-2xl border-primary hover:bg-darkerGreen hover:border-primary hover:border-b-8 hover:border-opacity-40 hover:bg-opacity-60 p-4 shadow-lg">
+      <div className="flex items-center justify-between">
+        <div>
+          <div className="text-xs text-white">Monthly Dues</div>
         </div>
-        <div className="text-gray-400 cursor-pointer">•••</div>
+        <div className="text-white cursor-pointer">
+          <BiDotsVerticalRounded />
+        </div>
       </div>
 
+      {/* AMOUNT */}
       <div className="flex items-center justify-between mb-3">
         {loading ? (
-          <div className="text-xl font-bold text-gray-800">Loading...</div>
+          <div className="text-xl font-bold text-white">Loading...</div>
         ) : error ? (
           <div className="text-xl font-bold text-red-600">{error}</div>
         ) : (
-          <div className="text-xl font-bold text-gray-800">
+          <div className="text-2xl font-semibold text-white">
             {incomes && incomes.bills ? formatIncome(incomes.bills) : "₱0.00"}
           </div>
         )}
-        {/* <div className="flex items-center text-green-500 text-xs font-medium bg-green-100 px-1 py-1 rounded-lg">
-          <BiTrendingUp className="mr-1 text-sm" />
-          100.00%
-        </div> */}
       </div>
-
-      <hr className="my-3 border-t border-gray-300" />
 
       <div className="flex items-center justify-between mt-2">
-        <div
-          className="text-xs font-medium text-green cursor-pointer"
-          onClick={toggleDetails}
-        >
+        <div className="text-xs font-medium text-white cursor-pointer">
           See Details
         </div>
-        <FiArrowRight className="text-gray-400 text-sm" />
+        <FiArrowRight className="text-white text-sm" />
       </div>
-
-      {showDetails && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-          <MonthlyDuesIncomeDetails onClose={toggleDetails} />
-        </div>
-      )}
     </div>
   );
 };

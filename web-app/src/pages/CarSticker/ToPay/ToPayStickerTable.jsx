@@ -70,6 +70,11 @@ const ToPayStickerTable = () => {
       return;
     }
 
+    if (paymentAmount !== totalAmount) {
+      setErrorMessage("Payment with balance are not allowed");
+      return;
+    }
+
     if (selectedSticker) {
       const result = await addStickerPayment(
         selectedSticker.id,

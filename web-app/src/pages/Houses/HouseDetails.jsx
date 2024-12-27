@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { CiCirclePlus } from "react-icons/ci";
 import { FaBook, FaRegUserCircle } from "react-icons/fa";
 import { IoMdArrowBack } from "react-icons/io";
@@ -18,6 +18,9 @@ const HouseDetails = ({ house, onBack }) => {
 
   const { addResident, editResident } = useResidents();
 
+  useEffect(() => {
+    setResidents(house.residents);
+  }, [house]);
   const handleSuccess = (message, newMember) => {
     alert(message);
     setResidents([...residents, newMember]);
@@ -156,9 +159,9 @@ const HouseDetails = ({ house, onBack }) => {
               onClick={() => setIsModalOpen(true)}
               className="bg-greyGreen text-black flex border-b-2 border-primary justify-between items-center px-9 py-4 shadow-md hover:bg-secondary cursor-pointer transition-colors"
             >
-              <div className="flex justify-center items-center text-lg text-white ">
-                <CiCirclePlus size={40} color="white" className="mr-2" /> ADD
-                DATA
+              <div className="flex justify-center items-center text-lg text-black ">
+                <CiCirclePlus size={40} color="black" className="mr-2" /> ADD
+                NEW MEMBER
               </div>
               {/* <button
     

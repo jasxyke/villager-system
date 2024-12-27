@@ -90,6 +90,11 @@ const ToPayPermitTable = () => {
         return;
       }
 
+      if (amount !== totalAmount) {
+        setErrorMessage("Payment with balance are not allowed");
+        return;
+      }
+
       const response = await addPermitPayment(
         permitRequestId,
         residentId,

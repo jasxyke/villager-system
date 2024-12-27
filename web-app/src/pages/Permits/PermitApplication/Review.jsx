@@ -89,22 +89,36 @@ const PermitApplicationReview = ({ permit, onBack }) => {
           className="text-2xl cursor-pointer"
           onClick={onBack}
         />
-        <div className="flex gap-4">
-          <button
-            className="bg-lime-700 border text-white px-4 py-2 rounded hover:bg-lime-600 transition-colors"
-            onClick={handleApproveClick}
-            disabled={loading} // Disable if loading
-          >
-            {loading ? "Processing..." : "Approve"}
-          </button>
-          <button
-            className="bg-red-500 border text-white px-4 py-2 rounded hover:bg-red-600 transition-colors"
-            onClick={handleRejectClick}
-            disabled={loading} // Disable if loading
-          >
-            {loading ? "Processing..." : "Reject"}
-          </button>
-        </div>
+        {permit.permit_status !== "rejected" ? (
+          <div className="flex gap-4">
+            <button
+              className="bg-lime-700 border text-white px-4 py-2 rounded hover:bg-lime-600 transition-colors"
+              onClick={handleApproveClick}
+              disabled={loading} // Disable if loading
+            >
+              {loading ? "Processing..." : "Approve"}
+            </button>
+            <button
+              className="bg-red-500 border text-white px-4 py-2 rounded hover:bg-red-600 transition-colors"
+              onClick={handleRejectClick}
+              disabled={loading} // Disable if loading
+            >
+              {loading ? "Processing..." : "Reject"}
+            </button>
+          </div>
+        ) : (
+          <div className="mr-5">
+            <p className="text-white text-lg">
+              Reason for Rejection:{" "}
+              <input
+                className="app-input"
+                type="text"
+                disabled
+                value={permit.note}
+              />
+            </p>
+          </div>
+        )}
       </div>
       {error && <p className="text-red-500 mb-4">{error}</p>}{" "}
       {/* Display error if any */}

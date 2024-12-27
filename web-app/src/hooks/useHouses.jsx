@@ -66,6 +66,18 @@ const useHouses = () => {
     }
   };
 
+  const fetchMatchingHouses = async (query, onSuccess, onError) => {
+    try {
+      setLoading(true);
+      const res = await axiosClient.get(`/houses/search?ownerName=${query}`);
+      onSuccess(res.data);
+    } catch (error) {
+      onError(error.response?.data?.message || "An error occurred");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return {
     houses,
     house, // Expose the single house state
@@ -74,6 +86,7 @@ const useHouses = () => {
     getHousesPerBlock,
     addHouse,
     searchHouseByOwnerName, // Expose the new function
+    fetchMatchingHouses,
   };
 };
 

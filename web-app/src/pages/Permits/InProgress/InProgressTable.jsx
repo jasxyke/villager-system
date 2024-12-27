@@ -41,7 +41,9 @@ const InProgressTable = () => {
     if (confirm) {
       const response = await completePermitRequest(permit.id);
       if (response) {
-        alert("Permit marked as done successfully!");
+        alert(
+          "Permit marked as done successfully. Resident are being notified as well!"
+        );
         changePage("in_progress", currentPage); // Refresh the data if needed
       } else {
         alert(completeError || "Failed to mark permit as done.");

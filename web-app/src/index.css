@@ -67,3 +67,63 @@ li:has(> a.active) {
 .pagination li:hover {
   background-color: var(--paleGreen);
 }
+
+.app-input {
+  padding: 5px;
+  background-color: white;
+  color: black;
+  border-radius: 10px;
+}
+
+.search-container {
+  position: relative; /* Keep the container relative to allow positioning of the results */
+  width: 100%; /* Full width of the container */
+  max-width: 600px; /* Optional: Set max-width */
+}
+
+.search-container input {
+  width: 100%;
+  padding: 10px 15px;
+  font-size: 16px;
+}
+
+.search-results {
+  position: absolute; /* Position it absolutely within the relative container */
+  top: 100%; /* Position below the input */
+  left: 0;
+  width: 100%; /* Ensure the dropdown width is the same as the input */
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.search-container input:focus {
+  border-color: #4caf50; /* Highlight border when focused */
+  box-shadow: 0 1px 5px rgba(76, 175, 80, 0.5); /* Glow effect */
+}
+
+.search-results li {
+  list-style: none; /* Remove default list styling */
+  padding: 10px 15px; /* Padding for list items */
+  cursor: pointer; /* Change cursor on hover */
+  border-bottom: 1px solid #f0f0f0; /* Subtle divider */
+}
+
+.search-results li:last-child {
+  border-bottom: none; /* Remove border for last item */
+}
+
+.search-results li:hover {
+  background: #f9f9f9; /* Highlight background on hover */
+}
+
+.no-results {
+  text-align: center; /* Center-align text */
+  padding: 10px; /* Padding for spacing */
+  color: #999; /* Light gray text */
+  font-style: italic; /* Italic text style */
+}

@@ -43,9 +43,23 @@ const StickerDetails = ({ sticker, onBack }) => {
           onClick={onBack}
           aria-label="Go back"
         />
-        <div className="text-2xl font-bold text-white">
-          Detailed Information
-        </div>
+        {sticker.request_status !== "rejected" ? (
+          <div className="text-2xl font-bold text-white">
+            Detailed Information
+          </div>
+        ) : (
+          <div className="mr-5">
+            <p className="text-white text-lg">
+              Reason for Rejection:{" "}
+              <input
+                className="app-input"
+                type="text"
+                disabled
+                value={sticker.note}
+              />
+            </p>
+          </div>
+        )}
       </div>
 
       <form className="space-y-6">

@@ -112,7 +112,7 @@ const StickerTable = () => {
                   <div className="flex items-center justify-center">
                     {status !== "rejected" ? (
                       <button
-                        className="bg-oliveGreen text-white px-4 py-2 rounded hover:bg-greyGreen transition"
+                        className="bg-oliveGreen text-white px-4 py-2 rounded-xl hover:bg-greyGreen transition"
                         onClick={(e) => handleReviewClick(sticker, e)}
                       >
                         Review

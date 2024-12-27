@@ -71,7 +71,7 @@ const ApprovedModal = ({ isOpen, onClose, onConfirm, permit }) => {
               value={permitFee}
               onChange={(e) => setPermitFee(e.target.value)}
               placeholder="Permit Fee"
-              // disabled
+              disabled
               required
             />
           </li>
@@ -83,7 +83,7 @@ const ApprovedModal = ({ isOpen, onClose, onConfirm, permit }) => {
               value={processingFee}
               onChange={(e) => setProcessingFee(e.target.value)}
               placeholder="Processing Fee"
-              // disabled
+              disabled
               required
             />
           </li>

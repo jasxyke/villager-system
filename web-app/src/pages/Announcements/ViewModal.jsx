@@ -173,7 +173,7 @@ const ViewModal = ({
           onClick={handleEdit}
           className="w-[125px] py-1 mr-5 bg-secondary rounded-md text-white"
         >
-          Edit
+          Save
         </button>
         <button
           onClick={onClose}

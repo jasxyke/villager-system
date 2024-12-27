@@ -70,7 +70,7 @@ const AddResidentModal = ({ isModalOpen, onModalClose, onAddMember }) => {
                 changeText={setContactNum}
               />
               <div className="mb-2">
-                <p className="text-black mb-1">Birthdte</p>
+                <p className="text-black mb-1">Birthdate</p>
                 <input
                   value={birthdate}
                   onChange={(e) => setBirthdate(e.target.value)}

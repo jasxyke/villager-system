@@ -52,9 +52,23 @@ const PermitDetails = ({ permit, onBack }) => {
           onClick={onBack}
           aria-label="Go back"
         />
-        <div className="text-2xl font-bold text-white px-5">
-          Detailed Information
-        </div>
+        {permit.permit_status !== "rejected" ? (
+          <div className="text-2xl font-bold text-white px-5">
+            Detailed Information
+          </div>
+        ) : (
+          <div className="mr-5">
+            <p className="text-white text-lg">
+              Reason for Rejection:{" "}
+              <input
+                className="app-input"
+                type="text"
+                disabled
+                value={permit.note}
+              />
+            </p>
+          </div>
+        )}
       </div>
 
       <form className="space-y-6 p-4">

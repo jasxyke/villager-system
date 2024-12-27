@@ -94,6 +94,7 @@ const ApprovedModal = ({ isOpen, onClose, onConfirm, carStickerRequest }) => {
                 type="number"
                 min={"1"}
                 step={"any"}
+                disabled
                 className="border border-gray-300 rounded px-2 py-1 w-64"
                 value={fee.amount}
                 onChange={(e) => handleInputChange(index, e.target.value)}

@@ -28,31 +28,44 @@ const EditBillModal = ({ isOpen, onRequestClose, bill, onSucess }) => {
     }
   }, [bill]);
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
-
   const setTodayDate = () => {
     const today = new Date().toISOString().split("T")[0];
     setFormData({ ...formData, transaction_date: today });
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+
+    // Update form data based on input change
+    const updatedFormData = { ...formData, [name]: value };
+
+    // If payment_amount changes, check if it satisfies the total amount
+    if (name === "payment_amount") {
+      const paymentAmount = parseFloat(value || 0);
+      const currentAmount = parseFloat(formData.amount);
+
+      if (paymentAmount >= currentAmount) {
+        // Automatically mark as paid if payment satisfies the total amount
+        updatedFormData.new_status = "paid";
+      } else if (formData.new_status === "paid") {
+        // Revert to default status if payment no longer satisfies the total amount
+        updatedFormData.new_status = bill.status;
+      }
+    }
+
+    setFormData(updatedFormData);
   };
 
   const validateInputs = () => {
     const newErrors = {};
     const currentAmount = parseFloat(formData.amount);
     const paymentAmount = parseFloat(formData.payment_amount);
-    const newAmount = parseFloat(formData.new_amount);
 
-    if (isNaN(paymentAmount) || paymentAmount < 0) {
-      newErrors.payment_amount = "Payment amount cannot be negative or empty.";
+    if (isNaN(paymentAmount) || paymentAmount <= 0) {
+      newErrors.payment_amount = "Payment amount must be a positive number.";
     } else if (paymentAmount > currentAmount) {
       newErrors.payment_amount =
         "Payment amount cannot exceed the current amount.";
-    }
-
-    if (newAmount && (isNaN(newAmount) || newAmount < 0)) {
-      newErrors.new_amount = "New amount must be a positive number.";
     }
 
     return newErrors;
@@ -75,6 +88,15 @@ const EditBillModal = ({ isOpen, onRequestClose, bill, onSucess }) => {
         new_amount: formData.new_amount,
         new_status: formData.new_status,
       };
+
+      // Ensure the status is set to 'paid' if the payment fully satisfies the bill
+      if (
+        parseFloat(formData.payment_amount) >= parseFloat(formData.amount) &&
+        formData.new_status !== "paid"
+      ) {
+        data.new_status = "paid";
+      }
+
       await updateBillAndAddPayment(data, onSucess);
       onRequestClose(); // Close the modal after successful update
     } catch (error) {

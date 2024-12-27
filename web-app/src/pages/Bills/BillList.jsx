@@ -4,6 +4,7 @@ import EditBillModal from "./EditBillModal";
 import { formatFullName, formatName } from "../../utils/DataFormatter";
 import ReactPaginate from "react-paginate";
 import LoadingContainer from "../../components/LoadingScreen/LoadingContainer";
+import ViewPaidBillModal from "./VIewPaidBillModal";
 
 const BillList = ({
   status,
@@ -25,6 +26,7 @@ const BillList = ({
   } = useBills();
   const [selectedBill, setSelectedBill] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isViewMode, setIsViewMode] = useState(false); // Track if the modal is for viewing
 
   useEffect(() => {
     // Fetch bills based on filters
@@ -43,6 +45,7 @@ const BillList = ({
 
   const openModal = (bill) => {
     setSelectedBill(bill);
+    setIsViewMode(bill.status === "paid"); // Use ViewBillModal if the bill is paid
     setIsModalOpen(true);
   };
 
@@ -51,7 +54,7 @@ const BillList = ({
     setIsModalOpen(false);
   };
 
-  const handleSucess = () => {
+  const handleSuccess = () => {
     alert("Bill updated successfully");
     fetchBills(status, month, year, searchQuery, currentPage);
   };
@@ -60,7 +63,6 @@ const BillList = ({
     changePage(status, month, year, searchQuery, event.selected + 1);
   };
 
-  // if (loading) return <LoadingContainer />;
   if (error) return <div>Error: {error.message}</div>;
 
   return (
@@ -83,9 +85,6 @@ const BillList = ({
               bills.map((bill, index) => (
                 <div
                   key={bill.id}
-                  // className={`grid grid-cols-7 gap-4 p-2 text-black ${
-                  //   index > 0 ? "border-t-2 border-greyGreen" : ""
-                  // }`}
                   className={`grid grid-cols-7 gap-4 p-4 ${
                     index % 2 === 0 ? "bg-gray-50" : "bg-white"
                   } hover:bg-gray-100`}
@@ -118,7 +117,7 @@ const BillList = ({
                       onClick={() => openModal(bill)}
                       className="text-white bg-oliveGreen rounded-xl w-28 p-2 hover:underline"
                     >
-                      View
+                      {bill.status === "paid" ? "View" : "Edit"}
                     </button>
                   </div>
                 </div>
@@ -130,14 +129,21 @@ const BillList = ({
         </div>
       </div>
 
-      {selectedBill && (
-        <EditBillModal
-          isOpen={isModalOpen}
-          onRequestClose={closeModal}
-          bill={selectedBill}
-          onSucess={handleSucess}
-        />
-      )}
+      {selectedBill &&
+        (isViewMode ? (
+          <ViewPaidBillModal
+            isOpen={isModalOpen}
+            onRequestClose={closeModal}
+            bill={selectedBill}
+          />
+        ) : (
+          <EditBillModal
+            isOpen={isModalOpen}
+            onRequestClose={closeModal}
+            bill={selectedBill}
+            onSuccess={handleSuccess}
+          />
+        ))}
 
       {/* Pagination Controls using React Paginate */}
       <div className="flex justify-center mt-4">

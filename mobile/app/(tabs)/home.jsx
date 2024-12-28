@@ -17,13 +17,14 @@ import LoadingEmptyAnnouncements from "../../components/Screens/Home/LoadingEmpt
 import useAnnouncement from "../../hooks/announcements/useAnnouncement";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import useBills from "../../hooks/useBills";
-// import { usePushNotifications } from "../../hooks/useNotifications";
+import { usePushNotifications } from "../../hooks/useNotifications";
 import { router } from "expo-router";
 const Home = () => {
   const [refreshing, setRefreshing] = useState(false);
   const { user } = useAuthContext();
   const { announcements, loading, getAnnouncements } = useAnnouncement();
   const { error, refetch, totalBalance } = useBills();
+  const { expoPushToken, setupNotifications } = usePushNotifications();
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
@@ -42,7 +43,7 @@ const Home = () => {
     if (user) {
       refetch(user.resident.id);
       getAnnouncements();
-      // usePushNotifications(user.id);
+      setupNotifications(user.id);
     }
   }, [user]);
 

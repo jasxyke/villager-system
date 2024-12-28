@@ -6,7 +6,8 @@ use App\Models\Notification;
 use App\Http\Requests\StoreNotificationRequest;
 use App\Http\Requests\UpdateNotificationRequest;
 use App\Models\ExpoToken;
-use Illuminate\Http\Client\Request;
+use App\Models\ExpoUserToken;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
 class NotificationController extends Controller
@@ -20,7 +21,7 @@ class NotificationController extends Controller
         ]);
 
         // Store or update the token
-        ExpoToken::updateOrCreate(
+        ExpoUserToken::updateOrCreate(
             ['user_id' => $validated['user_id']],
             ['expo_token' => $validated['token']]
         );
@@ -32,7 +33,7 @@ class NotificationController extends Controller
     public function sendTestNotification()
     {
         // Retrieve all stored expo tokens
-        $tokens = ExpoToken::pluck('expo_token')->all();
+        $tokens = ExpoUserToken::pluck('expo_token')->all();
 
         // Message content for the notification
         $message = [

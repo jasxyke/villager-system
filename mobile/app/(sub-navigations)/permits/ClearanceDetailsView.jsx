@@ -303,12 +303,12 @@ const ClearanceDetailedView = ({ onRequestExtension }) => {
               </View>
 
               {/* Payment Calculation */}
-              <View style={styles.paymentSection}>
+              {/* <View style={styles.paymentSection}>
                 <Text style={styles.paymentLabel}>
                   Total Payment: PHP {paymentAmount}
                 </Text>
                 <Text style={styles.paymentAmount}>PHP {paymentAmount}</Text>
-              </View>
+              </View> */}
 
               {/* Submit Button */}
               <TouchableOpacity onPress={handleExtensionSubmit}>
@@ -446,6 +446,9 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: colors.white,
   },
+  noPaymentsText: {
+    color: colors.white,
+  },
   modalOverlay: {
     flex: 1,
     justifyContent: "center",
@@ -496,7 +499,9 @@ const styles = StyleSheet.create({
     fontSize: 14,
     alignItems: "flex-start",
   },
-  datePickerText: {},
+  datePickerText: {
+    marginVertical: "auto",
+  },
 });
 
 export default ClearanceDetailedView;

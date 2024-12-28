@@ -16,6 +16,17 @@ Notifications.setNotificationHandler({
 
 // Function to register for push notifications
 async function registerForPushNotificationsAsync() {
+  console.log("Push Notification Registered!");
+
+  // if (Platform.OS === "android") {
+  //   Notifications.setNotificationChannelAsync("default", {
+  //     name: "default",
+  //     importance: Notifications.AndroidImportance.MAX,
+  //     vibrationPattern: [0, 250, 250, 250],
+  //     lightColor: "#FF231F7C",
+  //   });
+  // }
+
   let token;
 
   if (Device.isDevice) {
@@ -45,15 +56,6 @@ async function registerForPushNotificationsAsync() {
     }
   } else {
     alert("Must use a physical device for push notifications");
-  }
-
-  if (Platform.OS === "android") {
-    Notifications.setNotificationChannelAsync("default", {
-      name: "default",
-      importance: Notifications.AndroidImportance.MAX,
-      vibrationPattern: [0, 250, 250, 250],
-      lightColor: "#FF231F7C",
-    });
   }
 
   return token;

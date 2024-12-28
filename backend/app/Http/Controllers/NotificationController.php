@@ -7,6 +7,8 @@ use App\Http\Requests\StoreNotificationRequest;
 use App\Http\Requests\UpdateNotificationRequest;
 use App\Models\ExpoToken;
 use App\Models\ExpoUserToken;
+use App\Models\User;
+use App\Notifications\ExpoNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
@@ -29,38 +31,26 @@ class NotificationController extends Controller
         return response()->json(['message' => 'Token stored successfully!']);
     }
 
-    // Method to send a test notification to all users
-    public function sendTestNotification()
+    /**
+     * Send a test notification to a specific user.
+     */
+    public function sendTestNotification(Request $request)
     {
-        // Retrieve all stored expo tokens
-        $tokens = ExpoUserToken::pluck('expo_token')->all();
-
-        // Message content for the notification
-        $message = [
-            'title' => 'Test Notification',
-            'body' => 'This is a test push notification!',
-        ];
-
-        // Send notification to all tokens
-        foreach ($tokens as $token) {
-            $this->sendPushNotification($token, $message);
-        }
-
-        return response()->json(['message' => 'Test notification sent!']);
-    }
-
-    // Helper function to send the notification
-    protected function sendPushNotification($expoPushToken, $message)
-    {
-        $response = Http::post('https://exp.host/--/api/v2/push/send', [
-            'to' => $expoPushToken,
-            'sound' => 'default',
-            'title' => $message['title'],
-            'body' => $message['body'],
+        $validated = $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'title' => 'required|string',
+            'body' => 'required|string',
         ]);
 
-        if ($response->failed()) {
-            return response()->json(['error' => 'Failed to send push notification'], 500);
+        try {
+            $user = User::findOrFail($validated['user_id']);
+
+            // Send notification using Laravel's Notification system
+            $user->notify(new ExpoNotification($validated['title'], $validated['body']));
+
+            return response()->json(['message' => 'Notification sent successfully!']);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to send notification: ' . $e->getMessage()], 500);
         }
     }
 

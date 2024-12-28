@@ -72,10 +72,6 @@ class User extends Authenticatable
         return $this->hasOne(Admin::class);
     }
 
-    public function comments(): HasMany{
-        return $this->hasMany(Comment::class);
-    }
-
     public function bookings(): HasMany{
         return $this->hasMany(Booking::class);
     }
@@ -99,6 +95,11 @@ class User extends Authenticatable
      public function carStickerRequests()
     {
         return $this->hasMany(CarStickerRequest::class);
+    }
+
+    public function expoUserTokens()
+    {
+        return $this->hasMany(ExpoUserToken::class);
     }
 
 

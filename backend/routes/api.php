@@ -155,6 +155,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     //push notifications
     Route::post('/expo-token', [NotificationController::class, 'storeExpoToken']);
+    Route::post('/send-notification-to-all', [NotificationController::class, 'sendNotificationToAll']);
+    Route::post('/send-notification-to-user', [NotificationController::class, 'sendNotificationToUser']);
     
     //complaints
     Route::apiResource('complaints', ComplaintController::class);
@@ -194,7 +196,6 @@ Route::post('/bookings',[BookingController::class, 'store']);
 Route::get('/bookings/{id}',[BookingController::class, 'show']);
 
 //test notification only
-Route::get('/send-test-notification', [NotificationController::class, 'sendTestNotification']);
 
 Route::get('/testing', function () {
     return response()->json(['message'=>'hello']);

@@ -25,7 +25,7 @@ class StoreAnnouncementRequest extends FormRequest
             'announcementPic'=>'image|mimes:jpeg,png,jpg',
             'title'=>'required|string|max:100',
             'content'=>'required|string|max:2000',
-            'eventStartDate'=>'required|date|date_format:Y-m-d|after:tomorrow',
+            'eventStartDate'=>'required|date|date_format:Y-m-d',//|after:tomorrow
             'eventEndDate'=>'nullable|date|date_format:Y-m-d',
             'eventStartTime'=>'required|',//date_format:H:i
             'eventEndTIme'=>'nullable|after:eventEndTime'//date_format:H:i

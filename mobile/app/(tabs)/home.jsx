@@ -19,16 +19,6 @@ import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import useBills from "../../hooks/useBills";
 import { usePushNotifications } from "../../hooks/useNotifications";
 import { router } from "expo-router";
-import * as Notifications from "expo-notifications";
-
-// Notification handling settings
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: false,
-    shouldSetBadge: false,
-  }),
-});
 
 const Home = () => {
   const [refreshing, setRefreshing] = useState(false);

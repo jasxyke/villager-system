@@ -29,10 +29,11 @@ const useAnnouncements = () => {
       let newAnnouncements = [...announcements, res.data.announcement];
       console.log(newAnnouncements);
       setAnnouncements(newAnnouncements);
-      setLoading(false);
     } catch (error) {
       console.log(error);
       onError(error.response.data.message);
+    } finally {
+      setLoading(false);
     }
   };
 

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { AnnouncementTypes } from "../../data/contants";
+import LoadingElement from "../../components/LoadingScreen/LoadingElement";
 import useAnnouncements from "../../hooks/Announcements/useAnnouncements";
 
 const AddAnnouncement = () => {
@@ -14,6 +14,21 @@ const AddAnnouncement = () => {
 
   const { addAnnouncement, loading } = useAnnouncements();
 
+  const fileInputRef = React.useRef(null);
+
+  const clearFields = () => {
+    setStartDate(""); // Reset to an empty string
+    setEndDate("");
+    setStartTime("");
+    setEndTime("");
+    setTitle("");
+    setContent("");
+    setImg(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ""; // Clear the file input
+    }
+  };
+
   const handleSucces = (msg) => {
     alert(msg);
     clearFields();
@@ -23,16 +38,6 @@ const AddAnnouncement = () => {
     alert(msg);
   };
 
-  const clearFields = () => {
-    setStartDate(null);
-    setEndDate(null);
-    setStartTime(null);
-    setEndTime(null);
-    // setType(AnnouncementTypes[0].value);
-    setTitle("");
-    setContent("");
-    setImg(null);
-  };
   const submit = () => {
     const formData = {
       title: title,
@@ -75,7 +80,7 @@ const AddAnnouncement = () => {
             name="startDate"
             id="startDate"
             className="text-black p-2 bg-greyGreen"
-            value={startDate}
+            value={startDate || ""}
             onChange={(date) => setStartDate(date.target.value)}
           />
         </div>
@@ -89,7 +94,7 @@ const AddAnnouncement = () => {
             type="date"
             name="endDate"
             id="endDate"
-            value={endDate}
+            value={endDate || ""}
             onChange={(date) => setEndDate(date.target.value)}
             className="text-black p-2 bg-greyGreen"
           />
@@ -102,7 +107,7 @@ const AddAnnouncement = () => {
             type="time"
             name="startTime"
             id="startTime"
-            value={startTime}
+            value={startTime || ""}
             onChange={(time) => setStartTime(time.target.value)}
             className="text-black p-2 bg-greyGreen"
           />
@@ -115,7 +120,7 @@ const AddAnnouncement = () => {
             type="time"
             name="endTime"
             id="endTime"
-            value={endTime}
+            value={endTime || ""}
             onChange={(time) => setEndTime(time.target.value)}
             className="text-black p-2 bg-greyGreen"
           />
@@ -142,6 +147,7 @@ const AddAnnouncement = () => {
             type="file"
             name="image"
             id="image"
+            ref={fileInputRef}
             accept="image/png, image/gif, image/jpeg"
             onChange={setFile}
             className="bg-greyGreen my-auto p-1 rounded-md"
@@ -179,7 +185,7 @@ const AddAnnouncement = () => {
           className="bg-greyGreen py-2 px-8 mt-5 ml-auto rounded-md"
           onClick={submit}
         >
-          Announce
+          {loading ? <LoadingElement size={25} /> : "Announce"}
         </button>
       </div>
     </div>

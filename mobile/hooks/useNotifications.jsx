@@ -48,6 +48,8 @@ async function registerForPushNotificationsAsync() {
       Constants?.expoConfig?.extra?.eas?.projectId ??
       Constants?.easConfig?.projectId;
 
+    console.log("project id: ", projectId);
+
     try {
       token = (await Notifications.getExpoPushTokenAsync({ projectId })).data;
       console.log("Expo Push Token:", token);

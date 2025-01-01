@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\PushNotificationHelper;
 use App\Models\Announcement;
 use App\Http\Requests\StoreAnnouncementRequest;
 use App\Http\Requests\UpdateAnnouncementRequest;
@@ -55,6 +56,11 @@ class AnnouncementController extends Controller
             'event_end_time'=>$request->input('eventEndTime'),
             // 'type'=>$request->type
         ]);
+
+        PushNotificationHelper::sendToAll(
+            $request->input('title'),
+            $request->input('content'));
+        
         return response()->json(['message'=>'Announced successfuly!',
                             'announcement'=>$announcement]);
     }

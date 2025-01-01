@@ -9,16 +9,20 @@ import MainLogo from "../../components/MainLogo";
 import AddAnnouncement from "./AddAnnouncement";
 import ViewAnnouncements from "./ViewAnnouncements";
 import NotifyResidents from "./NotifyResidents";
+import AddNotification from "./AddNotification";
+
 import { colors } from "../../utils/colors";
 
 const AnnouncementPage = () => {
   const [isAdding, setIsAdding] = useState(true);
   const [isViewing, setIsViewing] = useState(false);
+  const [isAddNotification, setIsAddNotification] = useState(false);
   const [isNotifying, setIsNotifying] = useState(false);
 
   const reset = () => {
     setIsAdding(false);
     setIsViewing(false);
+    setIsAddNotification(false);
     setIsNotifying(false);
   };
   const adding = () => {
@@ -29,6 +33,11 @@ const AnnouncementPage = () => {
   const viewing = () => {
     reset();
     setIsViewing(true);
+  };
+
+  const addNotification = () => {
+    reset();
+    setIsAddNotification(true);
   };
 
   const notifying = () => {
@@ -56,6 +65,13 @@ const AnnouncementPage = () => {
           />
           <input
             className={styles.announcementButton + " text-center"}
+            value={"ADD NOTIFICATIONS"}
+            onClick={addNotification}
+            type="button"
+            style={{ backgroundColor: isAddNotification && colors.primary }}
+          />
+          <input
+            className={styles.announcementButton + " text-center"}
             value={"NOTIFY RESIDENTS"}
             onClick={notifying}
             type="button"
@@ -69,6 +85,8 @@ const AnnouncementPage = () => {
             <AddAnnouncement />
           ) : isViewing ? (
             <ViewAnnouncements />
+          ) : isAddNotification ? (
+            <AddNotification />
           ) : (
             isNotifying && <NotifyResidents />
           )}

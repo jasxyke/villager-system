@@ -65,6 +65,20 @@ const AdminDashboard = () => {
       <div className="pt-10">
         <MainLogo />
       </div>
+      <div className="p-4 mr-4 ml-4 bg-green rounded-lg">
+        <div className="flex justify-between text-white">
+          <div>TOTAL INCOME</div>
+          <div>DATE</div>
+        </div>
+        <div className="flex">
+          <div>
+            <div>//put here the total amount using the useincomes</div>
+            <div>//under is the expenses</div>
+          </div>
+
+          <div>REPORT</div>
+        </div>
+      </div>
       <div className="flex p-2">
         <div
           className="flex flex-row items-center bg-gradient-to-r from-green to-green p-8 w-full max-w-sm cursor-pointer mx-auto rounded-xl shadow-lg transition-transform duration-300 ease-in-out transform hover:scale-105 hover:shadow-2xl"

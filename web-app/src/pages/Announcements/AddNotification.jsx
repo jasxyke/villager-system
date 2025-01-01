@@ -39,7 +39,7 @@ const AddNotification = () => {
             <FiUser size={24} color="black" />
             <span className="w-[2px] h-full bg-green" />
             <span className="text-lg font-medium hover:text-green-500 transition-colors">
-              {selectedPeople || "Select People"}
+              {selectedPeople || "People"}
             </span>
             <FaCaretDown size={16} />
           </button>
@@ -47,15 +47,21 @@ const AddNotification = () => {
             <div className="absolute left-0 top-full mt-2 w-full bg-white border border-gray-300 rounded-lg shadow-lg z-10">
               <div
                 className="p-3 cursor-pointer hover:bg-gray-100 rounded-t-lg"
-                onClick={() => handlePeopleChange("everyone")}
+                onClick={() => handlePeopleChange("Everyone")}
               >
                 Everyone
               </div>
               <div
                 className="p-3 cursor-pointer hover:bg-gray-100"
-                onClick={() => handlePeopleChange("residents")}
+                onClick={() => handlePeopleChange("Select Residents")}
               >
                 Residents
+              </div>
+              <div
+                className="p-3 cursor-pointer hover:bg-gray-100 rounded-t-lg"
+                onClick={() => handlePeopleChange("Admins/Officers")}
+              >
+                Admins/Officers
               </div>
             </div>
           )}

@@ -70,7 +70,7 @@ class HouseSeeder extends Seeder
                             'resident_id' => $resident->id,
                             'bill_id' => $bill->id,
                             'amount' => $bill->amount,
-                            // 'payment_method' => $faker->randomElement(['cash', 'gcash']),
+                            'payment_method' => $faker->randomElement(['cash', 'e-wallet']),
                             'transaction_date' => Carbon::now()->subMonths($i)->endOfMonth(),
                         ]);
                     }

@@ -26,6 +26,10 @@
   margin-bottom: 15px;
 }
 
+.error {
+  color: red;
+}
+
 .label {
   display: block;
   margin-bottom: 5px;

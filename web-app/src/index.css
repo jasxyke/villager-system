@@ -66,6 +66,18 @@ li:has(> a.active) {
 
 .pagination li:hover {
   background-color: var(--paleGreen);
+  border-radius: 5px;
+}
+
+.pagination-active {
+  background-color: var(--paleGreen);
+  padding: 0 0.5rem;
+  border-radius: 5px;
+}
+
+.pagination-disabled {
+  color: grey;
+  opacity: 0.5;
 }
 
 .app-input {

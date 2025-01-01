@@ -5,8 +5,11 @@ import ResidentInfo from "./OverdueBills/ResidentInfo";
 import OverdueDetails from "./OverdueBills/OverdueDetails";
 import OverdueMonthlyList from "./OverdueBills/OverdueMonthlyList";
 import OverduePaymentModal from "./OverdueBills/OverduePaymentModal";
+import useSendNotification from "../../hooks/useSendNotification";
 
-const OverdueViewDetails = ({ bill, onBack }) => {
+const OverdueViewDetails = ({ resident, onBack, onSucess }) => {
+  const { sendNotificationToUser, loading, error, success } =
+    useSendNotification();
   const [isModalOpen, setIsModalOpen] = useState(false); // State to track if the modal is open
 
   const handleMakePaymentClick = () => {
@@ -15,6 +18,18 @@ const OverdueViewDetails = ({ bill, onBack }) => {
 
   const handleCloseModal = () => {
     setIsModalOpen(false); // Close the modal
+  };
+
+  const handleSuccess = () => {
+    onBack();
+    onSucess();
+  };
+
+  const handleRemindClick = () => {
+    // Call sendNotificationToUser with the resident's user ID, title, and body
+    const title = "Reminder: Overdue Monthly Dues";
+    const body = `Hello ${resident.resident.user.firstname}!,\n\nYou have overdue monthly dues. Please make a payment at your earliest convenience.`;
+    sendNotificationToUser(resident.resident.user.id, title, body);
   };
 
   return (
@@ -34,7 +49,7 @@ const OverdueViewDetails = ({ bill, onBack }) => {
 
       <div className="grid grid-cols-1 md:grid-cols-[1fr_3fr] gap-8 max-w-7xl mx-auto bg-white rounded-lg shadow-lg p-4">
         {/* Resident Details */}
-        <ResidentInfo />
+        <ResidentInfo resident={resident.resident} />
 
         {/* Overdue Details */}
         <div className="p-6 border-l-2">
@@ -42,7 +57,10 @@ const OverdueViewDetails = ({ bill, onBack }) => {
             <div className="text-lg font-bold text-black tracking-wide">
               Overdue Summary
             </div>
-            <button className="relative flex items-center space-x-2 text-red-500 text-base font-medium group p-1">
+            <button
+              className="relative flex items-center space-x-2 text-red-500 text-base font-medium group p-1"
+              onClick={handleRemindClick} // Trigger the remind function
+            >
               <BiBell className="text-2xl transition-transform group-hover:rotate-12" />
               <span>Remind</span>
               <div className="absolute bottom-0 left-0 w-0 h-[2px] bg-red-500 group-hover:w-full transition-all duration-500"></div>
@@ -51,9 +69,9 @@ const OverdueViewDetails = ({ bill, onBack }) => {
 
           <hr className="" />
 
-          <OverdueDetails />
+          <OverdueDetails residentBill={resident} />
 
-          <OverdueMonthlyList />
+          <OverdueMonthlyList unpaidDues={resident.resident.bills} />
 
           {/* Action Buttons */}
           <div className="flex flex-col space-y-4">
@@ -63,15 +81,23 @@ const OverdueViewDetails = ({ bill, onBack }) => {
             >
               Make Payment
             </button>
-            <button className="bg-gradient-to-r from-darkGreen to-secondary text-white text-lg font-semibold py-3 rounded-lg shadow hover:from-olive hover:to-green transition transform hover:scale-105 text-center cursor-pointer">
-              View Payment History
-            </button>
           </div>
         </div>
       </div>
 
       {/* Conditionally render the modal */}
-      {isModalOpen && <OverduePaymentModal onClose={handleCloseModal} />}
+      {isModalOpen && (
+        <OverduePaymentModal
+          onClose={handleCloseModal}
+          overdues={resident.resident.bills}
+          onSucess={handleSuccess}
+        />
+      )}
+
+      {/* Display success or error message */}
+      {/* {loading && <p>Sending reminder...</p>}
+      {success && <p className="text-green-500">Reminder sent successfully!</p>} */}
+      {/* {error && <p className="text-red-500">{error}</p>} */}
     </div>
   );
 };

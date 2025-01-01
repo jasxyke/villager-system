@@ -12,8 +12,13 @@ import {
 } from "react-icons/fi";
 import { BiMaleSign } from "react-icons/bi";
 import PaymentHistory from "./PaymentHistory";
+import {
+  calculateAge,
+  formatName,
+  formatUserName,
+} from "../../../utils/DataFormatter";
 
-const ResidentInfo = ({ bill }) => {
+const ResidentInfo = ({ resident }) => {
   return (
     <div className="mt-4 p-2">
       {/* Profile Info - Name and Picture side by side */}
@@ -21,8 +26,8 @@ const ResidentInfo = ({ bill }) => {
         {/* Profile Pic */}
         <div className="flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden shadow-lg">
           <img
-            src="https://i.pravatar.cc/150?img=2" // Example: Random person image URL from pravatar.cc
-            alt="Sample Resident Name"
+            src={resident.user.picture_url} // Example: Random person image URL from pravatar.cc
+            alt={resident.user.firstname}
             className="w-full h-full object-cover"
           />
         </div>
@@ -30,9 +35,9 @@ const ResidentInfo = ({ bill }) => {
         {/* Resident Name and Role */}
         <div className="text-start">
           <div className="text-sm font-semibold text-black truncate">
-            JOHN REY REBUSQUILLO
+            {formatUserName(resident.user, false)}
           </div>
-          <div className="text-sm">Homeowner</div>
+          <div className="text-sm">{formatName(resident.user.role_type)}</div>
         </div>
       </div>
 
@@ -46,19 +51,19 @@ const ResidentInfo = ({ bill }) => {
         <div className="space-y-1">
           <div className="flex items-center space-x-2 text-sm text-black">
             <FiMail />
-            <span>Email:</span>
+            <span>Email: {resident.user.email}</span>
           </div>
           <div className="text-black"></div>
 
           <div className="flex items-center space-x-2 text-sm text-black">
             <FiPhone />
-            <span>Contact Number:</span>
+            <span>Contact Number: {resident.user.contact_number}</span>
           </div>
           <div className="text-black"></div>
 
           <div className="flex items-center space-x-2 text-sm text-black">
             <FiFacebook />
-            <span>Facebook URL:</span>
+            <span>Facebook Name/URL: {resident.fb_name}</span>
           </div>
           <div className="text-black"></div>
         </div>
@@ -74,31 +79,31 @@ const ResidentInfo = ({ bill }) => {
         <div className="space-y-1">
           <div className="flex items-center space-x-2 text-sm text-black">
             <FiHome />
-            <span>Block No:</span>
+            <span>Block No: {resident.house.block}</span>
             <div className="text-black"></div>
           </div>
 
           <div className="flex items-center space-x-2 text-sm text-black">
             <FiMapPin />
-            <span>Lot No:</span>
+            <span>Lot No: {resident.house.lot}</span>
             <div className="text-black"></div>
           </div>
 
           <div className="flex items-center space-x-2 text-sm text-black">
             <FiUser />
-            <span>Age:</span>
+            <span>Age: {calculateAge(resident.birthdate)}</span>
             <div className="text-black"></div>
           </div>
 
           <div className="flex items-center space-x-2 text-sm text-black">
             <BiMaleSign />
-            <span>Gender:</span>
+            <span>Sex: {formatName(resident.sex)}</span>
             <div className="text-black"></div>
           </div>
 
           <div className="flex items-center space-x-2 text-sm text-black">
             <FiBriefcase />
-            <span>Occupation:</span>
+            <span>Occupation: {formatName(resident.occupation_status)}</span>
             <div className="text-black"></div>
           </div>
         </div>
@@ -110,7 +115,7 @@ const ResidentInfo = ({ bill }) => {
         <div className="text-md font-bold text-gray-800 mb-2">
           Payment History:
         </div>
-        <PaymentHistory />
+        <PaymentHistory transactions={resident.transactions} />
 
         <button className="p-2 text-red-500">View all</button>
       </div>

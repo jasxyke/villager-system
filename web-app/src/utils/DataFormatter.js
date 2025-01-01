@@ -93,3 +93,22 @@ export const formatToReadableDate = (dateString) => {
   const options = { year: "numeric", month: "short", day: "numeric" };
   return date.toLocaleDateString("en-US", options);
 };
+
+// export function calculateAge(birthdate) {
+//   const birthDate = new Date(birthdate);
+//   const today = new Date();
+
+//   let age = today.getFullYear() - birthDate.getFullYear();
+
+//   // Adjust for cases where the birthday hasn't occurred yet this year
+//   const hasHadBirthdayThisYear =
+//     today.getMonth() > birthDate.getMonth() ||
+//     (today.getMonth() === birthDate.getMonth() &&
+//       today.getDate() >= birthDate.getDate());
+
+//   if (!hasHadBirthdayThisYear) {
+//     age -= 1;
+//   }
+
+//   return age;
+// }

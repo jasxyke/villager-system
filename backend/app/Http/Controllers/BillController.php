@@ -68,18 +68,91 @@ class BillController extends Controller
         ]);
     }
 
-    public function getOverdueBills(string $page)
+    public function getOverdueBills(Request $request, string $page)
     {
+        // Fetch the search query from the request
+        $search = $request->input('search', '');
+
         // Create a query for bills
         $query = Bill::with(['resident.user']) // Eager load Resident and User relationships
             ->where('status', 'overdue');  // Filter for overdue bills
+
+        // If a search query is provided, filter by the resident's name
+        if ($search) {
+            $query->whereHas('resident.user', function ($q) use ($search) {
+                $q->where('firstname', 'like', '%' . $search . '%')
+                ->orWhere('lastname', 'like', '%' . $search . '%');
+            });
+        }
 
         // Order by the oldest due date
         $bills = $query->orderBy('due_date', 'asc')
             ->paginate(10, ['*'], 'page', $page); // Adjust the pagination limit as necessary
 
-        return response()->json($bills);
+        return response()->json([
+            'bills' => $bills->items(), 
+            'currentPage' => $bills->currentPage(),
+            'lastPage' => $bills->lastPage(),
+            'total' => $bills->total()
+        ]);
     }
+
+    public function getResidentsWithOverdues(Request $request, $page)
+    {
+        // Set the number of items per page (you can modify this as needed)
+        $perPage = 10;
+
+        // Get the search query from the request (if present)
+        $searchQuery = $request->input('search', '');
+
+        // Fetch residents with overdue bills, and optionally filter by the resident's name
+        $residents = Resident::whereHas('bills', function ($query) {
+            $query->where('status', 'overdue')
+                ->where('due_date', '<', now()); // Ensure the bill's due date is in the past
+        })
+        ->with(['transactions', 'house','user', 'bills' => function ($query) {
+            $query->where('status', 'overdue') // Only include overdue bills
+                ->where('due_date', '<', now()); // Ensure the bill's due date is in the past
+        }])
+        ->whereHas('user', function ($query) use ($searchQuery) {
+            // Search in the first name, middle name, or last name
+            $query->where('firstname', 'like', "%{$searchQuery}%")
+                ->orWhere('middlename', 'like', "%{$searchQuery}%")
+                ->orWhere('lastname', 'like', "%{$searchQuery}%");
+        })
+        ->paginate($perPage);
+
+        // Prepare the response with additional data (overdue months, number of months, total amount)
+        $residentsWithOverdueDetails = $residents->map(function ($resident) {
+            $overdueMonths = [];
+            $totalAmount = 0;
+
+            foreach ($resident->bills as $bill) {
+                // Ensure due_date is a Carbon instance before calling format()
+                $dueDate = Carbon::parse($bill->due_date); 
+                $overdueMonth = $dueDate->format('Y-m'); // Get the year and month of the overdue bill
+                if (!in_array($overdueMonth, $overdueMonths)) {
+                    $overdueMonths[] = $overdueMonth; // Add unique months
+                }
+                $totalAmount += $bill->amount; // Sum the overdue bill amounts
+            }
+
+            return [
+                'resident' => $resident,
+                'overdueMonths' => $overdueMonths, // List of overdue months
+                'numOverdueMonths' => count($overdueMonths), // Number of overdue months
+                'totalAmount' => $totalAmount, // Total overdue amount
+            ];
+        });
+
+        // Return the paginated results with the additional data
+        return response()->json([
+            'data' => $residentsWithOverdueDetails,
+            'current_page' => $residents->currentPage(),
+            'last_page' => $residents->lastPage(),
+            'total' => $residents->total(),
+        ]);
+    }   
 
     public function notifyOverdueBills(Request $request)
     {

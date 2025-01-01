@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from "react";
 import Modal from "react-modal";
 import useBills from "../../hooks/Bills/useBills";
-import styles from "./EditBillsModal.module.css"; // Import CSS Module
+import styles from "./EditBillsModal.module.css";
 
-Modal.setAppElement("#root"); // Ensure that screen readers can work with the modal
+Modal.setAppElement("#root");
 
-const EditBillModal = ({ isOpen, onRequestClose, bill, onSucess }) => {
+const EditBillModal = ({ isOpen, onRequestClose, bill, onSuccess }) => {
   const { updateBillAndAddPayment } = useBills();
   const [formData, setFormData] = useState({
     amount: "",
     transaction_date: "",
     payment_amount: "",
-    new_amount: "",
     new_status: bill.status,
+    payment_method: "cash",
   });
   const [errors, setErrors] = useState({});
 
@@ -22,8 +22,8 @@ const EditBillModal = ({ isOpen, onRequestClose, bill, onSucess }) => {
         amount: bill.amount,
         transaction_date: "",
         payment_amount: "",
-        new_amount: "",
         new_status: bill.status,
+        payment_method: "cash",
       });
     }
   }, [bill]);
@@ -36,19 +36,15 @@ const EditBillModal = ({ isOpen, onRequestClose, bill, onSucess }) => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
 
-    // Update form data based on input change
     const updatedFormData = { ...formData, [name]: value };
 
-    // If payment_amount changes, check if it satisfies the total amount
     if (name === "payment_amount") {
       const paymentAmount = parseFloat(value || 0);
       const currentAmount = parseFloat(formData.amount);
 
       if (paymentAmount >= currentAmount) {
-        // Automatically mark as paid if payment satisfies the total amount
         updatedFormData.new_status = "paid";
       } else if (formData.new_status === "paid") {
-        // Revert to default status if payment no longer satisfies the total amount
         updatedFormData.new_status = bill.status;
       }
     }
@@ -85,11 +81,10 @@ const EditBillModal = ({ isOpen, onRequestClose, bill, onSucess }) => {
         amount: formData.amount,
         transaction_date: formData.transaction_date,
         payment_amount: formData.payment_amount,
-        new_amount: formData.new_amount,
         new_status: formData.new_status,
+        payment_method: formData.payment_method,
       };
 
-      // Ensure the status is set to 'paid' if the payment fully satisfies the bill
       if (
         parseFloat(formData.payment_amount) >= parseFloat(formData.amount) &&
         formData.new_status !== "paid"
@@ -97,8 +92,8 @@ const EditBillModal = ({ isOpen, onRequestClose, bill, onSucess }) => {
         data.new_status = "paid";
       }
 
-      await updateBillAndAddPayment(data, onSucess);
-      onRequestClose(); // Close the modal after successful update
+      await updateBillAndAddPayment(data, onSuccess);
+      onRequestClose();
     } catch (error) {
       console.error("Failed to update bill and add payment:", error);
     }
@@ -127,19 +122,6 @@ const EditBillModal = ({ isOpen, onRequestClose, bill, onSucess }) => {
             disabled
           />
         </div>
-        {/* <div className={styles.formGroup}>
-          <label className={styles.label}>New Amount:</label>
-          <input
-            type="number"
-            name="new_amount"
-            value={formData.new_amount}
-            onChange={handleInputChange}
-            className={styles.input}
-          />
-          {errors.new_amount && (
-            <span className={styles.error}>{errors.new_amount}</span>
-          )}
-        </div> */}
         <div className={styles.formGroup}>
           <label className={styles.label}>New Status:</label>
           <select
@@ -168,6 +150,18 @@ const EditBillModal = ({ isOpen, onRequestClose, bill, onSucess }) => {
           )}
         </div>
         <div className={styles.formGroup}>
+          <label className={styles.label}>Payment Method:</label>
+          <select
+            name="payment_method"
+            value={formData.payment_method}
+            onChange={handleInputChange}
+            className={styles.select}
+          >
+            <option value="cash">Cash</option>
+            <option value="e-wallet">E-wallet</option>
+          </select>
+        </div>
+        <div className={styles.formGroup}>
           <label className={styles.label}>Transaction Date:</label>
           <input
             type="date"
@@ -186,6 +180,7 @@ const EditBillModal = ({ isOpen, onRequestClose, bill, onSucess }) => {
             </button>
           </div>
         </div>
+
         <button type="submit" className={`${styles.button} ${styles.submit}`}>
           Update Bill
         </button>

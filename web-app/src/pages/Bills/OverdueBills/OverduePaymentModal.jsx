@@ -1,15 +1,24 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import useUpdateBillAndAddPayments from "../../../hooks/Bills/useUpdateBillAndAddPayments";
 
-const OverduePaymentModal = ({ onClose }) => {
-  const monthlyData = [
-    { id: 1, month: "Feb", amount: "₱1,000", fee: "₱10", total: "₱1,010" },
-    { id: 2, month: "Mar", amount: "₱1,000", fee: "₱50", total: "₱1,050" },
-    { id: 3, month: "Apr", amount: "₱1,000", fee: "₱100", total: "₱1,100" },
-  ];
+const OverduePaymentModal = ({ onClose, overdues, onSucess }) => {
+  // Map overdues into a format suitable for rendering
+  const monthlyData = overdues.map((due) => ({
+    id: due.id,
+    month: new Date(due.due_date).toLocaleString("default", {
+      month: "long",
+      year: "numeric",
+    }),
+    amount: `₱${parseFloat(due.amount).toFixed(2)}`,
+  }));
 
   const [selectedMonths, setSelectedMonths] = useState([]);
   const [paymentAmount, setPaymentAmount] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState("cash");
   const [selectAll, setSelectAll] = useState(false);
+
+  const { loading, error, updateBillAndAddPayment } =
+    useUpdateBillAndAddPayments(); // Use the hook
 
   // Update selectAll checkbox based on selectedMonths
   useEffect(() => {
@@ -19,19 +28,46 @@ const OverduePaymentModal = ({ onClose }) => {
   // Calculate the total amount due for selected months
   const totalAmountDue = selectedMonths.reduce((sum, monthId) => {
     const month = monthlyData.find((item) => item.id === monthId);
-    return sum + parseFloat(month.total.replace("₱", "").replace(",", ""));
+    return sum + parseFloat(month.amount.replace("₱", "").replace(",", ""));
   }, 0);
 
   // Handle payment submission
-  const handlePaymentSubmit = () => {
-    if (!paymentAmount) {
-      alert("Please enter a payment amount.");
+  const handlePaymentSubmit = async () => {
+    if (!paymentAmount || selectedMonths.length === 0) {
+      alert("Please enter a payment amount and select at least one month.");
       return;
     }
-    alert(
-      `Payment of ₱${paymentAmount} has been processed for the selected months.`
-    );
-    onClose(); // Close the modal after payment
+
+    // Validate that the payment amount matches the total amount due
+    if (parseFloat(paymentAmount) !== totalAmountDue) {
+      alert(
+        `Payment amount must be equal to the total amount due: ₱${totalAmountDue.toLocaleString()}`
+      );
+      return;
+    }
+
+    // Prepare data for API call
+    const billIds = selectedMonths;
+    const paymentData = {
+      bill_ids: billIds,
+      payment_amount: parseFloat(paymentAmount),
+      payment_method: paymentMethod,
+    };
+
+    try {
+      // Call the custom hook to update the bill and add payment
+      const success = await updateBillAndAddPayment(paymentData, onClose);
+      if (success) {
+        alert(
+          `Payment of ₱${paymentAmount} (${paymentMethod}) has been processed for the selected months.`
+        );
+        onClose(); // Close the modal after payment
+        onSucess();
+      }
+    } catch (err) {
+      console.error("Error processing payment:", err);
+      alert("There was an error processing the payment.");
+    }
   };
 
   // Toggle selection of a month
@@ -84,27 +120,23 @@ const OverduePaymentModal = ({ onClose }) => {
 
           <div className="overflow-x-auto rounded-lg shadow-sm bg-white">
             <div className="text-center bg-green text-white">
-              <div className="p-3 text-sm font-semibold">
-                <div className="grid grid-cols-5 gap-4 px-4">
-                  <div>
-                    {/* Select All Checkbox */}
-                    <button
-                      className="flex items-center space-x-2 mb-4 text-white cursor-pointer"
-                      onClick={toggleSelectAll}
-                    >
-                      <input
-                        type="checkbox"
-                        checked={selectAll}
-                        onChange={toggleSelectAll}
-                        className="form-checkbox h-6 w-6 text-blue-500"
-                      />
-                      <span className="text-md">Select All</span>
-                    </button>
-                  </div>
+              <div className="p-2 text-sm font-semibold">
+                <div className="grid grid-cols-3 gap-4 px-4 items-center">
+                  {/* Select All Checkbox */}
+                  <button
+                    className="flex items-center justify-center text-white cursor-pointer"
+                    onClick={toggleSelectAll}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={selectAll}
+                      onChange={toggleSelectAll}
+                      className="form-checkbox h-4 w-4 text-blue-500"
+                    />
+                    <span className="text-md">Select All</span>
+                  </button>
                   <div>Month</div>
                   <div>Amount</div>
-                  <div>Fee/Interest</div>
-                  <div>Total</div>
                 </div>
               </div>
             </div>
@@ -117,20 +149,18 @@ const OverduePaymentModal = ({ onClose }) => {
                   index % 2 === 0 ? "bg-gray-100" : "bg-white"
                 } hover:bg-gray-200 transition-colors`}
               >
-                <div className="grid grid-cols-5 gap-4 px-4 py-4 text-gray-700">
+                <div className="grid grid-cols-3 gap-4 px-2 py-2 text-gray-700">
                   {/* Checkbox in the first column */}
                   <div className="text-center">
                     <input
                       type="checkbox"
                       checked={selectedMonths.includes(row.id)}
                       onChange={() => toggleMonthSelection(row.id)}
-                      className="form-checkbox h-6 w-6 text-blue-500"
+                      className="form-checkbox h-4 w-4 text-blue-500"
                     />
                   </div>
                   <div className="text-center">{row.month}</div>
                   <div className="text-center">{row.amount}</div>
-                  <div className="text-center">{row.fee}</div>
-                  <div className="text-center font-semibold">{row.total}</div>
                 </div>
               </div>
             ))}
@@ -147,8 +177,26 @@ const OverduePaymentModal = ({ onClose }) => {
           </div>
         </div>
 
+        {/* Payment Method */}
+        <div className="mb-2">
+          <label
+            htmlFor="payment-method"
+            className="block text-md font-semibold text-black"
+          >
+            Payment Method:
+          </label>
+          <select
+            id="payment-method"
+            value={paymentMethod}
+            onChange={(e) => setPaymentMethod(e.target.value)}
+            className="mt-2 p-2 w-full border rounded-md border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-300"
+          >
+            <option value="cash">Cash</option>
+            <option value="e-wallet">E-wallet</option>
+          </select>
+        </div>
         {/* Payment Form */}
-        <div className="mb-6">
+        <div className="mb-2">
           <label
             htmlFor="payment"
             className="block text-md font-semibold text-black"
@@ -160,7 +208,7 @@ const OverduePaymentModal = ({ onClose }) => {
             id="payment"
             value={paymentAmount}
             onChange={(e) => setPaymentAmount(e.target.value)}
-            className="mt-2 p-4 w-full border rounded-md border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-300"
+            className="mt-2 p-2 w-full border rounded-md border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-300"
             placeholder="Enter amount to pay"
           />
         </div>
@@ -177,7 +225,7 @@ const OverduePaymentModal = ({ onClose }) => {
             onClick={handlePaymentSubmit}
             className="bg-green text-white py-2 px-6 rounded-lg hover:bg-green-600 transition-colors"
           >
-            Pay Now
+            {loading ? "Adding Payment..." : "Pay Now"}
           </button>
         </div>
       </div>

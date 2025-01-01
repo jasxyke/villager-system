@@ -89,7 +89,7 @@ const BillList = ({
                     index % 2 === 0 ? "bg-gray-50" : "bg-white"
                   } hover:bg-gray-100`}
                 >
-                  <div className="flex items-center justify-center text-center">
+                  <div className="flex items-center justify-center text-center truncate max-w-xs">
                     {formatFullName(
                       bill.resident.user.firstname,
                       bill.resident.user.middlename,
@@ -156,9 +156,9 @@ const BillList = ({
           previousLabel={"< previous"}
           renderOnZeroPageCount={null}
           className={"pagination rounded-md"}
-          disabledClassName="text-grey opacity-50"
+          disabledClassName="pagination-disabled"
           pageClassName="text-white"
-          activeClassName="bg-paleGreen px-2"
+          activeClassName="pagination-active"
           forcePage={currentPage - 1}
         />
       </div>

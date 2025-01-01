@@ -103,12 +103,15 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/bills/generate-monthly', [BillController::class, 'generateMonthlyBills']);
     Route::get('/bills/resident/{resident_id}', [BillController::class, 'getUserBills']);
     Route::post('/bills/admin', [BillController::class, 'getMonthlyBills']);
+    
     //overdue bills
-    Route::get('/bills/overdue/{page}', [BillController::class, 'getOverdueBills']);
+    Route::post('/bills/overdue/{page}', [BillController::class, 'getOverdueBills']);
     Route::post('/bills/notify-overdue', [BillController::class, 'notifyOverdueBills']);
+    Route::post('/bills-resident-overdues/{page}', [BillController::class, 'getResidentsWithOverdues']);
     
     //transaction routes (monthly due bills)
     Route::post('/bills/pay-edit-bill', [TransactionController::class, 'updateBillAndAddPayment']);
+    Route::post('/bills/pay-edit-bills', [TransactionController::class, 'updateBillAndAddPayments']);
     Route::post('/transactions/recent-paid', [TransactionController::class, 'getRecentPaidTransactions']);
 
     //permit routes

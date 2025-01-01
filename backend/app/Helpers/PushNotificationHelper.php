@@ -22,7 +22,7 @@ class PushNotificationHelper
         $tokens = ExpoUserToken::pluck('expo_token')->toArray();
 
         if (empty($tokens)) {
-            return ['success' => false, 'message' => 'No Expo tokens found'];
+            return ['success' => false, 'message' => 'No registered mobile devices found.'];
         }
 
         try {
@@ -30,7 +30,7 @@ class PushNotificationHelper
             Notification::route('expo', $tokens)
                 ->notify(new ExpoNotification($title, $body, $tokens));
 
-            return ['success' => true, 'message' => 'Notification sent successfully to all users!'];
+            return ['success' => true, 'message' => 'Notification sent successfully to all residents!'];
         } catch (\Exception $e) {
             return ['success' => false, 'message' => 'Failed to send notifications: ' . $e->getMessage()];
         }
@@ -54,13 +54,13 @@ class PushNotificationHelper
             $expoToken = ExpoUserToken::where('user_id', $userId)->value('expo_token');
 
             if (!$expoToken) {
-                return ['success' => false, 'message' => 'Expo token not found for the user'];
+                return ['success' => false, 'message' => 'Resident has no registered mobile device.'];
             }
 
             // Use the user's notify method to send the notification
             $user->notify(new ExpoNotification($title, $body, [$expoToken]));
 
-            return ['success' => true, 'message' => 'Notification sent successfully to the user!'];
+            return ['success' => true, 'message' => 'Notification sent successfully to the resident!'];
         } catch (\Exception $e) {
             return ['success' => false, 'message' => 'Failed to send notification: ' . $e->getMessage()];
         }

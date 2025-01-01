@@ -15,7 +15,7 @@ class Transaction extends Model
         'resident_id',
         'bill_id',
         'amount',
-        // 'payment_method',
+        'payment_method',
         'transaction_date'
     ];
 

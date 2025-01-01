@@ -7,7 +7,7 @@ import Filters from "./Filters";
 import OverdueBills from "./OverdueBills";
 
 const BillsPage = () => {
-  const [activeFilter, setActiveFilter] = useState("billList");
+  const [activeFilter, setActiveFilter] = useState("overdue");
   const [searchPressed, setSearchPressed] = useState(false);
   const [filters, setFilters] = useState({
     status: "pending",
@@ -33,27 +33,24 @@ const BillsPage = () => {
       <MainLogo />
       <div className="bg-gradient-to-t from-green to-mutedGreen shadow-lg rounded-lg overflow-hidden">
         <div className="flex">
-          {[
-            // "overdue",
-            "billList",
-            "transactionHistory",
-            "reminders",
-          ].map((filter) => (
-            <button
-              key={filter}
-              onClick={() => handleFilterClick(filter)}
-              className={`flex-1 text-center py-3 transition-all duration-300 ease-in-out ${
-                activeFilter === filter
-                  ? "bg-paleDarkGreen text-white"
-                  : "bg-green  text-white hover:bg-paleDarkGreen"
-              } `}
-            >
-              {/* {filter === "overdue" && "Overdue Bills"} */}
-              {filter === "billList" && "Bill List"}
-              {filter === "transactionHistory" && "Transaction History"}
-              {filter === "reminders" && "Reminders"}
-            </button>
-          ))}
+          {["overdue", "billList", "transactionHistory", "reminders"].map(
+            (filter) => (
+              <button
+                key={filter}
+                onClick={() => handleFilterClick(filter)}
+                className={`flex-1 text-center py-3 transition-all duration-300 ease-in-out ${
+                  activeFilter === filter
+                    ? "bg-paleDarkGreen text-white"
+                    : "bg-green  text-white hover:bg-paleDarkGreen"
+                } `}
+              >
+                {filter === "overdue" && "Overdues"}
+                {filter === "billList" && "Monthly Dues List"}
+                {filter === "transactionHistory" && "Transaction History"}
+                {filter === "reminders" && "Reminders"}
+              </button>
+            )
+          )}
         </div>
 
         {/* Do not show Filters for "Overdue Bills" and "Reminders" */}

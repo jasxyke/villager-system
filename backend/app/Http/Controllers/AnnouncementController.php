@@ -29,6 +29,7 @@ class AnnouncementController extends Controller
         $announcements = Announcement::whereBetween(
                         'event_start_date', [$oneWeekAgo, $threeWeekSoon])
                         ->orderBy('event_start_date', 'DESC')
+                        ->take(20)
                         ->get();
         
         return $announcements;

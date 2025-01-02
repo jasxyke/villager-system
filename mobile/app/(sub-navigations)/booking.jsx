@@ -13,9 +13,10 @@ import TabsGradient from "../../components/gradients/TabsGradient";
 import AppHeader from "../../components/common/AppHeader";
 import { colors } from "../../styles/colors";
 import useBookings from "../../hooks/bookings/useBookings";
-import { AMENNITIES } from "../../data/DataStructures";
 import { formatTime } from "../../utils/DataFormatter";
 import BookingForm from "../../components/forms/BookingForm";
+import { useAmenities } from "../../context/AmenitiesContext";
+import LoadingScreen from "../../components/common/LoadingScreen";
 
 const Booking = () => {
   const [selectedAmenity, setSelectedAmenity] = useState(null);
@@ -30,6 +31,7 @@ const Booking = () => {
   const [selectedMonth, setSelectedMonth] = useState(new Date());
   const [markedDates, setMarkedDates] = useState({});
   const today = new Date().toISOString().split("T")[0];
+  const { amenities, fetchAmenities } = useAmenities();
 
   const { fetchBookings, bookings } = useBookings();
 
@@ -100,6 +102,7 @@ const Booking = () => {
       selectedMonth.getMonth() + 1,
       selectedAmenity
     );
+    fetchAmenities();
     setTimeout(() => {
       setRefreshing(false);
     }, 1000);
@@ -176,6 +179,10 @@ const Booking = () => {
     setShowForm(false);
   };
 
+  if (!amenities) {
+    return <LoadingScreen />;
+  }
+
   return (
     <View className="flex flex-1 w-full h-full">
       <TabsGradient />
@@ -210,7 +217,7 @@ const Booking = () => {
             />
 
             <View style={styles.amenitiesContainer}>
-              {AMENNITIES.map((amenity) => (
+              {amenities.map((amenity) => (
                 <TouchableOpacity
                   key={amenity.id}
                   style={[
@@ -272,7 +279,7 @@ const Booking = () => {
                         onConfirm={handleStartTimeConfirm}
                         onCancel={() => setShowStartTimePicker(false)}
                         backgroundColor={colors.white}
-                        minuteInterval={30}
+                        minuteInterval={5}
                       />
                     </View>
                     <View style={{ width: "45%" }}>
@@ -295,7 +302,7 @@ const Booking = () => {
                         onConfirm={handleEndTimeConfirm}
                         onCancel={() => setShowEndTimePicker(false)}
                         backgroundColor={colors.white}
-                        minuteInterval={30}
+                        minuteInterval={5}
                       />
                     </View>
                   </View>

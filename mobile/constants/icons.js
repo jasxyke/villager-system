@@ -11,3 +11,4 @@ export const TYPE = require("../assets/icons/type.png");
 export const PERMITS = require("../assets/icons/permits.png");
 export const DOWNLOADS = require("../assets/icons/download.png");
 export const CAR = require("../assets/icons/car.png");
+export const SERVICES = require("../assets/icons/services.png");

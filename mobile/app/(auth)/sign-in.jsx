@@ -62,7 +62,7 @@ const SignIn = () => {
           <Text className="text-white">Sign in</Text>
         )}
       </TouchableHighlight>
-      <View
+      {/* <View
         className="text-center justify-center 
       items-center mt-5"
       >
@@ -72,7 +72,7 @@ const SignIn = () => {
         <Link href={"booking"} className="text-white underline">
           Reserve Now
         </Link>
-      </View>
+      </View> */}
     </FormScreen>
   );
 };

@@ -89,12 +89,12 @@ const Home = () => {
         ) : (
           <ScrollViewContainer data={announcements} />
         )}
-        <Pressable
+        {/* <Pressable
           onPress={() => router.push("../home-tab/complaint")}
           className="p-5 mt-10 bg-secondary rounded-lg"
         >
           <Text>Send a Complaint</Text>
-        </Pressable>
+        </Pressable> */}
       </ScrollView>
     </View>
   );

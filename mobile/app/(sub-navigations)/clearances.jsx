@@ -25,10 +25,9 @@ const Permits = () => {
   return (
     <View style={styles.safeArea}>
       <TabsGradient />
-      <AppHeader />
       <View style={styles.content}>
         <>
-          <Text style={styles.title}>Clearances</Text>
+          {/* <Text style={styles.title}>Clearances</Text> */}
           <TouchableOpacity
             style={[styles.button]}
             onPress={handleShowPermitForm}

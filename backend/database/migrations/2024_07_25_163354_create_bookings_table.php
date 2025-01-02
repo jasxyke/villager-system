@@ -14,16 +14,15 @@ return new class extends Migration
 
         Schema::create('bookings', function (Blueprint $table) {
             $table->id();
-            // $table->foreignId('user_id')->constrained('users');
+            $table->foreignId('resident_id')->constrained('residents');
             $table->foreignId('amenity_id')->constrained('amenities');
             $table->date('booking_date');
             $table->time('start_time');
             $table->time('end_time');
-
             //new fields
-            $table->string('full_name');
-            $table->string('email',400);
-            $table->string('contact_number',15);
+            $table->string('full_name')->nullable();
+            $table->string('email',400)->nullable();
+            $table->string('contact_number',15)->nullable();
             $table->enum('booking_status', 
             ['for_approval','reserved','rejected','cancelled']);
             $table->enum('payment_status',['paid','partial','pending','failed'])->default('pending');

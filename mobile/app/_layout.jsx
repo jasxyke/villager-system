@@ -5,6 +5,7 @@ import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import { AuthProvider } from "../context/AuthContext";
 import { SettingsProvider } from "../context/SettingsContext";
+import { AmenitiesProvider } from "../context/AmenitiesContext";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -29,9 +30,11 @@ const RootLayout = () => {
   return (
     <AuthProvider>
       <SettingsProvider>
-        <Stack screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="index" options={{ headerShown: false }} />
-        </Stack>
+        <AmenitiesProvider>
+          <Stack screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="index" options={{ headerShown: false }} />
+          </Stack>
+        </AmenitiesProvider>
       </SettingsProvider>
     </AuthProvider>
   );

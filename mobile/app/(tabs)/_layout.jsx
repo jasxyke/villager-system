@@ -1,6 +1,13 @@
 import { Tabs } from "expo-router";
 import { Image, StatusBar, StyleSheet, Text, View } from "react-native";
-import { BILLS, CAR, HOME, PERMITS, PROFILE } from "../../constants/icons";
+import {
+  BILLS,
+  CAR,
+  HOME,
+  PERMITS,
+  PROFILE,
+  SERVICES,
+} from "../../constants/icons";
 import { colors } from "../../styles/colors";
 
 const TabIcon = ({ icon, color, name, focused }) => {
@@ -31,6 +38,13 @@ const MainLayout = () => {
           tabBarActiveTintColor: colors.green,
           tabBarInactiveTintColor: colors.white,
           tabBarStyle: { backgroundColor: colors.greyGreen },
+          headerStyle: {
+            backgroundColor: colors.primary,
+          },
+          headerTintColor: colors.white,
+          headerTitleStyle: {
+            fontWeight: "bold",
+          },
         }}
       >
         <Tabs.Screen
@@ -64,10 +78,26 @@ const MainLayout = () => {
           }}
         />
         <Tabs.Screen
+          name="services"
+          options={{
+            title: "Services",
+            headerShown: false,
+            tabBarIcon: ({ focused, color, size }) => (
+              <TabIcon
+                icon={SERVICES}
+                color={color}
+                focused={focused}
+                name={"services"}
+              />
+            ),
+          }}
+        />
+        {/* <Tabs.Screen
           name="permits"
           options={{
             title: "Permits",
             headerShown: false,
+            href: null,
             tabBarIcon: ({ focused, color, size }) => (
               <TabIcon
                 icon={PERMITS}
@@ -83,6 +113,7 @@ const MainLayout = () => {
           options={{
             title: "car-stickers",
             headerShown: false,
+            href: null,
             tabBarIcon: ({ focused, color, size }) => (
               <TabIcon
                 icon={CAR}
@@ -93,6 +124,22 @@ const MainLayout = () => {
             ),
           }}
         />
+        <Tabs.Screen
+          name="booking"
+          options={{
+            title: "Booking",
+            headerShown: true,
+            href: null,
+            tabBarIcon: ({ focused, color, size }) => (
+              <TabIcon
+                icon={CAR}
+                color={color}
+                focused={focused}
+                name={"booking"}
+              />
+            ),
+          }}
+        /> */}
         <Tabs.Screen
           name="profile"
           options={{

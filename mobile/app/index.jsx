@@ -43,14 +43,14 @@ export default function App() {
         >
           <Text style={styles.link}>Login</Text>
         </Link>
-        <Link
+        {/* <Link
           push
           href="/booking"
           className="p-5 rounded-full text-center bg-greyGreen font-pRegular text-lg"
           style={styles.navContainer}
         >
           <Text style={styles.link}>Booking</Text>
-        </Link>
+        </Link> */}
       </View>
       <View></View>
       {/* <Link

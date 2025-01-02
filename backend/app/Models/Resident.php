@@ -30,6 +30,10 @@ class Resident extends Model
         return $this->belongsTo(House::class);
     }
 
+    public function bookings(): HasMany{
+        return $this->hasMany(Booking::class);
+    }
+
     public function bills(): HasMany{
         return $this->hasMany(Bill::class);
     }

@@ -72,10 +72,6 @@ class User extends Authenticatable
         return $this->hasOne(Admin::class);
     }
 
-    public function bookings(): HasMany{
-        return $this->hasMany(Booking::class);
-    }
-
     public function notifications(): HasMany{
         return $this->hasMany(Notification::class);
     }

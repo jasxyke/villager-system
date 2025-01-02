@@ -9,9 +9,8 @@ const carStickers = () => {
   return (
     <View className="flex-1">
       <TabsGradient />
-      <AppHeader />
       <View className="p-6">
-        <Text style={styles.title}>Car Stickers</Text>
+        {/* <Text style={styles.title}>Car Stickers</Text> */}
         {/* Button to navigate to Car Sticker Form */}
         <TouchableOpacity
           style={styles.button}

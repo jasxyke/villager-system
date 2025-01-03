@@ -102,6 +102,7 @@ class BookingController extends Controller
         $booking = Booking::findOrFail($validated['booking_id']);
 
         $booking->amenity_id = $request->amenity_id;
+        // $booking->resident_id = $request->
         $booking->booking_date = $request->booking_date;
         $booking->start_time = $request->start_time;
         $booking->end_time = $request->end_time;

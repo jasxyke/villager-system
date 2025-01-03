@@ -14,10 +14,12 @@ class Booking extends Model
     protected $fillable = [
         // 'user_id',
         'amenity_id',
+        'resident_id',
         'booking_date',
         'start_time',
         'end_time',
         //new fields
+        'is_guest',
         'full_name',
         'email',
         'contact_number',

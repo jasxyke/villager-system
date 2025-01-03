@@ -9,7 +9,7 @@ const AuthLayout = () => {
         name="sign-in"
         options={{ headerShown: false, headerTitle: "Sign in" }}
       />
-      <Stack.Screen
+      {/* <Stack.Screen
         name="booking"
         options={{
           headerShown: true,
@@ -19,7 +19,7 @@ const AuthLayout = () => {
             backgroundColor: colors.green,
           },
         }}
-      />
+      /> */}
     </Stack>
   );
 };

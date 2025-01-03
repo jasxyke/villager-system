@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -11,8 +11,11 @@ import { colors } from "../../styles/colors";
 import {
   formatTimeTwentyFour,
   formatTo12Hour,
+  formatUserName,
 } from "../../utils/DataFormatter";
-import { AMENNITIES } from "../../data/DataStructures";
+import { useAmenities } from "../../context/AmenitiesContext";
+import Checkbox from "expo-checkbox";
+import { useAuthContext } from "../../context/AuthContext";
 
 const BookingForm = ({
   selectedAmenity,
@@ -25,17 +28,34 @@ const BookingForm = ({
   const [email, setEmail] = useState("");
   const [contactNumber, setContactNumber] = useState("");
   const [bookingStatus, setBookingStatus] = useState("for_approval");
+  const [isGuest, setIsGuest] = useState(false);
 
+  const { user } = useAuthContext();
   const { submitBooking, loading, error, success } = useBookings();
+  const { amenities } = useAmenities();
+
+  useEffect(() => {
+    if (user) {
+      if (!isGuest) {
+        setFullName(formatUserName(user));
+        setEmail(user.email);
+        setContactNumber(user.contact_number);
+      } else {
+        setFullName("");
+        setEmail("");
+        setContactNumber("");
+      }
+    }
+  }, [user, isGuest]);
 
   const handleFormSubmit = async () => {
     const bookingDetails = {
       amenity_id: selectedAmenity,
+      resident_id: user.resident.id,
       booking_date: selectedDate,
-      // start_time: localStartTime.toISOString().split("T")[1].slice(0, 5),
-      // end_time: localEndTime.toISOString().split("T")[1].slice(0, 5),
       start_time: formatTimeTwentyFour(startTime),
       end_time: formatTimeTwentyFour(endTime),
+      is_guest: isGuest,
       full_name: fullName,
       email,
       contact_number: contactNumber,
@@ -46,6 +66,7 @@ const BookingForm = ({
       setFullName("");
       setEmail("");
       setContactNumber("");
+      setIsGuest(false);
       setBookingStatus("for_approval");
     };
 
@@ -69,7 +90,7 @@ const BookingForm = ({
       <View style={styles.fieldContainer}>
         <Text style={styles.label}>Amenity</Text>
         <Text style={styles.value}>
-          {AMENNITIES.map(
+          {amenities.map(
             (amenity) => amenity.id === selectedAmenity && amenity.name
           )}
         </Text>
@@ -100,6 +121,7 @@ const BookingForm = ({
         value={fullName}
         onChangeText={setFullName}
         placeholderTextColor="grey"
+        editable={isGuest}
       />
 
       <TextInput
@@ -108,6 +130,7 @@ const BookingForm = ({
         value={email}
         onChangeText={setEmail}
         placeholderTextColor="grey"
+        editable={isGuest}
       />
 
       <TextInput
@@ -117,7 +140,17 @@ const BookingForm = ({
         onChangeText={setContactNumber}
         placeholderTextColor="grey"
         keyboardType="phone-pad"
+        editable={isGuest}
       />
+
+      <View style={styles.checkboxContainer}>
+        <Checkbox
+          value={isGuest}
+          onValueChange={setIsGuest}
+          color={isGuest ? colors.secondary : colors.white} // Checkbox color when checked
+        />
+        <Text style={styles.checkboxLabel}>Guest</Text>
+      </View>
 
       <TouchableOpacity
         style={styles.submitButton}
@@ -191,6 +224,16 @@ const styles = StyleSheet.create({
   backButtonText: {
     color: colors.white,
     fontSize: 16,
+  },
+  checkboxContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 10,
+  },
+  checkboxLabel: {
+    color: colors.white,
+    fontSize: 16,
+    marginLeft: 8,
   },
 });
 

@@ -20,6 +20,7 @@ return new class extends Migration
             $table->time('start_time');
             $table->time('end_time');
             //new fields
+            $table->boolean('is_guest');
             $table->string('full_name')->nullable();
             $table->string('email',400)->nullable();
             $table->string('contact_number',15)->nullable();

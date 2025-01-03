@@ -7,12 +7,14 @@ import {
   Alert,
   TouchableWithoutFeedback,
   StatusBar,
+  Image,
 } from "react-native";
 import React from "react";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { colors } from "../../styles/colors";
 import { router } from "expo-router";
 import { useAuthContext } from "../../context/AuthContext";
+import { LOGOUT } from "../../constants/icons";
 
 const NavigationModal = ({ visible, onClose }) => {
   const { logout } = useAuthContext();
@@ -44,7 +46,7 @@ const NavigationModal = ({ visible, onClose }) => {
           <View className="rounded-lg p-5 h-auto w-[70%] bg-green shadow-lg">
             <View className="flex-row justify-between">
               <Text className="text-white font-pRegular text-lg">
-                Log out from the app?
+                Other options
               </Text>
               <TouchableOpacity onPress={onClose} className="ml-auto mb-3">
                 <AntDesign name="close" color="white" size={26} />
@@ -56,7 +58,11 @@ const NavigationModal = ({ visible, onClose }) => {
               className="rounded-xl p-1 h-auto bg-paleGreen"
             >
               <View className="flex-row items-center p-1 gap-x-1">
-                <AntDesign name="arrowright" size={24} color="white" />
+                <Image
+                  tintColor={"white"}
+                  source={LOGOUT}
+                  style={styles.logout}
+                />
                 <Text className="font-pRegular text-white">Logout</Text>
               </View>
             </TouchableOpacity>
@@ -69,5 +75,9 @@ const NavigationModal = ({ visible, onClose }) => {
 
 const styles = StyleSheet.create({
   navigationButton: {},
+  logout: {
+    width: 30,
+    height: 30,
+  },
 });
 export default NavigationModal;

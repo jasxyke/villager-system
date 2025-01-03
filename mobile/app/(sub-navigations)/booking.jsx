@@ -17,6 +17,7 @@ import { formatTime } from "../../utils/DataFormatter";
 import BookingForm from "../../components/forms/BookingForm";
 import { useAmenities } from "../../context/AmenitiesContext";
 import LoadingScreen from "../../components/common/LoadingScreen";
+import { useAuthContext } from "../../context/AuthContext";
 
 const Booking = () => {
   const [selectedAmenity, setSelectedAmenity] = useState(null);
@@ -32,7 +33,6 @@ const Booking = () => {
   const [markedDates, setMarkedDates] = useState({});
   const today = new Date().toISOString().split("T")[0];
   const { amenities, fetchAmenities } = useAmenities();
-
   const { fetchBookings, bookings } = useBookings();
 
   // Fetch bookings when selected amenity or month changes

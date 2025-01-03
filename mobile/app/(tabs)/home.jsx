@@ -23,7 +23,8 @@ import { router } from "expo-router";
 const Home = () => {
   const [refreshing, setRefreshing] = useState(false);
   const { user } = useAuthContext();
-  const { announcements, loading, getAnnouncements } = useAnnouncement();
+  const { announcements, loading, getAnnouncements, totalPages, currentPage } =
+    useAnnouncement();
   const { error, refetch, totalBalance } = useBills();
   const { expoPushToken, setupNotifications } = usePushNotifications();
 
@@ -43,7 +44,6 @@ const Home = () => {
   useEffect(() => {
     if (user) {
       refetch(user.resident.id);
-      getAnnouncements();
       setupNotifications(user.id);
     }
   }, [user]);
@@ -85,9 +85,18 @@ const Home = () => {
             announcements={announcements}
           />
         ) : announcements.length === 0 ? (
-          <Text>No Announcements</Text>
+          <LoadingEmptyAnnouncements
+            loading={loading}
+            announcements={announcements}
+          />
         ) : (
-          <ScrollViewContainer data={announcements} />
+          <ScrollViewContainer
+            data={announcements}
+            loading={loading}
+            currentPage={currentPage}
+            totalPages={totalPages}
+            getAnnouncements={getAnnouncements}
+          />
         )}
         {/* <Pressable
           onPress={() => router.push("../home-tab/complaint")}
@@ -145,6 +154,12 @@ const styles = StyleSheet.create({
     color: "white",
     fontWeight: "bold",
     textAlign: "center",
+  },
+  arrowContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
+    marginTop: 10,
   },
 });
 

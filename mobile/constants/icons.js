@@ -12,3 +12,4 @@ export const PERMITS = require("../assets/icons/permits.png");
 export const DOWNLOADS = require("../assets/icons/download.png");
 export const CAR = require("../assets/icons/car.png");
 export const SERVICES = require("../assets/icons/services.png");
+export const LOGOUT = require("../assets/icons/logout.png");

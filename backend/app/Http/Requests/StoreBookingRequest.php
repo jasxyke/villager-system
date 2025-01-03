@@ -25,9 +25,11 @@ class StoreBookingRequest extends FormRequest
     {
         return [
             'amenity_id' => 'required|integer|exists:amenities,id',
+            'resident_id' => 'required|integer|exists:residents,id',
             'booking_date' => 'required|date',
             'start_time' => 'required|date_format:H:i',
             'end_time' => 'required|date_format:H:i|after:start_time',
+            'is_guest' => 'required|boolean',
             'full_name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
             'contact_number' => 'required|string|max:20',

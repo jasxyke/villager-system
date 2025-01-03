@@ -29,7 +29,7 @@ class BookingController extends Controller
     }
 
     public function getBookingsByYearAndMonth(Request $request){
-        $bookings = Booking::with('amenity')//'booking_payment'
+        $bookings = Booking::with(['amenity'])//'booking_payment'
                         ->where('booking_status','reserved')
                         ->where('amenity_id', $request->amenityId)
                         ->whereYear('booking_date',$request->year)
@@ -40,7 +40,7 @@ class BookingController extends Controller
 
     public function getBookingsAdmin(string $amenityId){
 
-        $bookings = Booking::with(['amenity','bookingPayments'])
+        $bookings = Booking::with(['amenity','bookingPayments','resident.user'])
                         ->where('amenity_id', $amenityId)
                         ->orderBy('created_at', 'DESC')
                         ->paginate(10);
@@ -59,9 +59,11 @@ class BookingController extends Controller
         // Create the booking
         $booking = Booking::create([
             'amenity_id' => $validated['amenity_id'],
+            'resident_id' => $validated['resident_id'],
             'booking_date' => $validated['booking_date'],
             'start_time' => $validated['start_time'],
             'end_time' => $validated['end_time'],
+            'is_guest' => $validated['is_guest'],
             'full_name' => $validated['full_name'],
             'email' => $validated['email'],
             'contact_number' => $validated['contact_number'],
@@ -94,23 +96,6 @@ class BookingController extends Controller
      */
     public function update(UpdateBookingRequest $request)
     {
-        // $booking = Booking::findOr($id, function (){
-        //     throw ValidationException::withMessages([
-        //         'message'=>'Booking record not fonud.'
-        //     ]);
-        // });
-
-        // $booking->booking_date = $request->booking_date;
-        // $booking->start_time = $request->start_time;
-        // $booking->end_time = $request->end_time;
-        // $booking->full_name = $request->full_name;
-        // $booking->email = $request->email;
-        // $booking->contact_number = $request->contact_number;
-        // $booking->booking_status = $request->booking_status;
-
-        // $booking->save();
-
-        // return response()->json(['booking'=>$booking]);
         $validated = $request->validated();
 
         // Find and update the booking
@@ -120,6 +105,7 @@ class BookingController extends Controller
         $booking->booking_date = $request->booking_date;
         $booking->start_time = $request->start_time;
         $booking->end_time = $request->end_time;
+        $booking->is_guest = $request->is_guest;
         $booking->full_name = $request->full_name;
         $booking->email = $request->email;
         $booking->contact_number = $request->contact_number;
@@ -140,7 +126,7 @@ class BookingController extends Controller
             }
         }
 
-        if ($booking->booking_status == 'reserved') {
+        if ($booking->booking_status == 'reserved' && $validated['notify']) {
             Mail::to($booking->email)->send(new BookingReserved($booking));
         }
 
@@ -170,7 +156,7 @@ class BookingController extends Controller
     public function getPendingBookings(Request $request)
     {
         // Query to fetch ongoing and for-approval bookings, ordered by the most recent
-        $bookings = Booking::with(['amenity', 'bookingPayments'])
+        $bookings = Booking::with(['amenity', 'bookingPayments','resident.user'])
             ->whereIn('booking_status', ['for_approval'])
             ->orderBy('created_at', 'desc')
             ->paginate(3);

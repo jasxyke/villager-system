@@ -16,7 +16,7 @@ class AnnouncementSeeder extends Seeder
     {
         Admin::factory()
                 ->count(2)
-                ->has(Announcement::factory()->count(5))
+                ->has(Announcement::factory()->count(20))
                 ->create();
     }
 }

@@ -20,20 +20,21 @@ class AnnouncementController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $now = Carbon::now();
-        $oneWeekAgo = $now->subWeek()->format('Y-m-d H:i');
-        $threeWeekSoon = $now->addWeek()->addWeek()->addWeek()->addWeek()->format('Y-m-d H:i');
-
-        $announcements = Announcement::whereBetween(
-                        'event_start_date', [$oneWeekAgo, $threeWeekSoon])
-                        ->orderBy('event_start_date', 'DESC')
-                        ->take(20)
-                        ->get();
-        
-        return $announcements;
+        $oneWeekAgo = (clone $now)->subWeek()->format('Y-m-d H:i');
+        $threeWeekSoon = (clone $now)->addWeeks(3)->format('Y-m-d H:i');
+    
+        $perPage = 10; // Default to 10 items per page
+    
+        $announcements = Announcement::whereBetween('event_start_date', [$oneWeekAgo, $threeWeekSoon])
+            ->orderBy('event_start_date', 'DESC')
+            ->paginate($perPage);
+    
+        return response()->json($announcements);
     }
+    
 
     /**
      * Store a newly created resource in storage.

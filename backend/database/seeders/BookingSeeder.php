@@ -28,13 +28,15 @@ class BookingSeeder extends Seeder
 
             // Store the date and time to avoid conflicts
             $dates[$date][] = $booking['start_time'];
-
+            $isGuest = array_rand([true, false]);
             // Create the booking
             Booking::create([
                 'amenity_id' => $booking['amenity_id'],
+                'resident_id' => '1',
                 'booking_date' => $date,
                 'start_time' => $booking['start_time'],
                 'end_time' => $booking['end_time'],
+                'is_guest' => $isGuest,
                 'full_name' => 'Jaspher',
                 'email' => 'rydelfabellon53@gmail.com',
                 'contact_number' => '09487834861',

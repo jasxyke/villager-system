@@ -5,6 +5,7 @@ import Modal from "react-modal";
 import { calculatePrice } from "./CalculatePrice";
 import useBookings from "../../hooks/Bookings/useBookings";
 import { formatTime } from "../../utils/DataFormatter";
+import { useConfirmDialog } from "../../components/ConfirmDialog/useConfirmDialog";
 Modal.setAppElement("#root");
 
 const BookingReviewModal = ({ isOpen, onRequestClose, booking, onUpdate }) => {
@@ -12,11 +13,23 @@ const BookingReviewModal = ({ isOpen, onRequestClose, booking, onUpdate }) => {
   const [paymentAmount, setPaymentAmount] = useState("");
   const [paymentDate, setPaymentDate] = useState("");
   const [payments, setPayments] = useState(booking.booking_payments);
-  const [isResident, setIsResident] = useState(true);
+  // const [isGuest, setIsGuest] = useState(booking.is_guest);
   const [error, setError] = useState("");
+
+  const { confirm, ConfirmDialogComponent } = useConfirmDialog(
+    "Notify Confirmation",
+    "Do you want to notify the resident?"
+  );
 
   useEffect(() => {
     setUpdatedBooking(booking);
+    if (booking.booking_payments.length > 0) {
+      setPayments(booking.booking_payments);
+    } else {
+      setPayments([]);
+    }
+    setPaymentAmount("");
+    setPaymentDate("");
   }, [booking]);
 
   useEffect(() => {
@@ -25,10 +38,10 @@ const BookingReviewModal = ({ isOpen, onRequestClose, booking, onUpdate }) => {
       0
     );
     const totalPrice = calculatePrice(
-      booking.amenity,
+      updatedBooking.amenity,
       updatedBooking.start_time,
       updatedBooking.end_time,
-      isResident
+      updatedBooking.is_guest
     );
 
     if (totalPrice === totalPaid) {
@@ -51,15 +64,19 @@ const BookingReviewModal = ({ isOpen, onRequestClose, booking, onUpdate }) => {
     payments,
     updatedBooking.start_time,
     updatedBooking.end_time,
-    isResident,
+    updatedBooking.is_guest,
     booking.amenity,
   ]);
 
   const { updateBooking, loading } = useBookings();
 
   const handleSave = async () => {
+    let notifyResident = await confirm();
+    console.log(notifyResident);
+
+    const finalBooking = { ...updatedBooking, notify: notifyResident };
     try {
-      const success = await updateBooking(updatedBooking, payments);
+      const success = await updateBooking(finalBooking, payments);
       alert(success);
       onUpdate();
       onRequestClose();
@@ -96,7 +113,7 @@ const BookingReviewModal = ({ isOpen, onRequestClose, booking, onUpdate }) => {
     booking.amenity,
     updatedBooking.start_time,
     updatedBooking.end_time,
-    isResident
+    updatedBooking.is_guest
   );
 
   const totalPaid = payments.reduce(
@@ -109,10 +126,10 @@ const BookingReviewModal = ({ isOpen, onRequestClose, booking, onUpdate }) => {
     <Modal
       isOpen={isOpen}
       onRequestClose={onRequestClose}
-      className="relative w-full max-w-5xl mx-auto bg-white p-6 rounded-lg shadow-lg overflow-y-auto"
+      className="relative w-full max-w-5xl mx-auto bg-white p-3 rounded-lg shadow-lg"
       overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
     >
-      <div className="h-[90vh]">
+      <div className="h-[90vh] overflow-y-auto p-3">
         <h2 className="text-2xl font-semibold mb-4">Review Booking</h2>
         <div className="flex">
           {/* Left Column */}
@@ -201,8 +218,13 @@ const BookingReviewModal = ({ isOpen, onRequestClose, booking, onUpdate }) => {
                     type="radio"
                     name="residentGuest"
                     value="resident"
-                    checked={isResident}
-                    onChange={() => setIsResident(true)}
+                    checked={!updatedBooking.is_guest}
+                    onChange={() =>
+                      setUpdatedBooking({
+                        ...updatedBooking,
+                        is_guest: false,
+                      })
+                    }
                     className="mr-2"
                   />
                   Resident
@@ -212,8 +234,13 @@ const BookingReviewModal = ({ isOpen, onRequestClose, booking, onUpdate }) => {
                     type="radio"
                     name="residentGuest"
                     value="guest"
-                    checked={!isResident}
-                    onChange={() => setIsResident(false)}
+                    checked={updatedBooking.is_guest}
+                    onChange={() =>
+                      setUpdatedBooking({
+                        ...updatedBooking,
+                        is_guest: true,
+                      })
+                    }
                     className="mr-2"
                   />
                   Guest
@@ -346,6 +373,7 @@ const BookingReviewModal = ({ isOpen, onRequestClose, booking, onUpdate }) => {
           </button>
         </div>
       </div>
+      {ConfirmDialogComponent}
     </Modal>
   );
 };

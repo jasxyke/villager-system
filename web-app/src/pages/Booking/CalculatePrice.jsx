@@ -12,7 +12,7 @@ export const calculatePrice = (amenity, startTime, endTime, isResident) => {
 
   // Calculate base price based on residency and time of day
   let basePrice;
-  if (isResident) {
+  if (!isResident) {
     basePrice = isDayTime ? amenity.day_price : amenity.night_price;
   } else {
     basePrice = isDayTime

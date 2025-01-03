@@ -9,10 +9,9 @@ import { useAmenities } from "../../contexts/AmenitiesContext";
 
 const BookingPage = () => {
   const [selectedAmenityId, setSelectedAmenityId] = useState(1);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   // Use the custom hook to fetch amenities
-  const { amenities, loading, error, fetchAmenities } = useAmenities();
+  const { amenities, loading, error } = useAmenities();
 
   // Fetch amenities on mount
   // useEffect(() => {
@@ -37,10 +36,6 @@ const BookingPage = () => {
     console.log(id);
   };
 
-  const toggleModal = () => {
-    setIsEditModalOpen(!isEditModalOpen);
-  };
-
   return (
     <div className={styles.mainContainer + " h-full"}>
       <div className={styles.bookingContainer}>
@@ -62,10 +57,6 @@ const BookingPage = () => {
             </button>
           ))}
         </div>
-        <EditAmenitiesModal
-          isOpen={isEditModalOpen}
-          onRequestClose={() => setIsEditModalOpen(false)}
-        />
         <div className={styles.searchBarContainer}>
           <BookingTable selectedAmenity={selectedAmenityId} />
         </div>

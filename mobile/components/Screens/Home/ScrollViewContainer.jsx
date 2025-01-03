@@ -7,22 +7,25 @@ import {
   Text,
   Image,
   StyleSheet,
-  Modal,
   TouchableOpacity,
-  Button,
+  ActivityIndicator,
 } from "react-native";
 import { colors } from "../../../styles/colors";
 import { router } from "expo-router";
 
 const width = 320;
 
-const ScrollViewContainer = ({ data = [], loading = false }) => {
+const ScrollViewContainer = ({
+  data = [],
+  loading = false,
+  currentPage,
+  totalPages,
+  getAnnouncements,
+}) => {
   const scrollX = useRef(new Animated.Value(0)).current;
   const flatListRef = useRef(null);
   const [index, setIndex] = useState(0);
   const [isManualScroll, setIsManualScroll] = useState(false);
-  const [modalVisible, setModalVisible] = useState(false);
-  const [selectedItem, setSelectedItem] = useState(null);
 
   useEffect(() => {
     if (!Array.isArray(data) || data.length === 0) {
@@ -48,13 +51,16 @@ const ScrollViewContainer = ({ data = [], loading = false }) => {
     return () => clearInterval(interval);
   }, [isManualScroll, data]);
 
-  useEffect(() => {
-    Animated.timing(scrollX, {
-      toValue: index * width,
-      duration: 500,
-      useNativeDriver: true,
-    }).start();
-  }, [index]);
+  const loadMoreAnnouncements = () => {
+    setTimeout(() => {
+      if (currentPage < totalPages && !loading) {
+        getAnnouncements(currentPage + 1);
+      } else if (currentPage === totalPages && !loading) {
+        // reset to first page
+        getAnnouncements(1);
+      }
+    }, 1000);
+  };
 
   const handleScroll = (event) => {
     const offsetX = event.nativeEvent.contentOffset.x;
@@ -70,7 +76,6 @@ const ScrollViewContainer = ({ data = [], loading = false }) => {
     setIsManualScroll(false);
   };
 
-  // Navigate to the Announcement screen
   const handleItemPress = (item) => {
     router.push({
       pathname: "../home-tab/announcement",
@@ -158,6 +163,8 @@ const ScrollViewContainer = ({ data = [], loading = false }) => {
         onScrollEndDrag={handleScrollEndDrag}
         snapToInterval={width}
         decelerationRate="fast"
+        onEndReached={loadMoreAnnouncements}
+        ListFooterComponent={loading && <ActivityIndicator size="small" />}
       />
       <Indicator />
     </View>

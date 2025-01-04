@@ -10,6 +10,7 @@ use App\Http\Controllers\CarStickerRequestController;
 use App\Http\Controllers\ComplaintController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\HouseController;
+use App\Http\Controllers\HouseholdPermissionController;
 use App\Http\Controllers\IncomeExpensesController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PermitPaymentController;
@@ -190,6 +191,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/get-expenses', [ExpenseController::class,'getExpenses']);
     Route::post('/income-totals', [IncomeExpensesController::class, 'getTotalIncome']);
     Route::post('/export-income-expenses', [IncomeExpensesController::class, 'exportIncomeExpenses']);
+
+    //HOUSEHOLD PERMISSIONS
+    Route::post('/permissions/grant', [HouseholdPermissionController::class, 'grantPermission']);
+    Route::post('/permissions/revoke', [HouseholdPermissionController::class, 'revokePermission']);
+    Route::get('/permissions/{houseId}', [HouseholdPermissionController::class, 'listPermissions']);
 });
 
 //booking routes (avaialable to the public)

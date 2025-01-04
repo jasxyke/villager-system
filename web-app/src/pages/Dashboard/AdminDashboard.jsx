@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import MainLogo from "../../components/MainLogo";
 import { FiUser, FiUsers } from "react-icons/fi";
 import { FiHome } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
-import LoadingContainer from "../../components/LoadingScreen/LoadingContainer"; // Import LoadingContainer
+import LoadingContainer from "../../components/LoadingScreen/LoadingContainer";
 import useOverdueResidents from "../../hooks/Dashboard/useOverdueResidents";
 import useTotalBookings from "../../hooks/Dashboard/useTotalBookings";
 import useTotalResidents from "../../hooks/Dashboard/useTotalResidents";
@@ -14,10 +14,16 @@ import OverdueModal from "./OverdueModal";
 import useOverdueResidentsList from "../../hooks/Dashboard/useOverdueResidentsList";
 import { TbCalendarCheck } from "react-icons/tb";
 import LoadingElement from "../../components/LoadingScreen/LoadingElement";
+import useIncomes from "../../hooks/IncomeExpenses/useIncomes";
+import { SyncLoader } from "react-spinners";
+import { FaMoneyBillWave } from "react-icons/fa";
+import { FcMoneyTransfer } from "react-icons/fc";
 
 const AdminDashboard = () => {
   const [isModalOpen, setIsModalOpen] = useState(false); // State for modal visibility
   const [modalContent, setModalContent] = useState(""); // State for modal content
+  const [currentMonth, setCurrentMonth] = useState(""); // State for current month
+  const [currentYear, setCurrentYear] = useState(""); // State for current year
 
   const navigate = useNavigate(); // Initialize useNavigate
 
@@ -40,8 +46,25 @@ const AdminDashboard = () => {
     error: errorOverdue,
   } = useOverdueResidents();
 
+  // Use the income hook
+  const {
+    incomes,
+    loading: loadingIncome,
+    error: errorIncome,
+    fetchIncomes,
+  } = useIncomes();
+
+  // Get the current date and month for income display
+  useEffect(() => {
+    const now = new Date();
+    setCurrentMonth(now.toLocaleString("default", { month: "long" })); // Full month name (e.g., January)
+    setCurrentYear(now.getFullYear()); // Current year
+    fetchIncomes(now.getFullYear(), now.getMonth() + 1); // Pass current year and month (0-based, so add 1)
+  }, [fetchIncomes]);
+
   // Check if any data is still loading
-  const isLoading = loadingResidents || loadingBookings || loadingOverdue;
+  const isLoading =
+    loadingResidents || loadingBookings || loadingOverdue || loadingIncome;
 
   // Handle opening the modal with relevant content
   const handleUnpaidClick = () => {
@@ -61,10 +84,47 @@ const AdminDashboard = () => {
   };
 
   return (
-    <div className="pb-10">
+    <div className="p-4">
       <div className="pt-10">
         <MainLogo />
       </div>
+      <div className="p-6 mx-4 bg-green rounded-lg shadow-lg">
+        {/* Title Section with Icon */}
+        <div className="flex justify-between items-center text-white mb-2">
+          <div className="flex items-center space-x-4">
+            <FcMoneyTransfer className="text-6xl bg-gradient-to-r from-oliveGreen to-paleGreen text-white rounded-full p-4 shadow-md transform transition-transform duration-300 hover:scale-110" />
+            <div className="text-3xl font-semibold tracking-tight">
+              MONTHLY INCOME
+            </div>
+          </div>
+          <div className="text-xl font-medium text-greyGreen">
+            {currentMonth} {currentYear}
+          </div>
+        </div>
+
+        {/* Income Display */}
+        <div className="flex justify-between">
+          <div className="text-6xl ml-5 font-extrabold text-greyGreen leading-tight">
+            {loadingIncome ? (
+              <div className="">
+                <SyncLoader size={20} color="#AEC09A" loading={loadingIncome} />
+                <span className="text-[#AEC09A] text-lg" />
+              </div>
+            ) : errorIncome ? (
+              <span className="text-red-400 font-medium">{`Error: ${errorIncome.message}`}</span>
+            ) : (
+              `$${incomes?.total_income ? incomes.total_income.toFixed(2) : 0}`
+            )}
+          </div>
+          {/* Action Button */}
+          <div className="flex justify-center items-center mt-8">
+            <button className="bg-gradient-to-r from-secondary to-oliveGreen text-white py-3 px-8 rounded-full shadow-md hover:bg-gradient-to-r hover:from-oliveGreen hover:to-secondary transition-all duration-300 transform hover:scale-105 ease-in-out">
+              GENERATE REPORT
+            </button>
+          </div>
+        </div>
+      </div>
+
       <div className="flex p-2">
         <div
           className="flex flex-row items-center bg-gradient-to-r from-green to-green p-8 w-full max-w-sm cursor-pointer mx-auto rounded-xl shadow-lg transition-transform duration-300 ease-in-out transform hover:scale-105 hover:shadow-2xl"

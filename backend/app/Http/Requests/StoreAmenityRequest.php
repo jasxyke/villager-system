@@ -23,10 +23,12 @@ class StoreAmenityRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:100',
-            'day_price' => 'required|numeric|min:0',
-            'night_price' => 'required|numeric|min:0',
-            'guest_additional_price' => 'required|numeric|min:0',
-            'extension_price' => 'required|numeric|min:0',
+            'day_price' => 'nullable|numeric|min:0',
+            'night_price' => 'nullable|numeric|min:0',
+            'day_per_person_price' => 'nullable|numeric|min:0',
+            'night_per_person_price' => 'nullable|numeric|min:0',
+            'guest_additional_price' => 'nullable|numeric|min:0',
+            'extension_price' => 'nullable|numeric|min:0',
         ];
     }
 }

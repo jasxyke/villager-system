@@ -6,6 +6,8 @@ import styles from "./AdminSettings.module.css";
 import EditAmenitiesModal from "../Booking/EditAmenitiesModal";
 import VillageSettings from "./VillageSettings";
 import CarStickerSettings from "./CarStickerSettings";
+import BookingSettings from "./BookingSettings";
+import AmenitiesSettings from "./AmenitiesSettings";
 
 const AdminSettings = () => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -17,16 +19,9 @@ const AdminSettings = () => {
       </div>
 
       <div className={styles.mainContainer}>
-        <div className="mb-5 bg-green p-10 rounded-3xl w-[85%] mx-auto">
-          <button
-            onClick={() => setIsEditModalOpen(true)}
-            className="bg-secondary rounded-md text-white p-2 mx-auto"
-          >
-            Edit Amenities
-          </button>
-        </div>
+        <AmenitiesSettings />
+        <BookingSettings />
         <BillsSettings />
-        {/* <BookingSettings /> */}
         <PermitsSettings />
         <CarStickerSettings />
         <VillageSettings />

@@ -15,6 +15,8 @@ class Amenity extends Model
         'name',
         'day_price',
         'night_price',
+        'day_per_person_price',
+        'night_per_person_price',
         'guest_additional_price',
         'extension_price'
     ];

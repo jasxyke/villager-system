@@ -32,7 +32,7 @@ class StoreBookingRequest extends FormRequest
             'is_guest' => 'nullable|boolean',
             'num_of_resident' => 'nullable|integer',
             'num_of_guest' => 'nullable|integer',
-            'full_name' => 'required|string|max:255',
+            'full_name' => 'required|string|max:255|min:5',
             'email' => 'required|email|max:255',
             'contact_number' => 'required|string|max:20',
             'booking_status' => 'required|string|in:for_approval,approved,canceled',

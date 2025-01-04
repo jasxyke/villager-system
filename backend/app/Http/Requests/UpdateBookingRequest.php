@@ -34,7 +34,7 @@ class UpdateBookingRequest extends FormRequest
             'num_of_resident' => 'nullable|integer',
             'num_of_guest' => 'nullable|integer',
             'notify' => 'required|boolean',
-            'full_name' => 'required|string|max:255',
+            'full_name' => 'required|string|max:255|min:5',
             'email' => 'required|email|max:400',
             'contact_number' => 'required|string|max:15',
             'booking_status' => 'required|in:for_approval,reserved,rejected,cancelled',

@@ -20,6 +20,7 @@ return new class extends Migration
             $table->time('start_time');
             $table->time('end_time');
             //new fields
+            $table->boolean('is_guest')->nullable();
             $table->integer('num_of_resident')->nullable();
             $table->integer('num_of_guest')->nullable();
             $table->string('full_name')->nullable();

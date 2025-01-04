@@ -3,7 +3,8 @@ export const calculatePrice = (
   startTime,
   endTime,
   numResidents = 0,
-  numGuests = 0
+  numGuests = 0,
+  isGuest = false
 ) => {
   if (!startTime || !endTime) return 0;
 
@@ -21,6 +22,12 @@ export const calculatePrice = (
   if (amenity.is_per_group) {
     // If the amenity is priced per group
     basePrice = isDayTime ? amenity.day_price : amenity.night_price;
+
+    // Apply guest-specific logic for group-based pricing
+    if (isGuest) {
+      basePrice = parseFloat(basePrice);
+      basePrice += parseFloat(amenity.guest_additional_price); // Add a guest-specific fee if applicable
+    }
   } else {
     // If the amenity is priced per person
     const perPersonPrice = isDayTime

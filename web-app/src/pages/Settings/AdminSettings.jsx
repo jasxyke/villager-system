@@ -20,7 +20,7 @@ const AdminSettings = () => {
 
       <div className={styles.mainContainer}>
         <AmenitiesSettings />
-        <BookingSettings />
+        {/* <BookingSettings /> */}
         <BillsSettings />
         <PermitsSettings />
         <CarStickerSettings />

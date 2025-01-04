@@ -30,6 +30,7 @@ class UpdateBookingRequest extends FormRequest
             'booking_date' => 'required|date',
             'start_time' => 'required|date_format:H:i',
             'end_time' => 'required|date_format:H:i|after:start_time',
+            'is_guest' => 'nullable|boolean',
             'num_of_resident' => 'nullable|integer',
             'num_of_guest' => 'nullable|integer',
             'notify' => 'required|boolean',

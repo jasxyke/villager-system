@@ -36,6 +36,7 @@ class BookingSeeder extends Seeder
                 'booking_date' => $date,
                 'start_time' => $booking['start_time'],
                 'end_time' => $booking['end_time'],
+                'is_guest' => $isGuest,
                 'num_of_resident' => random_int(5,15),
                 'num_of_guest' => random_int(5,15),
                 'full_name' => 'Jaspher',

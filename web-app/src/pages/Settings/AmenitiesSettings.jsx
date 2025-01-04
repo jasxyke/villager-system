@@ -331,7 +331,7 @@ const AmenitiesSettings = () => {
             <div className="col-span-1 flex justify-center">
               <button
                 onClick={() => handleDeleteAmenity(amenity.id)}
-                className="text-red-500 hover:text-red-700 underline decoration-gray-500"
+                className="text-red-500 hover:text-red-700 underline decoration-gray-300"
               >
                 Delete
               </button>

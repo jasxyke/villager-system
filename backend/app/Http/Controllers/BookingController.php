@@ -63,6 +63,7 @@ class BookingController extends Controller
             'booking_date' => $validated['booking_date'],
             'start_time' => $validated['start_time'],
             'end_time' => $validated['end_time'],
+            'is_guest' => $validated['is_guest'],
             'num_of_resident' => $validated['num_of_resident'],
             'num_of_guest' => $validated['num_of_guest'],
             'full_name' => $validated['full_name'],
@@ -107,6 +108,7 @@ class BookingController extends Controller
         $booking->booking_date = $request->booking_date;
         $booking->start_time = $request->start_time;
         $booking->end_time = $request->end_time;
+        $booking->is_guest = $request->is_guest;
         $booking->num_of_resident = $request->num_of_resident;
         $booking->num_of_guest = $request->num_of_guest;
         $booking->full_name = $request->full_name;
@@ -124,7 +126,7 @@ class BookingController extends Controller
                 BookingPayment::create([
                     'booking_id' => $booking->id,
                     'amount' => $paymentData['amount'],
-                    'payment_date' => $paymentData['date'],
+                    'payment_date' => $paymentData['payment_date'],
                 ]);
             }
         }

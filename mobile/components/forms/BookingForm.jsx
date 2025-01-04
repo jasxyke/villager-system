@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -29,6 +30,8 @@ const BookingForm = ({
   const [contactNumber, setContactNumber] = useState("");
   const [bookingStatus, setBookingStatus] = useState("for_approval");
   const [isGuest, setIsGuest] = useState(false);
+  const [numberOfResidents, setNumberOfResidents] = useState("");
+  const [numberOfGuests, setNumberOfGuests] = useState("");
 
   const { user } = useAuthContext();
   const { submitBooking, loading, error, success } = useBookings();
@@ -48,7 +51,36 @@ const BookingForm = ({
     }
   }, [user, isGuest]);
 
+  const clearForm = () => {
+    setFullName("");
+    setEmail("");
+    setContactNumber("");
+    setIsGuest(false);
+    setNumberOfResidents("");
+    setNumberOfGuests("");
+    setBookingStatus("for_approval");
+  };
+
   const handleFormSubmit = async () => {
+    const selectedAmenityDetails = amenities.find(
+      (amenity) => amenity.id === selectedAmenity
+    );
+
+    // Skip validation for numberOfGuests and numberOfResidents if amenity.is_per_group is true
+    if (
+      !selectedAmenityDetails?.is_per_group &&
+      (numberOfGuests === "" || numberOfResidents === "")
+    ) {
+      alert("Please add the number of residents and outsiders");
+      return;
+    }
+
+    if (isGuest) {
+      if (fullName === "" || contactNumber === "" || email === "") {
+        alert("Please fill in your contact details.");
+        return;
+      }
+    }
     const bookingDetails = {
       amenity_id: selectedAmenity,
       resident_id: user.resident.id,
@@ -56,18 +88,12 @@ const BookingForm = ({
       start_time: formatTimeTwentyFour(startTime),
       end_time: formatTimeTwentyFour(endTime),
       is_guest: isGuest,
+      num_of_resident: numberOfResidents,
+      num_of_guest: numberOfGuests,
       full_name: fullName,
       email,
       contact_number: contactNumber,
       booking_status: bookingStatus,
-    };
-
-    const clearForm = () => {
-      setFullName("");
-      setEmail("");
-      setContactNumber("");
-      setIsGuest(false);
-      setBookingStatus("for_approval");
     };
 
     const booking = await submitBooking(bookingDetails);
@@ -84,7 +110,7 @@ const BookingForm = ({
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>Complete Your Reservation</Text>
 
       <View style={styles.fieldContainer}>
@@ -142,15 +168,36 @@ const BookingForm = ({
         keyboardType="phone-pad"
         editable={isGuest}
       />
-
-      <View style={styles.checkboxContainer}>
-        <Checkbox
-          value={isGuest}
-          onValueChange={setIsGuest}
-          color={isGuest ? colors.secondary : colors.white} // Checkbox color when checked
-        />
-        <Text style={styles.checkboxLabel}>Guest</Text>
-      </View>
+      {!amenities.find((amenity) => amenity.id === selectedAmenity)
+        ?.is_per_group ? (
+        <>
+          <TextInput
+            style={styles.input}
+            placeholder="Number of Residents"
+            value={numberOfResidents.toString()}
+            onChangeText={setNumberOfResidents}
+            placeholderTextColor="grey"
+            keyboardType="numeric"
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Number of Outsiders"
+            value={numberOfGuests.toString()}
+            onChangeText={setNumberOfGuests}
+            placeholderTextColor="grey"
+            keyboardType="numeric"
+          />
+        </>
+      ) : (
+        <View style={styles.checkboxContainer}>
+          <Checkbox
+            value={isGuest}
+            onValueChange={setIsGuest}
+            color={isGuest ? colors.secondary : colors.white} // Checkbox color when checked
+          />
+          <Text style={styles.checkboxLabel}>Guest</Text>
+        </View>
+      )}
 
       <TouchableOpacity
         style={styles.submitButton}
@@ -168,16 +215,18 @@ const BookingForm = ({
       <TouchableOpacity style={styles.backButton} onPress={onBack}>
         <Text style={styles.backButtonText}>Back</Text>
       </TouchableOpacity>
-    </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
+    display: "flex",
     flex: 1,
     padding: 20,
     backgroundColor: colors.green,
     width: "90%",
+    height: "100%",
   },
   title: {
     fontSize: 24,

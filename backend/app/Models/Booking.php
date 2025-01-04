@@ -19,6 +19,7 @@ class Booking extends Model
         'start_time',
         'end_time',
         //new fields
+        'is_guest',
         'num_of_resident',
         'num_of_guest',
         'full_name',

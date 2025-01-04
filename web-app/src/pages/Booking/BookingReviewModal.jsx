@@ -41,6 +41,8 @@ const BookingReviewModal = ({ isOpen, onRequestClose, booking, onUpdate }) => {
       updatedBooking.amenity,
       updatedBooking.start_time,
       updatedBooking.end_time,
+      updatedBooking.num_of_resident,
+      updatedBooking.num_of_guest,
       updatedBooking.is_guest
     );
 
@@ -80,6 +82,7 @@ const BookingReviewModal = ({ isOpen, onRequestClose, booking, onUpdate }) => {
       alert(success);
       onUpdate();
       onRequestClose();
+      setError("");
     } catch (err) {
       setError("Failed to save the booking.");
     }
@@ -89,7 +92,7 @@ const BookingReviewModal = ({ isOpen, onRequestClose, booking, onUpdate }) => {
     if (paymentAmount && paymentAmount > 0 && paymentDate) {
       const newPayment = {
         amount: paymentAmount,
-        date: paymentDate,
+        payment_date: paymentDate,
       };
       setPayments([...payments, newPayment]);
       setPaymentAmount("");
@@ -110,9 +113,11 @@ const BookingReviewModal = ({ isOpen, onRequestClose, booking, onUpdate }) => {
   }
 
   const totalPrice = calculatePrice(
-    booking.amenity,
+    updatedBooking.amenity,
     updatedBooking.start_time,
     updatedBooking.end_time,
+    updatedBooking.num_of_resident,
+    updatedBooking.num_of_guest,
     updatedBooking.is_guest
   );
 
@@ -296,6 +301,42 @@ const BookingReviewModal = ({ isOpen, onRequestClose, booking, onUpdate }) => {
                 <option value="pending">Pending</option>
               </select>
             </div>
+            {!updatedBooking.amenity.is_per_group && (
+              <>
+                <div className="flex flex-col mb-4">
+                  <label className="text-sm font-medium mb-1">
+                    Number of Residents
+                  </label>
+                  <input
+                    type="number"
+                    value={updatedBooking.num_of_resident || ""}
+                    onChange={(e) =>
+                      setUpdatedBooking({
+                        ...updatedBooking,
+                        num_of_resident: e.target.value,
+                      })
+                    }
+                    className="p-2 border border-gray-300 rounded"
+                  />
+                </div>
+                <div className="flex flex-col mb-4">
+                  <label className="text-sm font-medium mb-1">
+                    Number of Outsiders
+                  </label>
+                  <input
+                    type="number"
+                    value={updatedBooking.num_of_guest || ""}
+                    onChange={(e) =>
+                      setUpdatedBooking({
+                        ...updatedBooking,
+                        num_of_guest: e.target.value,
+                      })
+                    }
+                    className="p-2 border border-gray-300 rounded"
+                  />
+                </div>
+              </>
+            )}
             <div className="flex flex-col mb-4">
               <label className="text-sm font-medium mb-1">Total Price</label>
               <div className="p-2 border border-gray-300 rounded bg-gray-100">
@@ -346,7 +387,8 @@ const BookingReviewModal = ({ isOpen, onRequestClose, booking, onUpdate }) => {
             {payments.map((payment, index) => (
               <div key={index} className="flex items-center space-x-2 mb-4">
                 <div className="p-2 border border-gray-300 rounded bg-gray-100 flex-1">
-                  PHP {parseFloat(payment.amount).toFixed(2)} on {payment.date}
+                  PHP {parseFloat(payment.amount).toFixed(2)} on{" "}
+                  {payment.payment_date}
                 </div>
                 <button
                   onClick={() => deletePayment(index)}

@@ -23,6 +23,7 @@ class StoreAmenityRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:100',
+            'is_per_group', 'required|boolean',
             'day_price' => 'nullable|numeric|min:0',
             'night_price' => 'nullable|numeric|min:0',
             'day_per_person_price' => 'nullable|numeric|min:0',

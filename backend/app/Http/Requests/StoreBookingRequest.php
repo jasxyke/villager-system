@@ -29,6 +29,7 @@ class StoreBookingRequest extends FormRequest
             'booking_date' => 'required|date',
             'start_time' => 'required|date_format:H:i',
             'end_time' => 'required|date_format:H:i|after:start_time',
+            'is_guest' => 'nullable|boolean',
             'num_of_resident' => 'nullable|integer',
             'num_of_guest' => 'nullable|integer',
             'full_name' => 'required|string|max:255',

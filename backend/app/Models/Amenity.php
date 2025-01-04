@@ -13,6 +13,7 @@ class Amenity extends Model
 
     protected $fillable = [
         'name',
+        'is_per_group',
         'day_price',
         'night_price',
         'day_per_person_price',

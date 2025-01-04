@@ -18,9 +18,12 @@ import BookingForm from "../../components/forms/BookingForm";
 import { useAmenities } from "../../context/AmenitiesContext";
 import LoadingScreen from "../../components/common/LoadingScreen";
 import { useAuthContext } from "../../context/AuthContext";
+import DropDownPicker from "react-native-dropdown-picker";
 
 const Booking = () => {
   const [selectedAmenity, setSelectedAmenity] = useState(null);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [amenitiesDropdown, setAmenitiesDropdown] = useState([]);
   const [selectedDate, setSelectedDate] = useState(null);
   const [reservedTimes, setReservedTimes] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
@@ -86,14 +89,25 @@ const Booking = () => {
     setSelectedMonth(new Date(date.dateString));
   };
 
+  // useEffect(() => {
+  //   if (selectedAmenity === null) {
+  //     setSelectedAmenity(1);
+  //   }
+  //   if (selectedMonth === null) {
+  //     setSelectedMonth(new Date());
+  //   }
+  // }, []);
+
   useEffect(() => {
-    if (selectedAmenity === null) {
-      setSelectedAmenity(1);
+    if (amenities.length > 0) {
+      setAmenitiesDropdown(
+        amenities.map((amenity) => ({
+          label: amenity.name,
+          value: amenity.id,
+        }))
+      );
     }
-    if (selectedMonth === null) {
-      setSelectedMonth(new Date());
-    }
-  }, []);
+  }, [amenities]);
 
   const onRefresh = () => {
     setRefreshing(true);
@@ -217,18 +231,33 @@ const Booking = () => {
             />
 
             <View style={styles.amenitiesContainer}>
-              {amenities.map((amenity) => (
-                <TouchableOpacity
-                  key={amenity.id}
-                  style={[
-                    styles.amenityButton,
-                    selectedAmenity === amenity.id && styles.selectedAmenity,
-                  ]}
-                  onPress={() => handleAmenitySelection(amenity.id)}
-                >
-                  <Text style={styles.amenityText}>{amenity.name}</Text>
-                </TouchableOpacity>
-              ))}
+              {amenities.length <= 2 ? (
+                amenities.map((amenity) => (
+                  <TouchableOpacity
+                    key={amenity.id}
+                    style={[
+                      styles.amenityButton,
+
+                      selectedAmenity === amenity.id && styles.selectedAmenity,
+                    ]}
+                    onPress={() => handleAmenitySelection(amenity.id)}
+                  >
+                    <Text style={styles.amenityText}>{amenity.name}</Text>
+                  </TouchableOpacity>
+                ))
+              ) : (
+                <DropDownPicker
+                  open={dropdownOpen}
+                  value={selectedAmenity}
+                  items={amenitiesDropdown}
+                  setOpen={setDropdownOpen}
+                  setValue={setSelectedAmenity}
+                  placeholder="Select an Amenity"
+                  style={styles.dropdown}
+                  dropDownContainerStyle={styles.dropdownContainer}
+                  listMode="SCROLLVIEW"
+                />
+              )}
             </View>
 
             {selectedAmenity && selectedDate ? (
@@ -394,6 +423,13 @@ const styles = StyleSheet.create({
   proceedButtonText: {
     color: colors.white,
     fontSize: 18,
+  },
+  dropdown: {
+    backgroundColor: colors.white,
+    borderColor: colors.green,
+  },
+  dropdownContainer: {
+    backgroundColor: colors.white,
   },
 });
 

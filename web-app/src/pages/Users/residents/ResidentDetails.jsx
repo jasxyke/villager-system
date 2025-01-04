@@ -1,7 +1,4 @@
 import React, { useState } from "react";
-import backArrow from "../../../assets/icons/arrow-left.png";
-import editICon from "../../../assets/icons/edit.png";
-import trashIcon from "../../../assets/icons/trash.png";
 import { calculateAge, formatFullName } from "../../../utils/DataFormatter";
 import ResidentDetail from "./ResidentDetail";
 import SelectOptions from "../../../components/forms/SelectOptions";

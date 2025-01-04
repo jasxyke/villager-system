@@ -19,7 +19,7 @@ import { useAuthContext } from "../contexts/AuthContext";
 import styles from "./SideBar.module.css";
 
 const SideBar = () => {
-  const { logout } = useAuthContext();
+  const { logout, user } = useAuthContext();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -113,15 +113,19 @@ const SideBar = () => {
             Users
           </NavLink>
         </li>
-        <li>
-          <NavLink
-            to="/announcements"
-            ref={location.pathname === "/announcements" ? activeLinkRef : null}
-          >
-            <FiMessageSquare className="text-3xl mr-2" />
-            Announcements
-          </NavLink>
-        </li>
+        {["admin"].includes(user.role_type) && (
+          <li>
+            <NavLink
+              to="/announcements"
+              ref={
+                location.pathname === "/announcements" ? activeLinkRef : null
+              }
+            >
+              <FiMessageSquare className="text-3xl mr-2" />
+              Announcements
+            </NavLink>
+          </li>
+        )}
         <li>
           <NavLink
             to="/complaints"
@@ -150,15 +154,19 @@ const SideBar = () => {
             Reports
           </NavLink>
         </li>
-        <li>
-          <NavLink
-            to="/admin-settings"
-            ref={location.pathname === "/admin-settings" ? activeLinkRef : null}
-          >
-            <MdOutlineRoomPreferences className="text-4xl mr-2" />
-            Admin Settings
-          </NavLink>
-        </li>
+        {["admin"].includes(user.role_type) && (
+          <li>
+            <NavLink
+              to="/admin-settings"
+              ref={
+                location.pathname === "/admin-settings" ? activeLinkRef : null
+              }
+            >
+              <MdOutlineRoomPreferences className="text-4xl mr-2" />
+              Admin Settings
+            </NavLink>
+          </li>
+        )}
         <li className="bg-transparent">
           <p className="" onClick={logoutUser}>
             <FiLogOut className="text-3xl mr-2" /> Logout

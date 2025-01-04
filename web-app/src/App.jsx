@@ -24,9 +24,16 @@ import Complaints from "./pages/Complaints/Complaints";
 import AdminSettings from "./pages/Settings/AdminSettings";
 import AdminDashboard from "./pages/Dashboard/AdminDashboard";
 import Expenses from "./pages/Expenses/Expenses";
+import PrivateRoute from "./components/Middlewares/PrivateRoute";
 
 function App() {
-  const { isLoggedIn } = useAuthContext();
+  const { isLoggedIn, getUser, user } = useAuthContext();
+
+  useEffect(() => {
+    if (isLoggedIn() && user === null) {
+      getUser();
+    }
+  }, []);
 
   const marginLeft = isLoggedIn() ? "300px" : "0px";
   return (
@@ -45,15 +52,36 @@ function App() {
               <Route path="sticker" element={<CarSticker />} />
             </Route>
             <Route path="/clearance" element={<Permits />} />
-            <Route path="/announcements" element={<AnnouncementPage />} />
+            <Route
+              path="/announcements"
+              element={
+                <PrivateRoute allowedRoles={["admin"]}>
+                  <AnnouncementPage />
+                </PrivateRoute>
+              }
+            />
             <Route path="/houses" element={<Houses />} />
             <Route path="/users">
               <Route path="residents" element={<Residents />} />
-
-              <Route path="admins" element={<AdminPage />} />
+              <Route
+                path="admins"
+                element={
+                  <PrivateRoute allowedRoles={["admin"]}>
+                    <AdminPage />
+                  </PrivateRoute>
+                }
+              />
             </Route>
             <Route path="/reports" element={<Reports />} />
-            <Route path="/admin-settings" element={<AdminSettings />} />
+
+            <Route
+              path="/admin-settings"
+              element={
+                <PrivateRoute allowedRoles={["admin"]}>
+                  <AdminSettings />
+                </PrivateRoute>
+              }
+            />
             <Route
               path="/guidelines"
               element={<CommunityRulesAndRegulation />}

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\PushNotificationHelper;
 use App\Models\Bill;
 use App\Models\Resident;
 use Illuminate\Http\Request;
@@ -169,8 +170,12 @@ class BillController extends Controller
         $bills = Bill::whereIn('id', $billIds)->get();
 
         foreach ($bills as $bill) {
-            $residentEmail = $bill->resident->user->email;
+            $user = $bill->resident->user;
+            $residentEmail = $user->email;
             Mail::to($residentEmail)->send(new OverdueBillNotification($bill));
+            $title = "Overdue Bill Notification";
+            $message = "This is a reminder that your bill for the month of " . Carbon::parse($bill->issue_date)->format('F Y') . " is overdue.";
+            PushNotificationHelper::sendToUser($user->id, $title, $message);
         }
 
         return response()->json(['message' => 'Notifications sent successfully']);

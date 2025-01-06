@@ -1,9 +1,12 @@
 import { View, Text, Image, StyleSheet, Pressable } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import AppLogo from "../../components/common/AppLogo";
 import { BELL, HAMBURGER } from "../../constants/icons";
 import NavigationModal from "../modals/NavigationModal";
 import { colors } from "../../styles/colors";
+import { useAuthContext } from "../../context/AuthContext";
+import { useNotificationsContext } from "../../context/NotificationContext"; // Import the context
+import { router } from "expo-router";
 
 const AppHeader = ({ addStyles }) => {
   const [visibleMenu, setVisibleMenu] = useState(false);
@@ -13,6 +16,25 @@ const AppHeader = ({ addStyles }) => {
   const openMenu = () => {
     setVisibleMenu(true);
   };
+
+  const { user } = useAuthContext();
+  const { notifications, loading } = useNotificationsContext(); // Consume the context
+
+  const goToNotifications = () => {
+    router.push("../notifications");
+  };
+
+  // Calculate the unread notification count
+  const unreadNotificationCount = notifications.filter(
+    (notification) => notification.read_status === "unread"
+  ).length;
+
+  useEffect(() => {
+    if (user?.id) {
+      // Fetch notifications when the user is available
+    }
+  }, [user]);
+
   return (
     <View
       className={
@@ -23,10 +45,14 @@ const AppHeader = ({ addStyles }) => {
       <NavigationModal visible={visibleMenu} onClose={handleCloseMenu} />
       <AppLogo width={50} height={50} />
       <View className="flex-row gap-x-3 mr-3">
-        <View className="">
+        <Pressable onPress={goToNotifications} className="">
           <Image source={BELL} style={styles.bellStyle} />
-          <Text style={styles.notificationCount}>1</Text>
-        </View>
+          {unreadNotificationCount > 0 && (
+            <Text style={styles.notificationCount}>
+              {unreadNotificationCount}
+            </Text>
+          )}
+        </Pressable>
         <Pressable onPress={openMenu}>
           <Image source={HAMBURGER} style={styles.hamburgerMenu} />
         </Pressable>

@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\PushNotificationHelper;
 use App\Models\Booking;
 use App\Http\Requests\StoreBookingRequest;
 use App\Http\Requests\UpdateBookingRequest;
 use App\Mail\BookingReserved;
 use App\Models\BookingPayment;
+use App\Models\Resident;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\ValidationException;
@@ -104,7 +106,7 @@ class BookingController extends Controller
         $booking = Booking::findOrFail($validated['booking_id']);
 
         $booking->amenity_id = $request->amenity_id;
-        // $booking->resident_id = $request->
+        //$booking->resident_id = $request->
         $booking->booking_date = $request->booking_date;
         $booking->start_time = $request->start_time;
         $booking->end_time = $request->end_time;
@@ -133,6 +135,11 @@ class BookingController extends Controller
 
         if ($booking->booking_status == 'reserved' && $validated['notify']) {
             Mail::to($booking->email)->send(new BookingReserved($booking));
+            $resident = Resident::findOrFail($booking->resident_id);
+            $user = $resident->user;
+            $title = "Booking Reservation";
+            $message = "Your Booking is Officially Reserved!";
+            PushNotificationHelper::sendToUser($user->id, $title, $message);
         }
 
         $booking = $booking->load(['bookingPayments','amenity']);

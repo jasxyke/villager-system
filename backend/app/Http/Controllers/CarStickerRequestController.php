@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\PushNotificationHelper;
 use App\Models\CarStickerRequest;
 use App\Http\Requests\StoreCarStickerRequestRequest;
 use App\Http\Requests\UpdateCarStickerRequestRequest;
@@ -200,7 +201,10 @@ class CarStickerRequestController extends Controller
         // $resident = Resident::findOrFail($stickerRequest->resident_id);
 
         // // Send email notification to the resident
-        // Mail::to($resident->user->email)->send(new CarStickerFeeNotification($stickerRequest));
+        Mail::to($stickerRequest->resident->user->email)->send(new CarStickerFeeNotification($stickerRequest));
+        $title = "Car Sticker Request Approved";
+        $message = "Your Car Sticker Requests has been approved! Please check your email for further details about your car sticker request.";
+        PushNotificationHelper::sendToUser($stickerRequest->resident->user->id, $title, $message);
 
         return response()->json([
             'message' => 'Sticker request updated and notification sent successfully.',
@@ -234,7 +238,10 @@ class CarStickerRequestController extends Controller
             // $resident = Resident::findOrFail($carStickerRequest->resident_id);
 
             // // Send an email to the resident with the rejection reason
-            // Mail::to($resident->user->email)->send(new CarStickerRejectedMail($carStickerRequest));
+            Mail::to($carStickerRequest->resident->user->email)->send(new CarStickerRejectedMail($carStickerRequest));
+            $title = "Car Sticker Request Rejected";
+            $message = "Your Car Sticker Requests has been rejected. Please check your email for further details about your car sticker request.";
+            PushNotificationHelper::sendToUser($carStickerRequest->resident->user->id, $title, $message);
 
             return response()->json([
                 'success' => true,

@@ -5,17 +5,20 @@ const useAnnouncements = () => {
   const [announcements, setAnnouncements] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const getAnnouncements = async (onError) => {
+  const getAnnouncements = async (onError, page = 1) => {
     try {
       setLoading(true);
-      const res = await axiosClient.get("/announcements");
-      setAnnouncements(res.data);
-      console.log(res.data);
-      setLoading(false);
+      const res = await axiosClient.get(`/announcements?page=${page}`);
+      setAnnouncements(res.data.data); // Assuming the API returns paginated data in `data`
+      setCurrentPage(res.data.current_page);
+      setTotalPages(res.data.last_page);
+      setTotalRecords(res.data.total);
     } catch (error) {
       setLoading(false);
-      console.log(error);
-      onError(error.response.data.message);
+      console.error(error);
+      onError && onError(error.response?.data?.message || "An error occurred");
+    } finally {
+      setLoading(false);
     }
   };
 

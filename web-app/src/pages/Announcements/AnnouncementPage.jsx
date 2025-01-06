@@ -70,13 +70,13 @@ const AnnouncementPage = () => {
             type="button"
             style={{ backgroundColor: isAddNotification && colors.primary }}
           />
-          <input
+          {/* <input
             className={styles.announcementButton + " text-center"}
             value={"NOTIFY RESIDENTS"}
             onClick={notifying}
             type="button"
             style={{ backgroundColor: isNotifying && colors.primary }}
-          />
+          /> */}
         </div>
       </div>
       <div className="flex-1 items-center justify-center mb-10">

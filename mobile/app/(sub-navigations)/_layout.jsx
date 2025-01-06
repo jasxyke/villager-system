@@ -17,6 +17,10 @@ const _layout = () => {
     >
       <Stack.Screen name="booking" options={{ title: "Book an Amenity" }} />
       <Stack.Screen name="car-stickers" options={{ title: "Car Stickers" }} />
+      <Stack.Screen
+        name="notifications"
+        options={{ title: "Inbox Notifications" }}
+      />
       <Stack.Screen name="home-tab" options={{ headerShown: false }} />
       <Stack.Screen name="permits" options={{ headerShown: false }} />
       <Stack.Screen name="profile" options={{ headerShown: false }} />

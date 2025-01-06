@@ -59,6 +59,7 @@ class PushNotificationHelper
 
             // Use the user's notify method to send the notification
             $user->notify(new ExpoNotification($title, $body, [$expoToken]));
+            NotificationHelper::createNotification($userId, $title, $body);
 
             return ['success' => true, 'message' => 'Notification sent successfully to the resident!'];
         } catch (\Exception $e) {

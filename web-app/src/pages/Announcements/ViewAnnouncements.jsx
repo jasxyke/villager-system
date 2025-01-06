@@ -1,10 +1,98 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import useAnnouncements from "../../hooks/Announcements/useAnnouncements";
 import LoadingContainer from "../../components/LoadingScreen/LoadingContainer";
 import styles from "./ViewAnnouncements.module.css";
 import noImg from "../../assets/no_image.jpg";
 import ViewModal from "./ViewModal";
 import { converTime } from "../../utils/DataFormatter";
+import ReactPaginate from "react-paginate";
+
+const ViewAnnouncements = () => {
+  const [isViewing, setIsViewing] = useState(false);
+  const [announcement, setAnnouncement] = useState(null);
+
+  const {
+    announcements,
+    loading,
+    getAnnouncements,
+    currentPage,
+    totalPages,
+    nextPage,
+    prevPage,
+  } = useAnnouncements();
+
+  useEffect(() => {
+    getAnnouncements((msg) => alert(msg));
+  }, []);
+
+  const handleView = (item) => {
+    setAnnouncement(item);
+    setIsViewing(true);
+  };
+
+  const handleModalClose = () => {
+    setIsViewing(false);
+  };
+
+  const handlePageClick = (event) => {
+    getAnnouncements((msg) => alert(msg), event.selected + 1); // API page is 1-indexed
+  };
+
+  if (loading) {
+    return <LoadingContainer loading={loading} />;
+  }
+
+  const list = announcements.map((item, index) => (
+    <AnnouncementItem
+      key={item.id}
+      announcement={item}
+      index={index}
+      onView={handleView}
+    />
+  ));
+
+  return (
+    <>
+      <div className={styles.listContainer}>
+        {loading ? (
+          <LoadingContainer loading={loading} />
+        ) : announcements.length > 0 ? (
+          <>{list}</>
+        ) : (
+          <div className="text-center p-4 bg-white">
+            No announcements available
+          </div>
+        )}
+      </div>
+
+      {announcement && (
+        <ViewModal
+          isViewing={isViewing}
+          onClose={handleModalClose}
+          announcement={announcement}
+        />
+      )}
+
+      {/* Pagination Controls */}
+      <div className="flex justify-center mt-4">
+        <ReactPaginate
+          breakLabel="..."
+          nextLabel={"next >"}
+          onPageChange={handlePageClick}
+          pageRangeDisplayed={5}
+          pageCount={totalPages}
+          previousLabel={"< previous"}
+          renderOnZeroPageCount={null}
+          className={"pagination rounded-md"}
+          disabledClassName="pagination-disabled"
+          pageClassName="text-white"
+          activeClassName="pagination-active"
+          forcePage={currentPage - 1} // Sync with API
+        />
+      </div>
+    </>
+  );
+};
 
 const AnnouncementItem = ({ announcement, index, onView }) => {
   const bgColor = index % 2 === 0 ? " bg-green" : " bg-primary";
@@ -15,6 +103,7 @@ const AnnouncementItem = ({ announcement, index, onView }) => {
           src={
             announcement.picture_url === null ? noImg : announcement.picture_url
           }
+          alt="Announcement"
         />
       </div>
       <div className={styles.itemDesc}>
@@ -37,58 +126,6 @@ const AnnouncementItem = ({ announcement, index, onView }) => {
         </button>
       </div>
     </div>
-  );
-};
-
-const ViewAnnouncements = () => {
-  const [isViewing, setIsViewing] = useState(false);
-  const [announcement, setAnnouncement] = useState(null);
-  const {
-    announcements,
-    loading,
-    editAnnouncement,
-    getAnnouncements,
-    changePicture,
-  } = useAnnouncements();
-
-  useEffect(() => {
-    getAnnouncements((msg) => alert(msg));
-  }, []);
-
-  if (announcements === null) {
-    return <LoadingContainer loading={loading} />;
-  }
-
-  const handleView = (item) => {
-    setAnnouncement(item);
-    setIsViewing(true);
-  };
-
-  const handleModalClose = () => {
-    setIsViewing(false);
-  };
-
-  const list = announcements.map((item, index) => (
-    <AnnouncementItem
-      key={item.id}
-      announcement={item}
-      index={index}
-      onView={handleView}
-    />
-  ));
-  return (
-    <>
-      <div className={styles.listContainer}>{list}</div>
-      {announcement !== null && (
-        <ViewModal
-          isViewing={isViewing}
-          onClose={handleModalClose}
-          announcement={announcement}
-          editAnnouncement={editAnnouncement}
-          changePic={changePicture}
-        />
-      )}
-    </>
   );
 };
 

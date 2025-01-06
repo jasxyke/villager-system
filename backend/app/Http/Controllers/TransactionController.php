@@ -7,6 +7,7 @@ use App\Models\Transaction;
 use App\Http\Requests\StoreTransactionRequest;
 use App\Http\Requests\UpdateTransactionRequest;
 use App\Models\Bill;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 class TransactionController extends Controller
@@ -42,6 +43,9 @@ class TransactionController extends Controller
                 'payment_method' => $request->input('payment_method')
             ];
             Transaction::create($paymentData);
+            $title = "Monthly Due Payment Received!";
+            $message = "Your payment for the bill for the month " . Carbon::parse($bill->due_date)->format('F Y')  . " has been received.";
+            PushNotificationHelper::sendToUser($bill->resident->user->id, $title, $message);
         }
 
         return response()->json(['success' => true]);

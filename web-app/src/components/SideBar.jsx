@@ -17,6 +17,8 @@ import { MdOutlineRoomPreferences } from "react-icons/md";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useAuthContext } from "../contexts/AuthContext";
 import styles from "./SideBar.module.css";
+import LoadingPage from "./LoadingScreen/LoadingPage";
+import LoadingContainer from "./LoadingScreen/LoadingContainer";
 
 const SideBar = () => {
   const { logout, user } = useAuthContext();
@@ -113,7 +115,7 @@ const SideBar = () => {
             Users
           </NavLink>
         </li>
-        {["admin"].includes(user.role_type) && (
+        {["admin"].includes(user?.role_type) && (
           <li>
             <NavLink
               to="/announcements"
@@ -154,7 +156,7 @@ const SideBar = () => {
             Reports
           </NavLink>
         </li>
-        {["admin"].includes(user.role_type) && (
+        {["admin"].includes(user?.role_type) && (
           <li>
             <NavLink
               to="/admin-settings"

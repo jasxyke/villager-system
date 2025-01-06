@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\PushNotificationHelper;
 use App\Models\PermitRequest;
 use App\Http\Requests\StorePermitRequestRequest;
 use App\Http\Requests\UpdatePermitRequestRequest;
@@ -227,7 +228,10 @@ public function approve(Request $request, $id)
         // Send email notification with the claim stub
         Mail::to($permitRequest->resident->user->email) // Assuming resident is related to user with an email
             ->send(new PermitClaimNotification($permitRequest));
-
+        $firstname = $permitRequest->resident->user->firstname;
+        $title = "Clearance Request Completed";
+        $message = "Hello $firstname, your $permitRequest->permit_type is ready to be claimed. Check your email for further details.";
+        PushNotificationHelper::sendToUser($permitRequest->resident->user->id, $title, $message);
         return response()->json([
             'message' => 'Permit request marked as completed and permit created successfully. Notification email sent.',
             'permit_request' => $permitRequest,

@@ -81,6 +81,7 @@ class TransactionController extends Controller
                 'payment_method' => $request->input('payment_method'),
             ];
             Transaction::create($paymentData);
+            //TODO: ADD PUSH NOTIFICATION HELPER FOR THIS, TINATAMAD PAKO
         }
 
         return response()->json(['success' => true]);

@@ -161,6 +161,20 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/expo-token', [NotificationController::class, 'storeExpoToken']);
     Route::post('/send-notification-to-all', [NotificationController::class, 'sendNotificationToAll']);
     Route::post('/send-notification-to-user', [NotificationController::class, 'sendNotificationToUser']);
+
+    //regular notifications
+
+    Route::prefix('notifications')->group(function () {
+        Route::get('/', [NotificationController::class, 'index']); // Get all notifications
+        Route::post('/', [NotificationController::class, 'store']); // Create a notification
+        Route::get('/{id}', [NotificationController::class, 'show']); // Get a single notification
+        Route::put('/{id}', [NotificationController::class, 'update']); // Update a notification
+        Route::delete('/{id}', [NotificationController::class, 'destroy']); // Delete a notification
+        Route::get('/user/{user_id}', [NotificationController::class, 'getNotificationsByUser']);
+        Route::patch('/read/{id}', [NotificationController::class, 'markNotificationAsRead']);
+
+    });
+
     
     //complaints
     Route::apiResource('complaints', ComplaintController::class);

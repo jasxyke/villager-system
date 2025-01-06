@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import { AuthProvider } from "../context/AuthContext";
 import { SettingsProvider } from "../context/SettingsContext";
 import { AmenitiesProvider } from "../context/AmenitiesContext";
+import { NotificationProvider } from "../context/NotificationContext";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -31,9 +32,11 @@ const RootLayout = () => {
     <AuthProvider>
       <SettingsProvider>
         <AmenitiesProvider>
-          <Stack screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="index" options={{ headerShown: false }} />
-          </Stack>
+          <NotificationProvider>
+            <Stack screenOptions={{ headerShown: false }}>
+              <Stack.Screen name="index" options={{ headerShown: false }} />
+            </Stack>
+          </NotificationProvider>
         </AmenitiesProvider>
       </SettingsProvider>
     </AuthProvider>

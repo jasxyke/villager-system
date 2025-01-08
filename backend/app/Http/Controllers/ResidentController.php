@@ -53,7 +53,7 @@ class ResidentController extends Controller
             'lastname'=>$request->input('lastname'),
             'firstname'=>$request->input('firstname'),
             'middlename'=>$request->input('middlename'),
-            'role_type'=>$request->roleType,
+            'role_type'=>$request->input('roleType'),
             'email'=>$request->input('email'),
             'contact_number'=>$request->input('contactNumber'),
         ]);

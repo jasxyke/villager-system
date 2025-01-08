@@ -4,6 +4,7 @@ import {
   BILLS,
   CAR,
   HOME,
+  HOUSEHOLD,
   PERMITS,
   PROFILE,
   SERVICES,
@@ -140,6 +141,21 @@ const MainLayout = () => {
             ),
           }}
         /> */}
+        <Tabs.Screen
+          name="household"
+          options={{
+            title: "Household",
+            headerShown: false,
+            tabBarIcon: ({ focused, color, size }) => (
+              <TabIcon
+                icon={HOUSEHOLD}
+                color={color}
+                focused={focused}
+                name={"Household"}
+              />
+            ),
+          }}
+        />
         <Tabs.Screen
           name="profile"
           options={{

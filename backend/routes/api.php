@@ -44,6 +44,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/block/{blockNumber}',[HouseController::class,
         'getHousesPerBlock']);
         Route::get('/search', [HouseController::class, 'search']);
+        Route::get('/members/{houseId}', [HouseController::class, 'getHouseMembers']);
     });
     Route::apiResource('houses',HouseController::class);
 

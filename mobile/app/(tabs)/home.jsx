@@ -128,6 +128,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     width: "90%",
     marginBottom: 0,
+    fontFamily: "Jaldi-Bold",
   },
   row: {
     flexDirection: "row",

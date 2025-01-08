@@ -15,7 +15,7 @@ const AddResidentModal = ({ isModalOpen, onModalClose, onAddMember }) => {
   const [middlename, setMiddlename] = useState("");
   const [email, setEmail] = useState("");
   const [contactNum, setContactNum] = useState("");
-  const [roleType, setRoleType] = useState(ROLE_TYPES_RESIDENT[0].value);
+  const [roleType, setRoleType] = useState(ROLE_TYPES_HOUSE[0].value);
   const [birthdate, setBirthdate] = useState("");
   const [sex, setSex] = useState(SEX_TYPES[0].value);
   const [civilStatus, setCivilStatus] = useState(CIVIL_STATUSES[0].value);
@@ -36,6 +36,8 @@ const AddResidentModal = ({ isModalOpen, onModalClose, onAddMember }) => {
       contactNum: contactNum,
       roleType: roleType,
     };
+
+    console.log(residentData);
 
     onAddMember(residentData);
   };

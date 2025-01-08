@@ -21,15 +21,26 @@ use Illuminate\Validation\ValidationException;
 
 class HouseController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
+
+    public function getHouseMembers (Request $request,$houseId){
+        // Validate that the house exists
+        $house = House::find($houseId);
+        if (!$house) {
+            return response()->json(['message' => 'House not found'], 404);
+        }
+
+        // Fetch the residents of the house
+        $residents = Resident::with('user')
+            ->where('house_id', $houseId)
+            ->get();
+
+        // Return the residents in a JSON response
+        return response()->json([
+            'house' => $house,
+            'residents' => $residents,
+        ]);
     }
 
-    
     public function getHousesPerBlocks(Request $request){
         $blocks = $request->filteredBlocks;
 

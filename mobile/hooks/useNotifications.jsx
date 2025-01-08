@@ -1,7 +1,8 @@
 import Constants from "expo-constants";
 import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
-import { useEffect, useRef, useState } from "react";
+import { getItemAsync, setItemAsync } from "expo-secure-store";
+import { useRef, useState } from "react";
 import { Platform } from "react-native";
 import axiosClient from "../utils/axios";
 
@@ -18,14 +19,14 @@ Notifications.setNotificationHandler({
 async function registerForPushNotificationsAsync() {
   console.log("Push Notification Registered!");
 
-  // if (Platform.OS === "android") {
-  //   Notifications.setNotificationChannelAsync("default", {
-  //     name: "default",
-  //     importance: Notifications.AndroidImportance.MAX,
-  //     vibrationPattern: [0, 250, 250, 250],
-  //     lightColor: "#FF231F7C",
-  //   });
-  // }
+  if (Platform.OS === "android") {
+    Notifications.setNotificationChannelAsync("default", {
+      name: "default",
+      importance: Notifications.AndroidImportance.MAX,
+      vibrationPattern: [0, 250, 250, 250],
+      lightColor: "#FF231F7C",
+    });
+  }
 
   let token;
 
@@ -70,10 +71,16 @@ export const usePushNotifications = () => {
   const responseListener = useRef();
 
   const setupNotifications = async (user_id) => {
-    const token = await registerForPushNotificationsAsync();
-    if (token) {
-      setExpoPushToken(token);
-      sendTokenToBackend(token, user_id); // Send token to Laravel backend
+    const expoToken = await getItemAsync("EXPO_TOKEN");
+    if (expoToken) {
+      setExpoPushToken(expoToken);
+    } else {
+      const token = await registerForPushNotificationsAsync();
+      if (token) {
+        setExpoPushToken(token);
+        sendTokenToBackend(token, user_id); // Send token to Laravel backend
+        await setItemAsync("EXPO_TOKEN", token);
+      }
     }
 
     // Listener for notifications received in foreground

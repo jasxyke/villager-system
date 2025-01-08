@@ -33,7 +33,9 @@ const NotificationsScreen = () => {
         ]}
       >
         <Text style={styles.notificationTitle}>{item.caption}</Text>
-        <Text style={styles.notificationText}>{item.content}</Text>
+        <Text className="truncate max-w-xs" style={styles.notificationText}>
+          {item.content}
+        </Text>
       </TouchableOpacity>
     );
   };

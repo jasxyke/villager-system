@@ -3,10 +3,9 @@ import { View, Text, Image, StyleSheet, Pressable, Alert } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import useUser from "../../../hooks/users/useUser";
 import { useAuthContext } from "../../../context/AuthContext";
+import { PROFILE } from "../../../constants/icons";
 
 const UserInfo = ({ imageUrl, userName, userRole }) => {
-  const [image, setImage] = useState(null);
-
   const { changePicture } = useUser();
   const { user, setUser } = useAuthContext();
 
@@ -38,17 +37,20 @@ const UserInfo = ({ imageUrl, userName, userRole }) => {
     }
   };
 
+  const image = imageUrl !== null ? { uri: imageUrl } : PROFILE;
+
   return (
     <View style={styles.container}>
       <View style={styles.imageContainer}>
         <Pressable onPress={pickImage}>
           <View>
             <Image
-              source={{ uri: image === null ? imageUrl : image }}
+              tintColor={imageUrl === null && "white"}
+              source={image}
               style={styles.image}
               resizeMode="cover"
             />
-            <Text className="text-white text-xs underline mt-1">
+            <Text className="text-white text-xs underline mt-1 text-center">
               Change Picture
             </Text>
           </View>
@@ -74,6 +76,8 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     flex: 1,
+    display: "flex",
+    justifyContent: "center",
     alignItems: "center",
     marginRight: 10,
   },

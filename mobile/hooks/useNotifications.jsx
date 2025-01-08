@@ -19,14 +19,14 @@ Notifications.setNotificationHandler({
 async function registerForPushNotificationsAsync() {
   console.log("Push Notification Registered!");
 
-  if (Platform.OS === "android") {
-    Notifications.setNotificationChannelAsync("default", {
-      name: "default",
-      importance: Notifications.AndroidImportance.MAX,
-      vibrationPattern: [0, 250, 250, 250],
-      lightColor: "#FF231F7C",
-    });
-  }
+  // if (Platform.OS === "android") {
+  //   Notifications.setNotificationChannelAsync("default", {
+  //     name: "default",
+  //     importance: Notifications.AndroidImportance.MAX,
+  //     vibrationPattern: [0, 250, 250, 250],
+  //     lightColor: "#FF231F7C",
+  //   });
+  // }
 
   let token;
 

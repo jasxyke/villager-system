@@ -1,9 +1,4 @@
-export function formatFullName(
-  firstname,
-  middlename,
-  lastname,
-  lastNameFirst = true
-) {
+export function formatFullName(firstname, middlename, lastname, lastNameFirst) {
   if (middlename === null) {
     middlename = "";
   } else {
@@ -19,11 +14,16 @@ export function formatFullName(
   if (lastNameFirst) {
     return lastname + ", " + firstname + " " + middlename;
   } else {
-    return firstname + " " + middlename + " " + lastname;
+    if (middlename === "") {
+      return firstname + "" + middlename + " " + lastname;
+    } else {
+      return firstname + " " + middlename + " " + lastname;
+    }
   }
 }
 
 export function formatName(name) {
+  if (!name) return "";
   name = name
     .replace(/[_-]/g, " ") // Replace underscores and dashes with spaces
     .split(" ")

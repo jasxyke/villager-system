@@ -98,5 +98,10 @@ class User extends Authenticatable
         return $this->hasMany(ExpoUserToken::class);
     }
 
+    public function householdPermissions()
+    {
+        return $this->hasMany(HouseholdPermission::class);
+    }
+
 
 }

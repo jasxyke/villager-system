@@ -42,7 +42,11 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        //
+        return response()->json([
+            'user' => $user->load(['resident.house', 'householdPermissions.grantedBy', 'householdPermissions.user']) 
+            // 'householdPermissions.user' loads the user (permission recipient)
+            // 'householdPermissions.grantedBy' loads the user (who granted the permission)
+        ]);
     }
 
 

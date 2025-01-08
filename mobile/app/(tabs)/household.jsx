@@ -67,10 +67,13 @@ const Household = () => {
 const MemberItem = ({ name, role, id }) => {
   const { user } = useAuthContext();
   const handleManage = () => {
-    if (user.resident.id === id) {
+    if (user.id === id) {
       router.navigate("profile");
     } else {
-      //
+      router.push({
+        pathname: "../household/house-member",
+        params: { userId: id },
+      });
     }
   };
   return (

@@ -6,6 +6,9 @@ import { Platform } from "react-native";
 const useUser = () => {
   const { setUser } = useAuthContext();
   const [loading, setLoading] = useState(false);
+  const [localUser, setLocalUser] = useState(null);
+
+  // Function to update user details
   const updateUser = async (user, onUpdate, onError) => {
     setLoading(true);
     let userForm = null;
@@ -28,6 +31,7 @@ const useUser = () => {
     }
   };
 
+  // Function to change the user's profile picture
   const changePicture = async (selectedPicture, onSuccess, onError) => {
     setLoading(true);
     const uri =
@@ -62,6 +66,7 @@ const useUser = () => {
     }
   };
 
+  // Function to request change of password
   const requestChangePassword = async (
     oldPassword,
     newPassword,
@@ -86,7 +91,31 @@ const useUser = () => {
       setLoading(false);
     }
   };
-  return { updateUser, changePicture, requestChangePassword, loading };
+
+  // Function to fetch user details
+  const fetchUserDetails = async (userId, onSuccess, onError) => {
+    setLoading(true);
+    try {
+      const res = await axiosClient.get(`/users/${userId}`);
+      setLocalUser(res.data.user); // Update the user context
+      onSuccess(res.data.user); // Return the fetched user data
+      setLoading(false);
+    } catch (error) {
+      console.log(error.response.data.message);
+      onError(error.response.data.message);
+      setLoading(false);
+    }
+  };
+
+  return {
+    localUser,
+    setLocalUser,
+    updateUser,
+    changePicture,
+    requestChangePassword,
+    fetchUserDetails,
+    loading,
+  };
 };
 
 export default useUser;

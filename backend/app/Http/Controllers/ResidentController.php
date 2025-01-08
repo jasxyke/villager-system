@@ -79,7 +79,11 @@ class ResidentController extends Controller
      */
     public function show(Resident $resident)
     {
-        //
+        // $resident = Resident::findOrFail($id)->with(['user','house']);
+
+        return response()->json([
+            'resident'=> $resident->load(['user','house']),
+        ]);
     }
     /**
      * Update the specified resource in storage.

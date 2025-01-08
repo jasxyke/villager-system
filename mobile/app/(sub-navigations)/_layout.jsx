@@ -25,6 +25,7 @@ const _layout = () => {
       <Stack.Screen name="permits" options={{ headerShown: false }} />
       <Stack.Screen name="profile" options={{ headerShown: false }} />
       <Stack.Screen name="stickers" options={{ headerShown: false }} />
+      <Stack.Screen name="household" options={{ headerShown: false }} />
     </Stack>
   );
 };

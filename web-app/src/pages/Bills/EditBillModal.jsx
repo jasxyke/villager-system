@@ -57,6 +57,10 @@ const EditBillModal = ({ isOpen, onRequestClose, bill, onSuccess }) => {
     const currentAmount = parseFloat(formData.amount);
     const paymentAmount = parseFloat(formData.payment_amount);
 
+    if (paymentAmount !== currentAmount) {
+      newErrors.payment_amount =
+        "Payment must be exact with the current monthy due amount.";
+    }
     if (isNaN(paymentAmount) || paymentAmount <= 0) {
       newErrors.payment_amount = "Payment amount must be a positive number.";
     } else if (paymentAmount > currentAmount) {

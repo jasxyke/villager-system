@@ -3,8 +3,10 @@ import mainLogo from "../../assets/logo.png";
 import { Link } from "react-router-dom";
 import styles from "./Users.module.css";
 import MainLogo from "../../components/MainLogo";
+import { useAuthContext } from "../../contexts/AuthContext";
 
 const UsersPage = ({ children }) => {
+  const { user } = useAuthContext();
   return (
     <div className={styles.mainContainer}>
       <div className={styles.userContainer}>
@@ -13,9 +15,11 @@ const UsersPage = ({ children }) => {
           <Link to="/users/residents" className={styles.userButton}>
             Residents
           </Link>
-          <Link to="/users/admins" className={styles.userButton}>
-            Administrators
-          </Link>
+          {user.role_type === "admin" && (
+            <Link to="/users/admins" className={styles.userButton}>
+              Administrators
+            </Link>
+          )}
         </div>
         {children}
       </div>

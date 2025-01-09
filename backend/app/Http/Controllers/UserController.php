@@ -59,15 +59,15 @@ class UserController extends Controller
         $fields = $request->validate([
             'lastname'=> 'required|string|max:255',
             'firstname' => 'required|string|max:255',
-            'middlename' => 'required|string|max:255',
-            'fbName' => 'required|string|max:150',
+            'middlename' => 'nullable|string|max:255',
+            'fbName' => 'nullable|string|max:150',
         ]);
 
         //return response()->json(['user'=>$fields]);
 
         $user->update($fields);
         
-        $resident = Resident::find($user->id);
+        $resident = Resident::find($user->resident->id);
         $resident->fb_name = $fields["fbName"];
         $resident->civil_status = $request->input('civilStatus');
         $resident->occupation_status = $request->input('occupation');

@@ -29,7 +29,7 @@ const Household = () => {
 
   const renderItem = ({ item }) => (
     <MemberItem
-      id={item.id}
+      id={item.user.id}
       name={`${formatUserName(item.user, false)}`}
       role={formatName(item.user.role_type)}
     />

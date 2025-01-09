@@ -251,12 +251,12 @@ class BillController extends Controller
         return response()->json($bill);
     }
 
-    public function countUnpaidResidents(Request $request)
+    public function countOverdueMontlhyDues(Request $request)
     {
         $month = $request->month;
         $year = $request->year;
 
-        // Query to count distinct residents with unpaid bills in the given month and year
+        // Query to count distinct bills with unpaid bills in the given month and year
         $unpaidResidentsCount = Bill::where('status', 'pending')
             ->whereYear('due_date', $year)
             ->whereMonth('due_date', $month)
@@ -267,29 +267,27 @@ class BillController extends Controller
         return response()->json(['unpaid_residents_count' => $unpaidResidentsCount]);
     }
 
-    public function countOverdueResidents()
+    public function countOverdue()
     {
         // Query to count distinct residents with overdue bills
-        $overdueResidentsCount = Bill::where('status', 'overdue')
-            ->select('resident_id')
+        $overdueBillsCount = Bill::whereIn('status', ['overdue', 'pending'])
             ->distinct()
             ->count();
-
-        return response()->json(['overdue_residents_count' => $overdueResidentsCount]);
+        return response()->json(['overdue_bills_count' => $overdueBillsCount]);
     }
 
-    public function topResidentsWithUnpaidBills()
+    public function topResidentsWithPendingBills()
 {
-    // Get the top 3 residents with the most unpaid or overdue bills
+    // Get the top 3 residents with the most overdue bills
     $topResidents = Resident::with(['user', 'house', 'bills' => function ($query) {
-        $query->whereIn('status', ['pending', 'overdue']); // Filter for unpaid or overdue bills
+        $query->whereIn('status', ['pending']); // Filter for overdue bills
     }])
     ->withCount(['bills' => function ($query) {
-        $query->whereIn('status', ['pending', 'overdue']); // Count only unpaid or overdue bills
+        $query->whereIn('status', ['pending']); // Count only overdue bills
     }])
     ->having('bills_count', '>', 0) // Only residents with unpaid or overdue bills
     ->orderByDesc('bills_count') // Sort by the number of unpaid or overdue bills
-    ->limit(3) // Limit to top 3 residents
+    ->limit(20)
     ->get();
 
     // Check if data is found

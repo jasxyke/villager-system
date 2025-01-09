@@ -118,7 +118,10 @@ const AdminDashboard = () => {
           </div>
           {/* Action Button */}
           <div className="flex justify-center items-center mt-8">
-            <button className="bg-gradient-to-r from-secondary to-oliveGreen text-white py-3 px-8 rounded-full shadow-md hover:bg-gradient-to-r hover:from-oliveGreen hover:to-secondary transition-all duration-300 transform hover:scale-105 ease-in-out">
+            <button
+              onClick={() => navigate("/expenses-income")}
+              className="bg-gradient-to-r from-secondary to-oliveGreen text-white py-3 px-8 rounded-full shadow-md hover:bg-gradient-to-r hover:from-oliveGreen hover:to-secondary transition-all duration-300 transform hover:scale-105 ease-in-out"
+            >
               GENERATE REPORT
             </button>
           </div>
@@ -156,7 +159,7 @@ const AdminDashboard = () => {
               {loadingOverdue ? <LoadingElement /> : overdueCount}
             </h2>
             <p className="text-sm text-mutedGreen uppercase font-semibold tracking-wider">
-              UNPAID RESIDENTS
+              UNPAID MONTHLY DUES
             </p>
           </div>
         </div>

@@ -15,7 +15,7 @@ import { useLocalSearchParams } from "expo-router";
 import useResident from "../../../hooks/houses/useResident";
 import { formStyles } from "../../../styles/profileStyles";
 import moment from "moment/moment";
-import { formatName } from "../../../utils/DataFormatter";
+import { formatName, formatUserName } from "../../../utils/DataFormatter";
 import { colors } from "../../../styles/colors";
 import AlertModal from "../../../components/modals/AlertModal";
 import EditProfile from "../../../components/forms/EditProfile";
@@ -30,6 +30,11 @@ const HouseMember = () => {
   const [modalMsg, setModalMsg] = useState("");
   const [isChangingPass, setIsChangPass] = useState(false);
   const [error, setError] = useState("");
+
+  const openModal = () => {
+    setModalVisible(true);
+  };
+
   const handleSucess = (msg) => {
     //
   };
@@ -100,8 +105,8 @@ const HouseMember = () => {
                 {/* Reusing UserInfo Component */}
                 <UserInfo
                   imageUrl={user.picture_url}
-                  userName={`${user.firstname} ${user.lastname}`}
-                  userRole={formatName()}
+                  userName={formatUserName(user, false)}
+                  userRole={formatName(user.role_type)}
                 />
 
                 {/* Name */}
@@ -110,7 +115,7 @@ const HouseMember = () => {
                     Name
                   </Text>
                   <TextInput
-                    value={`${user.firstname} ${user.lastname}`}
+                    value={formatUserName(user, false)}
                     style={formStyles.textInput}
                     editable={false}
                   />
@@ -238,6 +243,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     display: "flex",
     flexDirection: "row",
+    columnGap: 20,
     justifyContent: "space-between",
     marginTop: 20,
   },
@@ -246,7 +252,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: colors.paleGreen,
     alignItems: "center",
-    width: "80%",
+    flexGrow: 1,
   },
   buttonText: {
     color: "#FFFFFF",

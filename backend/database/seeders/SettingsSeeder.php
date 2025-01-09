@@ -16,7 +16,7 @@ class SettingsSeeder extends Seeder
         $settings = [
             //bills settings
             ['key' => 'allow_miss_payments', 'value' => true],
-            ['key' => 'bill_amount_per_month', 'value' => 1000],
+            ['key' => 'bill_amount_per_month', 'value' => 100],
             // ['key' => 'additional_per_missed_payment', 'value' => 100],
             ['key' => 'interest_per_missed_payment', 'value' => 2],
             // ['key' => 'payment_per_square_meter', 'value' => 50],

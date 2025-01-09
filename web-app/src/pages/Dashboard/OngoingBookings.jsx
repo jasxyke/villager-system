@@ -27,24 +27,24 @@ const OngoingBookings = () => {
   };
 
   return (
-    <div className="relative w-full sm:w-7/12 bg-gradient-to-r from-green to-green rounded-xl shadow-lg transition-transform duration-300 ease-in-out transform hover:scale-105 hover:shadow-2xl">
-      <div className="p-4 rounded-xl min-h-[50vh] max-h-[60vh] overflow-hidden border">
+    <div className=" border w-full sm:w-7/12 bg-gradient-to-r from-green to-green rounded-xl shadow-lg transition-transform duration-300 ease-in-out transform hover:scale-105 hover:shadow-2xl">
+      <div className="p-4 rounded-xl w-full">
         <div className="bg-oliveGreen p-4 rounded-t-md text-white font-semibold text-lg">
           Pending BOOKINGS
         </div>
-        <div className="bg-white rounded-b-md">
+        <div className="rounded-b-md min-h-auto max-h-[300px] overflow-y-auto overflow-x-hidden">
           {loading && (
-            <div className="pt-5 pb-5">
+            <div className="pt-5 pb-5 bg-white">
               <LoadingElement color="green" hasMargin={true} />
             </div>
           )}
           {error && (
-            <div className="p-4 text-center text-red-500">
+            <div className="p-4 text-center text-red-500 bg-white">
               Error: {error.message}
             </div>
           )}
           {!loading && !error && bookings.length === 0 && (
-            <div className="p-4 text-center text-gray-500">
+            <div className="p-4 text-center text-gray-500 bg-white">
               No pending bookings.
             </div>
           )}
@@ -55,7 +55,7 @@ const OngoingBookings = () => {
               <div
                 key={booking.id}
                 onClick={() => reviewBooking(booking)}
-                className="flex items-center gap-6 p-4 bg-white hover:bg-gray-200 cursor-pointer rounded-md shadow-md transition-transform duration-300 transform hover:scale-105"
+                className="flex items-center gap-6 p-4 bg-white hover:bg-gray-200 cursor-pointer shadow-md transition-transform duration-300 transform hover:scale-105"
               >
                 <div className="flex justify-center items-center w-16 h-16 rounded-full bg-primary shadow-md transition-transform duration-300 transform hover:rotate-12 hover:scale-110">
                   <FiUser className="text-3xl text-[#E9F5DB]" />

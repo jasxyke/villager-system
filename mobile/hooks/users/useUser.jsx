@@ -4,7 +4,7 @@ import { useAuthContext } from "../../context/AuthContext";
 import { Platform } from "react-native";
 
 const useUser = () => {
-  const { setUser } = useAuthContext();
+  const { setUser, user: homeOwner } = useAuthContext();
   const [loading, setLoading] = useState(false);
   const [localUser, setLocalUser] = useState(null);
 
@@ -20,9 +20,14 @@ const useUser = () => {
       civilStatus: user.resident.civil_status,
       occupation: user.resident.occupation_status,
     };
+
     try {
       const res = await axiosClient.put("/users/" + user.id, userForm);
-      setUser(res.data.user);
+      if (homeOwner.id === user.id) {
+        setUser(res.data.user);
+      } else {
+        setLocalUser(res.data.user);
+      }
       onUpdate(res.data.message);
       setLoading(false);
     } catch (error) {

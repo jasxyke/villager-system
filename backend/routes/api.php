@@ -196,9 +196,9 @@ Route::middleware('auth:sanctum')->group(function () {
     //DASHBOARD
     Route::get('/total-residents', [ResidentController::class, 'getTotalResidents']);
     Route::get('/total-bookings-this-month', [BookingController::class, 'getTotalBookingsThisMonth']);
-    Route::get('/overdue-residents-count', [BillController::class, 'countOverdueResidents']);
+    Route::get('/overdue-bills-count', [BillController::class, 'countOverdue']);
     Route::get('/{amenityId}', [BookingController::class, 'getBookingsAdmin']);
-    Route::get('/most-unpaid', [BillController::class, 'getResidentWithMostUnpaidBills']);
+    Route::get('/bills/most-unpaid-residents', [BillController::class, 'topResidentsWithPendingBills']);
     Route::get('/overdue-residents', [BillController::class, 'getOverdueBills']);
 
     //INCOME AND EXPENSES

@@ -25,11 +25,25 @@ const useResident = () => {
     }
   };
 
+  const addResident = async (residentData, onSuccess, onError) => {
+    try {
+      setLoading(true);
+      const res = await axiosClient.post("/residents", residentData);
+      onSuccess(res.data.message, res.data.resident);
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      console.log(error.response.data);
+      onError(error.response.data.message);
+    }
+  };
+
   return {
     resident,
     loading,
     error,
     fetchResident,
+    addResident,
   };
 };
 

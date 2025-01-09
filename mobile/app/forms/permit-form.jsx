@@ -1,3 +1,5 @@
+import * as ImagePicker from "expo-image-picker";
+import { router } from "expo-router";
 import React, { useState } from "react";
 import {
   Alert,
@@ -9,22 +11,16 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import * as ImagePicker from "expo-image-picker";
-import CustomButton from "../../components/common/CustomButton";
-import { usePermitFormLogic } from "../../components/Screens/Permits/PermitFormLogic";
-import usePermitRequest from "../../hooks/permits/usePermitRequest"; // Import the custom hook
 import DatePicker from "react-native-date-picker"; // Import the date picker component
-import { DOWNLOADS, PROFILE, TYPE } from "../../constants/icons";
-import { colors } from "../../styles/colors";
-import Modal from "react-native-modal";
-import TabsGradient from "../../components/gradients/TabsGradient";
-import { router } from "expo-router";
-import { CLEARANCE_TYPES } from "../../data/DataStructures";
 import DropDownPicker from "react-native-dropdown-picker";
-import {
-  convertDateToLaravelFormat,
-  formatTimeTwentyFour,
-} from "../../utils/DataFormatter";
+import Modal from "react-native-modal";
+import CustomButton from "../../components/common/CustomButton";
+import TabsGradient from "../../components/gradients/TabsGradient";
+import { usePermitFormLogic } from "../../components/Screens/Permits/PermitFormLogic";
+import { CLEARANCE_TYPES } from "../../data/DataStructures";
+import usePermitRequest from "../../hooks/permits/usePermitRequest"; // Import the custom hook
+import { colors } from "../../styles/colors";
+import { convertDateToLaravelFormat } from "../../utils/DataFormatter";
 
 const PermitForm = () => {
   const [isImageModalVisible, setIsImageModalVisible] = useState(false);

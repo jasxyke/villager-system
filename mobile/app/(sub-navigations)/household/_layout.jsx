@@ -17,6 +17,14 @@ const _layout = () => {
       }}
     >
       <Stack.Screen name="house-member" options={{ title: "Manage Member" }} />
+      <Stack.Screen
+        name="add-member"
+        options={{ title: "Add New House Member" }}
+      />
+      <Stack.Screen
+        name="create-account"
+        options={{ title: "Add New House Member" }}
+      />
     </Stack>
   );
 };

@@ -8,6 +8,9 @@ export const formStyles = StyleSheet.create({
     backgroundColor: colors.primary,
     color: colors.white,
   },
+  verticalMargin: {
+    marginVertical: 5,
+  },
   textInputLight: {
     borderRadius: 10,
     padding: 10,
@@ -26,12 +29,29 @@ export const formStyles = StyleSheet.create({
     fontSize: 14,
   },
 
+  buttonSecondary: {
+    padding: 15,
+    borderRadius: 20,
+    alignItems: "center",
+    width: "40%",
+    backgroundColor: colors.secondary,
+  },
+
   buttonLight: {
     padding: 15,
     borderRadius: 20,
     alignItems: "center",
     width: "40%",
     backgroundColor: colors.secondary,
+    marginVertical: 10,
+  },
+
+  buttonGrey: {
+    padding: 15,
+    borderRadius: 20,
+    alignItems: "center",
+    width: "40%",
+    backgroundColor: colors.ashGray,
     marginVertical: 10,
   },
   buttonTextLight: {

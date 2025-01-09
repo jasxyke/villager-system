@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\ResidentAccountHelper;
 use App\Models\House;
 use App\Http\Requests\StoreHouseRequest;
 use App\Http\Requests\UpdateHouseRequest;
@@ -67,78 +68,58 @@ class HouseController extends Controller
      */
     public function store(StoreHouseRequest $request)
     {
-        $houseExist = House::where('block',$request->block)
+        $houseExist = House::where('block', $request->block)
                             ->where('lot', $request->lot)
                             ->exists();
-
-        if($houseExist){
+    
+        if ($houseExist) {
             throw ValidationException::withMessages([
-                'message'=> 'House already exist, block and lot must be unique.'
+                'message' => 'House already exists; block and lot must be unique.'
             ]);
         }
-
+    
         $house = House::create([
-            'block'=> $request->input('block'),
-            'lot'=>$request->input('lot'),
-            'house_type'=>$request->input('houseType'),
+            'block' => $request->input('block'),
+            'lot' => $request->input('lot'),
+            'house_type' => $request->input('houseType'),
         ]);
-
-        $generatedPassword = Str::password(12);
-        $hashedPassword = Hash::make($generatedPassword);
-
-        $user = User::create([
-            'lastname'=>$request->input('lastname'),
-            'firstname'=>$request->input('firstname'),
-            'middlename'=>$request->input('middlename'),
-            'role_type'=>'home_owner',
-            'email'=>$request->input('email'),
-            'password'=>$hashedPassword,
-            'contact_number'=>$request->input('contactNumber'),
-            'picture_url' => Storage::disk('public')->url('default_img.jpg'),
-            'picture_path' => 'default_img.jpg',
-        ]);
-
-        $resident = Resident::create([
-            'user_id'=>$user->id,
-            'house_id'=>$house->id,
-            'birthdate'=>$request->input('birthdate'),
-            'sex'=>$request->input('sex'),
-            'civi_status'=>$request->input('civilStatus'),
-            'occupation_status'=>$request->input('occupation'),
-            'fb_name'=>$request->input('facebook'),
-        ]);
-
+    
+        // Use the helper to create the resident account
+        $accountData = ResidentAccountHelper::createResidentAccount($request->all(), $house->id);
+    
+        // Create dummy bills (to be removed after demo phase)
         for ($i = 0; $i < 5; $i++) {
             $bill = Bill::create([
-                'resident_id' => $resident->id,
+                'resident_id' => $accountData['resident']->id,
                 'amount' => 1000,
                 'due_date' => Carbon::now()->subMonths($i)->endOfMonth(),
                 'status' => fake()->randomElement(['paid', 'pending', 'overdue']),
                 'issue_date' => Carbon::now()->subMonths($i)->startOfMonth(),
             ]);
-
-            // If the bill is marked as paid, create a corresponding transaction
+    
             if ($bill->status == 'paid') {
                 Transaction::create([
-                    'resident_id' => $resident->id,
+                    'resident_id' => $accountData['resident']->id,
                     'bill_id' => $bill->id,
                     'amount' => $bill->amount,
-                    // 'payment_method' => $faker->randomElement(['cash', 'gcash']),
                     'transaction_date' => Carbon::now()->subMonths($i)->endOfMonth(),
                 ]);
             }
         }
-
-        //email the resident about his account details
-        Mail::to($user->email)->send(new SendPasswordMail(
-            $user->firstname, 
-            $user->email, 
-            $generatedPassword));
-
+    
+        // Send email to the user
+        Mail::to($accountData['user']->email)->send(new SendPasswordMail(
+            $accountData['user']->firstname,
+            $accountData['user']->email,
+            $accountData['generatedPassword']
+        ));
+    
         $house = $house->load(['residents', 'residents.user']);
-        
-        return response()->json(['message'=>'House successfuly created.', 
-                                'house'=>$house]);
+    
+        return response()->json([
+            'message' => 'House successfully created.',
+            'house' => $house,
+        ]);
     }
 
         public function search(Request $request)

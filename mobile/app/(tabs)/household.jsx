@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -6,6 +6,7 @@ import {
   Pressable,
   FlatList,
   ActivityIndicator,
+  RefreshControl,
 } from "react-native";
 import TabsGradient from "../../components/gradients/TabsGradient";
 import AppHeader from "../../components/common/AppHeader";
@@ -15,17 +16,33 @@ import useHouseHold from "../../hooks/houses/useHousehold";
 import { useAuthContext } from "../../context/AuthContext";
 import { formatName, formatUserName } from "../../utils/DataFormatter";
 import { router } from "expo-router";
+import { formStyles } from "../../styles/formStyles";
 
 const Household = () => {
-  // Pass a default houseId or from props
   const { residents, loading, error, fetchHouseMembers } = useHouseHold();
   const { user } = useAuthContext();
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     if (user) {
       fetchHouseMembers(user.resident.house_id); // Fetch house members when the component mounts
     }
   }, []);
+
+  const handleRefresh = async () => {
+    setRefreshing(true);
+    await fetchHouseMembers(user.resident.house_id);
+    setRefreshing(false);
+  };
+
+  const goToAddMember = () => {
+    router.push({
+      pathname: "../household/add-member",
+      params: {
+        houseId: user.resident.house_id,
+      },
+    });
+  };
 
   const renderItem = ({ item }) => (
     <MemberItem
@@ -57,7 +74,18 @@ const Household = () => {
             renderItem={renderItem}
             keyExtractor={(item) => item.id.toString()}
             contentContainerStyle={styles.listContainer}
+            refreshControl={
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={handleRefresh}
+              />
+            }
           />
+        )}
+        {!loading && (
+          <Pressable onPress={goToAddMember} style={formStyles.buttonLight}>
+            <Text style={formStyles.buttonText}>Add House Member</Text>
+          </Pressable>
         )}
       </View>
     </View>

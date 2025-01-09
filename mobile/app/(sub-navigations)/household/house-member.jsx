@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import TabsGradient from "../../../components/gradients/TabsGradient";
 import UserInfo from "../../../components/Screens/Profile/UserInfo";
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import useResident from "../../../hooks/houses/useResident";
 import { formStyles } from "../../../styles/profileStyles";
 import moment from "moment/moment";
@@ -28,7 +28,6 @@ const HouseMember = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [modalTitle, setModalTitle] = useState("");
   const [modalMsg, setModalMsg] = useState("");
-  const [isChangingPass, setIsChangPass] = useState(false);
   const [error, setError] = useState("");
 
   const openModal = () => {
@@ -53,10 +52,6 @@ const HouseMember = () => {
     setIsEditing(true);
   };
 
-  const handleChangePassword = () => {
-    setIsChangPass(true);
-  };
-
   const handleSavePress = (user) => {
     setIsEditing(false);
     updateUser(
@@ -72,6 +67,13 @@ const HouseMember = () => {
         setModalMsg(msg);
       }
     );
+  };
+
+  const handleCreateAccount = () => {
+    router.push({
+      pathname: "./create-account",
+      params: { houseId: user.resident.house_id },
+    });
   };
 
   const handleClosePress = () => {
@@ -215,7 +217,7 @@ const HouseMember = () => {
                   </Pressable>
                   <Pressable
                     style={[styles.button, styles.createAccountBtn]}
-                    onPress={handleEditPress}
+                    onPress={handleCreateAccount}
                   >
                     <Text style={styles.buttonText}>Create Account</Text>
                   </Pressable>

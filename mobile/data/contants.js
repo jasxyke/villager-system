@@ -48,4 +48,12 @@ export const AMENNITIES = [
   { id: 2, name: "Multi-Purpose Hall" },
 ];
 
+export const PERMISSION_TYPES = [
+  "view-monthly-dues",
+  "create-bookings",
+  "send-complaints",
+  "get-car-sticker",
+  "request-clearance",
+];
+
 export const BLOCKS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];

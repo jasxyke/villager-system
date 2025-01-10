@@ -134,6 +134,7 @@ const AddMember = ({ navigation }) => {
           selectedValue={sex}
           onValueChange={(itemValue) => setSex(itemValue)}
           style={styles.picker}
+          dropdownIconColor={colors.white}
         >
           {SEX_TYPES.map((type) => (
             <Picker.Item
@@ -148,6 +149,7 @@ const AddMember = ({ navigation }) => {
           selectedValue={civilStatus}
           onValueChange={(itemValue) => setCivilStatus(itemValue)}
           style={styles.picker}
+          dropdownIconColor={colors.white}
         >
           {CIVIL_STATUSES.map((status) => (
             <Picker.Item
@@ -162,6 +164,7 @@ const AddMember = ({ navigation }) => {
           selectedValue={occupation}
           onValueChange={(itemValue) => setOccupation(itemValue)}
           style={styles.picker}
+          dropdownIconColor={colors.white}
         >
           {OCCUPATION_STATUSES.map((occupation) => (
             <Picker.Item
@@ -176,6 +179,7 @@ const AddMember = ({ navigation }) => {
           selectedValue={roleType}
           onValueChange={(itemValue) => setRoleType(itemValue)}
           style={styles.picker}
+          dropdownIconColor={colors.white}
         >
           {ROLE_TYPES_HOUSE.map((role) => (
             <Picker.Item
@@ -214,7 +218,7 @@ const AddMember = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     padding: 20,
-    flexGrow: 1,
+    // flexGrow: 1,
   },
   title: {
     fontSize: 24,
@@ -231,9 +235,10 @@ const styles = StyleSheet.create({
   picker: {
     borderWidth: 1,
     borderColor: "#ccc",
-    borderRadius: 5,
+    borderRadius: 10,
     marginBottom: 15,
-    backgroundColor: "#f9f9f9",
+    backgroundColor: colors.primary,
+    color: colors.white,
   },
   buttonContainer: {
     flexDirection: "row",

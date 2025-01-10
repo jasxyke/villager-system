@@ -72,7 +72,7 @@ const HouseMember = () => {
   const handleCreateAccount = () => {
     router.push({
       pathname: "./create-account",
-      params: { houseId: user.resident.house_id },
+      params: { houseId: user.resident.house_id, userId: user.id },
     });
   };
 

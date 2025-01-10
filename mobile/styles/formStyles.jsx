@@ -17,6 +17,18 @@ export const formStyles = StyleSheet.create({
     backgroundColor: colors.white,
     color: colors.black,
   },
+  centerButton: {
+    padding: 15,
+    borderRadius: 15,
+    alignItems: "center",
+    backgroundColor: colors.primary,
+  },
+  centerButtonSecondary: {
+    padding: 15,
+    borderRadius: 15,
+    alignItems: "center",
+    backgroundColor: colors.secondary,
+  },
   button: {
     padding: 15,
     borderRadius: 20,

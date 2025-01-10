@@ -33,6 +33,34 @@ class HouseholdPermissionHelper
     }
 
     /**
+     * Grant multiple permissions to a single user for a specific household.
+     */
+    public static function grantMultiplePermissionsToUser($houseId, $userId, array $permissionTypes, $expiresAt = null)
+    {
+        $house = House::findOrFail($houseId);
+
+        // Ensure only home_owners can grant permissions
+        $homeOwner = Auth::user();
+        if ($homeOwner->role_type !== 'home_owner') {
+            throw new \Exception('Unauthorized', 403);
+        }
+
+        $createdPermissions = [];
+
+        foreach ($permissionTypes as $permissionType) {
+            $createdPermissions[] = HouseholdPermission::create([
+                'house_id' => $house->id,
+                'user_id' => $userId,
+                'granted_by' => $homeOwner->id,
+                'permission_type' => $permissionType,
+                'expires_at' => $expiresAt,
+            ]);
+        }
+
+        return $createdPermissions;
+    }
+
+    /**
      * Revoke a user's permission for a household.
      */
     public static function revokePermission($permissionId)

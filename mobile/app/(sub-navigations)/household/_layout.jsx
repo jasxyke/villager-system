@@ -23,7 +23,7 @@ const _layout = () => {
       />
       <Stack.Screen
         name="create-account"
-        options={{ title: "Add New House Member" }}
+        options={{ title: "Create House Member Account" }}
       />
     </Stack>
   );

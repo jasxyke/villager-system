@@ -83,7 +83,10 @@ const Household = () => {
           />
         )}
         {!loading && (
-          <Pressable onPress={goToAddMember} style={formStyles.buttonLight}>
+          <Pressable
+            onPress={goToAddMember}
+            style={formStyles.centerButtonSecondary}
+          >
             <Text style={formStyles.buttonText}>Add House Member</Text>
           </Pressable>
         )}

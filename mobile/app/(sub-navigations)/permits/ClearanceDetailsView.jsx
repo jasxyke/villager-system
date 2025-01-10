@@ -311,7 +311,7 @@ const ClearanceDetailedView = ({ onRequestExtension }) => {
               </View> */}
 
               {/* Submit Button */}
-              <TouchableOpacity onPress={handleExtensionSubmit}>
+              <TouchableOpacity >
                 <View style={styles.submitButton}>
                   <Text style={styles.submitButtonText}>
                     Submit Extension Request

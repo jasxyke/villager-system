@@ -73,7 +73,7 @@ const ChangePassword = () => {
 
           <button
             type="submit"
-            className="w-full bg-green-700 p-2 rounded text-white hover:bg-green-800"
+            className="w-full bg-secondary mt-4 p-2 rounded text-white hover:bg-darkerGreen"
           >
             Change Password
           </button>

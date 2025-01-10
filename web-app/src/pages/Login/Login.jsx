@@ -94,7 +94,8 @@ const Login = () => {
         </div>
       </div>
       <br />
-      <div className={styles.forgotPasswordClass}>Forgot Password?</div>
+      {/* uncomment kapag okay na yung forgot password */}
+      {/* <div className={styles.forgotPasswordClass}>Forgot Password?</div> */}
       <br />
       <div className={styles.inputContainer}>
         <input

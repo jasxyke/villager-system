@@ -25,7 +25,7 @@ import AdminSettings from "./pages/Settings/AdminSettings";
 import AdminDashboard from "./pages/Dashboard/AdminDashboard";
 import Expenses from "./pages/Expenses/Expenses";
 import PrivateRoute from "./components/Middlewares/PrivateRoute";
-import ChangePassword from "./pages/Settings/ChangePassword";
+import ChangePassword from "./pages/Profile/ChangePassword";
 
 function App() {
   const { isLoggedIn, getUser, user } = useAuthContext();

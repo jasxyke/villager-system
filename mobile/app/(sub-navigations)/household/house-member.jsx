@@ -48,6 +48,12 @@ const HouseMember = () => {
     }
   }, [userId]);
 
+  useEffect(() => {
+    if (user) {
+      console.log(user.household_permissions);
+    }
+  }, [user]);
+
   const handleEditPress = () => {
     setIsEditing(true);
   };
@@ -71,7 +77,7 @@ const HouseMember = () => {
 
   const handleCreateAccount = () => {
     router.push({
-      pathname: "./create-account",
+      pathname: "./manage-account",
       params: { houseId: user.resident.house_id, userId: user.id },
     });
   };
@@ -132,7 +138,18 @@ const HouseMember = () => {
                     multiline={true}
                     style={formStyles.textInput}
                     editable={false}
-                    value={`BLK ${user.resident.house.block} LOT ${user.resident.house.lot} PAMAHAY VILLAGE SAN JOSE RODRIGUEZ, RIZAL`}
+                    value={`BLK ${user.resident.house.block} LOT ${user.resident.house.lot}`}
+                  />
+                </View>
+                <View>
+                  <Text className="text-white text-base mb-1 font-pRegular">
+                    Contact Number
+                  </Text>
+                  <TextInput
+                    multiline={false}
+                    style={formStyles.textInput}
+                    editable={false}
+                    value={user.contact_number}
                   />
                 </View>
 

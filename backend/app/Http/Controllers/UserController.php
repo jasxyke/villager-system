@@ -43,7 +43,7 @@ class UserController extends Controller
     public function show(User $user)
     {
         return response()->json([
-            'user' => $user->load(['resident.house', 'householdPermissions.grantedBy', 'householdPermissions.user']) 
+            'user' => $user->load(['resident.house', 'householdPermissions']) 
             // 'householdPermissions.user' loads the user (permission recipient)
             // 'householdPermissions.grantedBy' loads the user (who granted the permission)
         ]);
@@ -61,6 +61,7 @@ class UserController extends Controller
             'firstname' => 'required|string|max:255',
             'middlename' => 'nullable|string|max:255',
             'fbName' => 'nullable|string|max:150',
+            'contact_number'=> 'required|string|min:11'
         ]);
 
         //return response()->json(['user'=>$fields]);

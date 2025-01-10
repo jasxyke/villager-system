@@ -10,7 +10,6 @@ import {
   Pressable,
   ScrollView,
 } from "react-native";
-import { PERMISSION_TYPES } from "../../../data/contants";
 import { formStyles } from "../../../styles/formStyles";
 import TabsGradient from "../../../components/gradients/TabsGradient";
 import { colors } from "../../../styles/colors";
@@ -18,11 +17,11 @@ import { formatName } from "../../../utils/DataFormatter";
 import useUser from "../../../hooks/users/useUser";
 import { useLocalSearchParams } from "expo-router";
 import useCreateAccount from "../../../hooks/houses/useCreateAccount";
+import { PERMISSION_TYPES } from "../../../data/contants";
 
 const ManageAccount = () => {
   const [email, setEmail] = useState("");
   const [permissions, setPermissions] = useState([]);
-  const [grantedPermissions, setGrantedPermissions] = useState([]);
   const { localUser: user, fetchUserDetails } = useUser();
   const { houseId, userId } = useLocalSearchParams();
   const { createAccount, loading, error, successMessage } = useCreateAccount();
@@ -30,7 +29,7 @@ const ManageAccount = () => {
   const availablePermissions = PERMISSION_TYPES;
 
   const handleCreateAccount = async () => {
-    if (!email) {
+    if (!email.trim()) {
       Alert.alert("Error", "Please enter an email address.");
       return;
     }
@@ -47,10 +46,9 @@ const ManageAccount = () => {
         userId,
         permissions,
       });
-      setGrantedPermissions(data.grantedPermissions || []);
-      //   Alert.alert("Success", data.message);
+      Alert.alert("Success", data.message);
     } catch (err) {
-      Alert.alert("Error", err);
+      Alert.alert("Error", err.message || "An error occurred.");
     }
   };
 
@@ -78,8 +76,8 @@ const ManageAccount = () => {
     if (userId) {
       fetchUserDetails(
         userId,
-        (msg) => {},
-        (errMsg) => {}
+        () => {}, // Success handler
+        () => {} // Error handler
       );
     }
   }, [userId]);
@@ -87,14 +85,18 @@ const ManageAccount = () => {
   useEffect(() => {
     if (user) {
       setEmail(user.email || "");
+      const userPermissions = user.household_permissions.map(
+        (perm) => perm.permission_type
+      );
+      setPermissions(userPermissions);
     }
   }, [user]);
 
   return (
-    <View className="h-full">
+    <View style={{ flex: 1 }}>
       <TabsGradient />
       <ScrollView contentContainerStyle={styles.container}>
-        <Text style={styles.title}>Create Account</Text>
+        <Text style={styles.title}>Create or Update Account</Text>
         <TextInput
           style={formStyles.textInputLight}
           placeholder="Enter user's email"
@@ -115,23 +117,13 @@ const ManageAccount = () => {
           disabled={loading}
         >
           <Text style={formStyles.buttonText}>
-            {loading ? "Creating Account..." : "Create Account"}
+            {loading ? "Processing..." : "Submit"}
           </Text>
         </Pressable>
-        {error && <Text style={{ color: "red" }}>{error}</Text>}
+        {error && <Text style={styles.errorText}>{error}</Text>}
         {successMessage && (
-          <Text style={{ color: "green" }}>{successMessage}</Text>
+          <Text style={styles.successText}>{successMessage}</Text>
         )}
-        <Text style={styles.subtitle}>Granted Permissions:</Text>
-        <FlatList
-          data={grantedPermissions}
-          renderItem={({ item }) => (
-            <Text style={styles.grantedPermissionText}>
-              {item.permission_type} (Expires: {item.expires_at || "N/A"})
-            </Text>
-          )}
-          keyExtractor={(item) => item.id.toString()}
-        />
       </ScrollView>
     </View>
   );
@@ -144,13 +136,6 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: "bold",
-    marginBottom: 10,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 5,
-    padding: 10,
     marginBottom: 10,
   },
   subtitle: {
@@ -178,9 +163,14 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: colors.white,
   },
-  grantedPermissionText: {
-    fontSize: 16,
-    marginBottom: 5,
+  errorText: {
+    color: "red",
+    marginTop: 10,
+  },
+  successText: {
+    color: colors.secondary,
+    marginTop: 10,
+    marginHorizontal: "auto",
   },
 });
 

@@ -16,6 +16,7 @@ const useUser = () => {
       lastname: user.lastname,
       firstname: user.firstname,
       middlename: user.middlename,
+      contact_number: user.contact_number,
       fbName: user.resident.fb_name,
       civilStatus: user.resident.civil_status,
       occupation: user.resident.occupation_status,

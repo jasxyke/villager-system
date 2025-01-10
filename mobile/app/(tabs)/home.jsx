@@ -19,6 +19,7 @@ import useBills from "../../hooks/useBills";
 import { usePushNotifications } from "../../hooks/useNotifications";
 import { router } from "expo-router";
 import { colors } from "../../styles/colors";
+import LoadingScreen from "../../components/common/LoadingScreen";
 
 const Home = () => {
   const [refreshing, setRefreshing] = useState(false);
@@ -48,11 +49,14 @@ const Home = () => {
     }
   }, [user]);
 
-
   const handleViewAnnouncementPress = () => {
     // Add your navigation logic here
     router.push("../announcement-details"); // Example path
   };
+
+  if (!user) {
+    return <LoadingScreen />;
+  }
 
   return (
     <View style={styles.container}>
@@ -98,10 +102,15 @@ const Home = () => {
           />
         )}
 
-         {/* View Announcement Link */}
-        <Pressable onPress={handleViewAnnouncementPress} style={styles.viewAnnouncementLink}>
-                <Text style={styles.viewAnnouncementText}>View Announcement</Text>
-                 <FontAwesome6 name="chevron-right" size={18} color="white" />
+        {/* View Announcement Link */}
+        <Pressable
+          onPress={handleViewAnnouncementPress}
+          style={styles.viewAnnouncementLink}
+        >
+          <Text className="underline" style={styles.viewAnnouncementText}>
+            View Announcement
+          </Text>
+          <FontAwesome6 name="chevron-right" size={18} color="white" />
         </Pressable>
       </ScrollView>
     </View>

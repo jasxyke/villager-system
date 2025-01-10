@@ -78,12 +78,29 @@ const EditProfile = ({ onSave, user, onClose }) => {
                 Address
               </Text>
               <TextInput
-                value={`BLK ${editedUser.resident.house.block} LOT ${editedUser.resident.house.lot} PAMAHAY VILLAGE SAN JOSE RODRIGUEZ, RIZAL`}
+                value={`BLK ${editedUser.resident.house.block} LOT ${editedUser.resident.house.lot}`}
                 style={formStyles.textInput}
                 editable={false}
                 multiline={true}
               />
             </View>
+          </View>
+          {/* Added Contact Number Input */}
+          <View className="mb-2">
+            <Text className="text-white text-base mb-1 font-pRegular">
+              Contact Number
+            </Text>
+            <TextInput
+              onChangeText={(text) => {
+                setEditUser({
+                  ...editedUser,
+                  contact_number: text,
+                });
+              }}
+              value={editedUser.contact_number || ""}
+              style={formStyles.textInput}
+              keyboardType="phone-pad"
+            />
           </View>
           <View
             className="mb-2"

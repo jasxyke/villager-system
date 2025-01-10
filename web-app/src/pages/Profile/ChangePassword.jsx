@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import MainLogo from "../../components/MainLogo";
+import useChangePassword from "../../hooks/Account/useChangePassword"; // Update the path as needed
 
 const ChangePassword = () => {
   const [oldPassword, setOldPassword] = useState("");
@@ -8,7 +9,9 @@ const ChangePassword = () => {
   const [responseMsg, setResponseMsg] = useState("");
   const [isError, setIsError] = useState(false);
 
-  const handleSubmit = (e) => {
+  const { requestChangePassword } = useChangePassword();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Password validation
@@ -18,22 +21,25 @@ const ChangePassword = () => {
       return;
     }
 
-    // Simulate API call or password update logic
-    setIsError(false);
-    setResponseMsg("Password changed successfully!");
+    // Call the API to change the password
+    await requestChangePassword(
+      oldPassword,
+      newPassword,
+      confirmPassword,
+      (successMessage) => {
+        setIsError(false);
+        setResponseMsg(successMessage);
 
-    // Reset fields
-    setOldPassword("");
-    setNewPassword("");
-    setConfirmPassword("");
-  };
-
-  const closeForm = () => {
-    // Logic to close or navigate away
-    setOldPassword("");
-    setNewPassword("");
-    setConfirmPassword("");
-    setResponseMsg("");
+        // Reset fields
+        setOldPassword("");
+        setNewPassword("");
+        setConfirmPassword("");
+      },
+      (errorMessage) => {
+        setIsError(true);
+        setResponseMsg(errorMessage);
+      }
+    );
   };
 
   return (
@@ -43,6 +49,15 @@ const ChangePassword = () => {
         <h2 className="text-2xl font-bold mb-4">Change Password</h2>
 
         <form onSubmit={handleSubmit}>
+          {responseMsg && (
+            <div
+              className={`p-3 mb-4 mt-4 rounded ${
+                isError ? "bg-red-500" : "bg-secondary"
+              } text-center`}
+            >
+              {responseMsg}
+            </div>
+          )}
           <div className="mb-4">
             <label htmlFor="oldPassword" className="block mb-1">
               Old Password
@@ -88,27 +103,11 @@ const ChangePassword = () => {
           <div className="flex items-center justify-center">
             <button
               type="submit"
-              className="bg-secondary p-2 rounded text-white hover:bg-darkerGreen w-[100%] mt-4"
+              className="bg-paleGreen p-2 rounded text-white hover:bg-darkerGreen w-[100%] mt-4"
             >
               Save
             </button>
-            {/* <button
-              type="button"
-              onClick={closeForm}
-              className="bg-red-500 p-2 rounded text-white hover:bg-red-600 w-[48%]"
-            >
-              Close
-            </button> */}
           </div>
-          {responseMsg && (
-            <div
-              className={`p-3 mb-4 mt-4 rounded ${
-                isError ? "bg-red-500" : ""
-              } text-center`}
-            >
-              {responseMsg}
-            </div>
-          )}
         </form>
       </div>
     </div>

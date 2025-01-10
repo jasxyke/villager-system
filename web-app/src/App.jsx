@@ -25,6 +25,7 @@ import AdminSettings from "./pages/Settings/AdminSettings";
 import AdminDashboard from "./pages/Dashboard/AdminDashboard";
 import Expenses from "./pages/Expenses/Expenses";
 import PrivateRoute from "./components/Middlewares/PrivateRoute";
+import ChangePassword from "./pages/Settings/ChangePassword";
 
 function App() {
   const { isLoggedIn, getUser, user } = useAuthContext();
@@ -89,6 +90,7 @@ function App() {
             <Route path="/sticker" element={<Sticker />} />
             <Route path="/complaints" element={<Complaints />} />
             <Route path="/expenses-income" element={<Expenses />} />
+            <Route path="/change-password" element={<ChangePassword />} />
           </Route>
           <Route element={<LoginMiddleRoute />}>
             <Route path="/" element={<Login />} />

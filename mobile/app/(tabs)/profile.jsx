@@ -251,10 +251,10 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 20,
     alignItems: "center",
-    backgroundColor: colors.paleGreen,
+    backgroundColor: colors.secondary,
   },
   editButton: {
-    backgroundColor: colors.paleGreen,
+    backgroundColor: colors.secondary,
   },
   saveButton: {},
   buttonText: {

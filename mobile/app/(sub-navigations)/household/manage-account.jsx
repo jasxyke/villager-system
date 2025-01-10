@@ -4,14 +4,12 @@ import {
   Text,
   StyleSheet,
   TextInput,
-  Button,
   FlatList,
   TouchableOpacity,
   Alert,
   Pressable,
   ScrollView,
 } from "react-native";
-import axios from "axios";
 import { PERMISSION_TYPES } from "../../../data/contants";
 import { formStyles } from "../../../styles/formStyles";
 import TabsGradient from "../../../components/gradients/TabsGradient";
@@ -19,13 +17,15 @@ import { colors } from "../../../styles/colors";
 import { formatName } from "../../../utils/DataFormatter";
 import useUser from "../../../hooks/users/useUser";
 import { useLocalSearchParams } from "expo-router";
+import useCreateAccount from "../../../hooks/houses/useCreateAccount";
 
-const CreateAccount = () => {
+const ManageAccount = () => {
   const [email, setEmail] = useState("");
   const [permissions, setPermissions] = useState([]);
   const [grantedPermissions, setGrantedPermissions] = useState([]);
-  const { localUser: user, fetchUserDetails, loading } = useUser();
+  const { localUser: user, fetchUserDetails } = useUser();
   const { houseId, userId } = useLocalSearchParams();
+  const { createAccount, loading, error, successMessage } = useCreateAccount();
 
   const availablePermissions = PERMISSION_TYPES;
 
@@ -38,6 +38,19 @@ const CreateAccount = () => {
     if (permissions.length === 0) {
       Alert.alert("Error", "Please select at least one permission.");
       return;
+    }
+
+    try {
+      const data = await createAccount({
+        email,
+        houseId,
+        userId,
+        permissions,
+      });
+      setGrantedPermissions(data.grantedPermissions || []);
+      //   Alert.alert("Success", data.message);
+    } catch (err) {
+      Alert.alert("Error", err);
     }
   };
 
@@ -61,16 +74,13 @@ const CreateAccount = () => {
     </TouchableOpacity>
   );
 
-  const handleSucess = (msg) => {
-    //
-  };
-  const handleError = (msg) => {
-    setError(msg);
-  };
-
   useEffect(() => {
     if (userId) {
-      fetchUserDetails(userId, handleSucess, handleError);
+      fetchUserDetails(
+        userId,
+        (msg) => {},
+        (errMsg) => {}
+      );
     }
   }, [userId]);
 
@@ -102,10 +112,17 @@ const CreateAccount = () => {
         <Pressable
           onPress={handleCreateAccount}
           style={formStyles.centerButton}
+          disabled={loading}
         >
-          <Text style={formStyles.buttonText}>Create Account</Text>
+          <Text style={formStyles.buttonText}>
+            {loading ? "Creating Account..." : "Create Account"}
+          </Text>
         </Pressable>
-        {/* <Text style={styles.subtitle}>Granted Permissions:</Text>
+        {error && <Text style={{ color: "red" }}>{error}</Text>}
+        {successMessage && (
+          <Text style={{ color: "green" }}>{successMessage}</Text>
+        )}
+        <Text style={styles.subtitle}>Granted Permissions:</Text>
         <FlatList
           data={grantedPermissions}
           renderItem={({ item }) => (
@@ -114,7 +131,7 @@ const CreateAccount = () => {
             </Text>
           )}
           keyExtractor={(item) => item.id.toString()}
-        /> */}
+        />
       </ScrollView>
     </View>
   );
@@ -167,4 +184,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CreateAccount;
+export default ManageAccount;

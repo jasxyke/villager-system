@@ -8,6 +8,7 @@ use App\Models\Resident;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Mail\OverdueBillNotification;
+use App\Models\House;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
@@ -184,8 +185,32 @@ class BillController extends Controller
     // get user billss
     public function getUserBills($resident_id)
     {
+    // Find the current resident
+    $resident = Resident::find($resident_id);
+
+    if (!$resident) {
+        return response()->json(['message' => 'Resident not found.'], 404);
+    }
+
+    // Check if the current resident is the homeowner
+    $homeOwner = null;
+    if ($resident->user->role_type === "home_owner") {
+        $homeOwner = $resident;
+    } else {
+        // Find the homeowner sharing the same house
+        $homeOwner = Resident::where('house_id', $resident->house_id)
+            ->whereHas('user', function ($query) {
+                $query->where('role_type', 'home_owner');
+            })
+            ->first();
+    }
+
+    if (!$homeOwner) {
+        return response()->json(['message' => 'Homeowner not found.'], 404);
+    }
+
         $bills = Bill::with('transactions')
-            ->where('resident_id', $resident_id)
+            ->where('resident_id', $homeOwner->id)
             ->orderBy('due_date', 'desc')
             ->get()
             ->map(function ($bill) {

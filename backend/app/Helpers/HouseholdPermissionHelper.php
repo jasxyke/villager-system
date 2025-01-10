@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 
 class HouseholdPermissionHelper
 {
+
     /**
      * Grant permission to a user for a specific household.
      */
@@ -59,6 +60,46 @@ class HouseholdPermissionHelper
 
         return $createdPermissions;
     }
+
+    public static function updateUserPermissions($houseId, $userId, array $newPermissions)
+    {
+        $house = House::findOrFail($houseId);
+
+        // Ensure only home_owners can grant permissions
+        $homeOwner = Auth::user();
+        if ($homeOwner->role_type !== 'home_owner') {
+            throw new \Exception('Unauthorized', 403);
+        }
+
+        // Get existing permissions for the user in the house
+        $existingPermissions = HouseholdPermission::where('house_id', $houseId)
+            ->where('user_id', $userId)
+            ->pluck('permission_type')
+            ->toArray();
+
+        // Determine permissions to revoke and to add
+        $permissionsToRevoke = array_diff($existingPermissions, $newPermissions);
+        $permissionsToAdd = array_diff($newPermissions, $existingPermissions);
+
+        // Revoke removed permissions
+        if (!empty($permissionsToRevoke)) {
+            HouseholdPermission::where('house_id', $houseId)
+                ->where('user_id', $userId)
+                ->whereIn('permission_type', $permissionsToRevoke)
+                ->delete();
+        }
+
+        // Grant new permissions
+        foreach ($permissionsToAdd as $permissionType) {
+            HouseholdPermission::create([
+                'house_id' => $houseId,
+                'user_id' => $userId,
+                'granted_by' => $homeOwner->id,
+                'permission_type' => $permissionType,
+            ]);
+        }
+    }
+
 
     /**
      * Revoke a user's permission for a household.

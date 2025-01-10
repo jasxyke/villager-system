@@ -84,7 +84,7 @@ const BookingReviewModal = ({ isOpen, onRequestClose, booking, onUpdate }) => {
       onRequestClose();
       setError("");
     } catch (err) {
-      setError("Failed to save the booking.");
+      setError(err);
     }
   };
 

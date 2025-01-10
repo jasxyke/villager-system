@@ -219,7 +219,7 @@ const HouseMember = () => {
                     style={[styles.button, styles.createAccountBtn]}
                     onPress={handleCreateAccount}
                   >
-                    <Text style={styles.buttonText}>Create Account</Text>
+                    <Text style={styles.buttonText}>Manage Account</Text>
                   </Pressable>
                 </View>
               </View>

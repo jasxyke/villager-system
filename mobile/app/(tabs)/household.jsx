@@ -17,6 +17,8 @@ import { useAuthContext } from "../../context/AuthContext";
 import { formatName, formatUserName } from "../../utils/DataFormatter";
 import { router } from "expo-router";
 import { formStyles } from "../../styles/formStyles";
+import PermissionHandler from "../../components/common/PermissionHandler";
+import LoadingScreen from "../../components/common/LoadingScreen";
 
 const Household = () => {
   const { residents, loading, error, fetchHouseMembers } = useHouseHold();
@@ -27,7 +29,13 @@ const Household = () => {
     if (user) {
       fetchHouseMembers(user.resident.house_id); // Fetch house members when the component mounts
     }
-  }, []);
+  }, [user]);
+
+  useEffect(() => {
+    if (residents) {
+      console.log(residents);
+    }
+  }, [residents]);
 
   const handleRefresh = async () => {
     setRefreshing(true);
@@ -83,12 +91,14 @@ const Household = () => {
           />
         )}
         {!loading && (
-          <Pressable
-            onPress={goToAddMember}
-            style={formStyles.centerButtonSecondary}
-          >
-            <Text style={formStyles.buttonText}>Add House Member</Text>
-          </Pressable>
+          <PermissionHandler user={user} onlyForHomeOwner={true}>
+            <Pressable
+              onPress={goToAddMember}
+              style={formStyles.centerButtonSecondary}
+            >
+              <Text style={formStyles.buttonText}>Add House Member</Text>
+            </Pressable>
+          </PermissionHandler>
         )}
       </View>
     </View>
@@ -96,7 +106,7 @@ const Household = () => {
 };
 
 const MemberItem = ({ name, role, id }) => {
-  const { user } = useAuthContext();
+  const { user, loading } = useAuthContext();
   const handleManage = () => {
     if (user.id === id) {
       router.navigate("profile");
@@ -113,10 +123,14 @@ const MemberItem = ({ name, role, id }) => {
         <Text style={styles.itemName}>{name}</Text>
         <Text style={styles.itemRole}>{role}</Text>
       </View>
-      <Pressable style={styles.itemButton} onPress={handleManage}>
-        <Text className="font-pRegular text-white">Manage</Text>
-        <MaterialIcons name="manage-accounts" size={24} color="white" />
-      </Pressable>
+      {!loading && (
+        <PermissionHandler user={user} onlyForHomeOwner={true}>
+          <Pressable style={styles.itemButton} onPress={handleManage}>
+            <Text className="font-pRegular text-white">Manage</Text>
+            <MaterialIcons name="manage-accounts" size={24} color="white" />
+          </Pressable>
+        </PermissionHandler>
+      )}
     </View>
   );
 };

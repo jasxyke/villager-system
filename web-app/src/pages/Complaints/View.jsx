@@ -1,5 +1,6 @@
 import React from "react";
 import { FiArrowLeft } from "react-icons/fi";
+import { formatUserName } from "../../../../mobile/utils/DataFormatter";
 
 const View = ({ onBack, complaint, onSolved }) => {
   return (
@@ -17,8 +18,9 @@ const View = ({ onBack, complaint, onSolved }) => {
         <div className="p-4 shadow-lg rounded-lg w-full max-w-5xl">
           <div className="flex mb-4 space-x-4">
             <div className="flex items-center flex-1 h-14 rounded-xl gap-2.5 pl-2.5 border-transparent bg-greyGreen shadow-lg">
-              <span className="text-lg font-medium text-black">
-                {complaint.resident.user.firstname}
+              Complainant:
+              <span className="text-md font-medium text-black">
+                {formatUserName(complaint.resident.user, false)}
               </span>
             </div>
             <div className="flex items-center flex-1 h-14 rounded-xl gap-2.5 pl-2.5 border-transparent bg-greyGreen shadow-lg">

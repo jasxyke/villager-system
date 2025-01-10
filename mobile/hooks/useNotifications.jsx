@@ -71,16 +71,22 @@ export const usePushNotifications = () => {
   const responseListener = useRef();
 
   const setupNotifications = async (user_id) => {
-    const expoToken = await getItemAsync("EXPO_TOKEN");
-    if (expoToken) {
-      setExpoPushToken(expoToken);
-    } else {
-      const token = await registerForPushNotificationsAsync();
-      if (token) {
-        setExpoPushToken(token);
-        sendTokenToBackend(token, user_id); // Send token to Laravel backend
-        await setItemAsync("EXPO_TOKEN", token);
-      }
+    // const expoToken = await getItemAsync("EXPO_TOKEN");
+    // if (expoToken) {
+    //   setExpoPushToken(expoToken);
+    // } else {
+    //   const token = await registerForPushNotificationsAsync();
+    //   if (token) {
+    //     setExpoPushToken(token);
+    //     sendTokenToBackend(token, user_id); // Send token to Laravel backend
+    //     await setItemAsync("EXPO_TOKEN", token);
+    //   }
+    // }
+
+    const token = await registerForPushNotificationsAsync();
+    if (token) {
+      setExpoPushToken(token);
+      sendTokenToBackend(token, user_id);
     }
 
     // Listener for notifications received in foreground

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import View from "./View";
 import useComplaintsByStatus from "../../hooks/useComplaints";
+import { formatUserName } from "../../../../mobile/utils/DataFormatter";
 
 const Solved = () => {
   const [viewing, setViewing] = useState(false);
@@ -29,7 +30,7 @@ const Solved = () => {
       ) : (
         <>
           <div className="grid grid-cols-5 bg-green font-semibold rounded-t-md text-white">
-            <div className="px-4 py-3 text-center">NAME</div>
+            <div className="px-4 py-3 text-center">COMPLAINANT</div>
             <div className="px-4 py-3 text-center">ADDRESS</div>
             <div className="px-4 py-3 text-center">TYPE</div>
             <div className="px-4 py-3 text-center">DATE</div>
@@ -37,14 +38,16 @@ const Solved = () => {
           </div>
 
           {loading ? (
-            <div className="text-center py-3">Loading complaints...</div>
+            <div className="text-center py-3 bg-primary text-white">
+              Loading complaints...
+            </div>
           ) : error ? (
             <div className="text-center py-3 text-red-500">{error}</div>
           ) : complaints.length > 0 ? (
             complaints.map((item, index) => (
               <div key={index} className="grid grid-cols-5 border-b bg-primary">
                 <div className="px-4 py-3 text-center text-white">
-                  {item.resident.user.firstname}
+                  {formatUserName(item.resident.user, false)}
                 </div>
                 <div className="px-4 py-3 text-center text-white">
                   BLK {item.resident.house.block} LOT {item.resident.house.lot}
@@ -66,7 +69,9 @@ const Solved = () => {
               </div>
             ))
           ) : (
-            <div className="text-center py-3">No solved complaints found.</div>
+            <div className="text-center py-3 bg-primary text-white">
+              No solved complaints found.
+            </div>
           )}
         </>
       )}

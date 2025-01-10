@@ -71,7 +71,7 @@ class AuthController extends Controller
         }
     } else {
         // Mobile login check for 'home_owner' role only
-        if ($user->role_type !== 'home_owner') {
+        if (!in_array($user->role_type, ['member','home_owner','seller','tenant'])) {
             throw ValidationException::withMessages([
                 'message' => 'Unauthenticated user!'
             ]);
@@ -103,8 +103,8 @@ class AuthController extends Controller
 
     public function me(Request $request){
         $user = $request->user();
-        if($user->role_type == 'home_owner'){
-            return $user->load('resident','resident.house');
+        if(in_array($user->role_type, ['home_owner','member','tenant','seller'])){
+            return $user->load('resident','resident.house', 'householdPermissions');
         }
         if($user->role_type == 'admin'){
             return $user->load('admin');

@@ -1,89 +1,137 @@
 <?php
 
-namespace App\Helpers;
+namespace App\Http\Controllers;
 
-use App\Models\HouseholdPermission;
+use App\Helpers\HouseholdPermissionHelper;
 use App\Models\User;
-use App\Models\House;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\SendPasswordMail;
+use Illuminate\Validation\Rule;
 
-class HouseholdPermissionHelper
+class HouseholdPermissionController extends Controller
 {
-    /**
-     * Grant permission to a user for a specific household.
-     */
-    public static function grantPermission($houseId, $userId, $permissionType, $expiresAt = null)
+
+    public function createAccount(Request $request)
     {
-        $house = House::findOrFail($houseId);
-
-        // Ensure only home_owners can grant permissions
-        $homeOwner = Auth::user();
-        if ($homeOwner->role_type !== 'home_owner') {
-            throw new \Exception('Unauthorized', 403);
-        }
-
-        // Create the permission
-        return HouseholdPermission::create([
-            'house_id' => $house->id,
-            'user_id' => $userId,
-            'granted_by' => $homeOwner->id,
-            'permission_type' => $permissionType,
-            'expires_at' => $expiresAt,
+        $validated = $request->validate([
+            'email' => [
+                'required',
+                'string',
+                'email:rfc,dns',
+                'max:255',
+                Rule::unique('users')->ignore($request->user_id),
+            ],
+            'house_id' => 'required|exists:houses,id',
+            'user_id' => 'required|exists:users,id',
         ]);
-    }
 
-    /**
-     * Grant multiple permissions to a single user for a specific household.
-     */
-    public static function grantMultiplePermissionsToUser($houseId, $userId, array $permissionTypes, $expiresAt = null)
-    {
-        $house = House::findOrFail($houseId);
+        $user = User::find($validated['user_id']);
+        $newPermissions = $request->permissions ?? [];
 
-        // Ensure only home_owners can grant permissions
-        $homeOwner = Auth::user();
-        if ($homeOwner->role_type !== 'home_owner') {
-            throw new \Exception('Unauthorized', 403);
-        }
+        if ($user && $user->password) {
+            // Update permissions
+            HouseholdPermissionHelper::updateUserPermissions(
+                $validated['house_id'],
+                $validated['user_id'],
+                $newPermissions
+            );
 
-        $createdPermissions = [];
-
-        foreach ($permissionTypes as $permissionType) {
-            $createdPermissions[] = HouseholdPermission::create([
-                'house_id' => $house->id,
-                'user_id' => $userId,
-                'granted_by' => $homeOwner->id,
-                'permission_type' => $permissionType,
-                'expires_at' => $expiresAt,
+            return response()->json([
+                'message' => "Permissions updated successfully.",
+                'grantedPermissions' => $newPermissions,
             ]);
         }
 
-        return $createdPermissions;
+        // Generate and hash the password for a new user
+        $generatedPassword = Str::password(8);
+        $hashedPassword = Hash::make($generatedPassword);
+
+        // Update or create the user's email and password
+        $user->update([
+            'password' => $hashedPassword,
+            'email' => $validated['email'],
+        ]);
+
+        // Grant initial permissions to the new user
+        HouseholdPermissionHelper::updateUserPermissions(
+            $validated['house_id'],
+            $validated['user_id'],
+            $newPermissions
+        );
+
+        // Send the password email
+        Mail::to($user->email)->send(new SendPasswordMail(
+            $user->firstname,
+            $user->email,
+            $generatedPassword
+        ));
+
+        return response()->json([
+            'message' => "House member account successfully created. Account details were sent to the given email.",
+            'grantedPermissions' => $newPermissions,
+        ]);
+    }
+
+
+
+    /**
+     * Grant permission to a user for a specific household.
+     */
+    public function grantPermission(Request $request)
+    {
+        $validated = $request->validate([
+            'house_id' => 'required|exists:houses,id',
+            'user_id' => 'required|exists:users,id',
+            'permission_type' => 'required|in:view,manage',
+            'expires_at' => 'nullable|date|after:now',
+        ]);
+
+        try {
+            HouseholdPermissionHelper::grantPermission(
+                $validated['house_id'],
+                $validated['user_id'],
+                $validated['permission_type'],
+                $validated['expires_at'] ?? null
+            );
+
+            return response()->json(['message' => 'Permission granted successfully.']);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], $e->getCode());
+        }
     }
 
     /**
      * Revoke a user's permission for a household.
      */
-    public static function revokePermission($permissionId)
+    public function revokePermission(Request $request)
     {
-        $permission = HouseholdPermission::findOrFail($permissionId);
+        $validated = $request->validate([
+            'permission_id' => 'required|exists:household_permissions,id',
+        ]);
 
-        // Ensure only the granting home_owner can revoke permissions
-        if ($permission->granted_by !== Auth::user()->id) {
-            throw new \Exception('Unauthorized', 403);
+        try {
+            HouseholdPermissionHelper::revokePermission($validated['permission_id']);
+
+            return response()->json(['message' => 'Permission revoked successfully.']);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], $e->getCode());
         }
-
-        $permission->delete();
-
-        return true;
     }
 
     /**
      * List all permissions for a given house.
      */
-    public static function listPermissions($houseId)
+    public function listPermissions($houseId)
     {
-        return HouseholdPermission::where('house_id', $houseId)
-            ->with(['user', 'grantedBy'])
-            ->get();
+        try {
+            $permissions = HouseholdPermissionHelper::listPermissions($houseId);
+
+            return response()->json($permissions);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], $e->getCode());
+        }
     }
 }

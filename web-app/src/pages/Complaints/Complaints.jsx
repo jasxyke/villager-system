@@ -3,6 +3,7 @@ import MainLogo from "../../components/MainLogo";
 import Pending from "./Pending";
 import Solved from "./Solved";
 import styles from "./complaints.module.css";
+import { colors } from "../../utils/colors";
 const Complaints = () => {
   const [isPending, setIsPending] = useState(true);
   const [isSolve, setIsSolve] = useState(false);
@@ -23,13 +24,15 @@ const Complaints = () => {
         <MainLogo />
         <div className="text-right w-[90%] mx-auto space-x-2">
           <input
+            style={{ backgroundColor: isPending && colors.secondary }}
             className="text-center bg-green p-2 text-white rounded-md cursor-pointer hover:bg-secondary"
             value={"PENDING"}
             onClick={pending}
             type="button"
           />
           <input
-            className="text-center bg-green p-2 text-white rounded-sm cursor-pointer hover:bg-secondary"
+            style={{ backgroundColor: isSolve && colors.secondary }}
+            className="text-center bg-green p-2 text-white rounded-md cursor-pointer hover:bg-secondary"
             value={"SOLVED"}
             onClick={solved}
             type="button"

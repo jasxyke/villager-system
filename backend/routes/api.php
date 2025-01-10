@@ -208,6 +208,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/export-income-expenses', [IncomeExpensesController::class, 'exportIncomeExpenses']);
 
     //HOUSEHOLD PERMISSIONS
+    Route::post('/household/create-account', [HouseholdPermissionController::class, 'createAccount']);
     Route::post('/permissions/grant', [HouseholdPermissionController::class, 'grantPermission']);
     Route::post('/permissions/revoke', [HouseholdPermissionController::class, 'revokePermission']);
     Route::get('/permissions/{houseId}', [HouseholdPermissionController::class, 'listPermissions']);

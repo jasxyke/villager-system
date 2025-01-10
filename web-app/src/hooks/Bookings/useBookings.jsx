@@ -64,10 +64,10 @@ const useBookings = (selectedAmenity) => {
 
       return response.data.success;
     } catch (error) {
-      console.log(error);
+      console.log(error.response.data.message);
 
-      setError("Failed to save the booking.");
-      throw error;
+      setError(error.response.data.message);
+      throw error.response.data.message;
     } finally {
       setLoading(false);
     }

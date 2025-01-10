@@ -11,6 +11,7 @@ import TabsGradient from "../../components/gradients/TabsGradient";
 import AppHeader from "../../components/common/AppHeader";
 import { colors } from "../../styles/colors";
 import { router } from "expo-router";
+import PermissionHandler from "../../components/common/PermissionHandler";
 
 const services = () => {
   const { user } = useAuthContext();
@@ -30,32 +31,44 @@ const services = () => {
       <View className="p-6">
         <Text style={styles.title}>Services</Text>
         {/* navigate to booking */}
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => router.push("../booking")}
-        >
-          <Text style={styles.buttonText}>Bookings</Text>
-        </TouchableOpacity>
+        <PermissionHandler user={user} allowedPermissions={["create-bookings"]}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => router.push("../booking")}
+          >
+            <Text style={styles.buttonText}>Bookings</Text>
+          </TouchableOpacity>
+        </PermissionHandler>
         {/* navigate to car stickers */}
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => router.push("../car-stickers")}
-        >
-          <Text style={styles.buttonText}>Get a Car Sticker</Text>
-        </TouchableOpacity>
+        <PermissionHandler user={user} allowedPermissions={["get-car-sticker"]}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => router.push("../car-stickers")}
+          >
+            <Text style={styles.buttonText}>Get a Car Sticker</Text>
+          </TouchableOpacity>
+        </PermissionHandler>
+
         {/* navigate to clearance requests */}
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => router.push("../clearances")}
+        <PermissionHandler
+          user={user}
+          allowedPermissions={["request-clearance"]}
         >
-          <Text style={styles.buttonText}>Request a Clearance</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => router.push("../home-tab/complaint")}
-        >
-          <Text style={styles.buttonText}>Send a Complaint</Text>
-        </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => router.push("../clearances")}
+          >
+            <Text style={styles.buttonText}>Request a Clearance</Text>
+          </TouchableOpacity>
+        </PermissionHandler>
+        <PermissionHandler user={user} allowedPermissions={["send-complaints"]}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => router.push("../home-tab/complaint")}
+          >
+            <Text style={styles.buttonText}>Send a Complaint</Text>
+          </TouchableOpacity>
+        </PermissionHandler>
       </View>
     </View>
   );

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import View from "./View";
 import useComplaintsByStatus from "../../hooks/useComplaints";
+import { formatUserName } from "../../../../mobile/utils/DataFormatter";
 
 const Pending = () => {
   const [viewing, setViewing] = useState(false);
@@ -32,6 +33,7 @@ const Pending = () => {
       setShowModal(false);
       setRemarks(""); // Clear remarks
       fetchComplaints(); // Refresh complaints
+      setViewing(false);
     }
   };
 
@@ -46,7 +48,7 @@ const Pending = () => {
       ) : (
         <>
           <div className="grid grid-cols-5 bg-green font-semibold rounded-t-md text-white">
-            <div className="px-4 py-3 text-center">NAME</div>
+            <div className="px-4 py-3 text-center">COMPLAINANT</div>
             <div className="px-4 py-3 text-center">ADDRESS</div>
             <div className="px-4 py-3 text-center">TYPE</div>
             <div className="px-4 py-3 text-center">DATE</div>
@@ -54,14 +56,16 @@ const Pending = () => {
           </div>
 
           {loading ? (
-            <div className="text-center py-3">Loading complaints...</div>
+            <div className="text-center py-3 bg-primary text-white">
+              Loading complaints..
+            </div>
           ) : error ? (
             <div className="text-center py-3 text-red-500">{error}</div>
           ) : complaints.length > 0 ? (
             complaints.map((item, index) => (
               <div key={index} className="grid grid-cols-5 border-b bg-primary">
                 <div className="px-4 py-3 text-center text-white">
-                  {item.resident.user.firstname}
+                  {formatUserName(item.resident.user, false)}
                 </div>
                 <div className="px-4 py-3 text-center text-white">
                   BLK {item.resident.house.block} LOT {item.resident.house.lot}
@@ -79,12 +83,12 @@ const Pending = () => {
                   >
                     View
                   </button>
-                  <button
+                  {/* <button
                     className="text-white px-2 py-1 rounded bg-blue-500 hover:bg-blue-600 ml-2"
                     onClick={() => handleSolveClick(item)}
                   >
                     Solve
-                  </button>
+                  </button> */}
                 </div>
               </div>
             ))

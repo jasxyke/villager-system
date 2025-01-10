@@ -29,6 +29,12 @@ export const formStyles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: colors.secondary,
   },
+  cernterButtonPaleGreen: {
+    padding: 15,
+    borderRadius: 15,
+    alignItems: "center",
+    backgroundColor: colors.paleGreen,
+  },
   button: {
     padding: 15,
     borderRadius: 20,

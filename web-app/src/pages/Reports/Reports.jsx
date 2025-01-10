@@ -15,7 +15,7 @@ const Reports = () => {
         <div className="relative w-full p-1 rounded-sm">
           <div className="flex justify-start">
             {[
-              { label: "Monthly Dues Report", value: "monthlyDuesReport" },
+              { label: "Overdue Bill Report", value: "monthlyDuesReport" },
               { label: "Resident Profile Report", value: "profileReport" },
               // {
               //   label: "Monthly Financial Report",

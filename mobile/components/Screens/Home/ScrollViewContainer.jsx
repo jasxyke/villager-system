@@ -115,37 +115,6 @@ const ScrollViewContainer = ({
     );
   };
 
-  const Indicator = () => {
-    if (!Array.isArray(data) || data.length === 0) {
-      return null;
-    }
-
-    return (
-      <View style={styles.indicatorContainer}>
-        {data.map((_, i) => {
-          const scale = scrollX.interpolate({
-            inputRange: [(i - 1) * width, i * width, (i + 1) * width],
-            outputRange: [0.8, 1.2, 0.8],
-            extrapolate: "clamp",
-          });
-
-          const opacity = scrollX.interpolate({
-            inputRange: [(i - 1) * width, i * width, (i + 1) * width],
-            outputRange: [0.3, 1, 0.3],
-            extrapolate: "clamp",
-          });
-
-          return (
-            <Animated.View
-              key={i}
-              style={[styles.dot, { transform: [{ scale }], opacity }]}
-            />
-          );
-        })}
-      </View>
-    );
-  };
-
   return (
     <View style={styles.scrollContainer}>
       <Animated.FlatList
@@ -166,7 +135,6 @@ const ScrollViewContainer = ({
         onEndReached={loadMoreAnnouncements}
         ListFooterComponent={loading && <ActivityIndicator size="small" />}
       />
-      <Indicator />
     </View>
   );
 };

@@ -41,15 +41,7 @@ const ChangePassword = () => {
       <MainLogo />
       <div className="w-[90%] max-w-md bg-green p-6 rounded-lg shadow-lg text-white">
         <h2 className="text-2xl font-bold mb-4">Change Password</h2>
-        {responseMsg && (
-          <div
-            className={`p-3 mb-4 rounded ${
-              isError ? "bg-red-500" : "bg-secondary"
-            }`}
-          >
-            {responseMsg}
-          </div>
-        )}
+
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label htmlFor="oldPassword" className="block mb-1">
@@ -108,6 +100,15 @@ const ChangePassword = () => {
               Close
             </button> */}
           </div>
+          {responseMsg && (
+            <div
+              className={`p-3 mb-4 mt-4 rounded ${
+                isError ? "bg-red-500" : ""
+              } text-center`}
+            >
+              {responseMsg}
+            </div>
+          )}
         </form>
       </div>
     </div>

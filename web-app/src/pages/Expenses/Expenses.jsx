@@ -59,7 +59,7 @@ const Expenses = () => {
                 loading ? "bg-gray-400 cursor-not-allowed" : "bg-secondary"
               } flex items-center bg-mute text-white px-4 py-2 rounded-md`}
             >
-              {loading ? "Generating..." : "Generate Report (Excel)"}
+              {loading ? "Generating..." : "Generate Report (PDF)"}
               <FaFile className="text-2xl text-white ml-2" />
             </button>
           </div>

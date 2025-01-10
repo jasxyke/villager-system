@@ -11,11 +11,13 @@ class IncomeExpensesReportExport implements FromView
 {
     protected $year;
     protected $month;
+    protected $headerData;
 
-    public function __construct($year, $month)
+    public function __construct($year, $month, $headerData)
     {
         $this->year = $year;
         $this->month = $month;
+        $this->headerData = $headerData;
     }
 
     public function view(): View
@@ -44,9 +46,9 @@ class IncomeExpensesReportExport implements FromView
         $totalIncome = $bookingIncome + $billsIncome + $permitIncome + $stickerIncome;
 
         $incomeData = [
-            ['category' => 'Bookings', 'amount' => $bookingIncome],
-            ['category' => 'Bills', 'amount' => $billsIncome],
-            ['category' => 'Permits', 'amount' => $permitIncome],
+            ['category' => 'Amenity Bookings', 'amount' => $bookingIncome],
+            ['category' => 'Monthly Dues', 'amount' => $billsIncome],
+            ['category' => 'Clearance Requests', 'amount' => $permitIncome],
             ['category' => 'Car Stickers', 'amount' => $stickerIncome],
             ['category' => 'Total Income', 'amount' => $totalIncome],
         ];
@@ -81,6 +83,7 @@ class IncomeExpensesReportExport implements FromView
             'expenseData' => $expenseData,
             'month' => $this->month,
             'year' => $this->year,
+            'headerData' => $this->headerData
         ]);
     }
 }

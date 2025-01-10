@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Exports\IncomeExpensesReportExport;
+use App\Helpers\HeaderHelper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Maatwebsite\Excel\Facades\Excel;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class IncomeExpensesController extends Controller
 {
@@ -15,12 +16,20 @@ class IncomeExpensesController extends Controller
             'year' => 'required|integer',
             'month' => 'required|integer|min:1|max:12',
         ]);
-
+    
         $year = $validated['year'];
         $month = $validated['month'];
-
-        return Excel::download(new IncomeExpensesReportExport($year, $month), 
-                    "Income_Expenses_Report_{$year}_{$month}.xlsx");
+    
+        // Generate the data
+        $hederData = HeaderHelper::getHeaderData();
+        $incomeExpensesReport = new IncomeExpensesReportExport($year, $month, $hederData);
+        $viewData = $incomeExpensesReport->view()->getData();
+    
+        // Generate the PDF
+        $pdf = PDF::loadView('exports.income_expenses_report', $viewData);
+        
+        // Return the PDF download response
+        return $pdf->download("Income_Expenses_Report_{$year}_{$month}.pdf");
     }
 
 

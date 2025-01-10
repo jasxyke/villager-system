@@ -34,7 +34,7 @@ const useExportIncomeExpenses = () => {
       link.href = url;
       link.setAttribute(
         "download",
-        `Income_Expenses_Report_${year}_${month}.xlsx`
+        `Income_Expenses_Report_${year}_${month}.pdf`
       );
 
       document.body.appendChild(link);

@@ -3,8 +3,10 @@ namespace App\Http\Controllers;
 
 use App\Helpers\HeaderHelper;
 use App\Helpers\SettingsHelper;
+use App\Models\Complaint;
 use App\Models\Resident;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -149,4 +151,64 @@ class ReportsController extends Controller
             'residents' => $residentData->values(), // Reset the array keys
         ]);
     }
+
+    public function generateComplaintsPdf()
+    {
+        try {
+            // Fetch all complaints with resident details
+            $complaints = Complaint::with('resident.user', 'resident.house')->get();
+
+            if ($complaints->isEmpty()) {
+                return response()->json(['error' => 'No complaints found'], 404);
+            }
+
+            // Group complaints by their status (Pending/Solved)
+            $groupedComplaints = $complaints->groupBy('status');
+
+            // Fetch header data for the PDF
+            $headerData = HeaderHelper::getHeaderData();
+
+            // Load the PDF view and pass the grouped complaints and header data
+            $pdf = PDF::loadView('reports.complaints_report', compact('groupedComplaints', 'headerData'))
+                            ->setPaper('a4', 'portrait');
+
+            if (!$pdf) {
+                return response()->json(['error' => 'PDF generation failed'], 500);
+            }
+
+            return $pdf->download('Complaints_Report.pdf');
+        } catch (\Exception $e) {
+            Log::error('PDF Generation Error: ' . $e->getMessage());
+            return response()->json(['error' => 'An error occurred while generating the report: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /**
+     * Fetch complaints data for display
+     */
+    public function generateComplaintsData()
+    {
+        $complaints = Complaint::with([
+            'resident:id,user_id,house_id',
+            'resident.user',
+            'resident.house:id,block,lot'
+        ])->get(['id', 'resident_id', 'status', 'type', 'date_sent', 'message', 'remarks']);
+
+        $complaintsData = $complaints->map(function ($complaint) {
+            return [
+                'resident' => $complaint->resident,
+                'address' => "Block {$complaint->resident->house->block} Lot {$complaint->resident->house->lot}",
+                'status' => ucfirst($complaint->status),
+                'type' => ucfirst($complaint->type),
+                'date_sent' => Carbon::parse($complaint->date_sent)->format('F d, Y'),
+                'message' => $complaint->message,
+                'remarks' => $complaint->remarks ?? 'N/A',
+            ];
+        });
+
+        return response()->json([
+            'complaints' => $complaintsData,
+        ]);
+    }
+
 }

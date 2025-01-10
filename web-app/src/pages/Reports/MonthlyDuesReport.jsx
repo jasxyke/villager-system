@@ -29,7 +29,7 @@ const MonthlyDuesReport = () => {
         style={{ maxHeight: "500px" }}
       >
         <h1 className="text-center p-2 font-bold text-white text-2xl">
-          MONTHLY DUE PENDING SUMMARY
+          OVERDUE BILL REPORT
         </h1>
 
         {loading ? (

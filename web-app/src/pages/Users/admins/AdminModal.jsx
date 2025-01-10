@@ -16,7 +16,7 @@ const AdminModal = ({
     lastname: "",
     email: "",
     password: "",
-    role_type: "member",
+    role_type: "admin",
   });
 
   useEffect(() => {
@@ -34,7 +34,7 @@ const AdminModal = ({
         lastname: "",
         email: "",
         password: "",
-        role_type: "member",
+        role_type: "admin",
       });
     }
   }, [selectedAdmin]);

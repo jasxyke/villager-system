@@ -145,7 +145,7 @@ const Bills = () => {
                 Status:{" "}
                 {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
               </Text>
-              <Text style={styles.billDetail}>Balance: PHP {item.balance}</Text>
+              {/*<Text style={styles.billDetail}>Balance: PHP {item.balance}</Text>*/}
             </View>
           )}
         />

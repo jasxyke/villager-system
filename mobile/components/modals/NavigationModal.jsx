@@ -71,6 +71,27 @@ const NavigationModal = ({ visible, onClose }) => {
                 </TouchableOpacity>
               </View>
 
+              {/* Contacts Button */}
+              <TouchableOpacity
+                onPress={openContacts}
+                className="rounded-xl p-1 h-auto bg-paleGreen mb-3"
+              >
+                <View className="flex-row items-center p-1 gap-x-1">
+                  <AntDesign name="phone" size={24} color="white" />
+                  <Text className="font-pRegular text-white">Contacts</Text>
+                </View>
+              </TouchableOpacity>
+              {/* About Us Button */}
+              <TouchableOpacity
+                onPress={openAbout}
+                className="rounded-xl p-1 h-auto bg-paleGreen mb-3"
+              >
+                <View className="flex-row items-center p-1 gap-x-1">
+                  <AntDesign name="infocirlceo" size={24} color="white" />
+                  <Text className="font-pRegular text-white">About Us</Text>
+                </View>
+              </TouchableOpacity>
+
               {/* Logout Button */}
               <TouchableOpacity
                 onPress={logoutUser}
@@ -83,28 +104,6 @@ const NavigationModal = ({ visible, onClose }) => {
                     style={styles.logout}
                   />
                   <Text className="font-pRegular text-white">Logout</Text>
-                </View>
-              </TouchableOpacity>
-
-              {/* Contacts Button */}
-              <TouchableOpacity
-                onPress={openContacts}
-                className="rounded-xl p-1 h-auto bg-paleGreen mb-3"
-              >
-                <View className="flex-row items-center p-1 gap-x-1">
-                  <AntDesign name="phone" size={24} color="white" />
-                  <Text className="font-pRegular text-white">Contacts</Text>
-                </View>
-              </TouchableOpacity>
-
-              {/* About Us Button */}
-              <TouchableOpacity
-                onPress={openAbout}
-                className="rounded-xl p-1 h-auto bg-paleGreen"
-              >
-                <View className="flex-row items-center p-1 gap-x-1">
-                  <AntDesign name="infocirlceo" size={24} color="white" />
-                  <Text className="font-pRegular text-white">About Us</Text>
                 </View>
               </TouchableOpacity>
             </View>

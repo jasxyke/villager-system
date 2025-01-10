@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
-  Button,
   Pressable,
   RefreshControl,
   ScrollView,
@@ -19,6 +18,7 @@ import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import useBills from "../../hooks/useBills";
 import { usePushNotifications } from "../../hooks/useNotifications";
 import { router } from "expo-router";
+import { colors } from "../../styles/colors";
 
 const Home = () => {
   const [refreshing, setRefreshing] = useState(false);
@@ -48,14 +48,11 @@ const Home = () => {
     }
   }, [user]);
 
-  if (!user || !announcements) {
-    return (
-      <View style={styles.centered}>
-        <TabsGradient />
-        <ActivityIndicator size="large" color={"white"} />
-      </View>
-    );
-  }
+
+  const handleViewAnnouncementPress = () => {
+    // Add your navigation logic here
+    router.push("../announcement-details"); // Example path
+  };
 
   return (
     <View style={styles.container}>
@@ -68,17 +65,19 @@ const Home = () => {
         }
       >
         <Text style={styles.greeting}>Hello, {user.firstname}!</Text>
-        <View style={styles.row}>
-          <View style={styles.card}>
-            <View className="flex flex-row justify-center w-full gap-x-2">
-              <FontAwesome6 name="peso-sign" size={40} color="white" />
-              <Text className="" style={styles.txtBalance}>
-                {totalBalance || "Error generating the total balance"}
-              </Text>
-            </View>
-            <Text className="textw-white text-lg text-white">Balance</Text>
+
+        {/* Balance Card */}
+        <View style={styles.card}>
+          <View style={styles.cardContent}>
+            <FontAwesome6 name="peso-sign" size={40} color="white" />
+            <Text style={styles.txtBalance}>
+              {totalBalance || "Error generating the total balance"}
+            </Text>
           </View>
+          <Text style={styles.cardContentText}>Balance</Text>
         </View>
+
+        {/* Announcements Section */}
         {announcements === null || loading ? (
           <LoadingEmptyAnnouncements
             loading={loading}
@@ -98,12 +97,12 @@ const Home = () => {
             getAnnouncements={getAnnouncements}
           />
         )}
-        {/* <Pressable
-          onPress={() => router.push("../home-tab/complaint")}
-          className="p-5 mt-10 bg-secondary rounded-lg"
-        >
-          <Text>Send a Complaint</Text>
-        </Pressable> */}
+
+         {/* View Announcement Link */}
+        <Pressable onPress={handleViewAnnouncementPress} style={styles.viewAnnouncementLink}>
+                <Text style={styles.viewAnnouncementText}>View Announcement</Text>
+                 <FontAwesome6 name="chevron-right" size={18} color="white" />
+        </Pressable>
       </ScrollView>
     </View>
   );
@@ -117,11 +116,13 @@ const styles = StyleSheet.create({
   centered: {
     flex: 1,
     justifyContent: "center",
-    alignItems: "center",
+    alignItems: "flex-start",
+    width: "80%",
   },
   content: {
     width: "100%",
-    alignItems: "center",
+    alignItems: "flex-start",
+    paddingLeft: 20, // Optional: Adds padding to the left
   },
   greeting: {
     color: "white",
@@ -130,25 +131,24 @@ const styles = StyleSheet.create({
     marginBottom: 0,
     fontFamily: "Jaldi-Bold",
   },
-  row: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    width: "100%",
-    marginBottom: 10,
-    padding: 20,
-  },
   card: {
     borderRadius: 10,
     backgroundColor: "#1A2902",
-    width: "100%",
+    width: "90%", // The card will take full width
     height: 100,
     justifyContent: "center",
     padding: 10,
     alignItems: "center",
+    marginBottom: 20, // Space below the card for the link
   },
   cardContent: {
+    flexDirection: "row", // Align icon and balance text horizontally
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  cardContentText: {
     color: "white",
-    fontSize: 18,
+    fontSize: 16,
   },
   txtBalance: {
     fontSize: 40,
@@ -156,11 +156,14 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
   },
-  arrowContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    width: "100%",
-    marginTop: 10,
+  viewAnnouncementLink: {
+    flexDirection: "row", // Align text and icon horizontally
+    alignItems: "center",
+    marginTop: 20, // Space below the link for announcements
+  },
+  viewAnnouncementText: {
+    fontSize: 16,
+    color: colors.white,
   },
 });
 

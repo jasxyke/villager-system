@@ -187,6 +187,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/reports/resident-bill-data', [ReportsController::class, 'generateDuesData']);
     Route::get('/reports/profile-pdf', [ReportsController::class, 'generateResidentProfilePdf']);
     Route::get('/reports/profile-data', [ReportsController::class, 'generateResidentProfileData']);
+    Route::get('/reports/complaints-pdf', [ReportsController::class, 'generateComplaintsPdf']);
+    Route::get('/reports/complaints-data', [ReportsController::class, 'generateComplaintsData']);
 
     //ADMIN SETTINGS
     Route::get('/settings', [SettingsController::class, 'index']);

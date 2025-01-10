@@ -1,26 +1,27 @@
 import React, { useEffect } from "react";
 import { FiPrinter } from "react-icons/fi";
-import useResidentProfileReports from "../../hooks/Reports/useResidentProfileReports";
+import useComplaintsReports from "../../hooks/Reports/useComplaintsReports";
+import { formatUserName } from "../../utils/DataFormatter";
 
-const ResidentProfileReport = () => {
+const ComplaintsReport = () => {
   const {
     loading,
     error,
-    residentData,
-    fetchResidentProfileReport,
-    fetchResidentProfileData,
-  } = useResidentProfileReports();
+    complaintsData,
+    fetchComplaintsReport,
+    fetchComplaintsData,
+  } = useComplaintsReports();
 
   // Fetch data when the component mounts
   useEffect(() => {
-    fetchResidentProfileData();
+    fetchComplaintsData();
   }, []);
 
   const handlePrintClick = async () => {
-    await fetchResidentProfileReport();
+    await fetchComplaintsReport();
   };
 
-  if (loading || residentData)
+  if (loading || complaintsData)
     return (
       <div className="flex w-full h-full">
         <div
@@ -28,40 +29,40 @@ const ResidentProfileReport = () => {
           style={{ maxHeight: "500px" }}
         >
           <h1 className="text-center p-2 font-bold text-white text-2xl">
-            RESIDENT PROFILE REPORT
+            COMPLAINTS REPORT
           </h1>
 
           {loading ? (
             <p className="text-center text-white">Loading...</p>
           ) : error ? (
             <p className="text-center text-red-500">{error}</p>
-          ) : residentData.length === 0 ? (
+          ) : complaintsData.length === 0 ? (
             <p className="text-center text-white">No data</p>
           ) : (
             <div className="w-full shadow-lg">
               <div className="flex items-center justify-between font-medium rounded-t-lg bg-mutedGreen p-4 text-center">
-                <div className="flex-1">Name</div>
-                <div className="flex-1">Address</div>
-                <div className="flex-1">Birthdate</div>
-                <div className="flex-1">Sex</div>
-                <div className="flex-1">Civil Status</div>
-                <div className="flex-1">Occupation Status</div>
-                <div className="flex-1">FB Name</div>
+                <div className="flex-1">Resident Name</div>
+                <div className="flex-1">Complaint Type</div>
+                <div className="flex-1">Date Sent</div>
+                <div className="flex-1">Status</div>
+                <div className="flex-1">Message</div>
+                <div className="flex-1">Remarks</div>
               </div>
               <div className="overflow-y-auto max-h-60">
                 {/* Add scrollable area for data */}
-                {residentData.map((item, index) => (
+                {complaintsData.map((item, index) => (
                   <div
                     key={index}
-                    className="grid grid-cols-7 p-3 border text-white mb-2"
+                    className="grid grid-cols-6 p-3 border text-white mb-2"
                   >
-                    <div className="text-center">{item.name}</div>
-                    <div className="text-center">{item.address}</div>
-                    <div className="text-center">{item.birthdate}</div>
-                    <div className="text-center">{item.sex}</div>
-                    <div className="text-center">{item.civil_status}</div>
-                    <div className="text-center">{item.occupation_status}</div>
-                    <div className="text-center">{item.fb_name}</div>
+                    <div className="text-center">
+                      {formatUserName(item.resident.user, false)}
+                    </div>
+                    <div className="text-center">{item.type}</div>
+                    <div className="text-center">{item.date_sent}</div>
+                    <div className="text-center">{item.status}</div>
+                    <div className="text-center">{item.message}</div>
+                    <div className="text-center">{item.remarks}</div>
                   </div>
                 ))}
               </div>
@@ -82,4 +83,4 @@ const ResidentProfileReport = () => {
     );
 };
 
-export default ResidentProfileReport;
+export default ComplaintsReport;

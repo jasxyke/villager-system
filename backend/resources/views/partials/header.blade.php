@@ -3,7 +3,7 @@
         .header-container {
             width: 100%;
             text-align: center;
-            border-bottom: 3px solid #4b5563;
+            border-bottom: 2px solid #000000;
             margin-bottom: 20px;
         }
         .header-container table {

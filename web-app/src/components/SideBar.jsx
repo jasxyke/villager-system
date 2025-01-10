@@ -19,6 +19,7 @@ import { useAuthContext } from "../contexts/AuthContext";
 import styles from "./SideBar.module.css";
 import LoadingPage from "./LoadingScreen/LoadingPage";
 import LoadingContainer from "./LoadingScreen/LoadingContainer";
+import { RiLockPasswordLine } from "react-icons/ri";
 
 const SideBar = () => {
   const { logout, user } = useAuthContext();
@@ -169,6 +170,17 @@ const SideBar = () => {
             </NavLink>
           </li>
         )}
+        <li>
+          <NavLink
+            to="/change-password"
+            ref={
+              location.pathname === "/change-password" ? activeLinkRef : null
+            }
+          >
+            <RiLockPasswordLine className="text-3xl mr-2" />
+            Change Password
+          </NavLink>
+        </li>
         <li className="bg-transparent">
           <p className="" onClick={logoutUser}>
             <FiLogOut className="text-3xl mr-2" /> Logout

@@ -13,10 +13,10 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 import { colors } from "../../styles/colors";
 
 const contactsData = [
-  { id: "1", name: "Fire Department", number: "101" },
-  { id: "2", name: "Police Department", number: "100" },
-  { id: "3", name: "Ambulance Service", number: "102" },
-  { id: "4", name: "Emergency Hotline", number: "112" },
+  { id: "1", name: "Fire Department", number: "0951-604-7279" },
+  { id: "2", name: "Police Department", number: "0998-598-5727 / 0999-195-5988" },
+  { id: "3", name: "Ambulance Service", number: "0920 432 7079" },
+  { id: "4", name: "Emergency Hotline", number: "911" },
 ];
 
 const Contacts = ({ visible, onClose }) => {
@@ -40,9 +40,11 @@ const Contacts = ({ visible, onClose }) => {
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>EMERGENCY HOTLINES</Text>
             {contactsData.map((contact) => (
-              <View key={contact.id} style={styles.contactItem}>
+              <View key={contact.id} style={styles.contactWrapper}>
                 <Text style={styles.contactName}>{contact.name}</Text>
-                <Text style={styles.contactNumber}>{contact.number}</Text>
+                <View style={styles.numberContainer}>
+                  <Text style={styles.contactNumber}>{contact.number}</Text>
+                </View>
               </View>
             ))}
           </View>
@@ -82,33 +84,48 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   section: {
+    marginTop: 30, // Added space between headerContainer and section
     marginBottom: 20,
   },
   sectionTitle: {
     fontSize: 16,
     fontWeight: "bold",
-    color: colors.black,
-    marginBottom: 10,
+    color: colors.white,
+    marginBottom: 20,
   },
-  contactItem: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 10,
+  contactWrapper: {
+    marginBottom: 15,
   },
   contactName: {
-    fontSize: 14,
-    color: colors.black,
+    fontSize: 16,
+    fontWeight: "bold",
+    color: colors.white,
+    marginBottom: 10,
+  },
+  numberContainer: {
+    backgroundColor: colors.primary,
+    padding: 10,
+    borderRadius: 8,
+    height: 40,
+    justifyContent: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 2,
   },
   contactNumber: {
     fontSize: 14,
-    color: colors.black,
+    color: colors.white,
+    textAlign: "center",
   },
   footerText: {
     fontSize: 12,
-    color: colors.black,
+    color: colors.white,
     textAlign: "center",
     marginTop: 20,
   },
 });
+
 
 export default Contacts;

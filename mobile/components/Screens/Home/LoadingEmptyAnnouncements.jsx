@@ -10,7 +10,9 @@ const LoadingEmptyAnnouncements = ({ loading, announcements }) => {
       ) : announcements === null ? (
         <ActivityIndicator size={"large"} color={"white"} />
       ) : (
-        announcements.length === 0 && <Text>No recent announcements</Text>
+        announcements.length === 0 && (
+          <Text className="text-white">No recent announcements</Text>
+        )
       )}
     </View>
   );

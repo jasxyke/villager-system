@@ -17,7 +17,7 @@ const Reports = () => {
       </div>
       <div className="bg-green shadow-md rounded-lg overflow-hidden p-2">
         <div className="relative w-full p-1 rounded-sm">
-          <div className="flex justify-between">
+          <div className="flex justify-start">
             {[
               { label: "Overdue Bill Report", value: "monthlyDuesReport" },
               { label: "Resident Profile Report", value: "profileReport" },
@@ -26,9 +26,9 @@ const Reports = () => {
               //   value: "monthlyFinancialReport",
               // },
               { label: "Complaints Report", value: "complaintsReport" },
-              { label: "Bookings Report", value: "bookingsReport" },
-              { label: "Car Stickers Report", value: "carStickersReport" },
-              { label: "Clearance Requests Report", value: "clearancesReport" },
+              // { label: "Bookings Report", value: "bookingsReport" },
+              // { label: "Car Stickers Report", value: "carStickersReport" },
+              // { label: "Clearance Requests Report", value: "clearancesReport" },
             ].map(({ label, value }) => (
               <button
                 key={value}

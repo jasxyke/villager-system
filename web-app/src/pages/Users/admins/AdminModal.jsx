@@ -15,7 +15,6 @@ const AdminModal = ({
     firstname: "",
     lastname: "",
     email: "",
-    password: "",
     role_type: "admin",
   });
 
@@ -25,7 +24,6 @@ const AdminModal = ({
         firstname: selectedAdmin.user.firstname,
         lastname: selectedAdmin.user.lastname,
         email: selectedAdmin.user.email,
-        password: "",
         role_type: selectedAdmin.user.role_type,
       });
     } else {
@@ -33,7 +31,6 @@ const AdminModal = ({
         firstname: "",
         lastname: "",
         email: "",
-        password: "",
         role_type: "admin",
       });
     }
@@ -110,19 +107,6 @@ const AdminModal = ({
               required
             />
           </div>
-          {!selectedAdmin && (
-            <div>
-              <label className="block text-gray-700">Password</label>
-              <input
-                type="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded"
-                required
-              />
-            </div>
-          )}
           <div>
             <label className="block text-gray-700">Role</label>
             <select

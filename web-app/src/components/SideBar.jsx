@@ -113,7 +113,7 @@ const SideBar = () => {
             }
           >
             <FiUsers className="text-3xl mr-2" />
-            Users
+            Users and Admins
           </NavLink>
         </li>
         {["admin"].includes(user?.role_type) && (

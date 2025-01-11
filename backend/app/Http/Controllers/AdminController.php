@@ -9,6 +9,9 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\SendAdminPassword;
 
 class AdminController extends Controller
 {
@@ -22,25 +25,35 @@ class AdminController extends Controller
   // Store a newly created admin in storage
   public function store(Request $request)
   {
-      $request->validate([
-          'firstname' => 'required|string|max:100',
-          'lastname' => 'required|string|max:50',
-          'email' => 'required|email|unique:users,email',
-          'password' => 'required|string|min:8',
-          'role_type' => 'required|in:admin,treasurer'
-      ]);
+    $request->validate([
+        'firstname' => 'required|string|max:100',
+        'lastname' => 'required|string|max:50',
+        'email' => 'required|email|unique:users,email',
+        'role_type' => 'required|in:admin,treasurer'
+    ]);
 
-      $user = User::create([
-          'firstname' => $request->firstname,
-          'lastname' => $request->lastname,
-          'email' => $request->email,
-          'password' => Hash::make($request->password),
-          'role_type' => $request->role_type
-      ]);
+    // Generate and hash the password for a new user
+    $generatedPassword = Str::password(8);
+    $hashedPassword = Hash::make($generatedPassword);
 
-      Admin::create(['user_id' => $user->id]);
+    $user = User::create([
+        'firstname' => $request->firstname,
+        'lastname' => $request->lastname,
+        'email' => $request->email,
+        'password' => $hashedPassword,
+        'role_type' => $request->role_type
+    ]);
 
-      return response()->json($user, Response::HTTP_CREATED);
+    Admin::create(['user_id' => $user->id]);
+
+    // Send the password email
+    Mail::to($user->email)->send(new SendAdminPassword(
+        $user->firstname,
+        $user->email,
+        $generatedPassword
+    ));
+
+    return response()->json($user, Response::HTTP_CREATED);
   }
 
   // Display the specified admin

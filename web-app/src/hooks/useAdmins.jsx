@@ -40,6 +40,7 @@ const useAdmins = () => {
       return response.data;
     } catch (err) {
       setError(err);
+      alert(err.response.data.message);
       throw err;
     } finally {
       setLoading(false);
@@ -53,7 +54,7 @@ const useAdmins = () => {
       fetchAdmins(); // Refresh the list after updating an admin
       return response.data;
     } catch (err) {
-      setError(err);
+      alert(err.response.data.message);
       throw err;
     } finally {
       setLoading(false);

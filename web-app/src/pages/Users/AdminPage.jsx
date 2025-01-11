@@ -43,15 +43,6 @@ function AdminPage() {
   };
 
   if (loading) return <LoadingPage />;
-  if (error)
-    return (
-      <UsersPage>
-        <div className="text-white bg-red-500 p-4 rounded">
-          Error: {error.message}
-        </div>
-      </UsersPage>
-    );
-
   return (
     <UsersPage>
       <div className="p-6 bg-green text-white shadow-md rounded-lg">

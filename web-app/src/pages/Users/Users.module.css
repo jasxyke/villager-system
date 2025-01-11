@@ -52,8 +52,14 @@
 }
 
 .userButton:hover {
-  background: #0f7c09;
+  background: var(--secondary);
   transform: scale(1.05);
+}
+
+.activeButton {
+  /* Styles for the active button */
+  background-color: var(--secondary);
+  color: white;
 }
 
 /* Block Button Styles */

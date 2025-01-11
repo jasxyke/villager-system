@@ -4,7 +4,8 @@ import * as SecureStore from "expo-secure-store";
 
 axios.defaults.withCredentials = true;
 
-export const DOMAIN = `${process.env.EXPO_PUBLIC_API_URL}`;
+// export const DOMAIN = `${process.env.EXPO_PUBLIC_API_URL}`;
+export const DOMAIN = `https://api.dvillager.com`;
 
 console.log(`DOMAIN: ${DOMAIN}`);
 

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styles from "./Login.module.css";
 import { useAuthContext } from "../../contexts/AuthContext";
+import LoadingElement from "../../components/LoadingScreen/LoadingElement";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -98,13 +99,14 @@ const Login = () => {
       {/* <div className={styles.forgotPasswordClass}>Forgot Password?</div> */}
       <br />
       <div className={styles.inputContainer}>
-        <input
+        <button
           className={styles.loginBtn + ` ${loading ? "bg-gray-400" : ""}`}
           type="submit"
-          value="Log in"
           disabled={loading}
           id="submitBtn"
-        />
+        >
+          {loading ? <LoadingElement size={30} /> : "Log in"}
+        </button>
       </div>
     </form>
   );

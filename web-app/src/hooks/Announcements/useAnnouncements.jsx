@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import axiosClient from "../../utils/axios";
 
 const useAnnouncements = () => {
   const [announcements, setAnnouncements] = useState(null);
   const [loading, setLoading] = useState(false);
-
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalRecords, setTotalRecords] = useState(0);
   const getAnnouncements = async (onError, page = 1) => {
     try {
       setLoading(true);
@@ -65,6 +67,18 @@ const useAnnouncements = () => {
     setAnnouncements(updatedItems);
   };
 
+  const nextPage = () => {
+    if (currentPage < totalPages) {
+      getAnnouncements(currentPage + 1);
+    }
+  };
+
+  const prevPage = () => {
+    if (currentPage > 1) {
+      getAnnouncements(currentPage - 1);
+    }
+  };
+
   const editAnnouncement = async (id, formData, onSuccess, onError) => {
     try {
       const res = await axiosClient.put("/announcements/" + id, formData);
@@ -83,6 +97,11 @@ const useAnnouncements = () => {
     getAnnouncements,
     editAnnouncement,
     changePicture,
+    currentPage,
+    totalPages,
+    totalRecords,
+    nextPage,
+    prevPage,
   };
 };
 

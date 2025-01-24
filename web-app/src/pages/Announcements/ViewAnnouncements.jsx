@@ -10,6 +10,7 @@ import ReactPaginate from "react-paginate";
 const ViewAnnouncements = () => {
   const [isViewing, setIsViewing] = useState(false);
   const [announcement, setAnnouncement] = useState(null);
+  const [announcementsList, setAnnouncementsList] = useState([]);
 
   const {
     announcements,
@@ -24,6 +25,20 @@ const ViewAnnouncements = () => {
   useEffect(() => {
     getAnnouncements((msg) => alert(msg));
   }, []);
+
+  useEffect(() => {
+    if (announcements) {
+      const list = announcements.map((item, index) => (
+        <AnnouncementItem
+          key={item.id}
+          announcement={item}
+          index={index}
+          onView={handleView}
+        />
+      ));
+      setAnnouncementsList(list);
+    }
+  }, [announcements]);
 
   const handleView = (item) => {
     setAnnouncement(item);
@@ -42,22 +57,13 @@ const ViewAnnouncements = () => {
     return <LoadingContainer loading={loading} />;
   }
 
-  const list = announcements.map((item, index) => (
-    <AnnouncementItem
-      key={item.id}
-      announcement={item}
-      index={index}
-      onView={handleView}
-    />
-  ));
-
   return (
     <>
       <div className={styles.listContainer}>
         {loading ? (
           <LoadingContainer loading={loading} />
-        ) : announcements.length > 0 ? (
-          <>{list}</>
+        ) : announcementsList.length > 0 ? (
+          <>{announcementsList}</>
         ) : (
           <div className="text-center p-4 bg-white">
             No announcements available

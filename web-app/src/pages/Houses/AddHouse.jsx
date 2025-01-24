@@ -92,7 +92,7 @@ const AddHouse = ({ onAdd, onClose, loading, blocks }) => {
       facebook: facebook,
       occupation: occupation,
       email: email,
-      contactNum: contactNum,
+      contactNumber: contactNum,
     };
 
     console.log(houseData);

@@ -27,7 +27,7 @@ const ResidentsList = ({ residents, handleViewDetails, selectedResident }) => {
             {resident?.resident?.house?.block || "N/A"}
           </div>
           <div className={styles.residentItem}>
-            {resident?.resident?.house?.lo || "N/A"}
+            {resident?.resident?.house?.lot || "N/A"}
           </div>
           <div className={styles.residentItem}>{resident.email || "N/A"}</div>
           <div className={styles.residentItem}>

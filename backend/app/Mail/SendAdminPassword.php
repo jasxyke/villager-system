@@ -34,7 +34,7 @@ class SendAdminPassword extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            from: new Address('jasxyke23.jxc@gmail.com', 'D\'Villager'),
+            from: new Address('pamahay-village@dvillager.com', 'D\'Villager'),
             subject: 'Villager Web App Account Details',
         );
     }

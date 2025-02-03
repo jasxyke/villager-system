@@ -33,7 +33,7 @@ class SendPasswordMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            from: new Address('jasxyke23.jxc@gmail.com', 'Villager'),
+            from: new Address('pamahay-village@dvillager.com', 'Villager'),
             subject: 'Villager App Account Details',
         );
     }

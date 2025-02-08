@@ -6,7 +6,7 @@ import styles from "./EditBillsModal.module.css";
 Modal.setAppElement("#root");
 
 const EditBillModal = ({ isOpen, onRequestClose, bill, onSuccess }) => {
-  const { updateBillAndAddPayment } = useBills();
+  const { updateBillAndAddPayment, loading } = useBills();
   const [formData, setFormData] = useState({
     amount: "",
     transaction_date: "",
@@ -112,7 +112,7 @@ const EditBillModal = ({ isOpen, onRequestClose, bill, onSuccess }) => {
       overlayClassName={styles.overlay}
     >
       <h2 className="text-2xl font-bold border-b-2 border-black mb-4">
-        Edit Bill
+        Edit Monthly Due
       </h2>
       <form onSubmit={handleSubmit}>
         <div className={styles.formGroup}>
@@ -186,7 +186,7 @@ const EditBillModal = ({ isOpen, onRequestClose, bill, onSuccess }) => {
         </div>
 
         <button type="submit" className={`${styles.button} ${styles.submit}`}>
-          Update Bill
+          {loading ? "Updating Monthly Due..." : "Update Monthly Due"}
         </button>
         <button
           type="button"

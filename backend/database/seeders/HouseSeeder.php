@@ -69,6 +69,7 @@ class HouseSeeder extends Seeder
                         Transaction::create([
                             'resident_id' => $resident->id,
                             'bill_id' => $bill->id,
+                            'reference_number' => Transaction::generateUniqueReference(),
                             'amount' => $bill->amount,
                             'payment_method' => $faker->randomElement(['cash', 'e-wallet']),
                             'transaction_date' => Carbon::now()->subMonths($i)->endOfMonth(),

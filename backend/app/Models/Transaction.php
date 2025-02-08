@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Str;
 
 class Transaction extends Model
 {
@@ -16,8 +17,18 @@ class Transaction extends Model
         'bill_id',
         'amount',
         'payment_method',
-        'transaction_date'
+        'transaction_date',
+        'reference_number'
     ];
+
+    public static function generateUniqueReference(): string
+    {
+        do {
+            $reference = 'MD-' . strtoupper(Str::random(7));
+        } while (self::where('reference_number', $reference)->exists());
+
+        return $reference;
+    }
 
     public function resident(): BelongsTo{
         return $this->belongsTo(Resident::class);

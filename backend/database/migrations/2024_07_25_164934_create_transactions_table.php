@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
+            $table->string('reference_number', 20)->unique();
             $table->foreignId('resident_id')->constrained('residents');
             $table->foreignId("bill_id")->constrained("bills");
             $table->decimal('amount', 8, 2);

@@ -18,6 +18,8 @@ const useUpdateBillAndAddPayments = () => {
       }
       return response.data.success;
     } catch (err) {
+      console.log(err);
+
       setError(err);
       throw err; // Propagate the error if necessary
     } finally {

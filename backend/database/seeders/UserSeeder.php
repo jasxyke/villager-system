@@ -53,6 +53,7 @@ class UserSeeder extends Seeder
                     Transaction::create([
                         'resident_id' => $residentUser->id,
                         'bill_id' => $bill->id,
+                        'reference_number' => Transaction::generateUniqueReference(),
                         'amount' => $bill->amount,
                         // 'payment_method' => $faker->randomElement(['cash', 'gcash']),
                         'transaction_date' => Carbon::now()->subMonths($i)->endOfMonth(),

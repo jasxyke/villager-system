@@ -58,11 +58,9 @@ const PermitApplicationReview = ({ permit, onBack }) => {
   const handleRejectSubmit = async (reason) => {
     try {
       await rejectPermitRequest(permit.id, reason);
-      // alert("The application has been rejected.");
       onBack();
     } catch (error) {
       console.log(error);
-      // alert("An error occurred while rejecting the application.");
     } finally {
       setIsRejectModalOpen(false);
     }
@@ -71,11 +69,9 @@ const PermitApplicationReview = ({ permit, onBack }) => {
   const handleConfirmApproval = async (permitFee, processingFee, note) => {
     try {
       await approvePermitRequest(permit.id, permitFee, processingFee, note);
-      // alert("The resident has been notified of the approval.");
       onBack();
     } catch (error) {
       // console.log(error);
-      // alert("An error occurred while approving the application.");
     } finally {
       setIsApprovedModalOpen(false);
     }

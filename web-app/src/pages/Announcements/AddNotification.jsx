@@ -4,6 +4,7 @@ import { FaCaretDown } from "react-icons/fa";
 import { formatName } from "../../utils/DataFormatter";
 import useNotifications from "../../hooks/Announcements/useNotifications";
 import { useSettings } from "../../contexts/SettingsContext";
+import { useAlert } from "../../contexts/AlertBox/AlertContext";
 
 const AddNotification = () => {
   const [selectedPeople, setSelectedPeople] = useState("Everyone");
@@ -12,6 +13,8 @@ const AddNotification = () => {
   const [notification, setNotification] = useState("");
   const [peopleDropdownOpen, setPeopleDropdownOpen] = useState(false);
   const [typeDropdownOpen, setTypeDropdownOpen] = useState(false);
+
+  const { showAlert } = useAlert();
 
   const { settings } = useSettings();
 
@@ -48,13 +51,13 @@ const AddNotification = () => {
     sendNotificationToAll(
       notificationForm,
       (successMessage) => {
-        alert(successMessage);
+        showAlert(successMessage, false);
         setTitle("");
         setNotification("");
         setSelectedType("");
       },
       (errorMessage) => {
-        alert(errorMessage);
+        showAlert(errorMessage, false);
       }
     );
   };

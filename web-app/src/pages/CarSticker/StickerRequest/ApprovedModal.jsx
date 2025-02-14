@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import useCarStickerRequests from "../../../hooks/CarStickers/useCarStickerRequests";
 import { useSettings } from "../../../contexts/SettingsContext";
+import { useAlert } from "../../../contexts/AlertBox/AlertContext";
 
 const ApprovedModal = ({ isOpen, onClose, onConfirm, carStickerRequest }) => {
   const [fees, setFees] = useState([{ label: "Car Sticker Fee", amount: "" }]);
   const [comment, setComment] = useState("");
-
+  const { showAlert } = useAlert();
   // Use the settings context
   const {
     settings,
@@ -48,7 +49,7 @@ const ApprovedModal = ({ isOpen, onClose, onConfirm, carStickerRequest }) => {
   const handleConfirm = async () => {
     const allFeesFilled = fees.every((fee) => fee.amount);
     if (!allFeesFilled) {
-      alert("Please enter all fees before confirming.");
+      showAlert("Please enter all fees before confirming.", true);
       return;
     }
 
@@ -63,14 +64,18 @@ const ApprovedModal = ({ isOpen, onClose, onConfirm, carStickerRequest }) => {
       );
 
       if (res) {
-        alert(
-          "Car sticker request updated and resident notified successfully."
+        showAlert(
+          "Car sticker request updated and resident notified successfully.",
+          false
         );
         onConfirm();
         onClose(); // Close the modal after successful update
       }
     } catch (err) {
-      alert("An error occurred while updating the request. Please try again.");
+      showAlert(
+        "An error occurred while updating the request. Please try again.",
+        true
+      );
     }
   };
 

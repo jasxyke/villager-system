@@ -44,31 +44,6 @@ const ToClaimRequestTable = () => {
     setDetailsView(false);
   };
 
-  // const handleSetAsClaimed = async (sticker, e) => {
-  //   e.stopPropagation();
-  //   const isConfirmed = window.confirm(
-  //     "Are you sure you want to mark this sticker request as claimed?"
-  //   );
-
-  //   if (isConfirmed) {
-  //     try {
-  //       // Use the custom hook function to mark the request as claimed
-  //       const responseSuccess = await claimCarStickerRequest(sticker.id);
-
-  //       if (responseSuccess) {
-  //         alert("Sticker request has been marked as claimed.");
-  //         // Optionally refresh the data after marking as claimed
-  //         fetchRequestsByStatus("completed", currentPage);
-  //       }
-  //     } catch (error) {
-  //       console.error("Failed to mark the sticker as claimed", claimError);
-  //       alert(
-  //         "There was an error marking the sticker as claimed. Please try again."
-  //       );
-  //     }
-  //   }
-  // };
-
   const handlePageClick = (event) => {
     // Paginate to the selected page
     changePage(event.selected + 1);

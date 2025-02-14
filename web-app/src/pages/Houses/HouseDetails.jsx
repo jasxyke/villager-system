@@ -16,18 +16,20 @@ const HouseDetails = ({ house, onBack }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [selectedResident, setSelectedResident] = useState(null);
 
+  const { showAlert } = useAlert();
+
   const { addResident, editResident } = useResidents();
 
   useEffect(() => {
     setResidents(house.residents);
   }, [house]);
   const handleSuccess = (message, newMember) => {
-    alert(message);
+    showAlert(message, false);
     setResidents([...residents, newMember]);
   };
 
   const handleError = (msg) => {
-    alert(msg);
+    showAlert(msg, true);
   };
 
   const handleAddMember = (newMember) => {

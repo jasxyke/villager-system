@@ -35,37 +35,46 @@ class AnnouncementController extends Controller
         return response()->json($announcements);
     }
     
-
     /**
      * Store a newly created resource in storage.
      */
     public function store(StoreAnnouncementRequest $request)
     {
-        $picturePath = $request->file('announcementPic')->store($this->imagesFolderName,'public');
-        $pictureUrl = Storage::disk('public')->url($picturePath);
+        $adminId = Admin::where('user_id', Auth::id())->first();
 
-        $adminId = Admin::where('user_id',Auth::id())->first();
-        
+        // Initialize picture values as null
+        $picturePath = null;
+        $pictureUrl = null;
+
+        // Check if the file exists before storing it
+        if ($request->hasFile('announcementPic')) {
+            $picturePath = $request->file('announcementPic')->store($this->imagesFolderName, 'public');
+            $pictureUrl = Storage::disk('public')->url($picturePath);
+        }
+
         $announcement = Announcement::create([
-            'admin_id'=>$adminId->id,
-            'title'=>$request->input('title'),
-            'content'=>$request->input('content'),
-            'picture_path'=>$picturePath,
-            'picture_url'=>$pictureUrl,
-            'event_start_date'=>$request->input('eventStartDate'),
-            'event_end_date'=>$request->input('eventEndDate'),
-            'event_start_time'=>$request->input('eventStartTime'),
-            'event_end_time'=>$request->input('eventEndTime'),
-            // 'type'=>$request->type
+            'admin_id' => $adminId->id,
+            'title' => $request->input('title'),
+            'content' => $request->input('content'),
+            'picture_path' => $picturePath, // This will be null if no file is uploaded
+            'picture_url' => $pictureUrl, // This will be null if no file is uploaded
+            'event_start_date' => $request->input('eventStartDate'),
+            'event_end_date' => $request->input('eventEndDate'),
+            'event_start_time' => $request->input('eventStartTime'),
+            'event_end_time' => $request->input('eventEndTime'),
         ]);
 
         PushNotificationHelper::sendToAll(
             $request->input('title'),
-            $request->input('content'));
-        
-        return response()->json(['message'=>'Announced successfuly!',
-                            'announcement'=>$announcement]);
+            $request->input('content')
+        );
+
+        return response()->json([
+            'message' => 'Announced successfully!',
+            'announcement' => $announcement,
+        ]);
     }
+
 
     /**
      * Display the specified resource.

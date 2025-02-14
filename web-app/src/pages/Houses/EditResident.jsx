@@ -11,6 +11,7 @@ import {
 } from "../../data/contants";
 import { calculateAge } from "../../utils/DataFormatter";
 import ResidentDetail from "../Users/residents/ResidentDetail";
+import { useAlert } from "../../contexts/AlertBox/AlertContext";
 
 const EditResident = ({
   resident,
@@ -34,14 +35,16 @@ const EditResident = ({
   const [email, setEmail] = useState(resident.user.email);
   const [roleType, setRoleType] = useState(resident.user.role_type);
 
+  const { showAlert } = useAlert();
+
   const onSuccess = (msg, editedResident) => {
-    alert(msg);
+    showAlert(msg, false);
     updateResident(editedResident);
     return;
   };
 
   const onError = (msg) => {
-    alert(msg);
+    showAlert(msg, true);
   };
 
   const saveEdit = () => {

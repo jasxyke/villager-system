@@ -6,12 +6,14 @@ import noImg from "../../assets/no_image.jpg";
 import ViewModal from "./ViewModal";
 import { converTime } from "../../utils/DataFormatter";
 import ReactPaginate from "react-paginate";
+import { useAlert } from "../../contexts/AlertBox/AlertContext";
 
 const ViewAnnouncements = () => {
   const [isViewing, setIsViewing] = useState(false);
   const [announcement, setAnnouncement] = useState(null);
   const [announcementsList, setAnnouncementsList] = useState([]);
 
+  const { showAlert } = useAlert();
   const {
     announcements,
     loading,
@@ -23,7 +25,7 @@ const ViewAnnouncements = () => {
   } = useAnnouncements();
 
   useEffect(() => {
-    getAnnouncements((msg) => alert(msg));
+    getAnnouncements((msg) => showAlert(msg, false));
   }, []);
 
   useEffect(() => {
@@ -50,7 +52,7 @@ const ViewAnnouncements = () => {
   };
 
   const handlePageClick = (event) => {
-    getAnnouncements((msg) => alert(msg), event.selected + 1); // API page is 1-indexed
+    getAnnouncements((msg) => showAlert(msg), event.selected + 1, false); // API page is 1-indexed
   };
 
   if (loading) {

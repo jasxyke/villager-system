@@ -5,6 +5,7 @@ import useUpdatePermitRequests from "../../../hooks/Permits/useUpdatePermitReque
 import LoadingContainer from "../../../components/LoadingScreen/LoadingContainer";
 import ReactPaginate from "react-paginate";
 import { formatUserName } from "../../../utils/DataFormatter";
+import { useAlert } from "../../../contexts/AlertBox/AlertContext";
 
 const ToClaimPermitsTable = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -12,6 +13,7 @@ const ToClaimPermitsTable = () => {
   const [selectedPermit, setSelectedPermit] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [modalPermit, setModalPermit] = useState(null);
+  const { showAlert } = useAlert();
 
   const { permitRequests, loading, error, lastPage, changePage } =
     usePermitRequests();
@@ -32,14 +34,15 @@ const ToClaimPermitsTable = () => {
       try {
         const responseSuccess = await claimPermitRequest(modalPermit.id);
         if (responseSuccess) {
-          alert(responseSuccess);
+          showAlert(responseSuccess, false);
           setShowModal(false);
           changePage("to_claim", currentPage); // Refresh data
         }
       } catch (error) {
         console.error("Failed to mark permit as claimed", claimError);
-        alert(
-          "There was an error marking the permit as claimed. Please try again."
+        showAlert(
+          "There was an error marking the permit as claimed. Please try again.",
+          true
         );
       }
     }

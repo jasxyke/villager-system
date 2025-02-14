@@ -6,6 +6,7 @@ import { formatName, formatUserName } from "../../../utils/DataFormatter";
 import ReactPaginate from "react-paginate";
 import useStickerPayments from "../../../hooks/CarStickers/useStickerPayments";
 import LoadingContainer from "../../../components/LoadingScreen/LoadingContainer";
+import { useAlert } from "../../../contexts/AlertBox/AlertContext";
 
 const ToPayStickerTable = () => {
   const [selectedSticker, setSelectedSticker] = useState(null);
@@ -13,7 +14,7 @@ const ToPayStickerTable = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [paymentAmount, setPaymentAmount] = useState(0);
   const [errorMessage, setErrorMessage] = useState(""); // For showing validation errors
-
+  const { showAlert } = useAlert();
   const {
     addStickerPayment,
     loading: paymentLoading,
@@ -84,7 +85,7 @@ const ToPayStickerTable = () => {
 
       if (result) {
         console.log("Payment added successfully:", result);
-        alert("Payment added successfuly!");
+        showAlert("Payment added successfuly!", false);
         handleModalClose();
         fetchRequestsByStatus("approved", currentPage);
       }

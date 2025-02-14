@@ -3,6 +3,7 @@ import ReactModal from "react-modal";
 import modalStyles from "./AnnouncementPage.module.css";
 import styles from "./ViewAnnouncements.module.css";
 import noImg from "../../assets/no_image.jpg";
+import { useAlert } from "../../contexts/AlertBox/AlertContext";
 
 const ViewModal = ({
   isViewing,
@@ -18,6 +19,9 @@ const ViewModal = ({
   const [endTime, setEndTime] = useState(announcement.event_end_time);
   const [content, setContent] = useState(announcement.content);
   const [img, setImg] = useState(announcement.picture_url);
+
+  const { showAlert } = useAlert();
+
   useEffect(() => {
     setTitle(announcement.title);
     setStartDate(announcement.event_start_date);
@@ -38,7 +42,7 @@ const ViewModal = ({
       imageFile,
       (imgURL) => setImg(imgURL),
       (msg) => {
-        alert(msg);
+        showAlert(msg, true);
         const imgPicker = document.getElementById("announceImg");
         imgPicker.value = null;
       }

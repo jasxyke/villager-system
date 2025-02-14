@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import useUpdateBillAndAddPayments from "../../../hooks/Bills/useUpdateBillAndAddPayments";
+import { useAlert } from "../../../contexts/AlertBox/AlertContext";
 
 const OverduePaymentModal = ({ onClose, overdues, onSucess }) => {
   // Map overdues into a format suitable for rendering
@@ -16,6 +17,8 @@ const OverduePaymentModal = ({ onClose, overdues, onSucess }) => {
   const [paymentAmount, setPaymentAmount] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("cash");
   const [selectAll, setSelectAll] = useState(false);
+
+  const { showAlert } = useAlert();
 
   const { loading, error, updateBillAndAddPayment } =
     useUpdateBillAndAddPayments(); // Use the hook
@@ -34,14 +37,18 @@ const OverduePaymentModal = ({ onClose, overdues, onSucess }) => {
   // Handle payment submission
   const handlePaymentSubmit = async () => {
     if (!paymentAmount || selectedMonths.length === 0) {
-      alert("Please enter a payment amount and select at least one month.");
+      showAlert(
+        "Please enter a payment amount and select at least one month.",
+        true
+      );
       return;
     }
 
     // Validate that the payment amount matches the total amount due
     if (parseFloat(paymentAmount) !== totalAmountDue) {
-      alert(
-        `Payment amount must be equal to the total amount due: ₱${totalAmountDue.toLocaleString()}`
+      showAlert(
+        `Payment amount must be equal to the total amount due: ₱${totalAmountDue.toLocaleString()}`,
+        true
       );
       return;
     }
@@ -58,15 +65,16 @@ const OverduePaymentModal = ({ onClose, overdues, onSucess }) => {
       // Call the custom hook to update the bill and add payment
       const success = await updateBillAndAddPayment(paymentData, onClose);
       if (success) {
-        alert(
-          `Payment of ₱${paymentAmount} (${paymentMethod}) has been processed for the selected months.`
+        showAlert(
+          `Payment of ₱${paymentAmount} (${paymentMethod}) has been processed for the selected months.`,
+          false
         );
         onClose(); // Close the modal after payment
         onSucess();
       }
     } catch (err) {
       console.error("Error processing payment:", err);
-      alert("There was an error processing the payment.");
+      showAlert(err.response.data.message);
     }
   };
 

@@ -1,15 +1,17 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
+import { useAlert } from "../../../contexts/AlertBox/AlertContext";
 
 const RejectionModal = ({ isOpen, onClose, onSubmit }) => {
   const [selectedReason, setSelectedReason] = useState("");
   const [otherReason, setOtherReason] = useState("");
+  const { showAlert } = useAlert();
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const reason = selectedReason === "Other" ? otherReason : selectedReason;
     if (!reason) {
-      alert("Please provide a reason for rejection.");
+      showAlert("Please provide a reason for rejection.", true);
       return;
     }
     onSubmit(reason);

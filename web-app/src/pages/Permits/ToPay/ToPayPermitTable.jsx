@@ -6,6 +6,7 @@ import usePermitRequests from "../../../hooks/Permits/usePermitRequests";
 import usePermitPayments from "../../../hooks/Permits/usePermitPayments";
 import styles from "../PermitStyles.module.css";
 import { formatUserName } from "../../../utils/DataFormatter";
+import { useAlert } from "../../../contexts/AlertBox/AlertContext";
 
 const ToPayPermitTable = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -13,6 +14,8 @@ const ToPayPermitTable = () => {
   const [paymentAmount, setPaymentAmount] = useState(0);
   const [errorMessage, setErrorMessage] = useState("");
   const [detailsView, setDetailsView] = useState(false); // Track details view
+
+  const { showAlert } = useAlert();
 
   const {
     permitRequests,
@@ -101,7 +104,7 @@ const ToPayPermitTable = () => {
         amount
       );
       if (response) {
-        alert(response);
+        showAlert(response, false);
       }
     }
   };

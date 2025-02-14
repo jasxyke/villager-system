@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axiosClient from "../../utils/axios"; // Adjust the import path as necessary
+import { useAlert } from "../../contexts/AlertBox/AlertContext";
 
 const useOverdueBills = () => {
   const [bills, setBills] = useState([]);
@@ -9,6 +10,8 @@ const useOverdueBills = () => {
   const [lastPage, setLastPage] = useState(null);
   const [total, setTotal] = useState(0);
   const [search, setSearch] = useState("");
+
+  const { showAlert } = useAlert();
 
   // Function to fetch overdue bills
   const fetchBills = async (page = 1) => {
@@ -33,7 +36,7 @@ const useOverdueBills = () => {
   const notifyResidents = async (billIds) => {
     try {
       await axiosClient.post("/bills/notify-overdue", { bill_ids: billIds });
-      alert("Notifications sent successfully");
+      showAlert("Notifications sent successfully", false);
     } catch (err) {
       console.log(err);
       setError(err);

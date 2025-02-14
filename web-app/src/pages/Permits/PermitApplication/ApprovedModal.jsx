@@ -1,23 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useSettings } from "../../../contexts/SettingsContext";
+import { useAlert } from "../../../contexts/AlertBox/AlertContext";
 const ApprovedModal = ({ isOpen, onClose, onConfirm, permit }) => {
   const { settings, loading, error } = useSettings(); // Get settings from the context
 
   const [permitFee, setPermitFee] = useState(0);
   const [processingFee, setProcessingFee] = useState(0);
   const [comment, setComment] = useState("");
-  // const [squareMeter, setSquareMeter] = useState(permit.floor_size);
 
-  // Calculate fees based on square meter
-  // useEffect(() => {
-  //   if (!loading && settings) {
-  //     const permitFeePerSquareMeter = settings.payment_per_square_meter || 0;
-
-  //     setPermitFee(permitFeePerSquareMeter * squareMeter);
-  //     setProcessingFee(settings.processing_fee);
-  //   }
-  // }, [loading, settings, squareMeter]);
-
+  const { showAlert } = useAlert();
   console.log(permit);
 
   useEffect(() => {
@@ -38,7 +29,7 @@ const ApprovedModal = ({ isOpen, onClose, onConfirm, permit }) => {
 
   const handleConfirm = () => {
     if (permitFee <= 0 || processingFee <= 0) {
-      alert("Please enter a valid fee.");
+      showAlert("Please enter a valid fee.", false);
       return;
     }
     onConfirm(permitFee, processingFee, comment);

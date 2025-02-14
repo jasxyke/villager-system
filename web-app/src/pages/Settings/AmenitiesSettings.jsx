@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import axiosClient from "../../utils/axios";
 import { useAmenities } from "../../contexts/AmenitiesContext";
 import { useConfirmDialog } from "../../components/ConfirmDialog/useConfirmDialog";
+import { useAlert } from "../../contexts/AlertBox/AlertContext";
 const AmenitiesSettings = () => {
   const [amenities, setAmenities] = useState([]);
   const [errors, setErrors] = useState({});
@@ -10,6 +11,9 @@ const AmenitiesSettings = () => {
     "Delete Amenity",
     "Are you sure you want to delete this amenity?"
   );
+
+  const { showAlert } = useAlert();
+
   const { amenities: amenitiesConext } = useAmenities();
 
   useEffect(() => {
@@ -96,10 +100,11 @@ const AmenitiesSettings = () => {
         })
       );
       setAmenities(updatedAmenities);
-      alert("Amenities updated successfully");
+
+      showAlert("Amenities updated successfully", false);
     } catch (error) {
       console.error("Failed to update amenities:", error);
-      alert("Failed to update amenities. Please try again.");
+      showAlert("Failed to update amenities. Please try again.", true);
     }
   };
 
@@ -136,13 +141,14 @@ const AmenitiesSettings = () => {
         setAmenities((prevAmenities) =>
           prevAmenities.filter((amenity) => amenity.id !== id)
         );
-        alert("Amenity deleted successfully.");
+        showAlert("Amenity deleted successfully.", false);
       }
     } catch (error) {
       console.error("Failed to delete amenity:", error);
-      alert(
+      showAlert(
         error.response?.data?.message ||
-          "Failed to delete amenity. Please try again."
+          "Failed to delete amenity. Please try again.",
+        true
       );
     }
   };

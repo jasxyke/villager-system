@@ -6,6 +6,7 @@ import { calculatePrice } from "./CalculatePrice";
 import useBookings from "../../hooks/Bookings/useBookings";
 import { formatTime } from "../../utils/DataFormatter";
 import { useConfirmDialog } from "../../components/ConfirmDialog/useConfirmDialog";
+import { useAlert } from "../../contexts/AlertBox/AlertContext";
 Modal.setAppElement("#root");
 
 const BookingReviewModal = ({ isOpen, onRequestClose, booking, onUpdate }) => {
@@ -13,6 +14,7 @@ const BookingReviewModal = ({ isOpen, onRequestClose, booking, onUpdate }) => {
   const [paymentAmount, setPaymentAmount] = useState("");
   const [paymentDate, setPaymentDate] = useState("");
   const [payments, setPayments] = useState(booking.booking_payments);
+  const { showAlert } = useAlert();
   // const [isGuest, setIsGuest] = useState(booking.is_guest);
   const [error, setError] = useState("");
 
@@ -79,7 +81,7 @@ const BookingReviewModal = ({ isOpen, onRequestClose, booking, onUpdate }) => {
     const finalBooking = { ...updatedBooking, notify: notifyResident };
     try {
       const success = await updateBooking(finalBooking, payments);
-      alert(success);
+      showAlert(success, false);
       onUpdate();
       onRequestClose();
       setError("");

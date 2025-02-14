@@ -21,15 +21,10 @@ const StickerReview = ({ sticker, onBack, onResponse }) => {
 
   const handleApproveClick = () => {
     setIsApproveModalOpen(true);
-    // alert("The application has been approved.");
-    // onBack(); // Call onBack after approval
   };
 
   const handleRejectSubmit = (reason) => {
     setIsRejectModalOpen(true);
-    // alert(`The application has been rejected. Reason: ${reason}`);
-    // setIsRejectModalOpen(false);
-    // onBack(); // Call onBack after rejection
   };
 
   const handleImageClick = (index) => {

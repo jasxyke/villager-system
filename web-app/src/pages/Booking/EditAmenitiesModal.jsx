@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Modal from "react-modal";
 import axiosClient from "../../utils/axios";
+import { useAlert } from "../../contexts/AlertBox/AlertContext";
 
 const EditAmenitiesModal = ({ isOpen, onRequestClose }) => {
   const [amenities, setAmenities] = useState([]);
@@ -8,6 +9,7 @@ const EditAmenitiesModal = ({ isOpen, onRequestClose }) => {
   const [confirmDeleteId, setConfirmDeleteId] = useState(null);
   const [isDeleteConfirmationOpen, setIsDeleteConfirmationOpen] =
     useState(false);
+  const { showAlert } = useAlert();
 
   useEffect(() => {
     const fetchAmenities = async () => {
@@ -107,11 +109,11 @@ const EditAmenitiesModal = ({ isOpen, onRequestClose }) => {
         })
       );
       setAmenities(updatedAmenities);
-      alert("Amenities updated successfully");
+      showAlert("Amenities updated successfully", false);
       onRequestClose();
     } catch (error) {
       console.error("Failed to update amenities:", error);
-      alert("Failed to update amenities. Please try again.");
+      showAlert("Failed to update amenities. Please try again.", true);
     }
   };
 
@@ -144,10 +146,10 @@ const EditAmenitiesModal = ({ isOpen, onRequestClose }) => {
         setAmenities(
           amenities.filter((amenity) => amenity.id !== confirmDeleteId)
         );
-        alert("Deleted Amenity Successfully");
+        showAlert("Deleted Amenity Successfully", false);
       } catch (error) {
         console.error("Failed to delete amenity:", error);
-        alert("Failed to delete amenity. Please try again.");
+        showAlert("Failed to delete amenity. Please try again.", true);
       }
     }
     setIsDeleteConfirmationOpen(false);

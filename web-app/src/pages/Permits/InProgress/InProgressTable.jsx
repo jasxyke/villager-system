@@ -6,6 +6,7 @@ import LoadingContainer from "../../../components/LoadingScreen/LoadingContainer
 import ReactPaginate from "react-paginate";
 import { formatUserName } from "../../../utils/DataFormatter";
 import styles from "../PermitStyles.module.css";
+import { useAlert } from "../../../contexts/AlertBox/AlertContext";
 
 const InProgressTable = () => {
   const [detailsView, setDetailsView] = useState(false);
@@ -18,6 +19,8 @@ const InProgressTable = () => {
     error: completeError,
     success,
   } = useUpdatePermitRequests();
+
+  const { showAlert } = useAlert();
 
   useEffect(() => {
     changePage("in_progress", currentPage);
@@ -41,12 +44,13 @@ const InProgressTable = () => {
     if (confirm) {
       const response = await completePermitRequest(permit.id);
       if (response) {
-        alert(
-          "Permit marked as done successfully. Resident are being notified as well!"
+        showAlert(
+          "Permit marked as done successfully. Resident are being notified as well!",
+          false
         );
         changePage("in_progress", currentPage); // Refresh the data if needed
       } else {
-        alert(completeError || "Failed to mark permit as done.");
+        showAlert(completeError || "Failed to mark permit as done.", true);
       }
     }
   };

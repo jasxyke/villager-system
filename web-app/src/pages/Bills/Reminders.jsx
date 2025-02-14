@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import useOverdueBills from "../../hooks/Bills/useOverDueBills";
 import ReactPaginate from "react-paginate";
 import LoadingContainer from "../../components/LoadingScreen/LoadingContainer";
+import { useAlert } from "../../contexts/AlertBox/AlertContext";
 
 const Reminders = () => {
   const {
@@ -17,6 +18,7 @@ const Reminders = () => {
 
   const [selectedBills, setSelectedBills] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
+  const { showAlert } = useAlert();
 
   useEffect(() => {
     if (selectAll) {
@@ -46,7 +48,7 @@ const Reminders = () => {
     if (selectedBills.length > 0) {
       notifyResidents(selectedBills);
     } else {
-      alert("Please select at least one bill to notify.");
+      showAlert("Please select at least one bill to notify.", true);
     }
   };
 

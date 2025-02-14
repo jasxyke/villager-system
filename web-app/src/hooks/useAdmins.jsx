@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
 import axiosClient from "../utils/axios";
+import { useAlert } from "../contexts/AlertBox/AlertContext";
 
 const useAdmins = () => {
   const [admins, setAdmins] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { showAlert } = useAlert();
 
   const fetchAdmins = async () => {
     setLoading(true);
@@ -40,7 +42,7 @@ const useAdmins = () => {
       return response.data;
     } catch (err) {
       setError(err);
-      alert(err.response.data.message);
+      showAlert(err.response.data.message, true);
       throw err;
     } finally {
       setLoading(false);
@@ -54,7 +56,7 @@ const useAdmins = () => {
       fetchAdmins(); // Refresh the list after updating an admin
       return response.data;
     } catch (err) {
-      alert(err.response.data.message);
+      showAlert(err.response.data.message, true);
       throw err;
     } finally {
       setLoading(false);

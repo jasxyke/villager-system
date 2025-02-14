@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import LoadingElement from "../../components/LoadingScreen/LoadingElement";
 import useAnnouncements from "../../hooks/Announcements/useAnnouncements";
+import { useAlert } from "../../contexts/AlertBox/AlertContext";
 
 const AddAnnouncement = () => {
   // const [type, setType] = useState(AnnouncementTypes[0].value);
@@ -12,6 +13,7 @@ const AddAnnouncement = () => {
   const [startTime, setStartTime] = useState(null);
   const [endTime, setEndTime] = useState(null);
 
+  const { showAlert } = useAlert();
   const { addAnnouncement, loading } = useAnnouncements();
 
   const fileInputRef = React.useRef(null);
@@ -30,12 +32,12 @@ const AddAnnouncement = () => {
   };
 
   const handleSucces = (msg) => {
-    alert(msg);
+    showAlert(msg, false);
     clearFields();
   };
 
   const handleError = (msg) => {
-    alert(msg);
+    showAlert(msg, true);
   };
 
   const submit = () => {

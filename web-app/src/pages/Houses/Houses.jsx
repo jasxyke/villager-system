@@ -11,6 +11,7 @@ import { useSettings } from "../../contexts/SettingsContext";
 import LoadingPage from "../../components/LoadingScreen/LoadingPage";
 import LoadingContainer from "../../components/LoadingScreen/LoadingContainer";
 import { FaHome } from "react-icons/fa";
+import { useAlert } from "../../contexts/AlertBox/AlertContext";
 
 const Houses = () => {
   const [blocks, setBlocks] = useState([]);
@@ -24,6 +25,8 @@ const Houses = () => {
   const { settings, loading: settingsLoading, error } = useSettings();
 
   const [debounceTimeout, setDebounceTimeout] = useState(null);
+
+  const { showAlert } = useAlert();
 
   useEffect(() => {
     if (!settingsLoading && settings?.village_blocks) {
@@ -66,12 +69,12 @@ const Houses = () => {
   };
 
   const handleSucces = (msg, newHouse) => {
-    alert(msg);
+    showAlert(msg, false);
     setSelectedHouse(newHouse);
   };
 
   const handleError = (msg) => {
-    alert(msg);
+    showAlert(msg, true);
   };
 
   const handleSearchPress = () => {

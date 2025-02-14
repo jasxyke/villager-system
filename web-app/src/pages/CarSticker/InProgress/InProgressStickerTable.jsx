@@ -6,12 +6,14 @@ import useCarStickerRequestsByStatus from "../../../hooks/CarStickers/useCarStic
 import useCarStickerRequests from "../../../hooks/CarStickers/useCarStickerRequests"; // Import the custom hook
 import { formatName, formatUserName } from "../../../utils/DataFormatter";
 import LoadingContainer from "../../../components/LoadingScreen/LoadingContainer";
+import { useAlert } from "../../../contexts/AlertBox/AlertContext";
 
 const InProgressStickerTable = () => {
   const [selectedSticker, setSelectedSticker] = useState(null);
   const [detailsView, setDetailsView] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [modalSticker, setModalSticker] = useState(null);
+  const { showAlert } = useAlert();
 
   // Use the custom hook to fetch car sticker requests
   const {
@@ -61,13 +63,16 @@ const InProgressStickerTable = () => {
       try {
         const response = await completeCarStickerRequest(modalSticker.id);
         if (response) {
-          alert("Sticker marked as done successfully.");
+          showAlert("Sticker marked as done successfully.", false);
           setShowModal(false);
           fetchRequestsByStatus("in_progress", currentPage); // Refresh data
         }
       } catch (error) {
         console.error("Failed to mark the sticker request as done:", error);
-        alert("Failed to mark the sticker request as done. Please try again.");
+        showAlert(
+          "Failed to mark the sticker request as done. Please try again.",
+          true
+        );
       }
     }
   };

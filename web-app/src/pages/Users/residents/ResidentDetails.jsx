@@ -12,6 +12,7 @@ import { IoMdArrowRoundBack } from "react-icons/io";
 import { FaTrashAlt, FaEdit } from "react-icons/fa";
 import useResidents from "../../../hooks/useResidents";
 import ResidentHistoryDetails from "./ResidentHistoryDetails";
+import { useAlert } from "../../../contexts/AlertBox/AlertContext";
 
 const ResidentDetails = ({
   resident,
@@ -41,14 +42,16 @@ const ResidentDetails = ({
     resident.family_members || []
   );
 
+  const { showAlert } = useAlert();
+
   const onSuccess = (msg, editedResident) => {
-    alert(msg);
+    showAlert(msg, false);
     updateResident(editedResident);
     return;
   };
 
   const onError = (msg) => {
-    alert(msg);
+    showAlert(msg, true);
   };
 
   const saveEdit = () => {

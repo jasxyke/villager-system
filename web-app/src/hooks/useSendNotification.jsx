@@ -1,10 +1,12 @@
 import { useState } from "react";
 import axiosClient from "../utils/axios";
+import { useAlert } from "../contexts/AlertBox/AlertContext";
 
 const useSendNotification = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
+  const { showAlert } = useAlert();
 
   const sendNotificationToAll = async (title, body) => {
     setLoading(true);
@@ -19,11 +21,11 @@ const useSendNotification = () => {
 
       if (response.status === 200) {
         setSuccess(true);
-        alert(response.data.message);
+        showAlert(response.data.message, false);
       }
     } catch (err) {
       setError(err.response.data.message);
-      alert(err.response.data.message);
+      showAlert(err.response.data.message, true);
       console.error(err);
     } finally {
       setLoading(false);
@@ -44,12 +46,12 @@ const useSendNotification = () => {
 
       if (response.status === 200) {
         setSuccess(true);
-        alert(response.data.message);
+        showAlert(response.data.message, false);
       }
       console.log("Sucessfuly sent a notification.");
     } catch (err) {
       setError(err.response.data.message);
-      alert(err.response.data.message);
+      showAlert(err.response.data.message, true);
       console.error(err);
     } finally {
       setLoading(false);

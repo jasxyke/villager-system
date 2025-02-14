@@ -5,6 +5,7 @@ import { formatFullName, formatName } from "../../utils/DataFormatter";
 import ReactPaginate from "react-paginate";
 import LoadingContainer from "../../components/LoadingScreen/LoadingContainer";
 import ViewPaidBillModal from "./VIewPaidBillModal";
+import { useAlert } from "../../contexts/AlertBox/AlertContext";
 
 const BillList = ({
   status,
@@ -27,6 +28,8 @@ const BillList = ({
   const [selectedBill, setSelectedBill] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isViewMode, setIsViewMode] = useState(false); // Track if the modal is for viewing
+
+  const { showAlert } = useAlert();
 
   useEffect(() => {
     // Fetch bills based on filters
@@ -55,7 +58,7 @@ const BillList = ({
   };
 
   const handleSuccess = () => {
-    alert("Bill updated successfully");
+    showAlert("Bill updated successfully", false);
     fetchBills(status, month, year, searchQuery, currentPage);
   };
 

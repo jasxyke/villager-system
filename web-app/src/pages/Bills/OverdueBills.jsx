@@ -116,8 +116,8 @@ const OverdueBills = () => {
       <div className="overflow-x-auto bg-white shadow-lg rounded-lg">
         {/* Header row */}
         <div className="grid grid-cols-5 bg-oliveGreen text-white font-semibold p-4">
-          <div className="text-left px-2">Homeowners</div>
-          <div className="text-left px-2">Overdue Months</div>
+          <div className="text-center px-2">Homeowners</div>
+          <div className="text-center px-2">Overdue Months</div>
           <div className="text-center px-2">No. of months</div>
           <div className="text-center px-2">Amount</div>
           {/* <div className="text-center px-2">Accrued Interest</div> */}
@@ -141,7 +141,7 @@ const OverdueBills = () => {
                 <div className="text-center p-2 truncate max-w-xs">
                   {formatUserName(resident.resident.user, true)}
                 </div>
-                <div className="text-center p-2">
+                <div className="text-center p-2 text-nowrap">
                   {resident.overdueMonths.slice(0, 2).map((month, index) => (
                     <span key={month}>
                       {new Date(month).toLocaleString("default", {

@@ -3,7 +3,7 @@ import axiosClient from "../../utils/axios";
 
 const useBills = () => {
   const [bills, setBills] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [lastPage, setLastPage] = useState(null);

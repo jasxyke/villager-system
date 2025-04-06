@@ -28,23 +28,23 @@ const AdminDashboard = () => {
   const navigate = useNavigate(); // Initialize useNavigate
 
   // Fetch data using custom hooks
-  const {
-    totalResidents,
-    loading: loadingResidents,
-    error: errorResidents,
-  } = useTotalResidents();
+  // const {
+  //   totalResidents,
+  //   loading: loadingResidents,
+  //   error: errorResidents,
+  // } = useTotalResidents();
 
-  const {
-    totalBookings,
-    loading: loadingBookings,
-    error: errorBookings,
-  } = useTotalBookings();
+  // const {
+  //   totalBookings,
+  //   loading: loadingBookings,
+  //   error: errorBookings,
+  // } = useTotalBookings();
 
-  const {
-    overdueCount,
-    loading: loadingOverdue,
-    error: errorOverdue,
-  } = useOverdueResidents();
+  // const {
+  //   overdueCount,
+  //   loading: loadingOverdue,
+  //   error: errorOverdue,
+  // } = useOverdueResidents();
 
   // Use the income hook
   const {
@@ -63,8 +63,8 @@ const AdminDashboard = () => {
   }, [fetchIncomes]);
 
   // Check if any data is still loading
-  const isLoading =
-    loadingResidents || loadingBookings || loadingOverdue || loadingIncome;
+  // const isLoading =
+  //   loadingResidents || loadingBookings || loadingOverdue || loadingIncome;
 
   // Handle opening the modal with relevant content
   const handleUnpaidClick = () => {
@@ -128,7 +128,9 @@ const AdminDashboard = () => {
         </div>
       </div>
 
-      <div className="flex p-2">
+      {/* PARANG UNNECESARY KASI NA INFORMATION ITO, DI KO SURE KUNG KEEP OR NOT */}
+
+      {/* <div className="flex p-2">
         <div
           className="flex flex-row items-center bg-gradient-to-r from-green to-green p-8 w-full max-w-sm cursor-pointer mx-auto rounded-xl shadow-lg transition-transform duration-300 ease-in-out transform hover:scale-105 hover:shadow-2xl"
           onClick={() => navigate("/houses")} // Redirect to the Houses page
@@ -180,7 +182,7 @@ const AdminDashboard = () => {
             </p>
           </div>
         </div>
-      </div>
+      </div> */}
 
       <div className="flex gap-6 p-4">
         <OngoingBookings />

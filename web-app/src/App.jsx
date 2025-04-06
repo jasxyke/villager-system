@@ -36,11 +36,11 @@ function App() {
     }
   }, []);
 
-  const marginLeft = isLoggedIn() ? "300px" : "0px";
+  const sidebarMargin = isLoggedIn() ? "sidebarMargin hideMain" : "";
   return (
     <div className={isLoggedIn() ? "app-container" : "w-full h-full"}>
       {isLoggedIn() ? <Sidebar /> : null}
-      <div className="main" style={{ marginLeft: marginLeft }}>
+      <div className={`main ${sidebarMargin}`}>
         <Routes>
           <Route element={<AuthenticatedMiddleRoute />}>
             <Route path="/homepage" element={<Homepage />} />

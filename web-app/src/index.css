@@ -27,14 +27,32 @@
 
 .app-container {
   /* display: grid;
-  grid-template-columns: 300px 1fr; */
+  grid-template-columns: 300px auto; */
+  position: relative;
   height: auto;
+  width: 100%;
   min-height: 100vh;
   background: linear-gradient(
     180deg,
     rgba(174, 192, 154, 1) 40%,
     rgba(52, 76, 17, 1) 100%
   );
+}
+
+.sidebarMargin {
+  margin-left: 300px;
+}
+
+.hideMain {
+}
+
+@media only screen and (max-width: 768px) {
+  .sidebarMargin {
+    margin-left: 0;
+  }
+  /* .hideMain {
+    width: 0;
+  } */
 }
 
 .main {

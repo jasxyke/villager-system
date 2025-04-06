@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import styles from "./Users.module.css";
 import MainLogo from "../../components/MainLogo";
 import { useAuthContext } from "../../contexts/AuthContext";
+import LoadingContainer from "../../components/LoadingScreen/LoadingContainer";
 
 const UsersPage = ({ children }) => {
   const { user } = useAuthContext();
@@ -15,6 +16,8 @@ const UsersPage = ({ children }) => {
   const handleButtonClick = (buttonName) => {
     setActiveButton(buttonName);
   };
+
+  if (!user) return <LoadingContainer />;
 
   return (
     <div className={styles.mainContainer}>

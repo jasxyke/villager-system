@@ -21,6 +21,12 @@ const _layout = () => {
         name="announcement"
         options={{ title: "Announcement Details" }}
       />
+      <Stack.Screen
+        name="all-announcements"
+        options={{
+          title: "All Announcements",
+        }}
+      />
     </Stack>
   );
 };

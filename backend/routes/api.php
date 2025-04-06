@@ -52,6 +52,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/residents/block/{blockNumber}', 
     [ResidentController::class, 'getResidentsPerBlock']);
     Route::apiResource('residents', ResidentController::class);
+    Route::get('/residents/homeowners', [ResidentController::class, 'getHomeOwners']);
 
     //route for total number use for dashboard
     Route::get('/total-homeowners', [ResidentController::class, 'getTotalHomeowners']);

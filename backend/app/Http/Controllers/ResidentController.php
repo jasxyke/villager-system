@@ -28,6 +28,16 @@ class ResidentController extends Controller
                 ->paginate(20);
     }
 
+    public function getHomeOwners()
+    {
+        // return Resident::with('user')->paginate(20);
+        return User::whereIn('role_type','home_owner')
+                ->with('resident','resident.house')
+                ->orderBy('lastname', 'ASC')
+                ->paginate(20);
+    }
+
+
     public function getResidentsPerBlock(Request $request, string $blockNumber){
         // $users = User::with('resident','resident.house')
         //     ->where('role_type','=','resident')

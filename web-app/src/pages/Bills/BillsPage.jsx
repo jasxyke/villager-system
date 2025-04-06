@@ -36,7 +36,7 @@ const BillsPage = () => {
         <div className="flex">
           {[
             "overdue",
-            // "residentAccounts",
+            "residentAccounts",
             "billList",
             "transactionHistory",
             "reminders",

@@ -286,12 +286,14 @@ const PermitForm = () => {
           {/* Submit Button */}
           <View style={styles.buttonContainer}>
             <CustomButton
+              loading={loading}
               title={loading ? "Processing" : "Submit Request"}
               onPress={handleSubmitRequest}
               disabled={loading}
             />
 
             <CustomButton
+              loading={loading}
               title="Cancel"
               onPress={() => {
                 Alert.alert(

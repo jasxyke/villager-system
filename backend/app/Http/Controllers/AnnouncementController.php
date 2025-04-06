@@ -11,6 +11,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 
@@ -31,7 +32,7 @@ class AnnouncementController extends Controller
         $announcements = Announcement::whereBetween('event_start_date', [$oneWeekAgo, $threeWeekSoon])
             ->orderBy('event_start_date', 'DESC')
             ->paginate($perPage);
-    
+      
         return response()->json($announcements);
     }
     

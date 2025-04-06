@@ -77,17 +77,25 @@ const CarStickerForm = ({ setShowCarStickerForm }) => {
 
   const handleSubmitRequest = async () => {
     if (!carModel || !plateNumber || !vehicleType) {
-      Alert.alert("Error", "Please fill in all required fields, including the vehicle type.");
+      Alert.alert(
+        "Error",
+        "Please fill in all required fields, including the vehicle type."
+      );
       return;
     }
-  
+
     if (images.length === 0) {
       Alert.alert("Error", "Please upload at least one supporting document.");
       return;
     }
-  
+
     try {
-      const msg = await createCarStickerRequest(carModel, plateNumber, vehicleType, images);
+      const msg = await createCarStickerRequest(
+        carModel,
+        plateNumber,
+        vehicleType,
+        images
+      );
       if (msg) {
         Alert.alert("Success", msg);
         router.back();
@@ -128,7 +136,7 @@ const CarStickerForm = ({ setShowCarStickerForm }) => {
               onChangeText={setPlateNumber}
             />
           </View>
-          
+
           <View style={styles.stickerRow}>
             <Text style={styles.dropdownLabel}>Type of Vehicle</Text>
             <DropDownPicker
@@ -197,6 +205,7 @@ const CarStickerForm = ({ setShowCarStickerForm }) => {
 
           <View style={styles.buttonContainer}>
             <CustomButton
+              loading={loading}
               title={"Submit Request"}
               onPress={handleSubmitRequest}
             />

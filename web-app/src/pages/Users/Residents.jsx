@@ -11,11 +11,12 @@ import paginationStyles from "./residents/Residents.module.css";
 import LoadingContainer from "../../components/LoadingScreen/LoadingContainer";
 
 const Residents = () => {
-  const { residents, getAllResidents, loading, editResident, changePage } =
+  const { residents, fetchResidents, loading, error, currentPage, lastPage } =
     useResidents();
   const [selectedResident, setSelectedResident] = useState(null);
+
   const handleSuccess = () => {
-    //
+    fetchResidents(currentPage); // Re-fetch residents after a successful action
   };
 
   const handleError = (msg) => {
@@ -23,27 +24,25 @@ const Residents = () => {
   };
 
   const goToPage = (event) => {
-    console.log(event.selected + 1);
-    changePage(event.selected + 1);
+    fetchResidents(event.selected + 1); // Change the page when user selects another page
   };
 
   useEffect(() => {
-    getAllResidents(handleSuccess, handleError);
-  }, []);
+    fetchResidents(currentPage); // Fetch residents when component mounts or page changes
+  }, [currentPage]);
 
   // ADDED: Function to handle viewing resident details
   const handleViewDetails = (resident) => {
     setSelectedResident(resident);
   };
 
-  if (residents === null) {
+  if (loading) {
     return <LoadingPage color={"white"} loading={loading} />;
   }
 
   return (
     <UsersPage>
       <div className={styles.residentContainer}>
-        {/* mag add ako ng funtion dito para ma select yung mga residents */}
         {selectedResident === null ? (
           <>
             <div className={styles.residentHeader}>
@@ -54,43 +53,40 @@ const Residents = () => {
               <div className={styles.residentHeaderItem}>Type</div>
             </div>
             <div className={styles.residentBody}>
-              {loading ? (
-                <LoadingContainer />
-              ) : residents !== null ? (
+              {residents.length > 0 ? (
                 <ResidentsList
-                  residents={residents.data}
+                  residents={residents}
                   handleViewDetails={handleViewDetails}
                 />
-              ) : null}
-              {/* <button className={styles.addDataButton} onClick={handleAddClick}>
-                ➕ Add Data
-              </button> */}
+              ) : (
+                <div>No residents found</div>
+              )}
             </div>
           </>
         ) : (
           <ResidentDetails
             resident={selectedResident}
             onBack={() => setSelectedResident(null)}
-            editResident={editResident}
             updateResident={setSelectedResident}
           />
         )}
       </div>
-      <div className="flex justify-center">
-        <ReactPaginate
-          breakLabel="..."
-          nextLabel={"next>"}
-          onPageChange={goToPage}
-          pageRangeDisplayed={5}
-          pageCount={residents.last_page}
-          previousLabel={"<previous"}
-          renderOnZeroPageCount={null}
-          className={paginationStyles.pagination + " rounded-md"}
-          disabledClassName="text-grey opacity-50"
-          pageClassName="text-white"
-          activeClassName="bg-paleGreen px-2"
-        />
-      </div>
+      {lastPage > 1 && (
+        <div className="flex justify-center">
+          <ReactPaginate
+            breakLabel="..."
+            nextLabel={"next>"}
+            onPageChange={goToPage}
+            pageRangeDisplayed={5}
+            pageCount={lastPage}
+            previousLabel={"<previous"}
+            className={paginationStyles.pagination + " rounded-md"}
+            disabledClassName="text-grey opacity-50"
+            pageClassName="text-white"
+            activeClassName="bg-paleGreen px-2"
+          />
+        </div>
+      )}
     </UsersPage>
   );
 };

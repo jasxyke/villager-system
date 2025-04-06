@@ -38,6 +38,7 @@ const Announcement = () => {
             borderBottomColor: "black",
             borderBottomWidth: StyleSheet.hairlineWidth,
           }}
+          className="mb-3"
         />
         {announcement.picture_url && (
           <Image
@@ -63,7 +64,6 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: "bold",
-    marginBottom: 10,
   },
   image: {
     width: "100%",

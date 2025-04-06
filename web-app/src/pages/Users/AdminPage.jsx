@@ -86,7 +86,7 @@ function AdminPage() {
           ))}
         </div>
         <button
-          className="mt-4 bg-green-700 text-white px-4 py-2 rounded hover:bg-green-800"
+          className="mt-4 bg-green-700 text-white px-4 py-2 rounded hover:bg-secondary"
           onClick={() => handleEdit(null)} // Open modal for adding a new admin
         >
           ➕ Add New Admin

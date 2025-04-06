@@ -3,10 +3,14 @@ import React from "react";
 import { TouchableOpacity, Text, StyleSheet } from "react-native";
 import { colors } from "../../styles/colors";
 
-const CustomButton = ({ title, onPress }) => {
+const CustomButton = ({ title, onPress, loading }) => {
   return (
-    <TouchableOpacity style={styles.button} onPress={onPress}>
-      <Text style={styles.buttonText}>{title}</Text>
+    <TouchableOpacity
+      style={styles.button}
+      onPress={onPress}
+      disabled={loading}
+    >
+      <Text style={styles.buttonText}>{loading ? "Submitting..." : title}</Text>
     </TouchableOpacity>
   );
 };

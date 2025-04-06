@@ -12,6 +12,7 @@ const useAnnouncement = () => {
     try {
       setLoading(true);
       const res = await axiosClient.get(`/announcements?page=${page}`);
+
       setAnnouncements(res.data.data); // Assuming the API returns paginated data in `data`
       setCurrentPage(res.data.current_page);
       setTotalPages(res.data.last_page);

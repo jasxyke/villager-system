@@ -33,22 +33,25 @@ const ScrollViewContainer = ({
       return;
     }
 
-    const interval = setInterval(() => {
-      if (!isManualScroll) {
-        setIndex((prevIndex) => {
-          const nextIndex = (prevIndex + 1) % data.length;
-          if (flatListRef.current) {
-            flatListRef.current.scrollToIndex({
-              index: nextIndex,
-              animated: true,
-            });
-          }
-          return nextIndex;
-        });
-      }
-    }, 3000);
+    // Auto scroll is disabled here
+    // const interval = setInterval(() => {
+    //   if (!isManualScroll) {
+    //     setIndex((prevIndex) => {
+    //       const nextIndex = (prevIndex + 1) % data.length;
+    //       if (flatListRef.current) {
+    //         flatListRef.current.scrollToIndex({
+    //           index: nextIndex,
+    //           animated: true,
+    //         });
+    //       }
+    //       return nextIndex;
+    //     });
+    //   }
+    // }, 3000);
 
-    return () => clearInterval(interval);
+    return () => {
+      // clearInterval(interval);
+    };
   }, [isManualScroll, data]);
 
   const loadMoreAnnouncements = () => {

@@ -214,7 +214,7 @@ const ExpensesContainer = ({ year, month }) => {
           handleDelete={handleDelete}
         />
       ) : (
-        <div className="text-center text-gray-500 text-xl mt-4">
+        <div className="text-center text-gray-300 text-xl mt-4">
           No expenses found for this period.
         </div>
       )}

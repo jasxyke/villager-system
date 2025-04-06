@@ -30,8 +30,6 @@ export function AuthProvider({ children }) {
     axiosClient
       .get("/sanctum/csrf-cookie", { baseURL: DOMAIN })
       .then(async (_res) => {
-        console.log("hellow from sanctum");
-
         setLoading(true);
         try {
           console.log(email);
@@ -41,8 +39,6 @@ export function AuthProvider({ children }) {
             password: password,
             isMobile: false,
           });
-
-          console.log("hello");
 
           //sets the bearer token
           localStorage.setItem("API_TOKEN", res.data.access_token);
@@ -63,6 +59,7 @@ export function AuthProvider({ children }) {
       })
       .catch((error) => {
         console.log(error);
+        onError(error.response.data.message);
       });
   };
 

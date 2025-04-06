@@ -51,7 +51,7 @@ const Home = () => {
 
   const handleViewAnnouncementPress = () => {
     // Add your navigation logic here
-    router.push("../announcement-details"); // Example path
+    router.push("home-tab/all-announcements");
   };
 
   if (!user) {
@@ -108,7 +108,7 @@ const Home = () => {
           style={styles.viewAnnouncementLink}
         >
           <Text className="underline" style={styles.viewAnnouncementText}>
-            View Announcement
+            View All Announcements
           </Text>
           <FontAwesome6 name="chevron-right" size={18} color="white" />
         </Pressable>

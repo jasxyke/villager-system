@@ -191,7 +191,7 @@ const PermitApplicationReview = ({ permit, onBack }) => {
                 label: "Claimed Date",
                 value: formatToReadableDate(permit.claimed_date) || "N/A",
               },
-              { label: "", value: permit.permit_fee || "N/A" },
+              { label: "Permit Fee", value: permit.permit_fee || "N/A" },
               {
                 label: "Processing Fee",
                 value: permit.processing_fee || "N/A",

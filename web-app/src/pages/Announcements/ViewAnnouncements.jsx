@@ -61,13 +61,13 @@ const ViewAnnouncements = () => {
 
   return (
     <>
-      <div className={styles.listContainer}>
+      <div className={styles.listContainer + " h-100"}>
         {loading ? (
           <LoadingContainer loading={loading} />
         ) : announcementsList.length > 0 ? (
           <>{announcementsList}</>
         ) : (
-          <div className="text-center p-4 bg-white">
+          <div className="text-center p-4 text-white text-lg">
             No announcements available
           </div>
         )}
@@ -105,7 +105,10 @@ const ViewAnnouncements = () => {
 const AnnouncementItem = ({ announcement, index, onView }) => {
   const bgColor = index % 2 === 0 ? " bg-green" : " bg-primary";
   return (
-    <div key={announcement.id} className={styles.listItem + bgColor}>
+    <div
+      key={announcement.id}
+      className={styles.listItem + bgColor + " rounded-sm"}
+    >
       <div className={styles.itemImage}>
         <img
           src={
